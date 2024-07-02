@@ -60,8 +60,8 @@ local cmd = keymap.cmd
 map({ "n", "v" }, "<Space>", "<Nop>")
 
 -- Remap for dealing with word wrap
-nmap("n", "k", "v:count == 0 ? 'gk' : 'k'")
-nmap("n", "j", "v:count == 0 ? 'gj' : 'j'")
+nmap("k", "v:count == 0 ? 'gk' : 'k'")
+nmap("j", "v:count == 0 ? 'gj' : 'j'")
 
 -- Git-blame
 nmap("<leader>gb", cmd("Git blame"), "Show git blame")
