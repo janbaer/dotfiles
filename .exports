@@ -36,3 +36,5 @@ export CDPATH=~/:~/Projects/:~/Projects/check24/:~/Projects/check24/bu-ansible/:
 # Show colored output when running molecule
 export PY_COLORS="1"
 export ANSIBLE_FORCE_COLOR="1"
+
+export SSH_ASKPASS=/usr/lib/seahorse/ssh-askpass
