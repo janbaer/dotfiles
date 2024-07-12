@@ -82,9 +82,9 @@ alias cleanup_ds_store="find . -name '*.DS_Store' -type f -ls -delete"
 # Some other Shortcuts
 alias n="nvim"
 alias vim="nvim"
-alias v="nvim"
 alias e="nvim -c 'startinsert'"
-alias edit="nvim"
+alias nvim-lazy-sync="nvim --headless '+Lazy! sync' +qa"
+
 alias cls='clear'
 alias ccat="pygmentize -O style=monokai -f console256 -g"
 alias rd="rm -rf" # Remove directories without asking me
