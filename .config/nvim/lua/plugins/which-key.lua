@@ -9,20 +9,28 @@ return {
     vim.o.timeoutlen = 500
   end,
   opts = {},
-  config = function()
+  keys = {
+    -- { "<leader>", function() require("which-key").show() end, desc = "which-key" },
+  },
+  config = function(_, opts)
     local wk = require("which-key")
 
-    wk.register({
-      [","] = { name = "+Hop" },
-      c = { name = "+ChatGPT" },
-      d = { name = "+Debug" },
-      f = { name = "+FzfLua" },
-      l = { name = "+Format/Linting" },
-      n = { name = "+Neotest" },
-      s = { name = "+Lsp[s]aga" },
-      t = { name = "+Telescope" },
-      w = { name = "+Workspaces" },
-      x = { name = "+Trouble" },
-    }, { prefix = "<leader>" })
+    wk.setup(opts)
+
+    local keys = {
+      { "<leader>,", group = "Hop" },
+      { "<leader>c", group = "ChatGPT" },
+      { "<leader>d", group = "Debug" },
+      { "<leader>f", group = "FzfLua" },
+      { "<leader>g", group = "Git" },
+      { "<leader>l", group = "Format/Linting" },
+      { "<leader>n", group = "Neotest" },
+      -- { "<leader>s", group = "Lsp[s]aga" },
+      { "<leader>s", group = "Split window" },
+      { "<leader>t", group = "Telescope" },
+      { "<leader>w", group = "Workspaces" },
+      { "<leader>x", group = "Trouble" },
+    }
+    wk.add(keys)
   end
 }

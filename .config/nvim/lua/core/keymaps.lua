@@ -6,9 +6,9 @@ local vmap = keymap.vmap
 local cmd = keymap.cmd
 
 -- -- Split window management
--- nmap("<leader>sv", "<C-w>v") -- split window vertically
--- nmap("<leader>sh", "<C-w>s") -- split window horizontally
--- nmap("<leader>se", "<C-w>=") -- make split windows equal width
+nmap("<leader>sv", "<C-w>v") -- split window vertically
+nmap("<leader>sh", "<C-w>s") -- split window horizontally
+nmap("<leader>se", "<C-w>=") -- make split windows equal width
 -- nmap("<leader>sx", ":close<CR>") -- close split window
 -- nmap("<leader>sj", "<C-w>-") -- make split window height shorter
 -- nmap("<leader>sk", "<C-w>+") -- make split windows height taller
@@ -69,8 +69,6 @@ nmap("<leader>gb", cmd("Git blame"), "Show git blame")
 -- Diagnostic keymaps
 nmap("[d", vim.diagnostic.goto_prev)
 nmap("]d", vim.diagnostic.goto_next)
-nmap('<leader>gg', cmd('lua vim.lsp.buf.hover()'), "hover lsp")
-nmap('<leader>gl', cmd('lua vim.diagnostic.open_float()'), 'Open diagnostic float')
 
 nmap("<leader>rl", cmd("source %")) -- Reload current buffer
 
@@ -86,8 +84,7 @@ imap("<leader>{{", "{{}}<ESC><left>i")
 -- quick exit or save
 nmap("<leader>q", cmd("q"), "Exit current window")
 nmap("<leader>e", cmd("quit"), "Exit current window")
--- nmap('<leader>x', cmd('x'), 'Save and exit current window')
-nmap("<leader>w", cmd("w!"), "Save current changes")
+nmap("<leader>W", cmd("w!"), "Save current changes")
 
 nmap("<leader>aa", "ggVG", "Select the whole text")
 
@@ -145,8 +142,6 @@ vmap("v", "<Plug>(expand_region_expand)")
 
 -- Use ToggleBackground from dark to light and back
 nmap("<leader>pp", cmd("lua ToggleBackground()"), "Toggle dark or light background")
--- nmap("<leader>cs", cmd("Telescope colorscheme"), "Show colorschemes in Telescope")
-nmap("<leader>cst", cmd('lua require("material.functions").find_style()'))
 
 -- Keys for hop - see https://github.com/smoka7/hop.nvim
 map({ "n", "v" }, "<leader>,w", cmd("HopWord"), "Hop word")
