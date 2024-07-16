@@ -84,7 +84,7 @@ imap("<leader>{{", "{{}}<ESC><left>i")
 -- quick exit or save
 nmap("<leader>q", cmd("q"), "Exit current window")
 nmap("<leader>e", cmd("quit"), "Exit current window")
-nmap("<leader>W", cmd("w!"), "Save current changes")
+nmap("W", cmd("wa!"), "Save all current changes")
 
 nmap("<leader>aa", "ggVG", "Select the whole text")
 
