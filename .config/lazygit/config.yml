@@ -23,6 +23,10 @@ customCommands:
     context: 'global'
     command: "git commit"
     subprocess: true
+  - key: 'f'
+    context: 'global'
+    command: "git fetch"
+    subprocess: true
   - key: 'n'
     context: 'localBranches'
     prompts:
