@@ -15,9 +15,9 @@ return {
       TelescopePrompt = true,
     },
     -- provider = 'HF',
-    provider = 'OpenAI',
+    provider = "OpenAI",
     provider_options = {
-      model = 'gpt-4',
+      model = "gpt-4o-mini",
     },
   },
   config = function(_, opts)
