@@ -17,17 +17,7 @@ else
   export GPG_TTY="$TTY"
 fi
 
-# Nix
-if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
-  . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
-fi
-# End Nix
-
 export PATH="/usr/local/bin:/usr/bin:$PATH"
-
-if [ Darwin = `uname` ]; then
-  [[ -f ~$HOME/.profile-macos ]] && source $HOME/.profile-macos
-fi
 
 # SSH_AUTH_SOCK set to GPG to enable using gpgagent as the ssh agent.
 export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
@@ -43,7 +33,12 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-autoload -Uz compinit && compinit
+autoload -Uz compinit
+# Load zcompdump only once a day
+for dump in ~/.zcompdump(N.mh+24); do
+  compinit
+done
+compinit -C
 
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 # Download Zinit, if it's not there yet
@@ -61,8 +56,8 @@ zinit snippet OMZP::sudo
 # zinit snippet OMZP::aws
 # zinit snippet OMZP::kubectl
 # zinit snippet OMZP::kubectx
-zinit snippet OMZP::nvm
 zinit snippet OMZP::rust
+zinit snippet OMZP::volta
 zinit snippet OMZP::command-not-found
 
 zinit light zsh-users/zsh-completions
@@ -73,27 +68,20 @@ export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
 [[ -f $HOME/.profile ]] && source $HOME/.profile
-
 if [ Linux = `uname` ]; then
   [[ -f ~/.profile-linux ]] && source $HOME/.profile-linux
+fi
+if [ Darwin = `uname` ]; then
+  [[ -f ~$HOME/.profile-macos ]] && source $HOME/.profile-macos
 fi
 
 setopt auto_cd
 
 #export PATH="/usr/local/opt/curl/bin:$PATH"
-export PATH="$PATH:$HOME/Library/flutter/bin"
+# export PATH="$PATH:$HOME/Library/flutter/bin"
 
 alias sudo='sudo '
 export LD_LIBRARY_PATH=/usr/local/lib
-
-# Completions
-source <(kubectl completion zsh)
-
-completions_dir="$HOME/.zsh-complete"
-mkdir -p $completions_dir
-if [ ! -f $completions_dir/_rg ]; then
-  rg --generate complete-zsh > $completions_dir/_rg
-fi
 
 # P10k customizations
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
@@ -102,14 +90,8 @@ fi
 # Fix for password store
 export PASSWORD_STORE_GPG_OPTS='--no-throw-keyids'
 
-export NVM_DIR="$HOME/.nvm"                            # You can change this if you want.
-export NVM_SOURCE="/usr/share/nvm"                     # The AUR package installs it to here.
-[ -s "$NVM_SOURCE/nvm.sh" ] && . "$NVM_SOURCE/nvm.sh"  # Load N
-
 bindkey "^P" up-line-or-beginning-search
 bindkey "^N" down-line-or-beginning-search
-
-[ -s "$HOME/.svm/svm.sh" ] && source "$HOME/.svm/svm.sh"
 
 # Capslock command
 alias capslock="sudo killall -USR1 caps2esc"

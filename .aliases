@@ -233,3 +233,5 @@ alias open="xdg-open"
 alias ld="lazydocker"
 
 alias tf="terraform"
+
+alias timezsh='for i in $(seq 1 5); do time zsh -i -c exit; done'
