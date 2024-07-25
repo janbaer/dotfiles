@@ -19,10 +19,6 @@ fi
 
 export PATH="/usr/local/bin:/usr/bin:$PATH"
 
-# SSH_AUTH_SOCK set to GPG to enable using gpgagent as the ssh agent.
-export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-gpgconf --launch gpg-agent
-
 # Source local zshrc with local only settings
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
