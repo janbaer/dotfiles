@@ -11,18 +11,6 @@ copyFiles() {
 
 copyFiles
 
-HOST_NAME=$(hostname)
-
-# Rename i3 configs
-if [ -f ~/.config/i3/config_${HOST_NAME} ]; then
-  mv ~/.config/i3/config_${HOST_NAME} ~/.config/i3/config
-fi
-
-IS_I3_RUNNING=$(ps aux | grep i3 | grep -v grep)
-if [ -n "${IS_I3_RUNNING}" ]; then
-  i3-msg reload
-fi
-
 if [ ! -d ~/.config/nvim ]; then
   echo "Create softlink for nvim"
   ln -s ~/Projects/dotfiles/.config/nvim ~/.config/nvim
