@@ -1,5 +1,5 @@
 # source script for keychain initialization
-alias kc="source ~/bin/init-keychain.sh"
+alias kc="source $HOME/bin/init-keychain.sh"
 
 # Easier navigation: .., ..., ~ and -
 alias cd..='cd ..'
@@ -102,18 +102,18 @@ alias yui="yarn upgrade-interactive --latest"
 alias yd="yarn debug"
 
 # goto my folders
-alias wiki='cd ~/Projects/wiki'
-alias blog='cd ~/Projects/WebSites/blog'
-alias mh='cd ~/Projects/WebSites/myhomepage'
-alias pr='cd ~/Projects'
-alias mdw='cd ~/Projects/mdwiki'
-alias mdwiki='cd ~/Projects/mdwiki'
-alias dotfiles='cd ~/Projects/dotfiles'
-alias dockerfiles='cd ~/Projects/dockerfiles'
-alias howcani='cd ~/Projects/howcani'
-alias mykatas='cd ~/Projects/Katas/MyKatas'
-alias notes="cd ~/SynologyDrive/Notes"
-alias mymusic="cd ~/Projects/mymusic"
+alias wiki="cd $HOME/Projects/wiki"
+alias blog="cd $HOME/Projects/WebSites/blog"
+alias mh="cd $HOME/Projects/WebSites/myhomepage"
+alias pr="cd $HOME/Projects"
+alias mdw="cd $HOME/Projects/mdwiki"
+alias mdwiki="cd $HOME/Projects/mdwiki"
+alias dotfiles="cd $HOME/Projects/dotfiles"
+alias dockerfiles="cd $HOME/Projects/dockerfiles"
+alias howcani="cd $HOME/Projects/howcani"
+alias mykatas="cd $HOME/Projects/Katas/MyKatas"
+alias notes="cd $HOME/SynologyDrive/Notes"
+alias mymusic="cd $HOME/Projects/mymusic"
 
 if [ $UID -ne 0 ]; then
   alias reboot='sudo reboot'
@@ -124,12 +124,12 @@ fi
 alias runTests=watchTests
 
 # Run tmux with a predefined set
-alias devmux='tmux -f ~/.dev.tmux.conf attach'
-alias tmuxexit='tmux kill-server'
-alias mux='tmux new -d -s delete-me && tmux run-shell ~/.tmux/plugins/tmux-resurrect/scripts/restore.sh && tmux kill-session -t delete-me && tmux attach || tmux attach'
+alias devmux="tmux -f $HOME/.dev.tmux.conf attach"
+alias tmuxexit="tmux kill-server"
+alias mux="tmux new -d -s delete-me && tmux run-shell $HOME/.tmux/plugins/tmux-resurrect/scripts/restore.sh && tmux kill-session -t delete-me && tmux attach || tmux attach"
 alias exitall=tmuxexit
 
-alias reload="source ~/.zshrc"
+alias reload="source $ZDOTDIR/.zshrc"
 
 # some aliases for go development
 alias got='go test -v ./... | sed ''/PASS/s//$(printf "\033[32mPASS\033[0m")/'' | sed ''/FAIL/s//$(printf "\033[31mFAIL\033[0m")/'''
@@ -143,8 +143,8 @@ alias r="lf"
 alias l="lf"
 
 # mount and unmount JABASOFT-DS
-alias mount-nas="~/bin/mount-nas.sh"
-alias unmount-nas="~/bin/unmount-nas.sh"
+alias mount-nas="$HOME/bin/mount-nas.sh"
+alias unmount-nas="$HOME/bin/unmount-nas.sh"
 
 # translate from English to German from the commandline
 # You need to install "npm install -g google-translate-cli" before
@@ -165,7 +165,7 @@ alias ydl="yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best'"
 alias ydla="yt-dlp --audio-format mp3 -x"
 
 # Show my wallpapers in sxiv
-alias ww="cd ~/Pictures/wallpapers && nsxiv -tf *.jpg && cd -"
+alias ww="cd $HOME/Pictures/wallpapers && nsxiv -tf *.jpg && cd -"
 
 # Show all images of the current directory in a slideshow
 alias slideshow="nsxiv -f -S 2 *.*"
@@ -236,4 +236,4 @@ alias tf="terraform"
 
 alias timezsh='for i in $(seq 1 5); do time zsh -i -c exit; done'
 
-alias secrets="source ~/.zshrc.secrets"
+alias zsh-secrets="source $HOME/.zshrc.secrets"

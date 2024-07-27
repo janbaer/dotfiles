@@ -20,9 +20,9 @@ fi
 export PATH="/usr/local/bin:/usr/bin:$PATH"
 
 # Source local zshrc with local only settings
-[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+[[ -f $ZDOTDIR/.zshrc.local ]] && source $ZDOTDIR/.zshrc.local
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Enable Powerlevel10k instant prompt. Should stay close to the top of $HOME/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
@@ -31,7 +31,7 @@ fi
 
 autoload -Uz compinit
 # Load zcompdump only once a day
-for dump in ~/.zcompdump(N.mh+24); do
+for dump in $HOME/.zcompdump(N.mh+24); do
   compinit
 done
 compinit -C
@@ -63,13 +63,13 @@ zinit light zsh-users/zsh-syntax-highlighting
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
-[[ -f $HOME/.profile ]] && source $HOME/.profile
-if [ Linux = `uname` ]; then
-  [[ -f ~/.profile-linux ]] && source $HOME/.profile-linux
-fi
-if [ Darwin = `uname` ]; then
-  [[ -f ~$HOME/.profile-macos ]] && source $HOME/.profile-macos
-fi
+# [[ -f $HOME/.profile ]] && source $HOME/.profile
+# if [ Linux = `uname` ]; then
+  # [[ -f $HOME/.profile-linux ]] && source $HOME/.profile-linux
+# fi
+# if [ Darwin = `uname` ]; then
+  # [[ -f ~$HOME/.profile-macos ]] && source $HOME/.profile-macos
+# fi
 
 setopt auto_cd
 
@@ -80,8 +80,8 @@ alias sudo='sudo '
 export LD_LIBRARY_PATH=/usr/local/lib
 
 # P10k customizations
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+# To customize prompt, run `p10k configure` or edit $HOME/.p10k.zsh.
+[[ -f $HOME/.p10k.zsh ]] && source $HOME/.p10k.zsh
 
 # Fix for password store
 export PASSWORD_STORE_GPG_OPTS='--no-throw-keyids'
@@ -98,24 +98,24 @@ fi
 
 zle_highlight=('paste:none')
 
-source ~/.exports
-source ~/.aliases
-source ~/.functions
+source $ZDOTDIR/.exports
+source $ZDOTDIR/.aliases
+source $ZDOTDIR/.functions
 
-[ -f ~/.fzf-init.zsh ] && source ~/.fzf-init.zsh
+[ -f $HOME/.fzf-init.zsh ] && source $HOME/.fzf-init.zsh
 
 # Some kubernetes things
-[ -f ~/.kube/kube-config.yaml ] && export KUBECONFIG=~/.kube/kube-config.yaml
+[ -f $HOME/.kube/kube-config.yaml ] && export KUBECONFIG=$HOME/.kube/kube-config.yaml
 
-[ -f ~/.cargo/env ] && source $HOME/.cargo/env
+[ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
 
 # Source local zshrc with local bu specific settings, if file exists
-[ -f ~/.zshrc.bu ] && source ~/.zshrc.bu
+[ -f $ZDOTDIR/.zshrc.bu ] && source $ZDOTDIR/.zshrc.bu
 
 export KEYCHAIN_KEYS="$KEYCHAIN_KEYS_LOCAL $KEYCHAIN_KEYS_BU"
-[ -f ~/tmp/keychain_init_done ] && source ~/bin/init-keychain.sh
+[ -f $HOME/tmp/keychain_init_done ] && source $HOME/bin/init-keychain.sh
 
 # Config keys for Atuin together with Fzf and run init for Zsh
-[ -f ~/.config/atuin/atuin-setup.sh ] && source ~/.config/atuin/atuin-setup.sh
+[ -f $HOME/.config/atuin/atuin-setup.sh ] && source $HOME/.config/atuin/atuin-setup.sh
 
 # zprof # Show profiling result
