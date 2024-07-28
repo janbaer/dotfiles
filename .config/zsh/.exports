@@ -38,3 +38,7 @@ export PY_COLORS="1"
 export ANSIBLE_FORCE_COLOR="1"
 
 export SSH_ASKPASS=/usr/lib/seahorse/ssh-askpass
+
+# Configurations for Volta
+export VOLTA_HOME="$HOME/.volta"
+export PATH="$VOLTA_HOME/bin:$PATH"
