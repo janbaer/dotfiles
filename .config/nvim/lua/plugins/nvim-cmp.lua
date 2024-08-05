@@ -132,7 +132,7 @@ return {
         -- { name = 'cmdline' }, -- Deactivated because it's producing unwanted proposals in the editor
       }),
       experimental = {
-        ghost_text = true,
+        ghost_text = false,
       },
       view = {
         entries = "custom",
