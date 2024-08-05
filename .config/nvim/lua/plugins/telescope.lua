@@ -10,7 +10,7 @@ return {
   "nvim-telescope/telescope.nvim",
   enabled = true,
   lazy = true,
-  branch = "0.1.x",
+  -- branch = "0.1.x",
   dependencies = {
     -- https://github.com/nvim-lua/plenary.nvim
     -- { 'kkharji/sqlite.lua' },
@@ -41,15 +41,16 @@ return {
       end,
       desc = "[/] Fuzzily search in current buffer]",
     },
-    { "<leader>tf", require("telescope.builtin").find_files,  desc = "Search [F]iles" },
-    -- { '<leader>th', require('telescope.builtin').help_tags, desc = 'Search [H]elp' },
-    { "<leader>tg", require("telescope.builtin").live_grep,   desc = "Search by [G]rep" },
-    { "<leader>td", require("telescope.builtin").diagnostics, desc = "Search [D]iagnostics" },
-    { "<leader>ts", require("telescope.builtin").resume,      desc = "[R]esume last search" },
-    { "<c-p>",      cmd("Telescope find_files"),              desc = "Telescope find files" },
-    { "<leader>tt", cmd("Telescope"),                         desc = "Show Telescope" },
-    { "<leader>tp", cmd("Telescope neoclip"),                 "Telescope neoclip" },
-    { "<leader>tr", cmd("Telescope repo list"),               "Telescope repos" },
+    -- { "<leader>tf",  require("telescope.builtin").find_files,                                     desc = "Search [F]iles" },
+    { "<leader>tf", cmd("Telescope frecency workspace=CWD path_display={'truncate'} theme=ivy"), desc = "Search frequently [F]iles" },
+    { '<leader>th', require('telescope.builtin').help_tags,                                      desc = 'Search [H]elp' },
+    { "<leader>tg", require("telescope.builtin").live_grep,                                      desc = "Search by [G]rep" },
+    { "<leader>td", require("telescope.builtin").diagnostics,                                    desc = "Search [D]iagnostics" },
+    { "<leader>ts", require("telescope.builtin").resume,                                         desc = "[R]esume last search" },
+    { "<c-p>",      cmd("Telescope find_files"),                                                 desc = "Telescope find files" },
+    { "<leader>tt", cmd("Telescope"),                                                            desc = "Show Telescope" },
+    { "<leader>tp", cmd("Telescope neoclip"),                                                    "Telescope neoclip" },
+    { "<leader>tr", cmd("Telescope repo list"),                                                  "Telescope repos" },
   },
   config = function()
     local telescope = require("telescope")
@@ -93,6 +94,12 @@ return {
             width = 0.75,
           },
         },
+        path_display = {
+          truncate = 3,
+          filename_first = {
+            reverse_directories = false,
+          },
+        },
       },
       pickers = {
         find_files = {
@@ -101,7 +108,12 @@ return {
         buffers = {
           sort_lastused = true,
           theme = "dropdown",
-        }
+        },
+        -- When I search for stuff in telescope, I want the path to be shown
+        -- first, this helps in files that are very deep in the tree and I
+        -- cannot see their name.
+        -- Also notice the "reverse_directories" option which will show the
+        -- closest dir right after the filename
       },
       extensions = {
         repo = {
