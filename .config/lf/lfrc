@@ -71,6 +71,10 @@ cmd on-select &{{
   lf -remote "send $id set statfmt \"$(exa -ld --color=always "$f")\""
 }}
 
+cmd lazy_git ${{
+  lazygit -p $f
+}}
+
 cmd ren-name ${{
   rename $file
 }}
@@ -89,6 +93,7 @@ map . set hidden!
 map D delete
 map dd trash
 map dr restore_trash
+map l lazy_git
 map p paste
 map x cut
 map y copy
