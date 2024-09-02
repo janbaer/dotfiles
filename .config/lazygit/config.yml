@@ -36,3 +36,7 @@ customCommands:
         initialValue: ''
     command: "git checkout -b feature/{{.Form.BranchName}}"
     loadingText: 'Creating feature branch'
+  - key: '<c-p>'
+    context: 'localBranches'
+    command: "git push --no-verify --force-with-lease"
+    loadingText: "Git pushing without verifying..." 
