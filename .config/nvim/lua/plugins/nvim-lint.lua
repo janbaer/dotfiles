@@ -10,9 +10,10 @@ return {
   dependencies = {
     "williamboman/mason.nvim",
   },
-  opts = {
-    events = { "BufWritePost", "BufReadPost", "InsertLeave" },
-    linters_by_ft = {
+  config = function()
+    local lint = require("lint")
+
+    lint.linters_by_ft = {
       ansible = { "ansible_lint", "yamllint" },
       javascript = { "eslint_d" },
       javascriptreact = { "eslint_d" },
@@ -26,11 +27,6 @@ return {
       yaml = { "yamllint" },
       zsh = { "zsh" },
     }
-  },
-  config = function(_, opts)
-    local lint = require("lint")
-
-    -- lint.setup(opts) -- This call here fails, but it looks like it is also working without
 
     -- https://luacheck.readthedocs.io/en/stable/cli.html
     lint.linters.luacheck.args = {
@@ -48,6 +44,13 @@ return {
     --   "--ignore-words=" .. codespell_ignore_filepath,
     --   "--check-hidden",
     -- }
+
+    vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost", "InsertLeave" }, {
+      callback = function()
+        lint.try_lint()
+      end,
+    })
+
     local nmap = require("user.key-map").nmap
     nmap("<leader>ll", lint.try_lint, "Trigger linting for current file")
   end,
