@@ -24,7 +24,6 @@ return {
       { "<leader>f", group = "FzfLua" },
       { "<leader>g", group = "Git" },
       { "<leader>l", group = "Format/Linting" },
-      { "<leader>n", group = "Neotest" },
       -- { "<leader>s", group = "Lsp[s]aga" },
       { "<leader>s", group = "Split window" },
       { "<leader>t", group = "Telescope" },

@@ -1,7 +1,7 @@
 -- https://github.com/nvim-neotest/neotest
 return {
   "nvim-neotest/neotest",
-  enabled = false,
+  enabled = true,
   lazy = true,
   dependencies = {
     "nvim-neotest/nvim-nio",
@@ -29,7 +29,9 @@ return {
   },
   ft = { "go", "typescript", "javascript", "rust" },
   config = function()
-    require("which-key").register({ n = { name = "+Neotest" } }, { prefix = "<leader>" })
+    require("which-key").add({
+      { "<leader>n", group = "Neotest" },
+    })
 
     local neotest = require("neotest")
     neotest.setup({
