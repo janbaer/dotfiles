@@ -210,6 +210,7 @@ alias -s {png,jpg,jpeg}=eog
 alias k="kubectl"
 alias kbb="kubectl run busybox --image=yauritux/busybox-curl --rm -it --restart=Never /bin/sh"
 alias kalpine="kubectl run alpine --image=alpine --rm -it --restart=Never /bin/sh"
+alias knetshoot="kubectl run netshoot --image=nicolaka/netshoot --rm -it --restart=Never /bin/bash"
 alias kerrorevents="kubectl get events --field-selector type!=Normal -A"
 
 # Alias for using molecule
