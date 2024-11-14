@@ -63,6 +63,20 @@ cmd delete ${{
   done
 }}
 
+cmd delete_with_sudo ${{
+  files=$(printf "$fx" | tr '\n' ';')
+  while [ "$files" ]; do
+    file=${files%%;*}
+
+    sudo rm -r "$(basename "$file")"
+    if [ "$files" = "$file" ]; then
+      files=''
+    else
+      files="${files#*;}"
+    fi
+  done
+}}
+
 cmd restore_trash ${{
   trash-restore
 }}
@@ -91,6 +105,7 @@ map ae $wine "$f"
 # Basic Functions
 map . set hidden!
 map D delete
+map <c-d> delete_with_sudo
 map dd trash
 map dr restore_trash
 map l lazy_git
