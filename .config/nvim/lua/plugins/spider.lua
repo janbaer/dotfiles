@@ -3,8 +3,8 @@
 -- https://github.com/chrisgrieser/nvim-spider
 return {
   "chrisgrieser/nvim-spider",
-  enabled = true,
-  lazy = false,
+  enabled = false,
+  lazy = true,
   opts = {
     skipInsignificantPunctuation = false,
   },
