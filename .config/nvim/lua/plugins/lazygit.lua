@@ -1,7 +1,8 @@
--- Plugin for calling lazygit from within neovim.
+-- Plugin for calling lazygit from within neovim.lazygit
 -- https://github.com/kdheepak/lazygit.nvim
 return {
   "kdheepak/lazygit.nvim",
+  enabled = false,
   cmd = {
     "LazyGit",
     "LazyGitConfig",
