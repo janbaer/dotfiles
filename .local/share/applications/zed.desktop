@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=Zed editor
+Exec=/usr/local/bin/zed %u

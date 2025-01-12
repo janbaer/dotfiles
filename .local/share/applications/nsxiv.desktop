@@ -1,4 +1,4 @@
 [Desktop Entry]
 Type=Application
-Name=feh image viewer
+Name=NSX image viewer
 Exec=/usr/bin/nsxiv -a %u
