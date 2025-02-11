@@ -17,3 +17,7 @@ bundle/
 tags
 .vim/spell/de.utf-8.add.spl
 .config/nvim/lazy-lock.json
+
+.zshrc.local
+.zshrc.bu
+.zcompdum**
