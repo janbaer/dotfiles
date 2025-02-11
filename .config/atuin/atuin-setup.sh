@@ -23,4 +23,6 @@ atuin-setup() {
 
 atuin-setup
 
-eval "$(/usr/bin/atuin init zsh --disable-up-arrow)"
+ATUIN=$(which atuin)
+
+eval "$($ATUIN init zsh --disable-up-arrow)"
