@@ -21,3 +21,5 @@ tags
 .zshrc.local
 .zshrc.bu
 .zcompdum**
+
+.tmux/plugins/
