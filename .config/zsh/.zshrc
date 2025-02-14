@@ -118,4 +118,10 @@ export KEYCHAIN_KEYS="$KEYCHAIN_KEYS_LOCAL $KEYCHAIN_KEYS_BU"
 # Config keys for Atuin together with Fzf and run init for Zsh
 [ -f $HOME/.config/atuin/atuin-setup.sh ] && source $HOME/.config/atuin/atuin-setup.sh
 
+# zoxide (better `cd`)
+# ------------------------------------------------------------------------------
+if type zoxide &>/dev/null; then
+  eval "$(zoxide init zsh --cmd cd)"
+fi
+
 # zprof # Show profiling result
