@@ -98,6 +98,7 @@ source $ZDOTDIR/.exports
 source $ZDOTDIR/.aliases
 source $ZDOTDIR/.functions
 
+[ -f $ZDOTDIR/.zshrc.macos ] && source $ZDOTDIR/.zshrc.macos
 
 [ -f $HOME/.fzf-init.zsh ] && source $HOME/.fzf-init.zsh
 
