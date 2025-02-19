@@ -48,7 +48,6 @@ source "${ZINIT_HOME}/zinit.zsh"
 # Define list of plugins that should be used
 zinit light ohmyzsh/ohmyzsh
 zinit ice depth=1; zinit light romkatv/powerlevel10k
-zinit snippet OMZP::sudo
 # zinit snippet OMZP::aws
 # zinit snippet OMZP::kubectl
 # zinit snippet OMZP::kubectx
@@ -68,13 +67,10 @@ export LC_ALL=en_US.UTF-8
   # [[ -f $HOME/.profile-linux ]] && source $HOME/.profile-linux
 # fi
 # if [ Darwin = `uname` ]; then
-  # [[ -f ~$HOME/.profile-macos ]] && source $HOME/.profile-macos
+#   [[ -f ~$HOME/.profile-macos ]] && source $HOME/.profile-macos
 # fi
 
 setopt auto_cd
-
-#export PATH="/usr/local/opt/curl/bin:$PATH"
-# export PATH="$PATH:$HOME/Library/flutter/bin"
 
 alias sudo='sudo '
 export LD_LIBRARY_PATH=/usr/local/lib
@@ -101,6 +97,7 @@ zle_highlight=('paste:none')
 source $ZDOTDIR/.exports
 source $ZDOTDIR/.aliases
 source $ZDOTDIR/.functions
+
 
 [ -f $HOME/.fzf-init.zsh ] && source $HOME/.fzf-init.zsh
 
