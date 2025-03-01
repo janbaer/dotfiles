@@ -115,6 +115,7 @@ return {
             buffer = "[Buffer]",
             path = "[Path]",
             cmdline = "[CMD]",
+            codecompanion = "[CC]",
           })[entry.source.name]
           return vim_item
         end,
@@ -124,6 +125,7 @@ return {
         { name = "codeium" },
         { name = "cmp_ai" },
         { name = "cmp_tabnine" },
+        { name = "codecompanion" },
         { name = "luasnip" },
         { name = "nvim_lua" },
         { name = "nvim_lsp" },
