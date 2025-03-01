@@ -12,7 +12,6 @@ return {
   { "voldikss/vim-floaterm",     event = "VeryLazy", enabled = true },  -- Showing a floating terminal for example TIG
   { "terryma/vim-expand-region", event = "VeryLazy", enabled = true },  -- Expand or reduce current selection
   { "tpope/vim-fugitive",        event = "VeryLazy", enabled = true },  -- A Git wrapper so awesome, it should be illegal
-  { "tpope/vim-rhubarb",         event = "VeryLazy", enabled = false }, -- GitHub extension for fugitive.vim
   { "tpope/vim-sleuth",          event = "VeryLazy", enabled = true },  -- Heuristically set buffer options - https://github.com/tpope/vim-sleuth
   { "fatih/vim-go",              ft = "go",          enabled = true },  -- Go development plugin for Vim - https://github.com/fatih/vim-go
 }
