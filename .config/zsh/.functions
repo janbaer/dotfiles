@@ -165,7 +165,7 @@ function gcor() {
 }
 
 function nf() {
-  nvim -O $(fzf -m --preview 'head -150 {} | pygmentize -O style=monokai' | tr '\n' ' ')
+  nvim -O $(fzf -m --preview 'bat --color=always {}' --preview-window '~3')
 }
 
 function cdf() {
