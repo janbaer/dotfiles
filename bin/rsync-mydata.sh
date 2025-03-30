@@ -1,6 +1,6 @@
 function rsync_remote() {
   local server_address=$1
-  local target_dir="${user}@${server_address}:/volume1/backup/${2}/"
+  local target_dir="${user}@${server_address}:/backup/${2}/"
   local user=$3
   local source_dir="$4/"
   local exclude_from_file=$5
@@ -16,9 +16,9 @@ function rsync_remote() {
   echo "backup directory $source_dir to $target_dir"
   echo "------------------------------------------"
 
-  rsync -avu --progress --delete                    \
-        --exclude-from=$exclude_from_file           \
-        -e "ssh -i /home/$(whoami)/.ssh/rsync-key"  \
+  rsync -avu --progress --delete                                  \
+        --exclude-from=$exclude_from_file                         \
+        -e "ssh -i /home/$(whoami)/.ssh/id_ed25519_jabasoft-ug"   \
         "${source_dir}" "${target_dir}"
 }
 
