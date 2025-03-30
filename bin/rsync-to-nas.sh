@@ -2,4 +2,4 @@
 
 . /home/jan/bin/rsync-mydata.sh
 
-backup "jabasoft-ds" "${HOSTNAME}/$(whoami)" "$(whoami)" "/home/$(whoami)" "/home/$(whoami)/rsync-remote-excludes"
+backup "jabasoft-ug" "${HOSTNAME}/$(whoami)" "$(whoami)" "/home/$(whoami)" "/home/$(whoami)/rsync-remote-excludes"
