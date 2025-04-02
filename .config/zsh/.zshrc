@@ -98,7 +98,9 @@ source $ZDOTDIR/.exports
 source $ZDOTDIR/.aliases
 source $ZDOTDIR/.functions
 
-[ -f $ZDOTDIR/.zshrc.macos ] && source $ZDOTDIR/.zshrc.macos
+if [[ $(uname) == 'Darwin' ]]; then
+  [ -f $ZDOTDIR/.zshrc.macos ] && source $ZDOTDIR/.zshrc.macos
+fi
 
 [ -f $HOME/.fzf-init.zsh ] && source $HOME/.fzf-init.zsh
 
