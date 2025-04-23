@@ -1,4 +1,4 @@
-theme = dark:tokyonight,light:tokyonight-day
+theme = tokyonight
 
 font-family = "ComicShannsMono Nerd Font Mono"
 font-size = 16
