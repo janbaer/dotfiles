@@ -2,5 +2,9 @@
 
 . /home/jan/bin/rsync-mydata.sh
 
-backup "USB" "${HOSTNAME}/$(whoami)" "$(whoami)" "/home/$(whoami)" "/home/$(whoami)/rsync-local-excludes"
-backup "USB" "${HOSTNAME}/local-bin" "$(whoami)" "/usr/local/bin" "/home/$(whoami)/rsync-local-excludes"
+hostname=$(hostname | tr '[a-zA-Z]' '[A-Za-z]')
+
+backup "USB" "${hostname}/$(whoami)" "$(whoami)" "/home/$(whoami)/" "/home/$(whoami)/rsync-local-excludes"
+backup "USB" "${hostname}/local-bin" "$(whoami)" "/usr/local/bin/" "/home/$(whoami)/rsync-local-excludes"
+backup "USB" "${hostname}/etc" "$(whoami)" "/etc/hosts" "/home/$(whoami)/rsync-local-excludes"
+backup "USB" "${hostname}/etc" "$(whoami)" "/etc/fstab" "/home/$(whoami)/rsync-local-excludes"

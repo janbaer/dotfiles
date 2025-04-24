@@ -2,7 +2,7 @@ function rsync_remote() {
   local server_address=$1
   local target_dir="${user}@${server_address}:/backup/${2}/"
   local user=$3
-  local source_dir="$4/"
+  local source_dir="$4"
   local exclude_from_file=$5
 
   # echo "*******************************"
@@ -25,7 +25,7 @@ function rsync_remote() {
 function rsync_local() {
   local target_dir="/run/media/jan/BACKUP-HD/${1}/"
   local user=$2
-  local source_dir="$3/"
+  local source_dir="$3"
   local exclude_from_file=$4
 
   # echo "*******************************"
