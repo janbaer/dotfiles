@@ -1,0 +1,42 @@
+{
+  "if statement": {
+    "prefix": "if",
+    "body": [
+      "if ${1} {${0}}"
+    ]
+  },
+  "test function": {
+    "prefix": "test",
+    "body": [
+      "func Test_${1}(t *testing.T) {${0}",
+      "}"
+    ]
+  },
+  "given convey": {
+    "prefix": "given",
+    "body": [
+      "Convey(\"Given ${1}\", t, func() {${0}",
+      "})"
+    ]
+  },
+  "when convey": {
+    "prefix": "when",
+    "body": [
+      "Convey(\"When ${1}\", t, func() {${0}",
+      "})"
+    ]
+  },
+  "it should convey": {
+    "prefix": "it",
+    "body": [
+      "Convey(\"It should ${1}\", func() {${0}",
+      "})"
+    ]
+  },
+  "so assertion": {
+    "prefix": "so",
+    "body": [
+      "So(${1}, Should${2}, ${3})"
+    ]
+  }
+}

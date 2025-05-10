@@ -1,0 +1,6 @@
+{
+  "ansible builtin": {
+    "prefix": "abi",
+    "body": ["ansible.builtin.${0}"]
+  }
+}

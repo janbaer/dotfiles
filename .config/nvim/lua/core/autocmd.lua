@@ -124,13 +124,3 @@ create_autocmd({ "BufWinLeave", "BufWinEnter" }, {
     handle_view_operations(args.event)
   end
 })
-
--- CmpDebounceAuGroup
-local cmp_debounce_group = create_augroup("CmpDebounceAuGroup", { clear = true })
-create_autocmd("TextChangedI", {
-  group = cmp_debounce_group,
-  pattern = "*",
-  callback = function()
-    require("user.debounce-cmp").debounce(1500)
-  end
-})

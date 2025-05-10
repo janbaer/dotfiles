@@ -1,6 +1,6 @@
 return {
   "tzachar/cmp-tabnine",
-  enabled = true,
+  enabled = false,
   event = "VeryLazy",
   build = "./install.sh",
   dependencies = {

@@ -1,0 +1,356 @@
+{
+  "Non-Breaking Space": {
+    "prefix": "nbs",
+    "body": ["&nbsp;"]
+  },
+  "Left Arrow": {
+    "prefix": "left",
+    "body": ["&#x2190;"]
+  },
+  "Right Arrow": {
+    "prefix": "right",
+    "body": ["&#x2192;"]
+  },
+  "Up Arrow": {
+    "prefix": "up",
+    "body": ["&#x2191;"]
+  },
+  "Down Arrow": {
+    "prefix": "down",
+    "body": ["&#x2193;"]
+  },
+  "Return Symbol": {
+    "prefix": "return",
+    "body": ["&#x21A9;"]
+  },
+  "Backtab Symbol": {
+    "prefix": "backtab",
+    "body": ["&#x21E4;"]
+  },
+  "Tab Symbol": {
+    "prefix": "tab",
+    "body": ["&#x21E5;"]
+  },
+  "Shift Symbol": {
+    "prefix": "shift",
+    "body": ["&#x21E7;"]
+  },
+  "Control Symbol": {
+    "prefix": "control",
+    "body": ["&#x2303;"]
+  },
+  "Enter Symbol": {
+    "prefix": "enter",
+    "body": ["&#x2305;"]
+  },
+  "Command Symbol": {
+    "prefix": "command",
+    "body": ["&#x2318;"]
+  },
+  "Option Symbol": {
+    "prefix": "option",
+    "body": ["&#x2325;"]
+  },
+  "Delete Symbol": {
+    "prefix": "delete",
+    "body": ["&#x2326;"]
+  },
+  "Backspace Symbol": {
+    "prefix": "backspace",
+    "body": ["&#x232B;"]
+  },
+  "Escape Symbol": {
+    "prefix": "escape",
+    "body": ["&#x238B;"]
+  },
+  "HTML 4.01 Strict": {
+    "prefix": "doctype HTML 4.01 Strict",
+    "body": [
+      "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\"",
+      "\"http://www.w3.org/TR/html4/strict.dtd\">"
+    ]
+  },
+  "HTML 4.01 Transitional": {
+    "prefix": "doctype HTML 4.01 Transitional",
+    "body": [
+      "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"",
+      "\"http://www.w3.org/TR/html4/loose.dtd\">"
+    ]
+  },
+  "HTML 5": {
+    "prefix": "doctype HTML 5",
+    "body": ["<!DOCTYPE HTML>"]
+  },
+  "XHTML 1.0 Frameset": {
+    "prefix": "doctype XHTML 1.0 Frameset",
+    "body": [
+      "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"",
+      "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"
+    ]
+  },
+  "XHTML 1.0 Strict": {
+    "prefix": "doctype XHTML 1.0 Strict",
+    "body": [
+      "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"",
+      "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"
+    ]
+  },
+  "XHTML 1.0 Transitional": {
+    "prefix": "doctype XHTML 1.0 Transitional",
+    "body": [
+      "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"",
+      "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
+    ]
+  },
+  "XHTML 1.1": {
+    "prefix": "doctype XHTML 1.1",
+    "body": [
+      "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\"",
+      "\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">"
+    ]
+  },
+  "HTML 4.01 Strict (short)": {
+    "prefix": "docts",
+    "body": [
+      "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\"",
+      "\"http://www.w3.org/TR/html4/strict.dtd\">"
+    ]
+  },
+  "HTML 4.01 Transitional (short)": {
+    "prefix": "doct",
+    "body": [
+      "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"",
+      "\"http://www.w3.org/TR/html4/loose.dtd\">"
+    ]
+  },
+  "HTML 5 (short)": {
+    "prefix": "doct5",
+    "body": ["<!DOCTYPE HTML>"]
+  },
+  "XHTML 1.0 Frameset (short)": {
+    "prefix": "docxf",
+    "body": [
+      "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Frameset//EN\"",
+      "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd\">"
+    ]
+  },
+  "XHTML 1.0 Strict (short)": {
+    "prefix": "docxs",
+    "body": [
+      "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"",
+      "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"
+    ]
+  },
+  "XHTML 1.0 Transitional (short)": {
+    "prefix": "docxt",
+    "body": [
+      "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"",
+      "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
+    ]
+  },
+  "XHTML 1.1 (short)": {
+    "prefix": "docx",
+    "body": [
+      "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\"",
+      "\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">"
+    ]
+  },
+  "html tag": {
+    "prefix": "html",
+    "body": ["<html>", "${1}", "</html>"]
+  },
+  "xhtml tag": {
+    "prefix": "xhtml",
+    "body": ["<html xmlns=\"http://www.w3.org/1999/xhtml\">", "${1}", "</html>"]
+  },
+  "body tag": {
+    "prefix": "body",
+    "body": ["<body>", "\t${1}", "</body>"]
+  },
+  "head tag": {
+    "prefix": "head",
+    "body": [
+      "<head>",
+      "\t<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\">",
+      "\t<title>${1}</title>",
+      "\t${2}",
+      "</head>"
+    ]
+  },
+  "title tag": {
+    "prefix": "title",
+    "body": ["<title>${1}</title>${2}"]
+  },
+  "script tag": {
+    "prefix": "script",
+    "body": [
+      "<script type=\"text/javascript\" charset=\"utf-8\">",
+      "\t${1}",
+      "</script>${2}"
+    ]
+  },
+  "script src tag": {
+    "prefix": "scriptsrc",
+    "body": ["<script src=\"${1}.js\" type=\"text/javascript\" charset=\"utf-8\"></script>${2}"]
+  },
+  "style tag": {
+    "prefix": "style",
+    "body": [
+      "<style type=\"text/css\" media=\"${1:screen}\">",
+      "\t${2}",
+      "</style>${3}"
+    ]
+  },
+  "base tag": {
+    "prefix": "base",
+    "body": ["<base href=\"${1}\" target=\"${2}\">"]
+  },
+  "br tag": {
+    "prefix": "r",
+    "body": ["<br>"]
+  },
+  "div tag": {
+    "prefix": "div",
+    "body": ["<div${1}>", "\t${2}", "</div>"]
+  },
+  "i18next translation": {
+    "prefix": "t",
+    "body": ["<%= t('${1}') %>"] 
+  },
+  "embed QT movie": {
+    "prefix": "movie",
+    "body": [
+      "<object width=\"$2\" height=\"$3\" classid=\"clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B\"",
+      "\t\tcodebase=\"http://www.apple.com/qtactivex/qtplugin.cab\">",
+      "\t<param name=\"src\" value=\"$1\">",
+      "\t<param name=\"controller\" value=\"$4\">",
+      "\t<param name=\"autoplay\" value=\"$5\">",
+      "\t<embed src=\"${1:movie.mov}\"",
+      "\t\twidth=\"${2:320}\" height=\"${3:240}\"",
+      "\t\tcontroller=\"${4:true}\" autoplay=\"${5:true}\"",
+      "\t\tscale=\"tofit\" cache=\"true\"",
+      "\t\tpluginspage=\"http://www.apple.com/quicktime/download/\"",
+      "\t>",
+      "</object>${6}"
+    ]
+  },
+  "fieldset tag": {
+    "prefix": "fieldset",
+    "body": [
+      "<fieldset id=\"$1\">",
+      "\t<legend>${1:name}</legend>",
+      "\t${3}",
+      "</fieldset>"
+    ]
+  },
+  "form tag": {
+    "prefix": "form",
+    "body": [
+      "<form action=\"${1}\" method=\"${2:get}\" accept-charset=\"utf-8\">",
+      "\t${3}",
+      "</form>"
+    ]
+  },
+  "h1 tag": {
+    "prefix": "h1",
+    "body": ["<h1 id=\"${1:heading}\">${2:$1}</h1>"]
+  },
+  "h2 tag": {
+    "prefix": "h2",
+    "body": ["<h2 id=\"${1:heading}\">${2:$1}</h2>"]
+  },
+  "h3 tag": {
+    "prefix": "h3",
+    "body": ["<h3 id=\"${1:heading}\">${2:$1}</h3>"]
+  },
+  "h4 tag": {
+    "prefix": "h4",
+    "body": ["<h4 id=\"${1:heading}\">${2:$1}</h4>"]
+  },
+  "input tag": {
+    "prefix": "input",
+    "body": ["<input type=\"${1:text/submit/hidden/button}\" name=\"${2:some_name}\" value=\"${3}\">${4}"]
+  },
+  "label with input": {
+    "prefix": "label",
+    "body": [
+      "<label for=\"${2:$1}\">${1:name}</label>",
+      "<input type=\"${3:text/submit/hidden/button}\" name=\"${4:$2}\" value=\"${5}\" id=\"${6:$2}\">${7}"
+    ]
+  },
+  "link tag": {
+    "prefix": "link",
+    "body": ["<link rel=\"${1:stylesheet}\" href=\"${2:/css/master.css}\" type=\"text/css\" media=\"${3:screen}\" charset=\"utf-8\">${4}"]
+  },
+  "mailto link": {
+    "prefix": "mailto",
+    "body": ["<a href=\"mailto:${1:joe@example.com}?subject=${2:feedback}\">${3:email me}</a>"]
+  },
+  "meta tag": {
+    "prefix": "meta",
+    "body": ["<meta name=\"${1:name}\" content=\"${2:content}\">${3}"]
+  },
+  "option tag": {
+    "prefix": "opt",
+    "body": ["<option value=\"${1:option}\">${2:$1}</option>${3}"]
+  },
+  "option tag without value": {
+    "prefix": "optt",
+    "body": ["<option>${1:option}</option>${2}"]
+  },
+  "select tag": {
+    "prefix": "select",
+    "body": [
+      "<select name=\"${1:some_name}\" id=\"${2:$1}\">",
+      "\t<option value=\"${3:option}\">${4:$3}</option>",
+      "</select>${5}"
+    ]
+  },
+  "table tag": {
+    "prefix": "table",
+    "body": ["<table${1}>", "\t${2}", "</table>"]
+  },
+  "textarea tag": {
+    "prefix": "textarea",
+    "body": ["<textarea name=\"${1:Name}\" rows=\"${2:8}\" cols=\"${3:40}\">${4}</textarea>${5}"]
+  },
+  "trans tag": {
+    "prefix": "trans",
+    "body": ["{% trans %}${1:key}{% endtrans %}${2}"]
+  },
+  "html5 template": {
+    "prefix": "html5",
+    "body": [
+      "<!DOCTYPE html>",
+      "<html>",
+      "<head>",
+      "\t<title>${1}</title>",
+      "\t<link rel=\"stylesheet\" href=\"/css/style.css\">",
+      "</head>",
+      "<body>",
+      "${2}",
+      "</body>",
+      "</html>"
+    ]
+  },
+  "template tag": {
+    "prefix": "template",
+    "body": ["<template>${1}</template>"]
+  },
+  "require tag": {
+    "prefix": "require",
+    "body": ["<require from=\"${1}\">${2}</require>"]
+  },
+  "double curly braces": {
+    "prefix": "{{",
+    "body": ["{{ ${1} }}"]
+  },
+  "square braces curly": {
+    "prefix": "[{",
+    "body": ["[{ ${1} }]"]
+  },
+  "routerLink": {
+    "prefix": "rl",
+    "body": ["[routerLink]=\"['${1}']\""]
+  }
+}
