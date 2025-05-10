@@ -1,5 +1,7 @@
+-- A native neovim extension for Windsurf (formerly Codeium)
+-- https://github.com/Exafunction/windsurf.nvim
 return {
-  "Exafunction/codeium.nvim",
+  "Exafunction/windsurf.nvim",
   enabled = true,
   event = "VeryLazy",
   dependencies = {

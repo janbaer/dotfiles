@@ -1,0 +1,62 @@
+{
+  "link id": {
+    "prefix": "[]",
+    "body": ["[${1:link_id}][]${2}"]
+  },
+  "link reference": {
+    "prefix": "[[",
+    "body": ["[${1:link}][${2:id}]${3}"]
+  },
+  "link url": {
+    "prefix": "[(",
+    "body": ["[${1:link}](http://${2:url})${3}"]
+  },
+  "link email": {
+    "prefix": "[@",
+    "body": ["[${1:link}(mailto:${2:email})${3}"]
+  },
+  "link with title": {
+    "prefix": "[(\"",
+    "body": ["[${1:link}](${2:url} \"${3:title}\")${4}"]
+  },
+  "reference id": {
+    "prefix": "[",
+    "body": ["[${1:id}]: http://${2:url} \"${3:title}\""]
+  },
+  "reference email": {
+    "prefix": "[:@",
+    "body": ["[${1:id}]: mailto:${2:url} \"${3:title}\""]
+  },
+  "image with alt text": {
+    "prefix": "![",,
+    "body": ["![${1:alt}][${2:id}]${3}"]
+  },
+  "image with url": {
+    "prefix": "!(",
+    "body": ["![${1:alt}](${2:url})${3}"]
+  },
+  "image with title": {
+    "prefix": "!(\"",
+    "body": ["![${1:alt}](${2:url} \"${3:title}\")${4}"]
+  },
+  "emphasis asterisk": {
+    "prefix": "*",
+    "body": ["*${1}*${2}"]
+  },
+  "emphasis underscore": {
+    "prefix": "_",
+    "body": ["_${1}_${2}"]
+  },
+  "strong asterisk": {
+    "prefix": "**",
+    "body": ["**${1}**${2}"]
+  },
+  "strong underscore": {
+    "prefix": "__",
+    "body": ["__${1}__${2}"]
+  },
+  "code": {
+    "prefix": "`",
+    "body": ["`${1}`${2}"]
+  }
+}

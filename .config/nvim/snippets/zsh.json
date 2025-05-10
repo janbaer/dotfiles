@@ -1,0 +1,112 @@
+{
+  "shebang": {
+    "prefix": "#!",
+    "body": ["#!/bin/zsh"]
+  },
+  "if statement": {
+    "prefix": "if",
+    "body": [
+      "if ${1:condition}; then",
+      "\t${2:# statements}",
+      "fi"
+    ]
+  },
+  "if else statement": {
+    "prefix": "ife",
+    "body": [
+      "if ${1:condition}; then",
+      "\t${2:# statements}",
+      "else",
+      "\t${3:# statements}",
+      "fi"
+    ]
+  },
+  "elif statement": {
+    "prefix": "elif",
+    "body": [
+      "elif ${1:condition} ; then",
+      "\t${2:# statements}"
+    ]
+  },
+  "for loop": {
+    "prefix": "for",
+    "body": [
+      "for (( ${2:i} = 0; $2 < ${1:count}; $2++ )); do",
+      "\t${3:# statements}",
+      "done"
+    ]
+  },
+  "for each loop": {
+    "prefix": "fore",
+    "body": [
+      "for ${1:item} in ${2:list}; do",
+      "\t${3:# statements}",
+      "done"
+    ]
+  },
+  "while loop": {
+    "prefix": "wh",
+    "body": [
+      "while ${1:condition}; do",
+      "\t${2:# statements}",
+      "done"
+    ]
+  },
+  "until loop": {
+    "prefix": "until",
+    "body": [
+      "until ${1:condition}; do",
+      "\t${2:# statements}",
+      "done"
+    ]
+  },
+  "repeat loop": {
+    "prefix": "repeat",
+    "body": [
+      "repeat ${1:integer}; do",
+      "\t${2:# statements}",
+      "done"
+    ]
+  },
+  "case statement": {
+    "prefix": "case",
+    "body": [
+      "case ${1:word} in",
+      "\t${2:pattern})",
+      "\t\t${3};;",
+      "esac"
+    ]
+  },
+  "select statement": {
+    "prefix": "select",
+    "body": [
+      "select ${1:answer} in ${2:choices}; do",
+      "\t${3:# statements}",
+      "done"
+    ]
+  },
+  "parentheses": {
+    "prefix": "(",
+    "body": ["( ${1:#statements} )"]
+  },
+  "braces": {
+    "prefix": "{",
+    "body": ["{ ${1:#statements} }"]
+  },
+  "test": {
+    "prefix": "[",
+    "body": ["[[ ${1:test} ]]"]
+  },
+  "always": {
+    "prefix": "always",
+    "body": ["{ ${1:try} } always { ${2:always} }"]
+  },
+  "function": {
+    "prefix": "fun",
+    "body": [
+      "function ${1:name} (${2:args}) {",
+      "\t${3:# body}",
+      "}"
+    ]
+  }
+}
