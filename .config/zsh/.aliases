@@ -238,3 +238,10 @@ alias tf="terraform"
 alias timezsh='for i in $(seq 1 5); do time zsh -i -c exit; done'
 
 alias zsh-secrets="source $ZDOTDIR/.zshrc.secrets"
+
+## Aliases for GPG
+alias gpg-edit-key="gpg --expert --edit-key $GPGKEY"
+alias gpg-quick-add-subkey="gpg --pinentry-mode loopback --quick-add-key $GPGKEY_FP ed25519 auth"
+alias gpg-show-keygrips="gpg --list-secret-keys --with-keygrip --keyid-format long"
+alias gpg-show-fingerprints="gpg --list-secret-keys --with-subkey-fingerprints --keyid-format long"
+alias gpg-reload-agent="gpg-connect-agent reloadagent /bye"
