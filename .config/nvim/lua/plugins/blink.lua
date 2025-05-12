@@ -1,3 +1,5 @@
+--- Performant, batteries-included completion plugin for Neovim
+--- https://github.com/Saghen/blink.cmp
 return {
   "saghen/blink.cmp",
   enabled = true,
