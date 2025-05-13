@@ -8,19 +8,19 @@ fi
 if [[ "$(uname)" == "Darwin" ]]; then
   killall ssh-agent
   eval "$(ssh-agent)"
+
+  stringList="$KEYCHAIN_KEYS"
+  keys=(${(s: :)stringList})
+  for key in "${keys[@]}"; do
+    if [[ "$(uname)" == "Darwin" ]]; then
+      ssh-add --apple-use-keychain ~/.ssh/$key 2>/dev/null
+    fi
+  done
+  exit 0 
 fi
 
-stringList="$KEYCHAIN_KEYS"
-
-keys=(${(s: :)stringList})
-
-for key in "${keys[@]}"; do
-  if [[ "$(uname)" == "Darwin" ]]; then
-    ssh-add --apple-use-keychain ~/.ssh/$key 2>/dev/null
-  else
-    eval $(keychain --quiet --agents ssh --eval "$key")
-  fi
-done
+eval $(keychain --quiet --ssh-spawn-gpg --eval $GPGKEY)
+eval $(keychain --quiet --eval $KEYCHAIN_KEYS)
 
 mkdir -p ~/tmp
 touch ~/tmp/keychain_init_done
