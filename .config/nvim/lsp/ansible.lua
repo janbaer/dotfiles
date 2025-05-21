@@ -1,28 +1,36 @@
----@type vim.lsp.Config
---- https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/configs/ansiblels.lua
---- https://github.com/neovim/nvim-lspconfig/pull/3659/files#diff-5ecad9b03732db4dfd97f3aa9874fa465b88ee4e121bf152e670f46e4f19cc6e
+---@brief
+---
+--- https://github.com/ansible/vscode-ansible
+---
+--- Language server for the ansible configuration management tool.
+---
+--- `ansible-language-server` can be installed via `npm`:
+---
+--- ```sh
+--- npm install -g @ansible/ansible-language-server
+--- ```
 return {
-    cmd = { "ansible-language-server", "--stdio" },
-    settings = {
-        ansible = {
-            python = {
-                interpreterPath = "python",
-            },
-            ansible = {
-                path = "ansible",
-            },
-            executionEnvironment = {
-                enabled = false,
-            },
-            validation = {
-                enabled = true,
-                lint = {
-                    enabled = true,
-                    path = "ansible-lint",
-                },
-            },
+  cmd = { 'ansible-language-server', '--stdio' },
+  settings = {
+    ansible = {
+      python = {
+        interpreterPath = 'python',
+      },
+      ansible = {
+        path = 'ansible',
+      },
+      executionEnvironment = {
+        enabled = false,
+      },
+      validation = {
+        enabled = true,
+        lint = {
+          enabled = true,
+          path = 'ansible-lint',
         },
+      },
     },
-    filetypes = { "yaml.ansible" },
-    root_markers = { "ansible.cfg", ".ansible-lint" },
+  },
+  filetypes = { 'yaml.ansible' },
+  root_markers = { 'ansible.cfg', '.ansible-lint' },
 }

@@ -29,12 +29,16 @@
 --- }
 --- ```
 ---
+--- Use the `:LspTypescriptSourceAction` command to see "whole file" ("source") code-actions such as:
+--- - organize imports
+--- - remove unused code
+---
 --- ### Vue support
 ---
---- As of 2.0.0, Volar no longer supports TypeScript itself. Instead, a plugin
+--- As of 2.0.0, the Vue language server no longer supports TypeScript itself. Instead, a plugin
 --- adds Vue support to this language server.
 ---
---- *IMPORTANT*: It is crucial to ensure that `@vue/typescript-plugin` and `volar `are of identical versions.
+--- *IMPORTANT*: It is crucial to ensure that `@vue/typescript-plugin` and `@vue/language-server `are of identical versions.
 ---
 --- ```lua
 --- vim.lsp.config('ts_ls', {
@@ -54,9 +58,9 @@
 ---   },
 --- })
 ---
---- -- You must make sure volar is setup
---- -- e.g. require'lspconfig'.volar.setup{}
---- -- See volar's section for more information
+--- -- You must make sure the Vue language server is setup
+--- -- e.g. vim.lsp.config('vue_ls')
+--- -- See vue_ls's section for more information
 --- ```
 ---
 --- `location` MUST be defined. If the plugin is installed in `node_modules`,
@@ -78,4 +82,34 @@ return {
     'typescript.tsx',
   },
   root_markers = { 'tsconfig.json', 'jsconfig.json', 'package.json', '.git' },
+  handlers = {
+    -- handle rename request for certain code actions like extracting functions / types
+    ['_typescript.rename'] = function(_, result, ctx)
+      local client = assert(vim.lsp.get_client_by_id(ctx.client_id))
+      vim.lsp.util.show_document({
+        uri = result.textDocument.uri,
+        range = {
+          start = result.position,
+          ['end'] = result.position,
+        },
+      }, client.offset_encoding)
+      vim.lsp.buf.rename()
+      return vim.NIL
+    end,
+  },
+  on_attach = function(client)
+    -- ts_ls provides `source.*` code actions that apply to the whole file. These only appear in
+    -- `vim.lsp.buf.code_action()` if specified in `context.only`.
+    vim.api.nvim_buf_create_user_command(0, 'LspTypescriptSourceAction', function()
+      local source_actions = vim.tbl_filter(function(action)
+        return vim.startswith(action, 'source.')
+      end, client.server_capabilities.codeActionProvider.codeActionKinds)
+
+      vim.lsp.buf.code_action({
+        context = {
+          only = source_actions,
+        },
+      })
+    end, {})
+  end,
 }
