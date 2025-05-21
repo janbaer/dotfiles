@@ -13,7 +13,7 @@ bat_preview() {
   bat --color=always --theme=base16 "$1"
 }
 
-TEMPDIR=/home/eric/.cache
+TEMPDIR=/home/jan/.cache
 
 file="$1"; shift
 case "$(basename "$file" | tr '[A-Z]' '[a-z]')" in
