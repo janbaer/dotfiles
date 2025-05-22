@@ -19,6 +19,7 @@ return {
         "ansible-lint",
         -- "codespell",
         "eslint_d",
+        "eslint-lsp",
         "jsonlint",
         "luacheck",
         -- "nix",
@@ -30,6 +31,8 @@ return {
         -- "trivy",
         "prettier",
         "stylua",
+        "terraform-ls",
+        "yaml-language-server",
       },
     })
   end,
