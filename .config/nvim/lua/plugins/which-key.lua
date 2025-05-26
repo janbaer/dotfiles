@@ -29,6 +29,7 @@ return {
       { "<leader>t", group = "Telescope" },
       { "<leader>w", group = "Workspaces" },
       { "<leader>x", group = "Trouble" },
+      { "gr",        group = "LSP commands" },
     }
     wk.add(keys)
   end

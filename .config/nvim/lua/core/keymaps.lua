@@ -57,6 +57,8 @@ nmap("<leader>se", "<C-w>=") -- make split windows equal width
 -- nmap('<leader>tr', '<cmd>lua vim.lsp.buf.document_symbol()<CR>')
 -- imap('<C-Space>', '<cmd>lua vim.lsp.buf.completion()<CR>')
 
+nmap('grd', "<cmd>lua vim.lsp.buf.definition()<CR>", "Goto definition")
+
 map({ "n", "v" }, "<Space>", "<Nop>")
 
 -- Remap for dealing with word wrap
