@@ -1,7 +1,7 @@
 {
   "shebang": {
     "prefix": "#!",
-    "body": ["#!/bin/zsh"]
+    "body": ["#!/usr/bin/env zsh"]
   },
   "if statement": {
     "prefix": "if",

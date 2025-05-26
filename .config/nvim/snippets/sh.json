@@ -1,7 +1,7 @@
 {
   "shebang": {
     "prefix": "shebang",
-    "body": ["#!/bin/bash", ""]
+    "body": ["#!/usr/bin/env bash", ""]
   },
   "if statement": {
     "prefix": "if",
