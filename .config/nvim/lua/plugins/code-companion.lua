@@ -2,7 +2,7 @@
 -- https://github.com/olimorris/codecompanion.nvim
 return {
   "olimorris/codecompanion.nvim",
-  enabled = false,
+  enabled = true,
   event = "VeryLazy",
   dependencies = {
     "nvim-lua/plenary.nvim",
@@ -76,13 +76,13 @@ return {
     },
     strategies = {
       chat = {
-        adapter = "anthropic",
+        adapter = "gemini",
         tools = {
           opts = {
             auto_submit_errors = false,  -- Send any errors to the LLM automatically?
             auto_submit_success = false, -- Send any successful output to the LLM automatically?
           },
-        }
+        },
       },
       inline = {
         adapter = "anthropic",
@@ -107,6 +107,30 @@ return {
           },
           env = {
             api_key = "cmd:gopass show /cloud/anthropic/claude",
+          },
+        })
+      end,
+      gemini = function()
+        return require("codecompanion.adapters").extend("gemini", {
+          schema = {
+            model = {
+              default = "gemini-2.5-flash-preview-05-20",
+            },
+          },
+          env = {
+            api_key = "cmd:gopass show /cloud/google/gemini",
+          },
+        })
+      end,
+      huggingface = function()
+        return require("codecompanion.adapters").extend("huggingface", {
+          schema = {
+            model = {
+              default = "Mistral-Nemo-Instruct-2407",
+            },
+          },
+          env = {
+            api_key = "cmd:gopass show /cloud/huggingface/neovim",
           },
         })
       end,
