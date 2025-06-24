@@ -3,6 +3,5 @@
 return {
   "j-hui/fidget.nvim",
   enabled = true,
-  tag = "legacy",
   opts = {},
 }
