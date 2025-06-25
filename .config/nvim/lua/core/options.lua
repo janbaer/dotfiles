@@ -120,3 +120,14 @@ vim.g.rooter_cd_cmd = "lcd"
 -- require('material.functions').change_style('palenight')
 vim.o.termguicolors = true
 vim.cmd("colorscheme catppuccin")
+
+-- Configurations for Showing LSP diagnostic results
+-- https://neovim.io/doc/user/diagnostic.html
+vim.diagnostic.config({
+  virtual_text = true,      -- Use virtual text for diagnostics
+  virtual_lines = false,    -- Use virtual lines for diagnostics.
+  -- signs = true,       --  Use signs for diagnostics
+  underline = true,         --  Use underline for diagnostics.
+  update_in_insert = false, -- Update diagnostics in Insert mode (if false, diagnostics are updated on InsertLeave)
+  -- severity_sort false,  -- Sort diagnostics by severity. This affects the order in which signs, virtual text, and highlights are displayed
+});
