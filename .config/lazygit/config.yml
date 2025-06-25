@@ -23,6 +23,11 @@ customCommands:
     context: 'global'
     command: "git commit"
     subprocess: true
+  - key: '<c-C>'
+    context: 'global'
+    description: "Create a commit message with using AI"
+    command: "lumen draft | wl-copy"
+    subprocess: true
   - key: 'f'
     context: 'global'
     command: "git fetch"
