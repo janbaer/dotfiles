@@ -22,16 +22,16 @@ customCommands:
   - key: 'C'
     context: 'global'
     command: "git commit"
-    subprocess: true
+    output: terminal
   - key: '<c-C>'
     context: 'global'
     description: "Create a commit message with using AI"
     command: "lumen draft | wl-copy"
-    subprocess: true
+    output: terminal
   - key: 'f'
     context: 'global'
     command: "git fetch"
-    subprocess: true
+    output: terminal
   - key: 'n'
     context: 'localBranches'
     prompts:
@@ -44,4 +44,4 @@ customCommands:
   - key: '<c-p>'
     context: 'localBranches'
     command: "git push --no-verify --force-with-lease"
-    loadingText: "Git pushing without verifying..." 
+    loadingText: "Git pushing without verifying..."
