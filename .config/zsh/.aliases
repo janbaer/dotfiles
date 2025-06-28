@@ -82,6 +82,7 @@ alias cleanup_ds_store="find . -name '*.DS_Store' -type f -ls -delete"
 # Some other Shortcuts
 alias n="nvim"
 alias vim="nvim"
+alias nvc="cd ~/Projects/dotfiles/ && nvim"
 alias e="nvim -c 'startinsert'"
 alias nvim-lazy-sync="nvim --headless '+Lazy! sync' +qa"
 
