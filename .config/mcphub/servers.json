@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "git": {  
+      "command": "docker",  
+      "args": ["run", "--rm", "-i", "--mount", "type=bind,src=/home/jan/Projects,dst=/home/jan/Projects", "mcp/git"]  
+    } 
+  }
+}

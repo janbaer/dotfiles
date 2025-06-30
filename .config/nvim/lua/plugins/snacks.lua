@@ -25,6 +25,7 @@ return {
           { icon = " ", key = "s", desc = "Restore Session", section = "session" },
           { icon = "󰒲 ", key = "L", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
           { icon = "M ", key = "M", desc = "Mason", action = ":Mason" },
+          { icon = "H ", key = "H", desc = "MCPHub", action = ":MCPHub" },
           { icon = " ", key = "q", desc = "Quit", action = ":qa" },
         },
       },

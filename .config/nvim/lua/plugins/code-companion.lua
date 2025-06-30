@@ -10,6 +10,16 @@ return {
     "j-hui/fidget.nvim",
   },
   opts = {
+    extensions = {
+      mcphub = {
+        callback = "mcphub.extensions.codecompanion",
+        opts = {
+          show_result_in_chat = true, -- Show mcp tool results in chat
+          make_vars = true,           -- Convert resources to #variables
+          make_slash_commands = true, -- Add prompts as /slash commands
+        },
+      },
+    },
     display = {
       action_palette = {
         width = 95,
@@ -126,18 +136,6 @@ return {
           },
         })
       end,
-      huggingface = function()
-        return require("codecompanion.adapters").extend("huggingface", {
-          schema = {
-            model = {
-              default = "Mistral-Nemo-Instruct-2407",
-            },
-          },
-          env = {
-            api_key = "cmd:gopass show /cloud/huggingface/neovim",
-          },
-        })
-      end,
     },
     opts = {
       -- log_level = "DEBUG",
@@ -150,7 +148,7 @@ return {
   },
   config = function(_, opts)
     require("codecompanion").setup(opts)
-    require('user/lualine-codecompanion')
+    require("user/lualine-codecompanion")
 
     local progress = require("fidget").progress
     local handles = {}
