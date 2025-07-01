@@ -52,7 +52,17 @@ return {
           ---@return number|fun(): number
           height = vim.o.lines - 2,
         },
-
+        tools = {
+          ["mcp"] = {
+            callback = function()
+              return require("mcphub.extensions.codecompanion")
+            end,
+            opts = {
+              requires_approval = false,
+              temperature = 0.7 -- Control creativity
+            }
+          }
+        },
         -- Options to customize the UI of the chat buffer
         window = {
           layout = "vertical", -- float|vertical|horizontal|buffer

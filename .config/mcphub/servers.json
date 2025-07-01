@@ -1,8 +1,35 @@
 {
   "mcpServers": {
-    "git": {  
-      "command": "docker",  
-      "args": ["run", "--rm", "-i", "--mount", "type=bind,src=/home/jan/Projects,dst=/home/jan/Projects", "mcp/git"]  
-    } 
+    "git": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "--name",
+        "mcp-git",
+        "-i",
+        "--mount",
+        "type=bind,src=/home/jan/Projects,dst=/home/jan/Projects",
+        "mcp/git"
+      ]
+    },
+    "time": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "--name", "mcp-time", "mcp/time"]
+    },
+    "filesystem": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "--name",
+        "mcp-filesystem",
+        "--mount",
+        "type=bind,src=/home/jan/Projects,dst=/projects/Project",
+        "mcp/filesystem",
+        "/projects"
+      ]
+    }
   }
 }
