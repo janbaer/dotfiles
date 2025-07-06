@@ -9,6 +9,7 @@ return {
   dependencies = {
     "rafamadriz/friendly-snippets",
     "Exfunction/windsurf.nvim",
+    "saghen/blink.compat",
   },
 
   -- use a release tag to download pre-built binaries
@@ -55,9 +56,10 @@ return {
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      default = { "snippets", "lsp", "path", "buffer", "codeium", "codecompanion" },
+      default = { "snippets", "lsp", "path", "buffer", "codeium", "codecompanion", "tabnine" },
       providers = {
         codeium = { name = "Codeium", module = "codeium.blink", async = true },
+        tabnine = { name = "TabNine", module = "blink.compat.source", score_offset = 100, async = true },
       },
     },
 
