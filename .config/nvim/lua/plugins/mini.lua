@@ -38,6 +38,8 @@ return {
       },
     })
 
+    require('mini.icons').setup()
+
     -- Go forward/backward with square brackets
     -- https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-bracketed.md
     require('mini.bracketed').setup({
