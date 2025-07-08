@@ -102,8 +102,6 @@ return {
           opts = {
             auto_submit_errors = false,  -- Send any errors to the LLM automatically?
             auto_submit_success = false, -- Send any successful output to the LLM automatically?
-          },
-          opts = {
             completion_provider = "blink",
           },
         },
@@ -118,6 +116,24 @@ return {
           schema = {
             model = {
               default = "gpt-4.5-preview",
+            },
+          },
+        })
+      end,
+      deepseek_r1t2_chimera = function()
+        return require("codecompanion.adapters").extend("openai_compatible", {
+          name = "deepseek-r1t2-chimera",
+          url = "https://openrouter.ai/api/v1/chat/completions",
+          headers = {
+            ["HTTP-Referer"] = "https://nvim.io",
+            ["X-Title"] = "Neovim CodeCompanion"
+          },
+          env = {
+            api_key = "cmd:gopass show /cloud/openrouter/nvim",
+          },
+          schema = {
+            model = {
+              default = "tngtech/deepseek-r1t2-chimera:free",
             },
           },
         })
