@@ -1,6 +1,7 @@
+
 return {
   "tzachar/cmp-tabnine",
-  enabled = true,
+  enabled = require("core.plugin-control").is_enabled("cmp-tabnine"),
   event = "VeryLazy",
   build = "./install.sh",
   dependencies = {

@@ -20,8 +20,10 @@ the file itself, only from DB.
   - :FrecencyDelete /full/path/to/the/file
 --]=====]
 
+
 return {
   "nvim-telescope/telescope-frecency.nvim",
+  enabled = require("core.plugin-control").is_enabled("telescope-frecency"),
   config = function()
     require("telescope").setup({
       extensions = {

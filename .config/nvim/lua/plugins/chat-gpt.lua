@@ -1,9 +1,10 @@
 -- https://github.com/jackMort/ChatGPT.nvim
 -- https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo
+
 return {
   "jackMort/ChatGPT.nvim",
   event = "VeryLazy",
-  enabled = true,
+  enabled = require("core.plugin-control").is_enabled("chat-gpt"),
   opts = {
     -- api_key_cmd = nil,
     api_key_cmd = "echo $OPENAI_API_KEY",

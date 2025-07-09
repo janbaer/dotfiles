@@ -1,8 +1,9 @@
 -- Library of 40+ independent Lua modules improving overall Neovim
 -- https://github.com/echasnovski/mini.nvim/tree/main
+
 return {
   'echasnovski/mini.nvim',
-  enabled = true,
+  enabled = require("core.plugin-control").is_enabled("mini"),
   config = function()
     require('mini.move').setup({
       mappings = {

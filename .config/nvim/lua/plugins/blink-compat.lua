@@ -1,8 +1,9 @@
 -- Compatibility layer for using nvim-cmp sources on blink.cmp
 -- https://github.com/Saghen/blink.compat
+
 return {
   "saghen/blink.compat",
-  enabled = true,
+  enabled = require("core.plugin-control").is_enabled("blink-compat"),
   -- use v2.* for blink.cmp v1.*
   version = "2.*",
   -- lazy.nvim will automatically load the plugin when it's required by blink.cmp

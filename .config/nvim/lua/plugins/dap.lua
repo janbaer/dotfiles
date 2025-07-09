@@ -8,7 +8,7 @@ local js_based_languages = {
 return {
   {
     "mfussenegger/nvim-dap",
-    enabled = false,
+    enabled = require("core.plugin-control").is_enabled("dap"),
     dependencies = {
       -- fancy UI for the debugger
       {

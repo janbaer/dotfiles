@@ -1,7 +1,8 @@
 -- https://github.com/nvim-neotest/neotest
+
 return {
   "nvim-neotest/neotest",
-  enabled = true,
+  enabled = require("core.plugin-control").is_enabled("neotest"),
   lazy = true,
   dependencies = {
     "nvim-neotest/nvim-nio",

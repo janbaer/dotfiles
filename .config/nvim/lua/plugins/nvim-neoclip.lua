@@ -1,8 +1,9 @@
 -- Clipboard manager neovim plugin with telescope integration
 -- https://github.com/AckslD/nvim-neoclip.lua
+
 return {
   "AckslD/nvim-neoclip.lua",
-  enabled = true,
+  enabled = require("core.plugin-control").is_enabled("nvim-neoclip"),
   dependencies = {
     { "kkharji/sqlite.lua",           module = "sqlite" },
     { "nvim-telescope/telescope.nvim" },

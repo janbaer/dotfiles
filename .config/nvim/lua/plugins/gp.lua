@@ -1,10 +1,11 @@
 -- Gp.nvim (GPT prompt) Neovim AI plugin: ChatGPT sessions & Instructable text/code operations & Speech to text [OpenAI, Ollama, Anthropic, ..]
 -- https://github.com/Robitx/gp.nvim
 -- https://github.com/exosyphon/nvim/blob/main/lua/plugins/gp.lua
+
 return {
   "robitx/gp.nvim",
   lazy = false,
-  enabled = true,
+  enabled = require("core.plugin-control").is_enabled("gp"),
   opts = {
     providers = {
       openai = {

@@ -1,9 +1,10 @@
 -- An MCP client for Neovim that seamlessly integrates MCP servers into your editing workflow
 -- with an intuitive interface for managing, testing, and using MCP servers with your favorite chat plugins.
 -- https://ravitemer.github.io/mcphub.nvim/installation.html
+
 return {
   "ravitemer/mcphub.nvim",
-  enabled = true,
+  enabled = require("core.plugin-control").is_enabled("mcphub"),
   dependencies = {
     "nvim-lua/plenary.nvim",
   },

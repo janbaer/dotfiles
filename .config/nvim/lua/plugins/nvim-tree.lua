@@ -1,5 +1,6 @@
 -- A File Explorer For Neovim Written In Lua
 -- https://github.com/nvim-tree/nvim-tree.lua
+
 local function custom_on_attach(bufnr)
   local api = require("nvim-tree.api")
 
@@ -18,7 +19,7 @@ end
 
 return {
   "nvim-tree/nvim-tree.lua",
-  enabled = true,
+  enabled = require("core.plugin-control").is_enabled("nvim-tree"),
   dependencies = { "nvim-tree/nvim-web-devicons" },
   opts = {
     -- set local keymaps

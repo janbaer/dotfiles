@@ -1,8 +1,9 @@
 -- Auto-completion of bracket/paren/quote pairs
 -- https://github.com/windwp/nvim-autopairs
+
 return {
   "windwp/nvim-autopairs",
-  enabled = true,
+  enabled = require("core.plugin-control").is_enabled("nvim-autopairs"),
   event = "InsertEnter",
   opts = {
     check_ts = true,                      -- enable treesitter

@@ -1,8 +1,9 @@
 -- That displays a popup with possible keybindings of the command you started typing.
 -- https://github.com/folke/which-key.nvim
+
 return {
   "folke/which-key.nvim",
-  enabled = true,
+  enabled = require("core.plugin-control").is_enabled("which-key"),
   event = "VeryLazy",
   init = function()
     vim.o.timeout = true

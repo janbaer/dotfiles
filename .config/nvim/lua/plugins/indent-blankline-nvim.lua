@@ -14,7 +14,7 @@ local highlight = {
 
 return {
   "lukas-reineke/indent-blankline.nvim",
-  enabled = true,
+  enabled = require("core.plugin-control").is_enabled("indent-blankline-nvim"),
   event = "VeryLazy",
   main = "ibl",
   opts = {

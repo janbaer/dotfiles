@@ -1,8 +1,9 @@
 -- Code Tree Support / Syntax Highlighting
 -- https://github.com/nvim-treesitter/nvim-treesitter
+
 return {
   "nvim-treesitter/nvim-treesitter",
-  enabled = true,
+  enabled = require("core.plugin-control").is_enabled("nvim-treesitter"),
   event = "VeryLazy",
   dependencies = {
     -- https://github.com/nvim-treesitter/nvim-treesitter-textobjects

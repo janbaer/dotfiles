@@ -14,7 +14,7 @@ end
 return {
   -- https://github.com/nvim-lualine/lualine.nvim
   "nvim-lualine/lualine.nvim",
-  enabled = true,
+  enabled = require("core.plugin-control").is_enabled("lualine-nvim"),
   dependencies = {
     -- https://github.com/SmiteshP/nvim-navic
     "SmiteshP/nvim-navic",

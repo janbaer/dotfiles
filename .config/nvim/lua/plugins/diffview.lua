@@ -1,6 +1,6 @@
 return {
   "sindrets/diffview.nvim",
-  enabled = false,
+  enabled = require("core.plugin-control").is_enabled("diffview"),
   event = "VeryLazy",
   opts = {
     -- See ':h diffview-config-enhanced_diff_hl'

@@ -1,8 +1,9 @@
 -- https://www.josean.com/posts/neovim-linting-and-formatting
 -- https://github.com/mfussenegger/nvim-lint
+
 return {
   "mfussenegger/nvim-lint",
-  enabled = true,
+  enabled = require("core.plugin-control").is_enabled("nvim-lint"),
   event = {
     "BufReadPre",
     "BufNewFile",

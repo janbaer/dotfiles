@@ -1,8 +1,9 @@
 -- https://www.josean.com/posts/neovim-linting-and-formatting
 -- https://github.com/stevearc/conform.nvim
+
 return {
   "stevearc/conform.nvim",
-  enabled = true,
+  enabled = require("core.plugin-control").is_enabled("conform"),
   event = { "BufReadPre", "BufNewFile" },
   dependencies = {
     "williamboman/mason.nvim",

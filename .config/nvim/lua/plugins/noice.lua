@@ -1,9 +1,10 @@
 -- Highly experimental plugin that completely replaces the UI
 -- for messages, cmdline and the popupmenu
 -- https://github.com/folke/noice.nvim
+
 return {
   "folke/noice.nvim",
-  enabled = true,
+  enabled = require("core.plugin-control").is_enabled("noice"),
   event = "VeryLazy",
   dependencies = {
     "MunifTanjim/nui.nvim",

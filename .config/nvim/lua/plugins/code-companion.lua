@@ -1,8 +1,9 @@
 -- ✨ AI-powered coding, seamlessly in Neovim
 -- https://github.com/olimorris/codecompanion.nvim
+
 return {
   "olimorris/codecompanion.nvim",
-  enabled = true,
+  enabled = require("core.plugin-control").is_enabled("code-companion"),
   event = "VeryLazy",
   dependencies = {
     "nvim-lua/plenary.nvim",

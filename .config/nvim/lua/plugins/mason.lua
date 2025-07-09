@@ -1,8 +1,9 @@
 -- Portable package manager for Neovim that runs everywhere Neovim runs.
 -- https://github.com/williamboman/mason.nvim
+
 return {
   "williamboman/mason.nvim",
-  enabled = true,
+  enabled = require("core.plugin-control").is_enabled("mason"),
   dependencies = {
     { "rcarriga/nvim-notify" },
     { "WhoIsSethDaniel/mason-tool-installer.nvim" },

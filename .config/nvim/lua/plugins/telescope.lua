@@ -8,7 +8,7 @@ end
 
 return {
   "nvim-telescope/telescope.nvim",
-  enabled = true,
+  enabled = require("core.plugin-control").is_enabled("telescope"),
   lazy = true,
   -- branch = "0.1.x",
   dependencies = {

@@ -2,7 +2,7 @@
 -- https://github.com/nvimdev/lspsaga.nvim
 return {
   "nvimdev/lspsaga.nvim",
-  enabled = false,
+  enabled = require("core.plugin-control").is_enabled("lsp-saga"),
   event = "VeryLazy",
   dependencies = {
     "nvim-treesitter/nvim-treesitter",

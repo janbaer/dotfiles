@@ -1,8 +1,9 @@
 --- Performant, batteries-included completion plugin for Neovim
 --- https://github.com/Saghen/blink.cmp
+
 return {
   "saghen/blink.cmp",
-  enabled = true,
+  enabled = require("core.plugin-control").is_enabled("blink.cmp"),
   lazy = true,
   event = { "BufReadPre", "BufNewFile" },
   -- optional: provides snippets for the snippet source

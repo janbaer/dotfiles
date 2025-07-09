@@ -1,8 +1,9 @@
 -- A collection of small QoL plugins for Neovim
 -- https://github.com/folke/snacks.nvim
+
 return {
   "folke/snacks.nvim",
-  enabled = true,
+  enabled = require("core.plugin-control").is_enabled("snacks"),
   priority = 1000,
   lazy = false,
   ---@type snacks.Config
