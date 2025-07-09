@@ -7,7 +7,6 @@ return {
   { "svermeulen/vim-cutlass",    event = "VeryLazy", enabled = true },  -- Plugin that adds a 'cut' operation separate from 'delete'
   { "mg979/vim-visual-multi",    event = "VeryLazy", enabled = true },  -- This True Sublime Text style multiple selections for Vim - https://github.com/mg979/vim-visual-multi
   { "tpope/vim-repeat",          event = "VeryLazy", enabled = true },  -- Enable repeating supported plugin maps with \".\"
-  -- { "tpope/vim-surround",        event = "VeryLazy", enabled = true },  -- surround.vim: quoting/parenthesizing made simple
   { "hashivim/vim-terraform",    ft = "terraform",   enabled = true },  -- Highlighting for Terraform
   { "voldikss/vim-floaterm",     event = "VeryLazy", enabled = true },  -- Showing a floating terminal for example TIG
   { "terryma/vim-expand-region", event = "VeryLazy", enabled = true },  -- Expand or reduce current selection
