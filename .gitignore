@@ -23,3 +23,6 @@ tags
 .zcompdum**
 
 .tmux/plugins/
+
+# Claude Code local settings
+.claude/settings.local.json
