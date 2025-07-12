@@ -175,6 +175,18 @@
 - `<` decrease indentation (stays in visual mode)
 - `>` increase indentation (stays in visual mode)
 
+## AI/CLAUDE CODE
+
+- `<leader>ac` toggle Claude Code
+- `<leader>af` focus Claude Code window
+- `<leader>ar` resume Claude Code session
+- `<leader>aC` continue Claude Code session
+- `<leader>ab` add current buffer to Claude
+- `<leader>as` send selection to Claude (visual mode)
+- `<leader>as` add file from tree explorer (in NvimTree/neo-tree/oil)
+- `<leader>aa` accept Claude diff
+- `<leader>ad` deny Claude diff
+
 ## UTILITY COMMANDS
 
 - `<leader>q` or `<leader>e` exit current window

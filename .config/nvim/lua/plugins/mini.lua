@@ -16,7 +16,7 @@ return {
 
     -- Press enter to start the jump mode
     -- https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-jump2d.md
-    require('mini.jump2d').setup()
+    -- require('mini.jump2d').setup()
 
     -- Extend and create a/i textobjects
     -- https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-ai.md
