@@ -1,0 +1,25 @@
+{
+  "env": {},
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(git commit:*)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs",
+      "WebFetch(domain:docs.ansible.com)",
+      "WebFetch(domain:docs.anthropic.com)",
+      "WebFetch(domain:developer.hashicorp.com)",
+      "WebFetch(domain:releases.hashicorp.com)",
+      "WebFetch(domain:www.terraform.io)",
+      "WebFetch(domain:github.com)",
+      "mcp__sequential-thinking-mcp__sequentialthinking",
+      "mcp__memory-mcp__create_entities",
+      "mcp__memory-mcp__create_relations",
+      "mcp__memory-mcp__add_observations",
+      "mcp__memory-mcp__search_nodes"
+    ],
+    "deny": []
+  }
+}

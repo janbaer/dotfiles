@@ -6,7 +6,7 @@ git pull
 nvim -e -s -c "mkspell! ~/Projects/dotfiles/.config/nvim/spell/de.utf-8.add" -c qa
 
 copyFiles() {
-  rsync --exclude ".git/" --exclude "sync.sh" --exclude "README.md" --exclude "terminal" --exclude "readme.md" --exclude "nvim" -av . ~
+  rsync --exclude ".git/" --exclude "sync.sh" --exclude "README.md" --exclude "terminal" --exclude "readme.md" --exclude "nvim" --exclude ".claude/settings.json" -av  . ~
 }
 
 copyFiles
