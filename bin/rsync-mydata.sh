@@ -16,7 +16,7 @@ function rsync_remote() {
   echo "backup directory $source_dir to $target_dir"
   echo "------------------------------------------"
 
-  rsync -avu --progress --delete                                  \
+  rsync -vuq --progress --recursive --delete --itemize-changes                                  \
         --exclude-from=$exclude_from_file                         \
         -e "ssh -i /home/$(whoami)/.ssh/id_ed25519_jabasoft-ug"   \
         "${source_dir}" "${target_dir}"
@@ -40,7 +40,7 @@ function rsync_local() {
   echo "backup directory $source_dir to $target_dir"
   echo "------------------------------------------"
 
-  rsync -avu --progress --delete            \
+  rsync -avuq --progress --delete            \
         --exclude-from=$exclude_from_file   \
         "${source_dir}" "${target_dir}"
 }
