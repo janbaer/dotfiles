@@ -7,10 +7,10 @@ M.plugins = {
   ["blink.cmp"] = true,
   ["blink-compat"] = true,
   ["cmp-tabnine"] = true,
-  ["code-companion"] = true,
+  ["code-companion"] = false,
   ["chat-gpt"] = false,
   ["gp"] = false,
-  ["mcphub"] = true,
+  ["mcphub"] = false,
   ["windsurf"] = true,
   ["claude-code"] = true,
 
