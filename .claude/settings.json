@@ -21,5 +21,9 @@
       "mcp__memory-mcp__search_nodes"
     ],
     "deny": []
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "input=$(cat); session_id=$(echo \"$input\" | jq -r '.session_id'); transcript_path=$(echo \"$input\" | jq -r '.transcript_path'); if [ -f \"$transcript_path\" ]; then session_start=$(stat -f %B \"$transcript_path\" 2>/dev/null || stat -c %Y \"$transcript_path\" 2>/dev/null || echo 0); current_time=$(date +%s); session_duration=$((current_time - session_start)); hours=$((session_duration / 3600)); minutes=$(((session_duration % 3600) / 60)); token_count=$(wc -c < \"$transcript_path\" | awk '{print int($1/4)}'); printf \"⏱️ %dh%02dm | 🎯 ~%dk tokens\" $hours $minutes $((token_count / 1000)); else printf \"⏱️ New session | 🎯 0 tokens\"; fi"
   }
 }
