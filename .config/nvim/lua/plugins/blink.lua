@@ -94,7 +94,7 @@ return {
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      default = { "snippets", "lsp", "path", "buffer", "codeium", "codecompanion", "tabnine" },
+      default = { "snippets", "lsp", "path", "buffer", "codeium", "tabnine" },
       providers = {
         codeium = { name = "Codeium", module = "codeium.blink", async = true },
         tabnine = { name = "TabNine", module = "blink.compat.source", score_offset = 100, async = true },
