@@ -6,4 +6,4 @@ export SSH_ASKPASS="/opt/homebrew/bin/ssh-askpass"
 
 source ~/.orbstack/shell/init.zsh 2>/dev/null || :
 
-# eval "$(direnv hook zsh 2> /dev/null)"
+eval "$(direnv hook zsh 2> /dev/null)"
