@@ -77,6 +77,10 @@ export LC_ALL=en_US.UTF-8
 
 setopt auto_cd
 
+# Activating vi mode (see also https://koenwoortman.com/zsh-vim-mode/)
+bindkey -v
+export KEYTIMEOUT=1
+
 alias sudo='sudo '
 export LD_LIBRARY_PATH=/usr/local/lib
 
