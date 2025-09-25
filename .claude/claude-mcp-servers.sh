@@ -20,7 +20,9 @@ claude mcp add-json --scope=user sequential-thinking-mcp '{
     }'
 claude mcp add-json --scope=user fetch-mcp '{
       "command": "uvx",
-      "args": [
-        "mcp-server-fetch"
-      ]
+      "args": [ "mcp-server-fetch" ]
+    }'
+claude mcp add-json --scope=user chrome-devtools-mcp '{
+      "command": "npx",
+      "args": [ "chrome-devtools-mcp@latest" ]
     }'
