@@ -13,6 +13,7 @@ M.plugins = {
   ["mcphub"] = false,
   ["windsurf"] = true,
   ["claude-code"] = true,
+  ["copilot"] = true,
 
   -- LSP/Language Support
   ["lsp-saga"] = false,

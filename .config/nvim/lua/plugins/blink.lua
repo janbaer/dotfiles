@@ -11,6 +11,7 @@ return {
     "rafamadriz/friendly-snippets",
     "Exfunction/windsurf.nvim",
     "saghen/blink.compat",
+    "giuxtaposition/blink-cmp-copilot", -- See https://github.com/giuxtaposition/blink-cmp-copilot
   },
 
   -- use a release tag to download pre-built binaries
@@ -57,7 +58,7 @@ return {
         draw = {
           columns = {
             { "kind_icon" },
-            { "label",      "label_description", gap = 1 },
+            { "label", "label_description", gap = 1 },
             { "source_name" },
           },
           components = {
@@ -94,10 +95,11 @@ return {
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      default = { "snippets", "lsp", "path", "buffer", "codeium", "tabnine" },
+      default = { "snippets", "lsp", "path", "buffer", "codeium", "copilot" },
       providers = {
         codeium = { name = "Codeium", module = "codeium.blink", async = true },
         tabnine = { name = "TabNine", module = "blink.compat.source", score_offset = 100, async = true },
+        copilot = { name = "copilot", module = "blink-cmp-copilot", score_offset = 100, async = true },
       },
     },
 
