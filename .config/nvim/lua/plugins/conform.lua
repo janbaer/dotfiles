@@ -27,6 +27,7 @@ return {
       markdown = { "prettier" },
       graphql = { "prettier" },
       lua = { "stylua" },
+      nix = { "alejandra" },
     },
     -- format_on_save = {
     --   lsp_fallback = true,

@@ -30,6 +30,7 @@ return {
         "yamllint",
         -- Required formatters
         -- "trivy",
+        "alejandra",
         "prettier",
         "stylua",
         "terraform-ls",
