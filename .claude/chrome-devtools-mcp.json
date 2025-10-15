@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "chrome-devtools-mcp": {
+      "command": "npx",
+      "args": [
+        "chrome-devtools-mcp@latest",
+        "--executablePath=/etc/profiles/per-user/jan/bin/chromium"
+      ]
+    }
+  }
+}
