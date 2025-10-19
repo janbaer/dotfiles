@@ -20,7 +20,7 @@ return {
 
     local keys = {
       { "<leader>,", group = "Hop" },
-      { "<leader>c", group = "ChatGPT" },
+      -- { "<leader>c", group = "ChatGPT" },
       { "<leader>d", group = "Debug" },
       { "<leader>f", group = "FzfLua" },
       { "<leader>g", group = "Git" },
