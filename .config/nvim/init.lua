@@ -30,7 +30,6 @@ require("lazy").setup("plugins", {
 })
 
 -- These modules are not loaded by lazy
-require("core.lsp")
 require("core.options")
 require("core.keymaps")
 require("core.functions")
