@@ -6,7 +6,7 @@ M.plugins = {
   -- AI/Code Completion
   ["blink.cmp"] = true,
   ["blink-compat"] = true,
-  ["cmp-tabnine"] = true,
+  ["cmp-tabnine"] = false,
   ["code-companion"] = false,
   ["chat-gpt"] = false,
   ["gp"] = false,

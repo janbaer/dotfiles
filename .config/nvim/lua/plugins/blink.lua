@@ -98,7 +98,6 @@ return {
       default = { "snippets", "lsp", "path", "buffer", "codeium", "copilot" },
       providers = {
         codeium = { name = "Codeium", module = "codeium.blink", async = true },
-        tabnine = { name = "TabNine", module = "blink.compat.source", score_offset = 100, async = true },
         copilot = { name = "copilot", module = "blink-cmp-copilot", score_offset = 100, async = true },
       },
     },
