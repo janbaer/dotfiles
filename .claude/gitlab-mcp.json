@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "gitlab-mcp": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "--pull=always",
+        "-e", "GITLAB_TOKEN",
+        "registry.gitlab.com/fforster/gitlab-mcp:latest"
+      ]
+    }
+  }
+}
