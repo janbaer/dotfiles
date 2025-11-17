@@ -1,4 +1,5 @@
 ---
+name: commit
 description: Create a commit for the currently staged changes
 ---
 
