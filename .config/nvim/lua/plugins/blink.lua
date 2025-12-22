@@ -9,7 +9,7 @@ return {
   -- optional: provides snippets for the snippet source
   dependencies = {
     "rafamadriz/friendly-snippets",
-    "Exfunction/windsurf.nvim",
+    "Exafunction/windsurf.nvim",
     "saghen/blink.compat",
     "giuxtaposition/blink-cmp-copilot", -- See https://github.com/giuxtaposition/blink-cmp-copilot
   },
