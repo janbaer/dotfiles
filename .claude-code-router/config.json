@@ -1,0 +1,40 @@
+{
+  "LOG": true,
+  "LOG_LEVEL": "debug",
+  "CLAUDE_PATH": "",
+  "HOST": "127.0.0.1",
+  "PORT": 3456,
+  "APIKEY": "",
+  "API_TIMEOUT_MS": "600000",
+  "PROXY_URL": "",
+  "transformers": [],
+	"OPENROUTER_API_KEY": "${OPENROUTER_API_KEY}",
+  "Providers": [
+    {
+      "name": "openrouter",
+      "api_base_url": "https://openrouter.ai/api/v1/chat/completions",
+      "api_key": "$OPENROUTER_API_KEY",
+      "models": ["z-ai/glm-4.7", "google/gemini-3.0-pro-preview", "google/gemini-3.0-flash-preview"]
+    }
+  ],
+  "StatusLine": {
+    "enabled": false,
+    "currentStyle": "default",
+    "default": {
+      "modules": []
+    },
+    "powerline": {
+      "modules": []
+    }
+  },
+  "Router": {
+    "default": "openrouter,z-ai/glm-4.7",
+    "background": "openrouter,z-ai/glm-4.7",
+    "think": "openrouter,z-ai/glm-4.7",
+      "longContext": "openrouter,z-ai/glm-4.7",
+    "longContextThreshold": 60000,
+    "webSearch": "openrouter,google/gemini-3-flash-preview",
+    "image": "openrouter,google/gemini-3-pro-preview"
+  },
+  "CUSTOM_ROUTER_PATH": ""
+}
