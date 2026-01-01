@@ -27,8 +27,13 @@
     "type": "command",
     "command": "input=$(cat); model=$(echo \"$input\" | jq -r '.model.display_name'); style=$(echo \"$input\" | jq -r '.output_style.name // \"default\"'); usage=$(echo \"$input\" | jq '.context_window.current_usage'); if [ \"$usage\" != \"null\" ]; then current=$(echo \"$usage\" | jq '.input_tokens + .cache_creation_input_tokens + .cache_read_input_tokens'); size=$(echo \"$input\" | jq '.context_window.context_window_size'); pct=$((current * 100 / size)); printf '%s | Context: %d%% | Mode: %s' \"$model\" \"$pct\" \"$style\"; else printf '%s | Context: 0%% | Mode: %s' \"$model\" \"$style\"; fi"
   },
-  "syntaxHighlightingDisabled": false,
   "enabledPlugins": {
-    "typescript-lsp@claude-plugins-official": true
-  }
+    "typescript-lsp@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "example-skills@anthropic-agent-skills": true,
+    "greptile@claude-plugins-official": true,
+    "ralph-wiggum@claude-plugins-official": true
+  },
+  "syntaxHighlightingDisabled": false
 }
