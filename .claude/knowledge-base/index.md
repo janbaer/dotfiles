@@ -27,6 +27,7 @@ Claude will read this file and the core references, then work with you using you
 - [design-patterns.md](design-patterns.md) - Patterns you prefer to use
 - [domain-language.md](domain-language.md) - Project-specific vocabulary and terms
 - [decisions.md](decisions.md) - Key architectural and design decisions
+- [style-guide.md](style-guide.md) - Coding standards and conventions
 
 ---
 
@@ -41,6 +42,7 @@ Claude will read this file and the core references, then work with you using you
 | design-patterns.md | Solving a design problem or choosing an approach |
 | domain-language.md | Discussing domain concepts or naming |
 | decisions.md | Understanding why something was built a certain way |
+| style-guide.md | Writing or reviewing code |
 
 ---
 
