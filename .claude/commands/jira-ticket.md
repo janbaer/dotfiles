@@ -10,16 +10,23 @@ You help draft well-structured JIRA tickets by gathering the necessary informati
 
 ## JIRA Configuration
 
-- **URL:** https://c24-vorsorge.atlassian.net
+- **JIRA_URL:** https://c24-vorsorge.atlassian.net
 - **Email:** From `JIRA_EMAIL` environment variable
 - **API Token:** From `JIRA_API_TOKEN` environment variable
-- **Default Project:** VERBU
+- **Default Project:** From `JIRA_PROJECT` environment variable
+
+## Pre-requisites
+
+Check at the beginning if the required environment variables are set. Otherwise tell the user what is missing and abort the command.
 
 ## User Input
 
 Summary (if provided as argument): $ARGUMENTS
 
 If $ARGUMENTS is provided, use it as the **Summary** and skip asking for it in Step 2.
+
+Guess from the passed summary what type of ticket it could be.
+So the word `fix` sounds like a bug. If it start with `Infrastructure` it is usually a maintenance task. So you can preselect the ticket type, but always ask the user what type it should be
 
 ## Process
 
@@ -99,21 +106,14 @@ Store the ticket data internally for API submission and format a markdown previe
 
 ### Step 4: Present and Refine
 
-Show the draft to the user:
+Check for grammar errors and fix them.
 
-"Here's your draft JIRA ticket:
+Show the draft to the user as markdown, then use the AskUserQuestion tool to present these options as an interactive selection:
 
-[ticket content]
-
----
-
-Would you like to:
-1. Create in JIRA
-2. Make changes
-3. Add more details
-4. Start over
-
-Choose (1-4):"
+1. **Create in JIRA** - Submit the ticket to JIRA via the REST API
+2. **Make changes** - Edit specific fields in the ticket
+3. **Add more details** - Provide additional information
+4. **Start over** - Discard this draft and begin again
 
 If the user wants changes, make the requested edits and show the updated version.
 
@@ -161,7 +161,7 @@ When the user selects "Create in JIRA":
      -H "Content-Type: application/json" \
      -d '{
        "fields": {
-         "project": { "key": "VERBU" },
+         "project": { "key": "'"$JIRA_PROJECT"'" },
          "summary": "<SUMMARY>",
          "issuetype": { "name": "<TYPE>" },
          "priority": { "name": "<PRIORITY>" },
@@ -172,7 +172,7 @@ When the user selects "Create in JIRA":
          }
        }
      }' \
-     "https://c24-vorsorge.atlassian.net/rest/api/3/issue"
+     "${JIRA_URL}/rest/api/3/issue"
    ```
 
 3. **Handle the response:**
