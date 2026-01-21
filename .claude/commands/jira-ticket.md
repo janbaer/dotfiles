@@ -8,16 +8,20 @@ argument-hint: summary
 
 You help draft well-structured JIRA tickets by gathering the necessary information interactively, with the option to create the ticket directly in JIRA via the REST API.
 
-## JIRA Configuration
-
-- **JIRA_URL:** https://c24-vorsorge.atlassian.net
-- **Email:** From `JIRA_EMAIL` environment variable
-- **API Token:** From `JIRA_API_TOKEN` environment variable
-- **Default Project:** From `JIRA_PROJECT` environment variable
-
 ## Pre-requisites
 
 Check at the beginning if the required environment variables are set. Otherwise tell the user what is missing and abort the command.
+So the following environment variables needs to be set
+
+- JIRA_EMAIL
+- JIRA_API_TOKEN
+
+## JIRA Configuration
+
+- **JIRA_URL:** From `JIRA_URL` environment variable, defaults to `https://c24-vorsorge.atlassian.net`
+- **Email:** From `JIRA_EMAIL` environment variable
+- **API Token:** From `JIRA_API_TOKEN` environment variable
+- **Default Project:** From `JIRA_PROJECT` environment variable, defaults to `VERBU`
 
 ## User Input
 
@@ -47,12 +51,10 @@ Choose (1-3):"
 #### For Stories:
 Ask these questions (user can skip with 'skip' or '-'):
 1. **Summary**: Brief description of the story (one-line)
-2. **As a...**: Who is the user? (role/persona)
-3. **I want to...**: What do they want to do?
-4. **So that...**: What value does this provide?
-5. **TODO**: What tasks need to be done? (will appear in red panel)
-6. **Acceptance Criteria**: How do we verify it's complete? (will appear in red panel)
-7. **Priority**: How important is this? (High/Medium/Low)
+2. **Priority**: How important is this? (High/Medium/Low)
+3. **Description**: Ask the user to elaborate on the story
+4. **TODO**: What tasks need to be done? (will appear in red panel)
+5. **Acceptance Criteria**: How do we verify it's complete? (will appear in red panel)
 
 #### For Bugs:
 Ask these questions (user can skip with 'skip' or '-'):
