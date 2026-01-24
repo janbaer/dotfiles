@@ -1,27 +1,16 @@
 ---
 name: jira-ticket
-description: Draft and create a JIRA ticket (Story, Bug, or Maintenance task) directly via the JIRA REST API
+description: Draft and create a JIRA ticket (Story, Bug, or Maintenance task) using the Jira MCP server
 argument-hint: summary
 ---
 
 # JIRA Ticket Drafter
 
-You help draft well-structured JIRA tickets by gathering the necessary information interactively, with the option to create the ticket directly in JIRA via the REST API.
+You help draft well-structured JIRA tickets by gathering the necessary information interactively, with the option to create the ticket directly in JIRA using the Jira MCP server.
 
 ## Pre-requisites
 
-Check at the beginning if the required environment variables are set. Otherwise tell the user what is missing and abort the command.
-So the following environment variables needs to be set
-
-- JIRA_EMAIL
-- JIRA_API_TOKEN
-
-## JIRA Configuration
-
-- **JIRA_URL:** From `JIRA_URL` environment variable, defaults to `https://c24-vorsorge.atlassian.net`
-- **Email:** From `JIRA_EMAIL` environment variable
-- **API Token:** From `JIRA_API_TOKEN` environment variable
-- **Default Project:** From `JIRA_PROJECT` environment variable, defaults to `VERBU`
+This command requires the **Jira MCP server** to be configured and available.
 
 ## User Input
 
@@ -53,8 +42,8 @@ Ask these questions (user can skip with 'skip' or '-'):
 1. **Summary**: Brief description of the story (one-line)
 2. **Priority**: How important is this? (High/Medium/Low)
 3. **Description**: Ask the user to elaborate on the story
-4. **TODO**: What tasks need to be done? (will appear in red panel)
-5. **Acceptance Criteria**: How do we verify it's complete? (will appear in red panel)
+4. **TODO**: What tasks need to be done?
+5. **Acceptance Criteria**: How do we verify it's complete?
 
 #### For Bugs:
 Ask these questions (user can skip with 'skip' or '-'):
@@ -65,16 +54,16 @@ Ask these questions (user can skip with 'skip' or '-'):
 5. **Actual Behavior**: What actually happens?
 6. **Severity**: How critical is this? (Critical/High/Medium/Low)
 7. **Screenshots/Logs**: Any additional context?
-8. **TODO**: What tasks need to be done to fix it? (will appear in red panel)
-9. **Acceptance Criteria**: How do we verify it's fixed? (will appear in red panel)
+8. **TODO**: What tasks need to be done to fix it?
+9. **Acceptance Criteria**: How do we verify it's fixed?
 
 #### For Maintenance tasks:
 Ask these questions (user can skip with 'skip' or '-'):
 1. **Summary**: What needs to be done? (one-line description)
 2. **Description**: Detailed explanation of the task
 3. **Motivation**: Why is this maintenance needed?
-4. **TODO**: What tasks need to be done? (will appear in red panel)
-5. **Acceptance Criteria**: How do we verify it's complete? (will appear in red panel)
+4. **TODO**: What tasks need to be done?
+5. **Acceptance Criteria**: How do we verify it's complete?
 6. **Dependencies**: Are there blockers or prerequisites?
 7. **Priority**: How urgent is this? (High/Medium/Low)
 
@@ -92,12 +81,12 @@ Store the ticket data internally for API submission and format a markdown previe
 ### Description
 [Formatted description based on gathered info]
 
-### TODO (each item in separate red panel)
+### TODO
 - Todo item 1
 - Todo item 2
 - ...
 
-### Acceptance Criteria (each item in separate red panel)
+### Acceptance Criteria
 - Criterion 1
 - Criterion 2
 - ...
@@ -112,7 +101,7 @@ Check for grammar errors and fix them.
 
 Show the draft to the user as markdown, then use the AskUserQuestion tool to present these options as an interactive selection:
 
-1. **Create in JIRA** - Submit the ticket to JIRA via the REST API
+1. **Create in JIRA** - Submit the ticket to JIRA with using the jira-mcp-server
 2. **Make changes** - Edit specific fields in the ticket
 3. **Add more details** - Provide additional information
 4. **Start over** - Discard this draft and begin again
@@ -123,65 +112,71 @@ If the user wants changes, make the requested edits and show the updated version
 
 When the user selects "Create in JIRA":
 
-1. **Convert description to Atlassian Document Format (ADF):**
+1. **Construct the Atlassian Document Format (ADF) description:**
 
-   The JIRA Cloud API requires descriptions in ADF format. Convert the markdown description to ADF structure:
-   - Paragraphs become `{"type": "paragraph", "content": [{"type": "text", "text": "..."}]}`
-   - Bold text becomes `{"type": "text", "text": "...", "marks": [{"type": "strong"}]}`
-   - Bullet lists become `{"type": "bulletList", "content": [{"type": "listItem", "content": [...]}]}`
-   - Numbered lists become `{"type": "orderedList", "content": [{"type": "listItem", "content": [...]}]}`
-   - Headings become `{"type": "heading", "attrs": {"level": N}, "content": [{"type": "text", "text": "..."}]}`
-   - **Panels** structure:
-     ```json
-     {
-       "type": "panel",
-       "attrs": { "panelType": "<TYPE>" },
-       "content": [
-         {
-           "type": "paragraph",
-           "content": [{ "type": "text", "text": "Panel content here" }]
-         }
-       ]
-     }
-     ```
-   - Panel types: "info" (blue), "note" (purple), "warning" (yellow), "success" (green), "error" (red)
-   - **TODO section** → use **"error"** panel (red) - will be switched to success when completed
-   - **Acceptance Criteria section** → use **"error"** panel (red)
-   - Place the section heading (e.g., "TODO", "Acceptance criteria") **outside** the panels as a regular heading
-   - **Each item gets its own separate panel** - do NOT group multiple items in one panel
-   - Example for multiple TODOs:
-     ```json
-     { "type": "heading", "attrs": { "level": 3 }, "content": [{ "type": "text", "text": "TODO" }] },
-     { "type": "panel", "attrs": { "panelType": "error" }, "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "First todo item" }] }] },
-     { "type": "panel", "attrs": { "panelType": "error" }, "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Second todo item" }] }] }
-     ```
+   Build an ADF object with proper formatting for all sections:
 
-2. **Create the issue via API using environment variables for authentication:**
-   ```bash
-   curl -s -X POST \
-     -H "Authorization: Basic $(echo -n "$JIRA_EMAIL:$JIRA_API_TOKEN" | base64)" \
-     -H "Content-Type: application/json" \
-     -d '{
-       "fields": {
-         "project": { "key": "'"$JIRA_PROJECT"'" },
-         "summary": "<SUMMARY>",
-         "issuetype": { "name": "<TYPE>" },
-         "priority": { "name": "<PRIORITY>" },
-         "description": {
-           "type": "doc",
-           "version": 1,
-           "content": [<ADF_CONTENT>]
-         }
-       }
-     }' \
-     "${JIRA_URL}/rest/api/3/issue"
+   ```javascript
+   {
+     "type": "doc",
+     "version": 1,
+     "content": [
+       // Main description paragraphs
+       { "type": "paragraph", "content": [{ "type": "text", "text": "Main description here" }] },
+
+       // Environment/context sections (for bugs)
+       { "type": "paragraph", "content": [{ "type": "text", "text": "Environment: Browser, OS, etc." }] },
+
+       // TODO section
+       { "type": "heading", "attrs": { "level": 3 }, "content": [{ "type": "text", "text": "TODO" }] },
+       { "type": "panel", "attrs": { "panelType": "error" }, "content": [
+         { "type": "paragraph", "content": [{ "type": "text", "text": "First task" }] }
+       ]},
+       { "type": "panel", "attrs": { "panelType": "error" }, "content": [
+         { "type": "paragraph", "content": [{ "type": "text", "text": "Second task" }] }
+       ]},
+
+       // Acceptance Criteria section
+       { "type": "heading", "attrs": { "level": 3 }, "content": [{ "type": "text", "text": "Acceptance Criteria" }] },
+       { "type": "panel", "attrs": { "panelType": "error" }, "content": [
+         { "type": "paragraph", "content": [{ "type": "text", "text": "First criterion" }] }
+       ]},
+       { "type": "panel", "attrs": { "panelType": "error" }, "content": [
+         { "type": "paragraph", "content": [{ "type": "text", "text": "Second criterion" }] }
+       ]}
+     ]
+   }
    ```
 
+   **Panel types available:**
+   - "error" (red) - Use for TODO items and Acceptance Criteria
+   - "info" (blue) - For informational notes
+   - "warning" (yellow) - For warnings
+   - "success" (green) - For completed items
+   - "note" (purple) - For general notes
+
+   **Each TODO and Acceptance Criteria item gets its own separate panel**
+
+2. **Use the jira-create-issue MCP tool:**
+
+   Call the `jira-create-issue` tool with the following parameters:
+   - `summary`: The ticket summary (one-line title)
+   - `description`: The ADF object constructed in step 1
+   - `issueType`: The mapped issue type (Story/Bug/Maintenance task)
+   - `priority`: The mapped priority (Highest/High/Medium/Low)
+   - `projectKey`: Use the value from `$JIRA_PROJECT` environment variable (default: "VERBU")
+
+   The MCP server handles:
+   - Authentication using `JIRA_EMAIL` and `JIRA_API_TOKEN`
+   - Sending the ADF object directly to Jira API
+   - Error handling
+
 3. **Handle the response:**
-   - On success: Extract the issue key from the response and show:
-     "Issue created successfully: VERBU-XXXXX
-     View it at: https://c24-vorsorge.atlassian.net/browse/VERBU-XXXXX"
-   - On error: Show the error message from the API response
+   - The tool returns a JSON response with `success`, `issue`, and `message` fields
+   - On success: Show the issue key and URL from the response
+     Example: "Issue created successfully: VERBU-123
+              View it at: https://c24-vorsorge.atlassian.net/browse/VERBU-123"
+   - On error: Show the error message from the response
 
 ## Issue Type Mapping
 
@@ -201,10 +196,9 @@ Map priorities to JIRA priority names:
 ## Guidelines
 
 - Keep language clear and concise
-- Use bullet points for lists
+- Use bullet points for lists in the markdown preview
 - Format acceptance criteria as checkboxes in markdown preview
 - Include all relevant technical details
 - If the user provides partial info via $ARGUMENTS, pre-fill what you can and ask only for missing details
-- When creating in JIRA, ensure all special characters in text are properly escaped for JSON
-- **TODO section** → each item in its own **"error"** panel (red) - switched to success when done
-- **Acceptance Criteria section** → each item in its own **"error"** panel (red)
+- When constructing ADF, ensure each TODO and Acceptance Criteria item gets its own separate error panel
+- The MCP server handles authentication and API communication
