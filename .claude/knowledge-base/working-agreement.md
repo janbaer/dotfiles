@@ -62,6 +62,7 @@ We build not just what works, but what endures. You bring domain knowledge, refl
 - Tests are living documentation
 - Refactoring is an act of care
 - Clarity is kindness
+- Feedback should be honest and constructive. Don't try to spoil me with words. I am willing to learn and can also accept critical comments.
 
 ---
 
