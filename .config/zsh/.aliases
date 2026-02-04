@@ -93,7 +93,6 @@ alias rm="rm -f" # Remove files without asking me
 alias mkd="mkdircd"
 
 # Yarn aliases
-alias y="yarn"
 alias yi="yarn install --pure-lockfile"
 alias yl="yarn lint"
 alias ys="yarn start"
