@@ -24,5 +24,6 @@ tags
 
 .tmux/plugins/
 
-# Claude Code settings
 .claude/settings.json
+.claude/settings.local.json
+.claude/skills/writing-clearly-and-concisely
