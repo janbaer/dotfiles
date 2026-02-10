@@ -30,6 +30,11 @@ Add the following plugin marketplaces:
   claude plugin marketplace add obra/superpowers
   ```
 
+- **claude-mem** (GitHub: thedotmack/claude-mem)
+```bash
+claude plugin marketplace add thedotmack/claude-mem
+```
+
 ## Plugins
 
 Install the following plugins (scope: `user`):
@@ -53,6 +58,12 @@ Install the following plugins (scope: `user`):
   ```bash
   claude plugin install -s user superpowers
   ```
+
+- **code-mem**
+  ```bash
+  claude plugin install -s user code-mem
+  ```
+
 
 ## MCP-servers
 
