@@ -89,6 +89,12 @@ Install the following MCP servers for the current user (scope: `user`):
   claude mcp add -s user memory-mcp -- npx -y @modelcontextprotocol/server-memory
   ```
 
+- **howcani-mcp** (HTTP transport with auth)
+  Requires `HOWCANI_TOKEN` env var set in your shell profile.
+  ```bash
+  claude mcp add-json -s user howcani-mcp '{"type":"http","url":"https://howcani.home.janbaer.de/mcp","headers":{"Authorization":"Bearer ${HOWCANI_TOKEN}"}}'
+  ```
+
 ## Statusline
 
 - Use for the statusline the script @~/.claude/statusline-command.sh
