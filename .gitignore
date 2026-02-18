@@ -27,3 +27,4 @@ tags
 .claude/settings.json
 .claude/settings.local.json
 .claude/skills/writing-clearly-and-concisely
+.claude/commands/opsx-*.md
