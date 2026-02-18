@@ -246,7 +246,12 @@ alias gpg-show-keygrips="gpg --list-secret-keys --with-keygrip --keyid-format lo
 alias gpg-show-fingerprints="gpg --list-secret-keys --with-subkey-fingerprints --keyid-format long"
 alias gpg-reload-agent="gpg-connect-agent reloadagent /bye"
 
-# Aliases for my new AI friend Claude
+# Aliases for my new AI friends Claude and Codex
 alias c="claude --dangerously-skip-permissions"
-alias claude-update="volta install @anthropic-ai/claude-code"
+alias claude-update="claude update"
 alias clp="claude -p --mcp-config '{\"mcpServers\":{\"context7\":{\"command\":\"npx\",\"args\":[\"@context7/mcp-server\"]}}}'"
+alias codex-update="volta install @openai/codex"
+alias openspec-update="volta install @fission-ai/openspec@latest"
+alias gemini-update="volta install @google/gemini-cli@latest"
+
+alias y=yazi
