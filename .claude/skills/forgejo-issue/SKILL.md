@@ -151,19 +151,7 @@ git push
 
 ### 10. Create a Pull Request
 
-Include `closes #N` in the PR body — Forgejo will automatically close the issue when the PR is merged.
-
-```
-create_pull_request(
-  owner, repo,
-  title="...",
-  head="feature/42-...",
-  base="main",
-  body="...\n\ncloses #42"
-)
-```
-
-Do **not** manually close the issue or call `issue_state_change` — the merge handles it.
+Use the **forgejo-pr** skill to create the PR. Always include `closes #N` in the body — Forgejo will automatically close the issue on merge. Do **not** call `issue_state_change` manually.
 
 ## MCP Tools Reference
 
@@ -172,7 +160,6 @@ Do **not** manually close the issue or call `issue_state_change` — the merge h
 | `list_repo_issues` | Browse open issues |
 | `get_issue_by_index` | Read issue details or validate state |
 | `list_issue_comments` | Read issue discussion |
-| `create_pull_request` | Open a PR with `closes #N` in body |
 
 ## If MCP Tools Are Unavailable
 

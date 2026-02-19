@@ -1,62 +1,97 @@
 # PR Description Templates
 
-This directory contains templates for different types of pull requests. Use these as starting points for your PR descriptions.
+Use these templates as the `body` when calling `create_pull_request`. Choose the type that matches the nature of the change.
 
-## Quick Usage
+## Feature
 
-```bash
-# Generate template based on branch name
-scripts/generate_pr_description.sh auto
+```
+## Summary
 
-# Generate specific template type
-scripts/generate_pr_description.sh feature
-scripts/generate_pr_description.sh bugfix
-scripts/generate_pr_description.sh hotfix
+- What the feature does and why it was added
+
+## Changes
+
+- List of notable changes
+
+## Testing
+
+- How this was tested
+
+closes #N
 ```
 
-## Template Types
+## Bugfix
 
-### Feature Template
-Use for new features and enhancements.
-- Focuses on motivation and implementation
-- Includes testing checklist
-- Links to related issues
+```
+## Summary
 
-### Bugfix Template
-Use for bug fixes.
-- Emphasizes root cause analysis
-- Documents testing approach
-- Includes regression prevention
+- What was broken and root cause
 
-### Hotfix Template
-Use for critical production fixes.
-- Includes severity assessment
-- Documents rollback plan
-- Requires immediate action items
+## Fix
 
-### Documentation Template
-Use for documentation updates.
-- Lists types of documentation changed
-- Includes quality checklist
-- Links verification
+- What was changed to fix it
 
-### Refactor Template
-Use for code refactoring.
-- Documents motivation for changes
-- Ensures no functional changes
-- Performance impact assessment
+## Testing
 
-## Customization
+- How the fix was verified
+- Regression: how to confirm the bug doesn't recur
 
-Templates can be customized by:
-1. Editing the `generate_pr_description.sh` script
-2. Creating custom template files in this directory
-3. Using environment variables for dynamic content
+closes #N
+```
+
+## Hotfix
+
+```
+## Summary
+
+- What is broken in production and severity
+
+## Fix
+
+- What was changed
+
+## Rollback
+
+- How to revert if needed
+
+closes #N
+```
+
+## Documentation
+
+```
+## Summary
+
+- What documentation was updated and why
+
+## Changes
+
+- Files or sections changed
+
+## Verification
+
+- How to confirm the docs are correct
+```
+
+## Refactor
+
+```
+## Summary
+
+- Motivation for the refactor
+
+## Changes
+
+- What changed structurally (no functional changes)
+
+## Performance impact
+
+- Any measured or expected impact
+```
 
 ## Best Practices
 
-1. **Be specific**: Replace placeholder text with actual details
-2. **Complete checklists**: Don't leave checkboxes unchecked without reason
-3. **Link issues**: Always reference related issues
-4. **Add evidence**: Include test output, screenshots, or metrics
-5. **Review before submitting**: Ensure description is complete and accurate
+1. Replace all placeholder text with actual details
+2. Always reference related issues with `closes #N`
+3. Include test output, screenshots, or metrics where relevant
+4. Keep it concise — a good PR description explains *why*, not just *what*
