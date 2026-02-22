@@ -3,13 +3,20 @@ name: forgejo-review-pr
 description: Use when reviewing an open Pull Request on a Forgejo repository - reading changes, leaving comments, or labelling the outcome.
 ---
 
+## Pre-requisites
+
+- forgejo-mcp server has to be available and successful connected. If not inform the user and abort
+- **REQUIRED SUB-SKILL:** code-review-excellence
+- The skill `ntfy-me` is required for notifications after the review is done
+
+```markdown
+Installation with: `npx skills add https://github.com/wshobson/agents --skill code-review-excellence`
+```
+
 # Forgejo Pull Request Review
 
-Uses the `forgejo-mcp` MCP server and git to review PRs on any Forgejo project.
-
-**REQUIRED SUB-SKILL:** Use `code-review-excellence` for the actual review process — feedback quality, severity labels, checklists, and templates. This skill handles only the Forgejo-specific parts.
-
-Installation with: `npx skills add https://github.com/wshobson/agents --skill code-review-excellence`
+- Uses the `forgejo-mcp` MCP server and git to review PRs on any Forgejo project.
+- Use skill `code-review-excellence` for the actual review process — feedback quality, severity labels, checklists, and templates. This skill handles only the Forgejo-specific parts. If the skill is not available tell the user how to install it.
 
 ## Detect Repo
 
@@ -80,6 +87,3 @@ Use the **ntfy-me** skill to send a notification to topic `code-review` with:
 | `create_issue_comment` | Post the review comment |
 | `add_issue_labels` | Label outcome (approved, needs-changes) |
 
-## If MCP Tools Are Unavailable
-
-> The `forgejo-mcp` MCP server is not active. Restart Claude Code — it is configured in `~/.claude.json` using the wrapper at `~/Projects/dotfiles/bin/forgejo-mcp-wrapper`.

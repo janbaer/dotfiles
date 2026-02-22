@@ -3,6 +3,11 @@ name: forgejo-issue
 description: Use when working with Forgejo issues in the current project - listing open issues, selecting one to implement, or following the full implementation workflow through OpenSpec to PR.
 ---
 
+## Pre-requisites
+
+- forgejo-mcp server has to be available and successful connected. If not inform the user and abort
+- The skill `ntfy-me` is required for notifications whenever any user interaction is required
+
 # Forgejo Issue Management
 
 Uses the `forgejo-mcp` MCP server (configured globally in `~/.claude.json`) to interact with issues on any Forgejo project.
@@ -65,6 +70,7 @@ digraph issue_workflow {
 **Minimize user interaction.** Only stop to ask if genuinely blocked. Never pause to confirm next steps when the path forward is clear. Keep moving.
 
 The only required user input in the entire workflow is choosing which issue to work on (step 1, when no issue number is given). Everything else runs automatically.
+If any user input is required or the whole workflow is done, use the `ntfy-me` skill to inform the user about it. Use the topic `claude` for it.
 
 ## Steps
 
@@ -128,6 +134,10 @@ When in doubt, lean toward continuing. Only stop if implementation truly cannot 
 
 Follow the tasks from `openspec instructions apply`. Work through each task in order without stopping for confirmation between tasks.
 
+> **Important:** After completing each task, immediately mark it as done in `tasks.md` before moving to the next one:
+> `- [ ] Task description` → `- [x] Task description`
+> Do **not** leave this until after archiving.
+
 ### 7. Run tests and lint
 
 Run the project's test and lint commands before committing. Fix failures before proceeding — do not ask the user whether to fix them.
@@ -161,6 +171,3 @@ Use the **forgejo-pr** skill to create the PR. Always include `closes #N` in the
 | `get_issue_by_index` | Read issue details or validate state |
 | `list_issue_comments` | Read issue discussion |
 
-## If MCP Tools Are Unavailable
-
-> The `forgejo-mcp` MCP server is not active. Restart Claude Code — it is configured in `~/.claude.json` using the wrapper at `~/Projects/dotfiles/bin/forgejo-mcp-wrapper`.

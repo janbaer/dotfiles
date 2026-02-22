@@ -3,6 +3,10 @@ name: forgejo-pr
 description: Use when creating, listing, or inspecting Pull Requests on a Forgejo repository using the forgejo-mcp MCP server.
 ---
 
+## Pre-requisites
+
+- forgejo-mcp server has to be available and successful connected. If not inform the user and abort
+
 # Forgejo Pull Request Management
 
 Uses the `forgejo-mcp` MCP server (configured globally in `~/.claude.json`) to create and manage PRs on any Forgejo project.
@@ -62,6 +66,3 @@ add_issue_labels(owner, repo, index=N, labels="enhancement,needs-review")
 | `get_pull_request_by_index` | Read PR details |
 | `add_issue_labels` | Label a PR |
 
-## If MCP Tools Are Unavailable
-
-> The `forgejo-mcp` MCP server is not active. Restart Claude Code — it is configured in `~/.claude.json` using the wrapper at `~/Projects/dotfiles/bin/forgejo-mcp-wrapper`.
