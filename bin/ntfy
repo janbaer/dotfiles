@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+TITLE=""
+TAGS=""
+TOPIC="claude"
+PRIORITY="default"
+MESSAGE=""
+SERVER=""
+
+# Config discovery
+if [[ -f ~/.config/ntfy/client.yml ]]; then
+  SERVER=$(grep 'default-host' ~/.config/ntfy/client.yml 2>/dev/null | awk '{print $2}' | tr -d '"')
+fi
+SERVER="${SERVER:-https://ntfy.home.janbaer.de}"
+
+usage() {
+  echo "Usage: ntfy [options] <message>"
+  echo ""
+  echo "Options:"
+  echo "  --title, -t     Notification title"
+  echo "  --tags          Comma-separated emoji tag names (e.g. white_check_mark,rocket)"
+  echo "  --topic         Topic (default: claude)"
+  echo "  --priority, -p  Priority: min|low|default|high|max (default: default)"
+  echo "  --server        Override server URL"
+  echo "  --help, -h      Show this help"
+  echo ""
+  echo "Example:"
+  echo "  ntfy --title 'Build done' --tags white_check_mark --topic ci 'All tests passed'"
+  exit 1
+}
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --title|-t)   TITLE="$2";    shift 2 ;;
+    --tags)       TAGS="$2";     shift 2 ;;
+    --topic)      TOPIC="$2";    shift 2 ;;
+    --priority|-p) PRIORITY="$2"; shift 2 ;;
+    --server)     SERVER="$2";   shift 2 ;;
+    --help|-h)    usage ;;
+    -*)           echo "Unknown option: $1"; usage ;;
+    *)            MESSAGE="$1";  shift ;;
+  esac
+done
+
+if [[ -z "$MESSAGE" ]]; then
+  echo "Error: message is required" >&2
+  usage
+fi
+
+HEADERS=(-H "Priority: $PRIORITY")
+[[ -n "$TITLE" ]] && HEADERS+=(-H "Title: $TITLE")
+[[ -n "$TAGS" ]] && HEADERS+=(-H "Tags: $TAGS")
+
+curl -s "${HEADERS[@]}" -d "$MESSAGE" "$SERVER/$TOPIC"

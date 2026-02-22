@@ -74,6 +74,13 @@ edit_merge_request(project_id="group/repo", mr_iid=N, labels="approved")
 # or: "needs-changes", "needs-review"
 ```
 
+### 7. Notify when done
+
+Use the **ntfy-me** skill to send a notification to topic `code-review` with:
+- Title: `MR Review Done – <MR title>`
+- Tags: `mag,white_check_mark`
+- Body: MR number, title, verdict, and project
+
 ## MCP Tools Reference
 
 | Tool | Use case |
