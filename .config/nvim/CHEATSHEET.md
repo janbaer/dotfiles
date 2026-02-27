@@ -45,7 +45,6 @@
 - `<Ctrl>+o` jump to location you were before (e.g. after using `gg`)
 - `<Ctrl>+i` jump back to location you were before (after using `Ctrl`+`o`)
 - `<Space>` fold/unfold current text
-- `<leader>aa` select all text (ggVG)
 - `<leader>h` toggle highlight search
 - `k`/`j` smart line navigation (considers word wrap)
 
@@ -56,13 +55,19 @@
 - `<CR>` accept completion
 - `<C-space>` show completion menu
 - `<C-c>` cancel completion
-- `K` show LSP context info
+- `K` show LSP hover info
+- `<leader><space>` show LSP hover info (alternative)
 - `grd` go to definition
+- `gD` go to declaration
+- `gi` go to implementation
+- `<leader>D` go to type definition
 - `gr` show references of function
 - `<leader>rn` rename all refs of the symbol under cursor
 - `<leader>ca` code action (normal and visual mode)
+- `<leader>d` open diagnostic float
 - `[d` go to previous diagnostic
 - `]d` go to next diagnostic
+- `<leader>lh` toggle inlay hints
 
 ## Telescope
 
@@ -144,9 +149,11 @@
 - `yip` "yank-inside-paragraph"
 - `yaW` copy word w/ dashes/underscores
 - `p/P` paste yanked line below/above
-- `x` cut (mapped to delete)
-- `xx` cut whole line
-- `<DEL>` delete without yanking
+- `<leader>aa` select all text (ggVG)
+- `d`/`D` delete without yanking (blackhole register)
+- `x` cut to register (with yank)
+- `xx` cut whole line (with yank)
+- `<DEL>` delete character without yanking
 - `W` save all changes
 - `[<space>` add empty line above cursor
 - `]<space>` add empty line below cursor
