@@ -45,6 +45,4 @@
 
 - [x] **Replace vim-cutlass with native keymaps** — removed plugin, `d`/`x` now use `"_d` directly
 
-- [ ] **Consider enabling mcphub.nvim**
-  - Currently disabled — but given heavy Claude Code usage, direct MCP server connections from Neovim could be useful
-  - File: `lua/core/plugin-control.lua` → set `["mcphub"] = true`
+- [x] **Consider enabling mcphub.nvim** — removed; claude-code.nvim already covers this use case

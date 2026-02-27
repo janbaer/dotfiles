@@ -6,7 +6,6 @@ M.plugins = {
   -- AI/Code Completion
   ["blink.cmp"] = true,
   ["blink-compat"] = true,
-  ["mcphub"] = false,
   ["windsurf"] = true,
   ["claude-code"] = true,
   ["copilot"] = true,
