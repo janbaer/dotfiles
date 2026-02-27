@@ -133,11 +133,12 @@ nmap("<silent>F3", cmd("MaximizerToggle"))
 -- Search for current word with ACK plugin
 nmap("<leader>vv", cmd("Ack! <cword>"), "Search current word") -- codespell: ignore
 
--- Mapping for Cutlass to use x for cut operations
-nmap("x", "d")
-vmap("x", "d")
-nmap("xx", "dd")
-nmap("<DEL>", "d") -- Deleting something with the Del key should not add do a yank operation
+-- Delete without yanking (replaces vim-cutlass)
+map({ "n", "v" }, "d", '"_d')
+nmap("D", '"_D')
+nmap("x", "d")    -- noremap: calls built-in d (cut with yank), bypasses the d→"_d remap
+nmap("xx", "dd")  -- noremap: cuts whole line with yank
+nmap("<DEL>", '"_x')
 
 -- Mappings for expand-selection plugin
 vmap("v", "<Plug>(expand_region_expand)")

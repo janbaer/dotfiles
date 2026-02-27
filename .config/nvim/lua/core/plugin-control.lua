@@ -6,21 +6,16 @@ M.plugins = {
   -- AI/Code Completion
   ["blink.cmp"] = true,
   ["blink-compat"] = true,
-  ["cmp-tabnine"] = false,
-  ["code-companion"] = false,
-  ["chat-gpt"] = false,
-  ["gp"] = false,
-  ["mcphub"] = false,
   ["windsurf"] = true,
   ["claude-code"] = true,
   ["copilot"] = true,
 
   -- LSP/Language Support
-  ["lsp-saga"] = false,
+  ["nvim-ansible"] = true,
   ["mason"] = true,
   ["conform"] = true,
   ["nvim-lint"] = true,
-  ["rust-tools"] = true,
+  ["rustaceanvim"] = true,
 
   -- UI/Interface
   ["snacks"] = true,
@@ -43,7 +38,6 @@ M.plugins = {
 
   -- Git
   ["git-signs"] = true,
-  ["diffview"] = false,
 
   -- Debug/Testing
   ["dap"] = false,
@@ -60,7 +54,6 @@ M.plugins = {
   ["vim-haproxy"] = true,
   ["ack.vim"] = true,
   ["vim-maximizer"] = true,
-  ["vim-cutlass"] = true,
   ["vim-visual-multi"] = true,
   ["vim-repeat"] = true,
   ["vim-terraform"] = true,
@@ -68,7 +61,6 @@ M.plugins = {
   ["vim-expand-region"] = true,
   ["vim-fugitive"] = true,
   ["vim-sleuth"] = true,
-  ["vim-go"] = true,
 }
 
 -- Helper function to check if a plugin is enabled

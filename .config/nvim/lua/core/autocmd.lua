@@ -98,6 +98,21 @@ create_autocmd({ "BufWinLeave", "BufWinEnter" }, {
   end
 })
 
+-- Filetype detection for compound filetypes not recognized by default
+vim.filetype.add({
+  extension = {
+    tfvars = "terraform-vars",
+    mdx = "markdown.mdx",
+  },
+  filename = {
+    ["docker-compose.yml"] = "yaml.docker-compose",
+    ["docker-compose.yaml"] = "yaml.docker-compose",
+    ["compose.yml"] = "yaml.docker-compose",
+    ["compose.yaml"] = "yaml.docker-compose",
+    [".gitlab-ci.yml"] = "yaml.gitlab",
+  },
+})
+
 -- YAML autocmd group
 local yaml_group = create_augroup("yamlFile", { clear = true })
 create_autocmd({ "BufNewFile", "BufRead" }, {
@@ -149,6 +164,15 @@ create_autocmd(
           border = "rounded",
         })
       end, opts)
+
+      -- Inlay hints: off by default, toggle with <leader>lh
+      local client = vim.lsp.get_client_by_id(ev.data.client_id)
+      if client and client.supports_method("textDocument/inlayHint") then
+        vim.lsp.inlay_hint.enable(false, { bufnr = ev.buf })
+        vim.keymap.set("n", "<leader>lh", function()
+          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = ev.buf }), { bufnr = ev.buf })
+        end, vim.tbl_extend("force", opts, { desc = "Toggle inlay hints" }))
+      end
     end,
   }
 )
