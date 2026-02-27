@@ -20,7 +20,7 @@ return {
 
     local keys = {
       { "<leader>,", group = "Hop" },
-      -- { "<leader>c", group = "ChatGPT" },
+      { "<leader>p", group = "Parrot AI" },
       { "<leader>d", group = "Debug" },
       { "<leader>f", group = "FzfLua" },
       { "<leader>g", group = "Git" },
@@ -30,8 +30,8 @@ return {
       { "<leader>t", group = "Telescope" },
       { "<leader>w", group = "Workspaces" },
       { "<leader>x", group = "Trouble" },
-      { "gr",        group = "LSP commands" },
+      { "gr", group = "LSP commands" },
     }
     wk.add(keys)
-  end
+  end,
 }

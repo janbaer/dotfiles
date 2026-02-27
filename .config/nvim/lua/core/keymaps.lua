@@ -144,7 +144,7 @@ nmap("<DEL>", '"_x')
 vmap("v", "<Plug>(expand_region_expand)")
 
 -- Use ToggleBackground from dark to light and back
-nmap("<leader>pp", cmd("lua ToggleBackground()"), "Toggle dark or light background")
+nmap("<F9>", cmd("lua ToggleBackground()"), "Toggle dark or light background")
 
 -- Keys for hop - see https://github.com/smoka7/hop.nvim
 map({ "n", "v" }, "<leader>,w", cmd("HopWord"), "Hop word")

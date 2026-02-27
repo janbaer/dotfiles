@@ -4,6 +4,7 @@ local M = {}
 
 M.plugins = {
   -- AI/Code Completion
+  ["parrot"] = true,
   ["blink.cmp"] = true,
   ["blink-compat"] = true,
   ["windsurf"] = true,

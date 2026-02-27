@@ -182,6 +182,18 @@
 - `<` decrease indentation (stays in visual mode)
 - `>` increase indentation (stays in visual mode)
 
+## PARROT AI (Quick Text Operations)
+
+- `<leader>pc` toggle chat (vsplit)
+- `<leader>pm` select model
+- `<leader>po` select provider
+- `<leader>ps` stop generation
+- `<leader>pr` rewrite selection with custom prompt
+- `<leader>pa` append to selection with custom prompt
+- `<leader>pg` grammar check selection
+- `<leader>pe` rephrase selection
+- `<leader>pt` translate selection (EN↔DE)
+
 ## AI/CLAUDE CODE
 
 - `<leader>ac` toggle Claude Code
@@ -200,7 +212,7 @@
 - `<leader>rl` reload current buffer
 - `<leader>rs` run sync.sh script
 - `<leader>gb` show git blame
-- `<leader>pp` toggle dark/light background
+- `<F9>` toggle dark/light background
 - `<leader>vv` search current word with ACK
 - `<F2>` open file under cursor in vertical split
 - `<F11>` toggle floaterm
