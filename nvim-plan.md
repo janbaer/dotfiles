@@ -22,10 +22,7 @@
   - FZF-Lua is faster with fewer deps; Telescope has better ecosystem
   - Files: `lua/plugins/telescope.lua`, `lua/plugins/fzf-lua.lua`
 
-- [ ] **Clean up disabled plugins**
-  - 8 disabled entries in plugin-control.lua: `dap`, `diffview`, `chat-gpt`, `code-companion`, `gp`, `mcphub`, `lsp-saga`, `cmp-tabnine`
-  - Either activate or remove their config files entirely
-  - File: `lua/core/plugin-control.lua`
+- [x] **Clean up disabled plugins** — removed cmp-tabnine, code-companion, chat-gpt, gp, lsp-saga, diffview, rust-tools.lua leftover; dap and mcphub kept disabled
 
 ---
 
