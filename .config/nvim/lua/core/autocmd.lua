@@ -164,6 +164,15 @@ create_autocmd(
           border = "rounded",
         })
       end, opts)
+
+      -- Inlay hints: off by default, toggle with <leader>lh
+      local client = vim.lsp.get_client_by_id(ev.data.client_id)
+      if client and client.supports_method("textDocument/inlayHint") then
+        vim.lsp.inlay_hint.enable(false, { bufnr = ev.buf })
+        vim.keymap.set("n", "<leader>lh", function()
+          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = ev.buf }), { bufnr = ev.buf })
+        end, vim.tbl_extend("force", opts, { desc = "Toggle inlay hints" }))
+      end
     end,
   }
 )

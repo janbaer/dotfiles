@@ -44,10 +44,7 @@
 
 - [x] **Extend mini.lua with mini.ai and mini.surround** — already configured
 
-- [ ] **Inlay hints**
-  - `vim.lsp.inlay_hint` is built-in since Neovim 0.10
-  - Enable for ts_ls (TypeScript) and gopls (Go)
-  - Likely in `after/lsp/ts_ls.lua` and `after/lsp/gopls.lua`
+- [x] **Inlay hints** — enabled globally in LspAttach for all supporting servers, toggle with `<leader>lh`
 
 - [x] **Replace vim-cutlass with native keymaps** — removed plugin, `d`/`x` now use `"_d` directly
 
