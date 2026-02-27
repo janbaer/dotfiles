@@ -20,7 +20,7 @@ M.plugins = {
   ["mason"] = true,
   ["conform"] = true,
   ["nvim-lint"] = true,
-  ["rust-tools"] = true,
+  ["rustaceanvim"] = true,
 
   -- UI/Interface
   ["snacks"] = true,

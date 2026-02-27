@@ -1,22 +1,24 @@
--- Tools for better development in rust using neovim's builtin lsp
--- See https://github.com/simrat39/rust-tools.nvim
--- See also https://sharksforarms.dev/posts/neovim-rust/
+-- Modern Rust development tools for Neovim
+-- Successor to deprecated rust-tools.nvim
+-- See https://github.com/mrcjkb/rustaceanvim
 
 return {
-  "simrat39/rust-tools.nvim",
-  enabled = require("core.plugin-control").is_enabled("rust-tools"),
+  "mrcjkb/rustaceanvim",
+  enabled = require("core.plugin-control").is_enabled("rustaceanvim"),
+  version = "^5",
   ft = "rust",
-  config = function()
-    local rust_tools = require("rust-tools")
-    rust_tools.setup({
+  init = function()
+    vim.g.rustaceanvim = {
       server = {
         on_attach = function(_, bufnr)
-          -- Hover actions
-          vim.keymap.set("n", "<Leader>rha", rust_tools.hover_actions.hover_actions, { buffer = bufnr })
-          -- Code action groups
-          vim.keymap.set("n", "<Leader>rca", rust_tools.code_action_group.code_action_group, { buffer = bufnr })
+          vim.keymap.set("n", "<Leader>rha", function()
+            vim.cmd.RustLsp({ "hover", "actions" })
+          end, { buffer = bufnr })
+          vim.keymap.set("n", "<Leader>rca", function()
+            vim.cmd.RustLsp("codeAction")
+          end, { buffer = bufnr })
         end,
       },
-    })
+    }
   end,
 }

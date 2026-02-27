@@ -52,6 +52,7 @@ return {
     opts = {
       ensure_installed = {
         "alejandra",
+        "rust-analyzer",
         "ansible-lint",
         "jsonlint",
         "yamllint",
