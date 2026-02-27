@@ -16,11 +16,7 @@
 
 ### 🟡 Redundancies (Simplification)
 
-- [ ] **Consolidate Telescope + FZF-Lua**
-  - Both picker engines run in parallel — unnecessary overhead
-  - Decision needed: keep one, remove the other
-  - FZF-Lua is faster with fewer deps; Telescope has better ecosystem
-  - Files: `lua/plugins/telescope.lua`, `lua/plugins/fzf-lua.lua`
+- [x] **Consolidate Telescope + FZF-Lua** — keeping both intentionally; each has unique features (e.g. FZF-Lua colorscheme preview)
 
 - [x] **Clean up disabled plugins** — removed cmp-tabnine, code-companion, chat-gpt, gp, lsp-saga, diffview, rust-tools.lua leftover; dap and mcphub kept disabled
 
@@ -30,12 +26,7 @@
 
 - [x] **flash.nvim instead of hop.nvim** — tried, reverted; hop's "label all words" UX preferred
 
-- [ ] **Verify mason-lspconfig v2 handler behaviour**
-  - `after/lsp/*.lua` already use new `vim.lsp.Config` table format — no `require('lspconfig').setup{}` calls anywhere
-  - nvim-lspconfig is intentionally kept as a server definition library (ships `lsp/` configs for all servers)
-  - Old `setup{}` API is deprecated and will be removed — confirm it's not being used anywhere
-  - Verify all 13 servers start correctly with `:LspInfo` — mason-lspconfig v2 removed the default auto-handler
-  - If servers are missing: explicitly call `vim.lsp.enable({...})` for each server in mason.lua
+- [x] **Verify mason-lspconfig v2 handler behaviour** — all servers confirmed active in :LspInfo; after/lsp/*.lua already use new vim.lsp.Config format
 
 - [x] **oil.nvim alongside nvim-tree** — tried previously, not useful
 
