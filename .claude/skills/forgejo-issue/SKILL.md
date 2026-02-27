@@ -5,7 +5,7 @@ description: Use when working with Forgejo issues in the current project - listi
 
 ## Pre-requisites
 
-- forgejo-mcp server has to be available and successful connected. If not inform the user and abort
+- forgejo-mcp server must be available and successfully connected. Verify by checking that forgejo-mcp tools are listed. If not available: inform the user that the forgejo-mcp MCP server is not connected, and **abort immediately**. Do NOT attempt workarounds such as REST API calls, curl, or any other method — the MCP server is the only supported interface.
 - The skill `ntfy-me` is required for notifications whenever any user interaction is required
 
 # Forgejo Issue Management
