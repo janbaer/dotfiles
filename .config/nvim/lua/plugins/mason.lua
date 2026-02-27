@@ -53,7 +53,7 @@ return {
       ensure_installed = {
         "alejandra",
         "rust-analyzer",
-        "ansible-lint",
+        -- ansible-lint: provided by home-manager (Mason conflicts with Nix Python packages)
         "jsonlint",
         "yamllint",
         "luacheck",

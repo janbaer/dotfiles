@@ -16,6 +16,7 @@ M.plugins = {
   ["copilot"] = true,
 
   -- LSP/Language Support
+  ["nvim-ansible"] = true,
   ["lsp-saga"] = false,
   ["mason"] = true,
   ["conform"] = true,

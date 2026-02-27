@@ -98,6 +98,21 @@ create_autocmd({ "BufWinLeave", "BufWinEnter" }, {
   end
 })
 
+-- Filetype detection for compound filetypes not recognized by default
+vim.filetype.add({
+  extension = {
+    tfvars = "terraform-vars",
+    mdx = "markdown.mdx",
+  },
+  filename = {
+    ["docker-compose.yml"] = "yaml.docker-compose",
+    ["docker-compose.yaml"] = "yaml.docker-compose",
+    ["compose.yml"] = "yaml.docker-compose",
+    ["compose.yaml"] = "yaml.docker-compose",
+    [".gitlab-ci.yml"] = "yaml.gitlab",
+  },
+})
+
 -- YAML autocmd group
 local yaml_group = create_augroup("yamlFile", { clear = true })
 create_autocmd({ "BufNewFile", "BufRead" }, {

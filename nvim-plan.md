@@ -34,16 +34,14 @@
 
 ### 🟢 Missed Modern Features
 
-- [ ] **flash.nvim instead of hop.nvim**
-  - `folke/flash.nvim` has largely superseded hop
-  - Adds Treesitter integration, remote operators (e.g. `yr<flash>` = yank remote), f/t enhancement
-  - File: `lua/plugins/hop.lua` → replace
+- [x] **flash.nvim instead of hop.nvim** — tried, reverted; hop's "label all words" UX preferred
 
-- [ ] **Native LSP config (Neovim 0.11+)**
-  - Neovim 0.11 introduced `vim.lsp.config` and `vim.lsp.enable()`
-  - Could fully replace nvim-lspconfig — no plugin needed
-  - Check current Neovim version first: `:version`
-  - Files: `lua/plugins/mason.lua`, `after/lsp/`
+- [ ] **Verify mason-lspconfig v2 handler behaviour**
+  - `after/lsp/*.lua` already use new `vim.lsp.Config` table format — no `require('lspconfig').setup{}` calls anywhere
+  - nvim-lspconfig is intentionally kept as a server definition library (ships `lsp/` configs for all servers)
+  - Old `setup{}` API is deprecated and will be removed — confirm it's not being used anywhere
+  - Verify all 13 servers start correctly with `:LspInfo` — mason-lspconfig v2 removed the default auto-handler
+  - If servers are missing: explicitly call `vim.lsp.enable({...})` for each server in mason.lua
 
 - [ ] **oil.nvim alongside nvim-tree**
   - `stevearc/oil.nvim`: edit directories like a buffer (rename/delete/move with normal vim commands)

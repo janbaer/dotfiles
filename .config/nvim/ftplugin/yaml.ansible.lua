@@ -1,0 +1,1 @@
+-- Ansible YAML files (detected by mfussenegger/nvim-ansible)
