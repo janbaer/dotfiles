@@ -10,10 +10,7 @@
 
 ### 🔴 Critical (Deprecated / Broken)
 
-- [ ] **vim-go → modern Go tooling**
-  - vim-go is heavy and overlaps with gopls
-  - Replace with: `nvim-dap-go` for debugging + let gopls handle everything else
-  - File: `lua/plugins/plugins.lua` (simple plugin list)
+- [x] **vim-go → modern Go tooling** — removed plugin, `<leader>gr`/`<leader>gt` now use `!go run .` / `!go test ./...`
 
 ---
 
@@ -43,10 +40,7 @@
   - Verify all 13 servers start correctly with `:LspInfo` — mason-lspconfig v2 removed the default auto-handler
   - If servers are missing: explicitly call `vim.lsp.enable({...})` for each server in mason.lua
 
-- [ ] **oil.nvim alongside nvim-tree**
-  - `stevearc/oil.nvim`: edit directories like a buffer (rename/delete/move with normal vim commands)
-  - Keep nvim-tree for overview, add oil for file operations
-  - No existing file — new plugin entry needed
+- [x] **oil.nvim alongside nvim-tree** — tried previously, not useful
 
 - [x] **Extend mini.lua with mini.ai and mini.surround** — already configured
 

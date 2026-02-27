@@ -68,7 +68,6 @@ M.plugins = {
   ["vim-expand-region"] = true,
   ["vim-fugitive"] = true,
   ["vim-sleuth"] = true,
-  ["vim-go"] = true,
 }
 
 -- Helper function to check if a plugin is enabled
