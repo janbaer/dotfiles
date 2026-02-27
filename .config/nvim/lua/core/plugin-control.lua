@@ -61,7 +61,6 @@ M.plugins = {
   ["vim-haproxy"] = true,
   ["ack.vim"] = true,
   ["vim-maximizer"] = true,
-  ["vim-cutlass"] = true,
   ["vim-visual-multi"] = true,
   ["vim-repeat"] = true,
   ["vim-terraform"] = true,

@@ -6,7 +6,6 @@ return {
   { "Joorem/vim-haproxy",        ft = "haproxy",     enabled = plugin_control.is_enabled("vim-haproxy") },  -- Syntaxsupport for HAProxy config files
   { "mileszs/ack.vim",           event = "VeryLazy", enabled = plugin_control.is_enabled("ack.vim") },  -- Provides support for ack and the SilverlightSearcher in vim
   { "szw/vim-maximizer",         event = "VeryLazy", enabled = plugin_control.is_enabled("vim-maximizer") },  -- Maximizes and restores the current window in Vim.
-  { "svermeulen/vim-cutlass",    event = "VeryLazy", enabled = plugin_control.is_enabled("vim-cutlass") },  -- Plugin that adds a 'cut' operation separate from 'delete'
   { "mg979/vim-visual-multi",    event = "VeryLazy", enabled = plugin_control.is_enabled("vim-visual-multi") },  -- This True Sublime Text style multiple selections for Vim - https://github.com/mg979/vim-visual-multi
   { "tpope/vim-repeat",          event = "VeryLazy", enabled = plugin_control.is_enabled("vim-repeat") },  -- Enable repeating supported plugin maps with \".\"
   { "hashivim/vim-terraform",    ft = "terraform",   enabled = plugin_control.is_enabled("vim-terraform") },  -- Highlighting for Terraform
