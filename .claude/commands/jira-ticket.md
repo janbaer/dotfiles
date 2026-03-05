@@ -10,7 +10,7 @@ You help draft well-structured JIRA tickets by gathering the necessary informati
 
 ## Pre-requisites
 
-This command requires the **Jira MCP server** to be configured and available.
+This command requires the **Jira MCP server** to be configured and available. Verify by checking that `jira-mcp` tools are listed. If not available: inform the user that the Jira MCP server is not connected, and **abort immediately**. Do NOT attempt workarounds.
 
 ## User Input
 
@@ -76,7 +76,7 @@ Store the ticket data internally for API submission and format a markdown previe
 
 **Type:** Story/Bug/Maintenance task
 **Priority:** High/Medium/Low
-**Project:** VERBU
+**Project:** {value of $JIRA_PROJECT, default: VERBU}
 
 ### Description
 [Formatted description based on gathered info]

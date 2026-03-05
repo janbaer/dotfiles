@@ -40,6 +40,7 @@ discussion_list(project_id="group/repo", mr_iid=N)
 ```
 
 Note the `source_branch` and `target_branch` from the response.
+Also note the `diff_refs` object — you will need `base_sha`, `head_sha`, and `start_sha` to post inline comments.
 
 ### 3. Optionally, read the original Jira issue from the title
 
@@ -68,10 +69,33 @@ Apply the **code-review-excellence** skill to analyse the diff — work through 
 
 **Always** show the review result in the terminal first and ask the user if the review should be posted as a comment to the merge-request.
 
-### 7. Post the review comment
+### 7. Post the review
+
+**Prefer inline comments for specific line-level findings** — use `discussion_new_with_position` with the SHAs from `diff_refs`:
 
 ```
-discussion_new(project_id="group/repo", mr_iid=N, body="<review output from step 5>")
+discussion_new_with_position(
+  resource_type="merge_request",
+  project_id="group/repo",
+  resource_id=N,
+  body="<finding>",
+  position_type="text",
+  base_sha="<diff_refs.base_sha>",
+  head_sha="<diff_refs.head_sha>",
+  start_sha="<diff_refs.start_sha>",
+  old_path="path/to/file.ts",
+  new_path="path/to/file.ts",
+  new_line=42          # line number in the new file
+)
+```
+
+- Use `new_line` for added/unchanged lines, `old_line` for removed lines.
+- Use `old_path` = `new_path` for non-renamed files.
+
+**Post the overall review summary** (verdict, context, non-line-specific comments) as a general comment:
+
+```
+discussion_new(resource_type="merge_request", parent_id="group/repo", resource_id=N, body="<summary>")
 ```
 
 ### 8. Label the outcome (optional)
@@ -98,7 +122,9 @@ Use the **ntfy-me** skill to send a notification to topic `code-review` with:
 | `get_merge_request` | Read MR metadata (branches, title, description) |
 | `discussion_list` | Read existing discussion and review comments |
 | `list_merge_request_diffs` | Get the file diffs for the MR |
-| `discussion_new` | Post the review comment |
+| `discussion_new` | Post the overall review summary comment |
+| `discussion_new_with_position` | Post an inline comment on a specific diff line |
+| `discussion_modify_note` | Update an existing comment (e.g. after correction) |
 | `edit_merge_request` | Set labels on the outcome |
 | `jira-get-issue` | Read the original Jira ticket (optional, requires `jira-mcp`) |
 
