@@ -1,6 +1,6 @@
 ---
 name: ntfy-me
-description: Use when sending push notifications via ntfy — checking config, formatting messages, or notifying about events like build completion, weather, or alerts.
+description: Use when sending push notifications via ntfy — checking config, formatting messages, or notifying about events like build completion, weather, or alerts. Trigger on phrases like "notify me", "send a notification", "alert me when done", "send me a push notification", or "ping me".
 ---
 
 # ntfy
@@ -48,3 +48,4 @@ ntfy --title "Weather Munich – Feb 22" --tags "cloud,umbrella" --topic test \
 
 - **Using full emoji in --tags** — takes emoji *names* (`umbrella`), not emoji characters (`☂`)
 - **Forgetting --title** — notification shows raw body only, no heading
+- **Script not found** — if `~/bin/ntfy` is missing, check that `~/bin` is in `$PATH` and the script exists

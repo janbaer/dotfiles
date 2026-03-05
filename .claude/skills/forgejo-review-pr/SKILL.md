@@ -1,35 +1,27 @@
 ---
 name: forgejo-review-pr
-description: Use when reviewing an open Pull Request on a Forgejo repository - reading changes, leaving comments, or labelling the outcome.
+description: Use when reviewing an open Pull Request on a Forgejo repository - reading changes, leaving comments, or labelling the outcome. Trigger on phrases like "review PR", "review a pull request", "check the PR", "review the changes", or "give feedback on the PR".
 ---
 
 ## Pre-requisites
 
 - forgejo-mcp server must be available and successfully connected. Verify by checking that forgejo-mcp tools are listed. If not available: inform the user that the forgejo-mcp MCP server is not connected, and **abort immediately**. Do NOT attempt workarounds such as REST API calls, curl, or any other method — the MCP server is the only supported interface.
-- **REQUIRED SUB-SKILL:** code-review-excellence
-- The skill `ntfy-me` is required for notifications after the review is done
-
-```markdown
-Installation with: `npx skills add https://github.com/wshobson/agents --skill code-review-excellence`
-```
+- **REQUIRED SUB-SKILL:** `code-review-excellence` — for the actual review process (feedback quality, severity labels, checklists, and templates). This skill handles only the Forgejo-specific parts. If the skill is not available, tell the user how to install it: `npx skills add https://github.com/wshobson/agents --skill code-review-excellence`
 
 # Forgejo Pull Request Review
 
-- Uses the `forgejo-mcp` MCP server and git to review PRs on any Forgejo project.
-- Use skill `code-review-excellence` for the actual review process — feedback quality, severity labels, checklists, and templates. This skill handles only the Forgejo-specific parts. If the skill is not available tell the user how to install it.
+Uses the `forgejo-mcp` MCP server and git to review PRs on any Forgejo project.
 
-## Detect Repo
+## Workflow
 
-Always derive owner and repo from git remote, never hardcode:
+### 1. Detect repo and select a PR
+
+Derive owner and repo from git remote, never hardcode:
 
 ```bash
 git remote get-url origin
 # https://forgejo.home.janbaer.de/owner/repo.git → owner="owner", repo="repo"
 ```
-
-## Workflow
-
-### 1. Select a PR
 
 ```
 list_repo_pull_requests(owner, repo, state="open")
@@ -57,22 +49,26 @@ git diff origin/{base}...origin/{head}
 
 Apply the **code-review-excellence** skill to analyse the diff — work through context gathering, high-level review, and line-by-line review. Produce a structured review comment using the template from that skill.
 
-### 5. Post the review comment
+### 5. Show the review result
+
+**Always** show the review result in the terminal first and ask the user if the review should be posted as a comment to the PR.
+
+### 6. Post the review comment
 
 ```
 create_issue_comment(owner, repo, index=N, body="<review output from step 4>")
 ```
 
-### 6. Label the outcome (optional)
+### 7. Label the outcome (optional)
 
 ```
 add_issue_labels(owner, repo, index=N, labels="approved")
 # or: "needs-changes", "needs-review"
 ```
 
-### 7. Notify when done
+### 8. Notify when done
 
-Use the **ntfy-me** skill to send a notification to topic `code-review` with:
+Use the **ntfy-me** skill (if available) to send a notification to topic `code-review` with:
 - Title: `PR Review Done – <PR title>`
 - Tags: `mag,white_check_mark`
 - Body: PR number, title, verdict, and repo
@@ -86,4 +82,3 @@ Use the **ntfy-me** skill to send a notification to topic `code-review` with:
 | `list_issue_comments` | Read existing discussion |
 | `create_issue_comment` | Post the review comment |
 | `add_issue_labels` | Label outcome (approved, needs-changes) |
-

@@ -1,64 +1,40 @@
 ---
 name: forgejo-create-issue
-description: Use when creating a new issue on a Forgejo repository - guiding the user through structured questions about the issue type, severity, motivation, and testing approach before submitting.
+description: Use when creating a new issue on a Forgejo repository - guiding the user through structured questions about the issue type, severity, motivation, and testing approach before submitting. Trigger on phrases like "create issue", "file an issue", "open a ticket", "report a bug", or "add an issue".
 ---
 
 ## Pre-requisites
 
 - forgejo-mcp server must be available and successfully connected. Verify by checking that forgejo-mcp tools are listed. If not available: inform the user that the forgejo-mcp MCP server is not connected, and **abort immediately**. Do NOT attempt workarounds such as REST API calls, curl, or any other method — the MCP server is the only supported interface.
-- The skill `ntfy-me` is required for notifications whenever any user interaction is required
 
 # Forgejo Issue Creation
 
 Uses the `forgejo-mcp` MCP server to create issues on any Forgejo project.
 
-## Detect Repo
+## Workflow
 
-Always derive owner and repo from git remote, never hardcode:
+### 1. Detect Repo
+
+Derive owner and repo from git remote, never hardcode:
 
 ```bash
 git remote get-url origin
 # https://forgejo.home.janbaer.de/owner/repo.git → owner="owner", repo="repo"
 ```
 
-## Workflow
-
-```dot
-digraph create_issue {
-    "Detect repo from git remote" [shape=box];
-    "Fetch available labels" [shape=box];
-    "Ask structured questions" [shape=box];
-    "Map answers to label IDs" [shape=box];
-    "Create issue via MCP" [shape=box];
-    "Notify user" [shape=box];
-
-    "Detect repo from git remote" -> "Fetch available labels";
-    "Fetch available labels" -> "Ask structured questions";
-    "Ask structured questions" -> "Map answers to label IDs";
-    "Map answers to label IDs" -> "Create issue via MCP";
-    "Create issue via MCP" -> "Notify user";
-}
-```
-
-### 1. Detect Repo
-
-```bash
-git remote get-url origin
-```
-
 ### 2. Fetch Available Labels
 
-Before asking any questions, fetch all labels from the repo to get their numeric IDs:
+Before asking any questions, fetch label IDs by inspecting a sample of open issues:
 
 ```
 list_repo_issues(owner, repo, type="issues", state="open")
 ```
 
-Use the forgejo-mcp label listing capability. Since forgejo-mcp may not have a dedicated label-list tool, fetch labels via the Forgejo API concept — use `search_repos` or inspect issues to discover available label names and their IDs.
+Collect label names and their numeric IDs from the results.
 
 > **Important:** Labels are passed to Forgejo as **numeric IDs**, not strings. Always resolve label names to IDs before creating the issue.
 
-If no label-listing tool is available in forgejo-mcp, create the issue without labels and note in the body which labels should be applied manually.
+If no labels can be discovered, create the issue without labels.
 
 ### 3. Ask Structured Questions
 
@@ -88,7 +64,7 @@ Example prompt to the user:
 > 5. **Claude**: Needs feedback first — or — Auto-implement?
 > 6. **How to test**: How can this be verified once done?
 
-Use the `ntfy-me` skill (topic: `claude`) to notify the user that input is needed.
+If the `ntfy-me` skill is available, use it (topic: `claude`) to notify the user that input is needed.
 
 ### 4. Map Answers to Label IDs
 
@@ -132,7 +108,7 @@ create_issue(
 
 ### 6. Notify When Done
 
-Use the **ntfy-me** skill to notify with topic `claude`:
+Use the **ntfy-me** skill (if available) to notify with topic `claude`:
 - Title: `Issue Created – #{N}: {title}`
 - Body: link to the created issue
 
@@ -141,5 +117,5 @@ Use the **ntfy-me** skill to notify with topic `claude`:
 | Tool | Use case |
 |------|----------|
 | `create_issue` | Create the new issue |
-| `list_repo_issues` | Used to inspect labels on existing issues |
+| `list_repo_issues` | Inspect existing issues to discover label names and IDs |
 | `add_issue_labels` | Apply labels after creation if needed |

@@ -1,11 +1,11 @@
 ---
 name: howcani
-description: Use this skill whenever the user asks a question starting with "How can I". Search the howcani-mcp knowledge base first before answering.
+description: Use this skill when the user asks "How can I", "How do I", "How would I", or any similar how-to question — search the howcani-mcp knowledge base first before answering. Also trigger when the user wants to save, update, or look up items in the howcani knowledge base.
 ---
 
 ## Instructions
 
-Whenever the user asks a question starting with "How can I" (case-insensitive), ALWAYS search the howcani-mcp knowledge base first using `mcp__howcani-mcp__search_items` with username `jan` before providing any answer.
+Whenever the user asks a how-to question (e.g. "How can I", "How do I", "How would I" — case-insensitive), ALWAYS search the howcani-mcp knowledge base first using `mcp__howcani-mcp__search_items` with username `jan` before providing any answer.
 
 - If a matching item is found, return its answer.
 - If not found, answer the question and offer to save the question and answer using the howcani-mcp server.
@@ -20,7 +20,7 @@ Use `jan` as the username for searching and creating new items.
 
 When saving or displaying answers, use Markdown for formatting. Mark the user's questions like this: **User asked:** *question...*
 
-Ask the user, which tags should be assigned, and if there is no suitable for the current question, make proposal for a new tag.
+Ask the user which tags should be assigned. If no existing tag fits, propose a new one.
 
 Always show the user a preview of the new item and ask the user if they want to make any changes.
 

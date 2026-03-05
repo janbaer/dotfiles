@@ -1,25 +1,15 @@
 ---
 name: forgejo-issue
-description: Use when working with Forgejo issues in the current project - listing open issues, selecting one to implement, or following the full implementation workflow through OpenSpec to PR.
+description: Use when working with Forgejo issues in the current project - listing open issues, selecting one to implement, or following the full implementation workflow through OpenSpec to PR. Trigger on phrases like "implement issue", "work on issue", "pick up an issue", "start working on a ticket", or "fix issue".
 ---
 
 ## Pre-requisites
 
 - forgejo-mcp server must be available and successfully connected. Verify by checking that forgejo-mcp tools are listed. If not available: inform the user that the forgejo-mcp MCP server is not connected, and **abort immediately**. Do NOT attempt workarounds such as REST API calls, curl, or any other method — the MCP server is the only supported interface.
-- The skill `ntfy-me` is required for notifications whenever any user interaction is required
 
 # Forgejo Issue Management
 
 Uses the `forgejo-mcp` MCP server (configured globally in `~/.claude.json`) to interact with issues on any Forgejo project.
-
-## Detect Repo
-
-Always derive owner and repo from git remote, never hardcode:
-
-```bash
-git remote get-url origin
-# https://forgejo.home.janbaer.de/owner/repo.git → owner="owner", repo="repo"
-```
 
 ## Full Workflow
 
@@ -33,7 +23,7 @@ digraph issue_workflow {
     "User selects issue" [shape=diamond];
     "Read issue details" [shape=box];
     "Create branch: feature/{N}-{slug}" [shape=box];
-    "openspec new change + /opsx:ff" [shape=box];
+    "opsx-ff skill" [shape=box];
     "Design and tasks clear?" [shape=diamond];
     "openspec instructions apply" [shape=box];
     "Implement" [shape=box];
@@ -52,8 +42,8 @@ digraph issue_workflow {
     "List open issues" -> "User selects issue";
     "User selects issue" -> "Read issue details";
     "Read issue details" -> "Create branch: feature/{N}-{slug}";
-    "Create branch: feature/{N}-{slug}" -> "openspec new change + /opsx:ff";
-    "openspec new change + /opsx:ff" -> "Design and tasks clear?";
+    "Create branch: feature/{N}-{slug}" -> "opsx-ff skill";
+    "opsx-ff skill" -> "Design and tasks clear?";
     "Design and tasks clear?" -> "openspec instructions apply" [label="yes"];
     "Design and tasks clear?" -> "Commit + push (partial)" [label="no - stop here"];
     "openspec instructions apply" -> "Implement";
@@ -70,11 +60,18 @@ digraph issue_workflow {
 **Minimize user interaction.** Only stop to ask if genuinely blocked. Never pause to confirm next steps when the path forward is clear. Keep moving.
 
 The only required user input in the entire workflow is choosing which issue to work on (step 1, when no issue number is given). Everything else runs automatically.
-If any user input is required or the whole workflow is done, use the `ntfy-me` skill to inform the user about it. Use the topic `claude` for it.
+If any user input is required or the whole workflow is done, use the `ntfy-me` skill (if available) to inform the user. Use the topic `claude` for it.
 
 ## Steps
 
-### 1. Select issue
+### 1. Detect repo and select issue
+
+Derive owner and repo from git remote, never hardcode:
+
+```bash
+git remote get-url origin
+# https://forgejo.home.janbaer.de/owner/repo.git → owner="owner", repo="repo"
+```
 
 **If an issue number was passed as argument:**
 
@@ -119,11 +116,11 @@ Branch name: `feature/{issue-number}-{short-slug}`
 openspec new change "<change-name>"
 ```
 
-Then invoke `/opsx:ff` to fast-forward through artifact creation (proposal → specs → design → tasks) in one pass. **Do not wait for user confirmation after `/opsx:ff` completes — proceed immediately to step 5.**
+Then invoke the **opsx-ff** skill to fast-forward through artifact creation (proposal → specs → design → tasks) in one pass. **Do not wait for user confirmation after `opsx-ff` completes — proceed immediately to step 5.**
 
 ### 5. Evaluate clarity and continue
 
-After `/opsx:ff` completes, assess whether design and tasks are clear enough to implement **without asking the user**:
+After `opsx-ff` completes, assess whether design and tasks are clear enough to implement **without asking the user**:
 
 - **Clear** → immediately run `openspec instructions apply --change "<name>"` and proceed to implementation without pausing
 - **Not clear** → commit what exists, push the branch, then explain to the user what is ambiguous and what decision is needed
@@ -170,4 +167,3 @@ Use the **forgejo-pr** skill to create the PR. Always include `closes #N` in the
 | `list_repo_issues` | Browse open issues |
 | `get_issue_by_index` | Read issue details or validate state |
 | `list_issue_comments` | Read issue discussion |
-
