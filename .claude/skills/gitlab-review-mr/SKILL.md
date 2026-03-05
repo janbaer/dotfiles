@@ -1,11 +1,14 @@
 ---
 name: gitlab-review-mr
-description: Use when reviewing an open Merge Request on a GitLab repository - reading changes, leaving comments, or labelling the outcome.
+description: Use when reviewing an open Merge Request on a GitLab repository - reading changes, leaving inline comments, posting a review, or labelling the outcome. Trigger on any phrase like "review MR", "review the merge request", "code review", "check the MR", "look at the PR", or "give feedback on the changes".
 ---
 
 # GitLab Merge Request Review
 
 Uses the `gitlab-mcp` MCP server to review MRs on any GitLab project.
+
+**REQUIRED MCP SERVER:** `gitlab-mcp` — provides tools to interact with GitLab repositories, MRs, and discussions.
+**OPTIONAL MCP-SERVER:** `jira-mcp` - Provides access to the original Jira ticket
 
 **REQUIRED SUB-SKILL:** Use `code-review-excellence` for the actual review process — feedback quality, severity labels, checklists, and templates. This skill handles only the GitLab-specific parts.
 
@@ -38,7 +41,13 @@ discussion_list(project_id="group/repo", mr_iid=N)
 
 Note the `source_branch` and `target_branch` from the response.
 
-### 3. Get the diff
+### 3. Optionally, read the original Jira issue from the title
+
+Usually the title starts with `VERBU-12345` this is the issue number (of course the numbers are different)
+With that you can get the ticket with the tool `jira-get-issue` from the `jira-mcp` server.
+Read it for better understanding why the change was made.
+
+### 4. Get the diff
 
 ```
 list_merge_request_diffs(project_id="group/repo", mr_iid=N)
@@ -51,21 +60,21 @@ git fetch origin
 git diff origin/{target_branch}...origin/{source_branch}
 ```
 
-### 4. Perform the review
+### 5. Perform the review
 
 Apply the **code-review-excellence** skill to analyse the diff — work through context gathering, high-level review, and line-by-line review. Produce a structured review comment using the template from that skill.
 
-### 5. Show the review result
+### 6. Show the review result
 
-**Always** show the review result in a terminal first and ask the user if the review should be posted as a comment to the merge-request
+**Always** show the review result in the terminal first and ask the user if the review should be posted as a comment to the merge-request.
 
-### 5. Post the review comment
+### 7. Post the review comment
 
 ```
-discussion_new(project_id="group/repo", mr_iid=N, body="<review output from step 4>")
+discussion_new(project_id="group/repo", mr_iid=N, body="<review output from step 5>")
 ```
 
-### 6. Label the outcome (optional)
+### 8. Label the outcome (optional)
 
 GitLab MRs use approvals and labels. Apply as appropriate:
 
@@ -74,7 +83,7 @@ edit_merge_request(project_id="group/repo", mr_iid=N, labels="approved")
 # or: "needs-changes", "needs-review"
 ```
 
-### 7. Notify when done
+### 9. Notify when done
 
 Use the **ntfy-me** skill to send a notification to topic `code-review` with:
 - Title: `MR Review Done – <MR title>`
@@ -91,7 +100,13 @@ Use the **ntfy-me** skill to send a notification to topic `code-review` with:
 | `list_merge_request_diffs` | Get the file diffs for the MR |
 | `discussion_new` | Post the review comment |
 | `edit_merge_request` | Set labels on the outcome |
+| `jira-get-issue` | Read the original Jira ticket (optional, requires `jira-mcp`) |
 
 ## If MCP Tools Are Unavailable
 
-> The `gitlab-mcp` MCP server is not active. Restart Claude Code — check `~/.claude.json` for the server configuration.
+The `gitlab-mcp` MCP server is not active, do not try to find any alternative solutions. Just inform the user and abort the workflow.
+
+## Hints
+
+- If you see in the package json, that also NPM packages were changed with that ticket, this is not a blocker, since everything will be merged later in a code-migration.
+- Please do not praise the developers for doing a good job. They are not used to get such feedback and don't want to see it, they are just used to get critical feedback from the teamlead.
