@@ -47,17 +47,37 @@ git diff origin/{base}...origin/{head}
 
 ### 4. Perform the review
 
-Apply the **code-review-excellence** skill to analyse the diff — work through context gathering, high-level review, and line-by-line review. Produce a structured review comment using the template from that skill.
+Apply the **code-review-excellence** skill to analyse the diff — work through context gathering, high-level review, and line-by-line review.
+
+Produce **two outputs**:
+
+1. **Summary** — overall verdict, high-level observations, and any blocking issues (using the template from `code-review-excellence`)
+2. **Inline comments** — for every concrete change suggestion, note the file path, line number, and feedback text. These will be posted as inline code comments directly on the diff.
 
 ### 5. Show the review result
 
-**Always** show the review result in the terminal first and ask the user if the review should be posted as a comment to the PR.
+**Always** show both the summary and the list of inline comments in the terminal first. Ask the user if the review should be posted.
 
-### 6. Post the review comment
+### 6. Post the review
+
+Use `create_pull_review` to post the summary and all inline comments in a single review:
 
 ```
-create_issue_comment(owner, repo, index=N, body="<review output from step 4>")
+create_pull_review(
+  owner, repo, index=N,
+  body="<summary from step 4>",
+  event="COMMENT",           ← use "APPROVED" or "REQUEST_CHANGES" if appropriate
+  comments=[
+    { path: "src/foo.ts", position: 12, body: "This can be null — add a null check" },
+    { path: "src/bar.ts", position: 34, body: "Extract this into a named constant" },
+    ...
+  ]
+)
 ```
+
+- `position` is the line number within the diff hunk (not the file line number)
+- Only include inline comments where there is a specific, actionable suggestion
+- If `create_pull_review` is unavailable, fall back to `create_issue_comment` for the summary only
 
 ### 7. Label the outcome (optional)
 
@@ -80,5 +100,7 @@ Use the **ntfy-me** skill (if available) to send a notification to topic `code-r
 | `list_repo_pull_requests` | List open PRs to select one |
 | `get_pull_request_by_index` | Read PR metadata (branches, title, description) |
 | `list_issue_comments` | Read existing discussion |
-| `create_issue_comment` | Post the review comment |
+| `create_pull_review` | Post summary + inline comments as a single PR review |
+| `submit_pull_review` | Submit a pending review if created in draft state |
+| `create_issue_comment` | Fallback: post summary-only comment if review tool unavailable |
 | `add_issue_labels` | Label outcome (approved, needs-changes) |
