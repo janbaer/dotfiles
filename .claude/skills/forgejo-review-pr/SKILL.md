@@ -88,10 +88,10 @@ add_issue_labels(owner, repo, index=N, labels="approved")
 
 ### 8. Notify when done
 
-Use the **ntfy-me** skill (if available) to send a notification to topic `code-review` with:
-- Title: `PR Review Done – <PR title>`
-- Tags: `mag,white_check_mark`
-- Body: PR number, title, verdict, and repo
+```bash
+~/bin/ntfy --title "PR Review Done – <PR title>" --tags "mag,white_check_mark" --topic "code-review" \
+  "PR #<N> · <verdict> · <repo>"
+```
 
 ## MCP Tools Reference
 

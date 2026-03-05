@@ -60,7 +60,11 @@ digraph issue_workflow {
 **Minimize user interaction.** Only stop to ask if genuinely blocked. Never pause to confirm next steps when the path forward is clear. Keep moving.
 
 The only required user input in the entire workflow is choosing which issue to work on (step 1, when no issue number is given). Everything else runs automatically.
-If any user input is required or the whole workflow is done, use the `ntfy-me` skill (if available) to inform the user. Use the topic `claude` for it.
+If any user input is required or the whole workflow is done, notify via:
+
+```bash
+~/bin/ntfy --topic "claude" --title "<status title>" "<message>"
+```
 
 ## Steps
 
