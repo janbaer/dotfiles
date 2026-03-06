@@ -1,6 +1,6 @@
 ---
 name: gitlab-review-mr
-description: Use when reviewing an open Merge Request on a GitLab repository - reading changes, leaving inline comments, posting a review, or labelling the outcome. Trigger on any phrase like "review MR", "review the merge request", "code review", "check the MR", "look at the PR", or "give feedback on the changes".
+description: Use when reviewing an open Merge Request on a GitLab repository - reading changes, analysing the diff, and labelling the outcome. Trigger on any phrase like "review MR", "review the merge request", "code review", "check the MR", "look at the PR", or "give feedback on the changes".
 ---
 
 # GitLab Merge Request Review
@@ -67,51 +67,15 @@ Apply the **code-review-excellence** skill to analyse the diff — work through 
 
 ### 6. Show the review result
 
-**Always** show the review result in the terminal first and ask the user if the review should be posted as a comment to the merge-request.
+Show the full review result in the terminal.
 
-### 7. Post the review
-
-**Prefer inline comments for specific line-level findings** — use `discussion_new_with_position` with the SHAs from `diff_refs`:
-
-```
-discussion_new_with_position(
-  resource_type="merge_request",
-  project_id="group/repo",
-  resource_id=N,
-  body="<finding>",
-  position_type="text",
-  base_sha="<diff_refs.base_sha>",
-  head_sha="<diff_refs.head_sha>",
-  start_sha="<diff_refs.start_sha>",
-  old_path="path/to/file.ts",
-  new_path="path/to/file.ts",
-  new_line=42          # line number in the new file
-)
-```
-
-- Use `new_line` for added/unchanged lines, `old_line` for removed lines.
-- Use `old_path` = `new_path` for non-renamed files.
-
-**Post the overall review summary** (verdict, context, non-line-specific comments) as a general comment:
-
-```
-discussion_new(resource_type="merge_request", parent_id="group/repo", resource_id=N, body="<summary>")
-```
-
-### 8. Label the outcome (optional)
+### 7. Label the outcome (optional)
 
 GitLab MRs use approvals and labels. Apply as appropriate:
 
 ```
 edit_merge_request(project_id="group/repo", mr_iid=N, labels="approved")
 # or: "needs-changes", "needs-review"
-```
-
-### 9. Notify when done
-
-```bash
-~/bin/ntfy --title "MR Review Done – <MR title>" --tags "mag,white_check_mark" --topic "code-review" \
-  "MR !<N> · <verdict> · <project>"
 ```
 
 ## MCP Tools Reference
@@ -122,9 +86,6 @@ edit_merge_request(project_id="group/repo", mr_iid=N, labels="approved")
 | `get_merge_request` | Read MR metadata (branches, title, description) |
 | `discussion_list` | Read existing discussion and review comments |
 | `list_merge_request_diffs` | Get the file diffs for the MR |
-| `discussion_new` | Post the overall review summary comment |
-| `discussion_new_with_position` | Post an inline comment on a specific diff line |
-| `discussion_modify_note` | Update an existing comment (e.g. after correction) |
 | `edit_merge_request` | Set labels on the outcome |
 | `jira-get-issue` | Read the original Jira ticket (optional, requires `jira-mcp`) |
 
@@ -135,4 +96,4 @@ The `gitlab-mcp` MCP server is not active, do not try to find any alternative so
 ## Hints
 
 - If you see in the package json, that also NPM packages were changed with that ticket, this is not a blocker, since everything will be merged later in a code-migration.
-- Please do not praise the developers for doing a good job. They are not used to get such feedback and don't want to see it, they are just used to get critical feedback from the teamlead.
+- Please do not praise the developers for doing a good job. They are not used to get such feedback and don't want to see it, they are just used to get critical feedback from the team-lead.
