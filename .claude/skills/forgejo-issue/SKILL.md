@@ -29,6 +29,9 @@ digraph issue_workflow {
     "Implement" [shape=box];
     "Run tests + lint" [shape=box];
     "All pass?" [shape=diamond];
+    "Execute 'How to Test' scenarios" [shape=box];
+    "All scenarios pass?" [shape=diamond];
+    "Fix issues" [shape=box];
     "Commit + push" [shape=box];
     "openspec archive + commit" [shape=box];
     "Create PR (body: closes #N)" [shape=box];
@@ -49,7 +52,11 @@ digraph issue_workflow {
     "openspec instructions apply" -> "Implement";
     "Implement" -> "Run tests + lint";
     "Run tests + lint" -> "All pass?";
-    "All pass?" -> "Commit + push" [label="yes"];
+    "All pass?" -> "Execute 'How to Test' scenarios" [label="yes"];
+    "Execute 'How to Test' scenarios" -> "All scenarios pass?";
+    "All scenarios pass?" -> "Commit + push" [label="yes"];
+    "All scenarios pass?" -> "Fix issues" [label="no"];
+    "Fix issues" -> "Run tests + lint";
     "Commit + push" -> "openspec archive + commit";
     "openspec archive + commit" -> "Create PR (body: closes #N)";
 }
@@ -143,7 +150,16 @@ Follow the tasks from `openspec instructions apply`. Work through each task in o
 
 Run the project's test and lint commands before committing. Fix failures before proceeding — do not ask the user whether to fix them.
 
-### 8. Commit and push
+### 8. Execute the "How to Test" scenarios
+
+Re-read the **"How to Test"** section from the original issue (fetched in step 2). Execute every scenario described there — use the browser via Chrome DevTools MCP tools if the issue requires UI interaction. This is **mandatory**, not optional.
+
+- If all scenarios pass → proceed to commit
+- If any scenario fails → fix the issue, re-run tests and lint, then re-verify all scenarios
+
+Do not skip this step even if automated tests pass. Automated tests verify correctness; the "How to Test" scenarios verify that the feature works as the user intended.
+
+### 9. Commit and push
 
 ```bash
 git add <files>
@@ -151,7 +167,7 @@ git commit -m "<message>"
 git push -u origin feature/42-fix-login-redirect
 ```
 
-### 9. Archive the OpenSpec change and commit
+### 10. Archive the OpenSpec change and commit
 
 ```bash
 openspec archive "<change-name>"
@@ -160,7 +176,7 @@ git commit -m "Archive OpenSpec change <change-name>"
 git push
 ```
 
-### 10. Create a Pull Request
+### 11. Create a Pull Request
 
 Use the **forgejo-pr** skill to create the PR. Always include `closes #N` in the body — Forgejo will automatically close the issue on merge. Do **not** call `issue_state_change` manually.
 
