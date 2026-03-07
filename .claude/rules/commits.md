@@ -1,5 +1,25 @@
 # Git commit rules
 
+## Commit message format
+
+All commit messages must follow: `{component} {emoji}: {message}`
+
+- **component**: the changed area (e.g. `itemlist`, `backup`, `header`) — never a type like `feat` or `fix`
+- **emoji**: indicates the type of change:
+  - ✨ new feature
+  - 🐛 bug fix
+  - ♻️ refactoring
+  - ⚡️ performance
+  - 📝 docs
+  - 🔧 config/tooling
+  - 💄 style/formatting
+  - ✅ tests
+- **message**: present participle, concise (e.g. "Reducing column width", "Fixing backup path")
+
+Examples: `itemlist ♻️: Extracting masonry column width into CSS variable`, `backup 🐛: Fixing path resolution to use volume mount`
+
+## Other rules
+
 - Commit messages should always start with a ticket number, but only if the current directory is in a sub-directory of a directory with the name `check24`.
 - The ticket number always starts with `VERBU-` followed bu 5 numbers.
 - If git current branch is a feature branch, you can guess the ticket from the branch-name.
