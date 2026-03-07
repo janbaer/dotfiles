@@ -7,16 +7,16 @@ return {
   dependencies = { "ibhagwan/fzf-lua", "nvim-lua/plenary.nvim" },
   event = "VeryLazy",
   keys = {
-    { "<leader>p",  nil,                        desc = "Parrot AI" },
-    { "<leader>pc", "<cmd>PrtChatToggle<cr>",   desc = "Toggle chat" },
-    { "<leader>po", "<cmd>PrtProvider<cr>",     desc = "Select provider" },
-    { "<leader>pm", "<cmd>PrtModel<cr>",        desc = "Select model" },
-    { "<leader>ps", "<cmd>PrtStop<cr>",         desc = "Stop generation" },
-    { "<leader>pr", "<cmd>PrtRewrite<cr>",      mode = { "n", "v" }, desc = "Rewrite selection" },
-    { "<leader>pa", "<cmd>PrtAppend<cr>",       mode = { "n", "v" }, desc = "Append to selection" },
+    { "<leader>p", nil, desc = "Parrot AI" },
+    { "<leader>pc", "<cmd>PrtChatToggle<cr>", desc = "Toggle chat" },
+    { "<leader>po", "<cmd>PrtProvider<cr>", desc = "Select provider" },
+    { "<leader>pm", "<cmd>PrtModel<cr>", desc = "Select model" },
+    { "<leader>ps", "<cmd>PrtStop<cr>", desc = "Stop generation" },
+    { "<leader>pr", "<cmd>PrtRewrite<cr>", mode = { "n", "v" }, desc = "Rewrite selection" },
+    { "<leader>pa", "<cmd>PrtAppend<cr>", mode = { "n", "v" }, desc = "Append to selection" },
     { "<leader>pg", "<cmd>PrtGrammarCheck<cr>", mode = { "n", "v" }, desc = "Grammar check" },
-    { "<leader>pe", "<cmd>PrtRephrase<cr>",     mode = { "n", "v" }, desc = "Rephrase selection" },
-    { "<leader>pt", "<cmd>PrtTranslate<cr>",    mode = { "n", "v" }, desc = "Translate selection" },
+    { "<leader>pe", "<cmd>PrtRephrase<cr>", mode = { "n", "v" }, desc = "Rephrase selection" },
+    { "<leader>pt", "<cmd>PrtTranslate<cr>", mode = { "n", "v" }, desc = "Translate selection" },
   },
   config = function()
     require("parrot").setup({
@@ -31,11 +31,11 @@ return {
             command = { temperature = 0.8, top_p = 1 },
           },
           topic = {
-            model = "z-ai/glm-4.7-flash",
+            model = "inception/mercury-2",
             params = { max_completion_tokens = 64 },
           },
           models = {
-            "z-ai/glm-4.7-flash",
+            "inception/mercury-2",
             "z-ai/glm-5",
           },
         },
@@ -91,7 +91,6 @@ return {
           parrot.Prompt(params, parrot.ui.Target.rewrite, model_obj, nil, template)
         end,
       },
-
     })
   end,
 }
