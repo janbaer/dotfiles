@@ -51,7 +51,7 @@ return {
     enabled = require("core.plugin-control").is_enabled("mason"),
     opts = {
       ensure_installed = {
-        "alejandra",
+        -- "alejandra",
         "rust-analyzer",
         -- ansible-lint: provided by home-manager (Mason conflicts with Nix Python packages)
         "jsonlint",
