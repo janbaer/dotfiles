@@ -4,7 +4,9 @@
 
 All commit messages must follow: `{component} {emoji}: {message}`
 
-- **component**: the changed area (e.g. `itemlist`, `backup`, `header`) — never a type like `feat` or `fix`
+- **component**: the top-level area of the codebase being changed — never a type like `feat` or `fix`, and never the name of the specific file or feature modified
+  - In this dotfiles repo: `.claude/` → `claude`, `.config/nvim/` → `nvim`, `bin/` → `bin`, `.config/hypr/` → `hypr`, etc.
+  - In application repos: use the module or domain name (e.g. `itemlist`, `backup`, `header`)
 - **emoji**: indicates the type of change:
   - ✨ new feature
   - 🐛 bug fix
