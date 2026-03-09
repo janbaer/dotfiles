@@ -38,33 +38,21 @@ If no labels can be discovered, create the issue without labels.
 
 ### 3. Ask Structured Questions
 
-Ask the user **all questions at once** in a single message — never spread across multiple round-trips. Do NOT ask for a title — derive it from the Description.
+Use the `AskUserQuestion` tool to collect each field **one at a time**, in the order below. For fields with predefined options, present them as a selection list. For free-text fields, ask an open question.
 
-**REQUIRED fields — you MUST ask all 6, in this order:**
+**Field order:**
 
-| # | Field | Options / Format |
-|---|-------|-----------------|
-| 1 | **Description** | What is the issue about? (free text — title will be derived from this) |
-| 2 | **IssueType** | `Bug` / `Improvement` / `Idea` / `Future` |
-| 3 | **Severity** | `Minor` / `Medium` / `High` / `Critical` |
-| 4 | **Motivation** | Why does this matter? What problem does it solve? (free text) |
-| 5 | **Claude** | `Needs feedback first` (stop and ask before implementing) / `Auto-implement` (Claude can start right away) |
-| 6 | **How to test** | How can this be verified once implemented? (free text) |
+1. **Description** *(free text)* — "What is the issue about?" *(the title will be derived from this)*
+2. **IssueType** *(single select)* — `Bug` / `Improvement` / `Idea` / `Future`
+3. **Severity** *(single select)* — `Minor` / `Medium` / `High` / `Critical`
+4. **Motivation** *(free text)* — "Why does this matter? What problem does it solve?"
+5. **Acceptance Criteria** *(free text)* — "What checks must be fulfilled before this issue can be accepted? List them one per line."
+6. **How to Test** *(free text)* — "How can this be verified once implemented?"
+7. **Claude** *(single select)* — `Needs feedback first` (stop and ask before implementing) / `Auto-implement` (Claude can start right away)
 
-**The Claude field (#5) is mandatory.** Never skip it. It controls whether future agents can auto-implement or must pause for input.
+**The Claude field (#7) is mandatory.** Never skip it. It controls whether future agents can auto-implement or must pause for input.
 
-Example prompt to the user:
-
-> I need a few details to create the issue. Please fill in:
->
-> 1. **Description**: What is the issue about?
-> 2. **IssueType**: Bug / Improvement / Idea / Future
-> 3. **Severity**: Minor / Medium / High / Critical
-> 4. **Motivation**: Why does this matter?
-> 5. **Claude**: Needs feedback first — or — Auto-implement?
-> 6. **How to test**: How can this be verified once done?
-
-If the `ntfy-me` skill is available, use it (topic: `claude`) to notify the user that input is needed.
+If the `ntfy-me` skill is available, use it (topic: `claude`) to notify the user that input is needed before starting the questions.
 
 ### 4. Map Answers to Label IDs
 
@@ -85,6 +73,10 @@ Build the issue body using **exactly** this template — do not add extra sectio
 ## Motivation
 
 {Motivation}
+
+## Acceptance Criteria
+
+{AcceptanceCriteria — formatted as a markdown checklist, one item per line: `- [ ] item`}
 
 ## How to Test
 
