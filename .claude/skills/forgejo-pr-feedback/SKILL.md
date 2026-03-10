@@ -1,6 +1,6 @@
 ---
 name: forgejo-pr-feedback
-description: Use when reading review comments on a Forgejo pull request to understand received feedback, assess whether each comment is correct, and estimate the effort to address it. Trigger on phrases like "read PR comments", "check PR feedback", "what feedback did I get", "review comments on my PR", "what do the reviewers say", or "assess PR review".
+description: Use when reading review comments on a Forgejo pull request to understand received feedback, assess whether each comment is correct, estimate the effort to address it, and post a follow-up comment summarising what was fixed and what was not. Trigger on phrases like "read PR comments", "check PR feedback", "what feedback did I get", "review comments on my PR", "what do the reviewers say", "assess PR review", "post review response", or "reply to review comments".
 ---
 
 ## Pre-requisites
@@ -91,6 +91,58 @@ Sort by: blocking issues first, then by effort (small first within each validity
 
 End with a **prioritised action list** — a numbered list of the valid comments the user should address, ordered by impact vs effort.
 
+### 6. Post a follow-up comment (after the user has worked on the feedback)
+
+Once the user has addressed the items from the action list, offer to post responses that close the loop with the reviewers.
+
+Before posting, ask the user for each item on the prioritised action list:
+- Was it **fixed**? If yes, a brief note on what changed is enough.
+- Was it **not fixed**? Ask why — common reasons: disagreed with the suggestion, deferred to a follow-up issue, too large in scope, intentional design decision.
+
+**Replying to inline comments**
+
+For each inline comment from a review, post an individual reply using `create_issue_comment`. Quote the original comment so the reviewer sees the context, then give a short response:
+
+```markdown
+> [reviewer] on `src/foo.ts` line 12: "This can be null — add a null check."
+
+Fixed — added a null guard in the `getUser` function. ✅
+```
+
+or if not addressed:
+
+```markdown
+> [reviewer] on `src/bar.ts` line 34: "Extract this into a named constant."
+
+Deferred — will address in the follow-up refactoring PR. ⏭️
+```
+
+Post replies for all inline comments, not just the ones that were fixed — reviewers appreciate knowing what happened to every point they raised.
+
+**Overall summary comment**
+
+After the inline replies, post one final summary comment using `create_issue_comment` with this structure:
+
+```markdown
+## Review Response
+
+Thank you for the review! Here's a summary of how each point was addressed:
+
+### ✅ Fixed
+
+- **[short description of point]** — [what was changed / how it was resolved]
+- …
+
+### ⏭️ Not addressed
+
+- **[short description of point]** — [reason: e.g. "Deferred — opened issue #N", "Intentional design: …", "Out of scope for this PR"]
+- …
+```
+
+Only include sections that are relevant — omit "Not addressed" if everything was fixed, or "Fixed" if nothing was.
+
+The goal of this comment is to respect the reviewer's time: it lets them see at a glance what changed and understand the reasoning behind anything that wasn't addressed, so they don't have to re-read the whole diff to figure out what happened.
+
 ## MCP Tools Reference
 
 | Tool | Use case |
@@ -101,3 +153,4 @@ End with a **prioritised action list** — a numbered list of the valid comments
 | `list_pull_reviews` | Read review summaries and their status |
 | `list_pull_review_comments` | Read inline comments for a specific review |
 | `get_pull_request_diff` | Get the diff to evaluate inline comment accuracy |
+| `create_issue_comment` | Post the follow-up review response comment |
