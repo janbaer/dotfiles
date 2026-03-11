@@ -33,8 +33,7 @@ digraph issue_workflow {
     "All scenarios pass?" [shape=diamond];
     "Fix issues" [shape=box];
     "Commit + push" [shape=box];
-    "openspec archive + commit" [shape=box];
-    "Create PR (body: closes #N)" [shape=box];
+    "Notify user: run /forgejo-finish-issue" [shape=box];
     "Commit + push (partial)" [shape=box];
 
     "Issue number given?" -> "Validate issue is open" [label="yes"];
@@ -57,8 +56,7 @@ digraph issue_workflow {
     "All scenarios pass?" -> "Commit + push" [label="yes"];
     "All scenarios pass?" -> "Fix issues" [label="no"];
     "Fix issues" -> "Run tests + lint";
-    "Commit + push" -> "openspec archive + commit";
-    "openspec archive + commit" -> "Create PR (body: closes #N)";
+    "Commit + push" -> "Notify user: run /forgejo-finish-issue";
 }
 ```
 
@@ -167,18 +165,13 @@ git commit -m "<message>"
 git push -u origin feature/42-fix-login-redirect
 ```
 
-### 10. Archive the OpenSpec change and commit
+After pushing, send a notification:
 
 ```bash
-openspec archive "<change-name>"
-git add openspec/
-git commit -m "Archive OpenSpec change <change-name>"
-git push
+~/bin/ntfy --topic "claude" --title "Implementation pushed" "Ready for your review. Run /forgejo-finish-issue when done."
 ```
 
-### 11. Create a Pull Request
-
-Use the **forgejo-pr** skill to create the PR. Always include `closes #N` in the body — Forgejo will automatically close the issue on merge. Do **not** call `issue_state_change` manually.
+The skill ends here. Archive and PR creation are handled by `/forgejo-finish-issue` once the user has verified the implementation manually.
 
 ## MCP Tools Reference
 
