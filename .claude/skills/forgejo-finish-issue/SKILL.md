@@ -27,7 +27,7 @@ digraph finish_workflow {
     "Archive OpenSpec + commit + push" [shape=box];
     "PR already exists?" [shape=diamond];
     "Show existing PR link" [shape=box];
-    "Create PR via forgejo-pr skill" [shape=box];
+    "Create PR via forgejo-pr-create skill" [shape=box];
     "Send ntfy notification" [shape=box];
 
     "Detect repo + branch" -> "On feature/* branch?";
@@ -41,9 +41,9 @@ digraph finish_workflow {
     "User confirms?" -> "Stop: user not ready" [label="no"];
     "Archive OpenSpec + commit + push" -> "PR already exists?";
     "PR already exists?" -> "Show existing PR link" [label="yes"];
-    "PR already exists?" -> "Create PR via forgejo-pr skill" [label="no"];
+    "PR already exists?" -> "Create PR via forgejo-pr-create skill" [label="no"];
     "Show existing PR link" -> "Send ntfy notification";
-    "Create PR via forgejo-pr skill" -> "Send ntfy notification";
+    "Create PR via forgejo-pr-create skill" -> "Send ntfy notification";
 }
 ```
 
@@ -108,7 +108,7 @@ list_repo_pull_requests(owner, repo, state="open")
 Filter by `head` branch matching the current feature branch.
 
 - **PR found** → show the user the link, skip creation
-- **No PR found** → invoke the **forgejo-pr** skill to create the PR; always include `closes #N` in the PR body
+- **No PR found** → invoke the **forgejo-pr-create** skill to create the PR; always include `closes #N` in the PR body
 
 ### 7. Send notification
 
