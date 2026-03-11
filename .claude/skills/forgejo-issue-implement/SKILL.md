@@ -1,5 +1,5 @@
 ---
-name: forgejo-issue
+name: forgejo-issue-implement
 description: Use when working with Forgejo issues in the current project - listing open issues, selecting one to implement, or following the full implementation workflow through OpenSpec to PR. Trigger on phrases like "implement issue", "work on issue", "pick up an issue", "start working on a ticket", or "fix issue".
 ---
 
@@ -33,7 +33,7 @@ digraph issue_workflow {
     "All scenarios pass?" [shape=diamond];
     "Fix issues" [shape=box];
     "Commit + push" [shape=box];
-    "Notify user: run /forgejo-finish-issue" [shape=box];
+    "Notify user: run /forgejo-issue-finish" [shape=box];
     "Commit + push (partial)" [shape=box];
 
     "Issue number given?" -> "Validate issue is open" [label="yes"];
@@ -56,7 +56,7 @@ digraph issue_workflow {
     "All scenarios pass?" -> "Commit + push" [label="yes"];
     "All scenarios pass?" -> "Fix issues" [label="no"];
     "Fix issues" -> "Run tests + lint";
-    "Commit + push" -> "Notify user: run /forgejo-finish-issue";
+    "Commit + push" -> "Notify user: run /forgejo-issue-finish";
 }
 ```
 
@@ -168,10 +168,10 @@ git push -u origin feature/42-fix-login-redirect
 After pushing, send a notification:
 
 ```bash
-~/bin/ntfy --topic "claude" --title "Implementation pushed" "Ready for your review. Run /forgejo-finish-issue when done."
+~/bin/ntfy --topic "claude" --title "Implementation pushed" "Ready for your review. Run /forgejo-issue-finish when done."
 ```
 
-The skill ends here. Archive and PR creation are handled by `/forgejo-finish-issue` once the user has verified the implementation manually.
+The skill ends here. Archive and PR creation are handled by `/forgejo-issue-finish` once the user has verified the implementation manually.
 
 ## MCP Tools Reference
 
