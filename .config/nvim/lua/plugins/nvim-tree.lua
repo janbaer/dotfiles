@@ -44,7 +44,7 @@ return {
       },
     },
     filters = {
-      custom = { ".DS_Store", ".git", "node_modules", ".terraform" },
+      custom = { "^\\.DS_Store$", "^\\.git$", "^node_modules$", "^\\.terraform$" },
     },
     git = {
       ignore = false,
