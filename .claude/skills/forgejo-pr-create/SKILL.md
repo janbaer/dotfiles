@@ -44,7 +44,29 @@ Use the issue title as the PR title and include `closes #N` in the body.
 
 Derive a title from the branch name or recent commits. Do not include `closes #N`.
 
-### 4. Create the PR
+### 4. Check for implementation deviations
+
+Compare the actual implementation (commits, code changes) against the issue description, acceptance criteria, and "How to Test" scenarios fetched in step 3.
+
+Look for decisions made during implementation that contradict or significantly differ from what was defined in the issue — for example:
+- A different technical approach than described
+- Acceptance criteria that were changed, dropped, or reinterpreted
+- "How to Test" steps that no longer match the actual behavior
+- Scope that was added or removed without being reflected in the issue
+
+**If deviations are found:**
+
+Update the issue body to reflect what was actually built:
+
+```
+update_issue(owner, repo, index=N, body="<updated body>")
+```
+
+Keep the original structure — only update the sections that differ. Add a short note at the bottom of the affected section explaining what changed and why, so reviewers understand the decision.
+
+**If no deviations are found:** proceed directly to PR creation.
+
+### 5. Create the PR
 
 ```
 create_pull_request(
@@ -72,7 +94,7 @@ closes #N   ← only if an issue is linked
 
 - Do **not** call `issue_state_change` manually — Forgejo closes the issue automatically on merge.
 
-### 5. Show the PR link
+### 6. Show the PR link
 
 Output the URL of the newly created PR so the user can open it directly.
 
@@ -81,4 +103,5 @@ Output the URL of the newly created PR so the user can open it directly.
 | Tool | Use case |
 |------|----------|
 | `create_pull_request` | Open a new PR |
-| `get_issue_by_index` | Read issue title for PR title and link |
+| `get_issue_by_index` | Read issue details for title, link, and deviation check |
+| `update_issue` | Update issue body if implementation deviated from spec |
