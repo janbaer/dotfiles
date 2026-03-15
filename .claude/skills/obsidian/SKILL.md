@@ -44,7 +44,11 @@ When the user wants to find information in their vault:
    ```
    Glob(pattern="**/*keyword*", path="$OBSIDIAN_VAULT")
    ```
-3. **Browse a directory** — list files in a specific topic folder:
+3. **By tag** — use Grep to search YAML frontmatter (fast, uses ripgrep under the hood):
+   ```
+   Grep(pattern="tags:.*keyword", path="$OBSIDIAN_VAULT", glob="*.md")
+   ```
+4. **Browse a directory** — list files in a specific topic folder:
    ```
    Bash: ls "$OBSIDIAN_VAULT/TopicName/"
    ```
@@ -63,18 +67,30 @@ When the user wants to add a new note:
 
 2. **Determine placement** — list existing top-level directories with Glob and suggest the one that best fits the note's topic. Present the suggestion as a relative path from the vault root (e.g. `Linux/Tools`, `DevOPs/Docker`) and ask the user to confirm or change it. If the chosen directory does not exist yet, create it with `mkdir -p` before writing the file.
 
-3. **Apply template** — new pages use `_templates/page.md` as the base. The frontmatter format is:
+3. **Apply template** — new pages use `_templates/page.md` as the base. Suggest 3–5 relevant tags based on the note's topic and content, then automatically populate the frontmatter with them:
    ```yaml
    ---
    created: YYYY-MM-DD
-   tags: []
+   tags: [suggested-tag-1, suggested-tag-2, ...]
    ---
    ```
-   Replace `YYYY-MM-DD` with today's date. Populate tags based on the content topic.
+   Use today's date. Tags should be lowercase, hyphenated, and specific enough to be useful for cross-referencing (e.g. `git`, `shell-scripting`, `docker-compose`).
 
-4. **Write the note** — use the Write tool. The filename should be descriptive and use Title Case with spaces (Obsidian convention), e.g. `Docker Compose.md`, `Rust Error Handling.md`.
+4. **Write the note** — use the Write tool. The filename should be descriptive with words separated by hyphens (no spaces), e.g. `docker-compose.md`, `rust-error-handling.md`.
 
-5. **Confirm** — tell the user the file path and a one-line summary of what was created.
+5. **Find cross-reference candidates** — after writing the note, search for other vault notes that share the same topic or tags using Grep. Look for files containing any of the new note's tags in their frontmatter, or files whose content mentions the same subject:
+   ```
+   Grep(pattern="tags:.*tag-name", path="$OBSIDIAN_VAULT", glob="*.md")
+   ```
+   Present the candidates to the user and ask which of those files should reference the new note. For each file the user selects, read it, then add a `## References` section at the bottom (if one doesn't already exist) containing a wiki-link to the new note:
+   ```markdown
+   ## References
+
+   - [[new-note-name]]
+   ```
+   If a `## References` section already exists, append the link there instead of creating a duplicate section.
+
+6. **Confirm** — tell the user the file path, the tags applied, and a one-line summary of what was created.
 
 ### Update
 
