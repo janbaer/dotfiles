@@ -65,18 +65,27 @@ git diff origin/{target_branch}...origin/{source_branch}
 
 Apply the **code-review-excellence** skill to analyse the diff — work through context gathering, high-level review, and line-by-line review. Produce a structured review comment using the template from that skill.
 
-### 6. Show the review result
+### 6. Show the review result and wait for approval
 
-Show the full review result in the terminal.
+Show the full review result in the terminal. This includes inline comments and a summary — the summary is for local reference only and will never be posted to GitLab.
 
-### 7. Label the outcome (optional)
+**STOP HERE. Do not post anything to GitLab yet.** Ask the user explicitly:
+> "Should I go through the inline comments with you and ask which ones to post?"
 
-GitLab MRs use approvals and labels. Apply as appropriate:
+Only proceed to step 7 if the user confirms. If they ask for changes to the review, update it and ask again before proceeding.
 
-```
-edit_merge_request(project_id="group/repo", mr_iid=N, labels="approved")
-# or: "needs-changes", "needs-review"
-```
+### 7. Post inline comments selectively (only after explicit user approval in step 6)
+
+For each inline comment in the review, present it to the user and ask:
+> "Post this comment to GitLab?"
+
+Only post comments the user explicitly approves. Skip any they decline. The summary comment is **never posted** — it exists solely for the user's local reference.
+
+Use the appropriate MCP tool to post each approved inline comment.
+
+### 8. Done
+
+The workflow is complete after posting the approved inline comments. Do not apply any labels — the user handles all labelling manually in GitLab.
 
 ## MCP Tools Reference
 
@@ -86,7 +95,7 @@ edit_merge_request(project_id="group/repo", mr_iid=N, labels="approved")
 | `get_merge_request` | Read MR metadata (branches, title, description) |
 | `discussion_list` | Read existing discussion and review comments |
 | `list_merge_request_diffs` | Get the file diffs for the MR |
-| `edit_merge_request` | Set labels on the outcome |
+| `create_merge_request_discussion` | Post an inline comment on a specific line |
 | `jira-get-issue` | Read the original Jira ticket (optional, requires `jira-mcp`) |
 
 ## If MCP Tools Are Unavailable
