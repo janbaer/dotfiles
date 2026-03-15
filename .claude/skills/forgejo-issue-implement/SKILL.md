@@ -127,14 +127,21 @@ openspec new change "<change-name>"
 
 Then invoke the **opsx-ff** skill to fast-forward through artifact creation (proposal → specs → design → tasks) in one pass. **Do not wait for user confirmation after `opsx-ff` completes — proceed immediately to step 5.**
 
-### 5. Evaluate clarity and continue
+### 5. Evaluate clarity and check implementation mode
 
-After `opsx-ff` completes, assess whether design and tasks are clear enough to implement **without asking the user**:
+After `opsx-ff` completes, re-read the **`## Implementation`** section from the issue body (fetched in step 2) to determine the Claude field value.
 
+**If `Claude: Needs feedback first`:**
+- Present the OpenSpec plan (proposed approach, design decisions, task list) to the user in a clear summary
+- Explain your understanding of the problem and how you intend to solve it
+- Wait for the user's confirmation or corrections before proceeding
+- Only continue to step 6 once the user has approved the approach
+
+**If `Claude: Auto-implement`:**
+- Assess whether design and tasks are clear enough to implement without asking the user
 - **Clear** → immediately run `openspec instructions apply --change "<name>"` and proceed to implementation without pausing
 - **Not clear** → commit what exists, push the branch, then explain to the user what is ambiguous and what decision is needed
-
-When in doubt, lean toward continuing. Only stop if implementation truly cannot proceed without a decision that only the user can make.
+- When in doubt, lean toward continuing. Only stop if implementation truly cannot proceed without a decision that only the user can make.
 
 ### 6. Implement
 

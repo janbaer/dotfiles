@@ -104,6 +104,18 @@ Use the **ntfy-me** skill (if available) to notify with topic `claude`:
 - Title: `Issue Created – #{N}: {title}`
 - Body: link to the created issue
 
+### 7. Ask Whether to Implement
+
+After notifying, always ask the user:
+
+> "Issue #{N} created. Would you like to implement it now?"
+
+Present two options:
+- **Yes** → invoke the `forgejo-issue-implement` skill, passing the issue number
+- **No** → stop; the workflow is complete
+
+Do NOT start implementing unless the user explicitly selects Yes.
+
 ## MCP Tools Reference
 
 | Tool | Use case |
