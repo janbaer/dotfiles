@@ -23,14 +23,31 @@ git branch --show-current
 # current feature branch
 ```
 
-### 2. Confirm base branch
+### 2. Ensure branch is pushed
+
+Check that the current branch exists on the remote and is up to date:
+
+```bash
+git status
+# Look for "Your branch is ahead of 'origin/...' by N commits"
+```
+
+If the branch is ahead of its remote tracking branch (or has no remote tracking branch), push it first:
+
+```bash
+git push -u origin <current-branch>
+```
+
+Do **not** create the PR until the branch is fully pushed.
+
+### 3. Confirm base branch
 
 ```bash
 git remote show origin | grep "HEAD branch"
 # typically "main"
 ```
 
-### 3. Derive title and issue link
+### 4. Derive title and issue link
 
 **If on a `feature/{N}-{slug}` branch:**
 
@@ -44,7 +61,7 @@ Use the issue title as the PR title and include `closes #N` in the body.
 
 Derive a title from the branch name or recent commits. Do not include `closes #N`.
 
-### 4. Check for implementation deviations
+### 5. Check for implementation deviations
 
 Compare the actual implementation (commits, code changes) against the issue description, acceptance criteria, and "How to Test" scenarios fetched in step 3.
 
@@ -66,7 +83,7 @@ Keep the original structure — only update the sections that differ. Add a shor
 
 **If no deviations are found:** proceed directly to PR creation.
 
-### 5. Create the PR
+### 6. Create the PR
 
 ```
 create_pull_request(
@@ -94,7 +111,7 @@ closes #N   ← only if an issue is linked
 
 - Do **not** call `issue_state_change` manually — Forgejo closes the issue automatically on merge.
 
-### 6. Show the PR link
+### 7. Show the PR link
 
 Output the URL of the newly created PR so the user can open it directly.
 
