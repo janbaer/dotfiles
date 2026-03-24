@@ -9,6 +9,10 @@ If a question can be answered by exploring the codebase, explore the codebase in
 
 Once the interview is done, ask the user, if a new Forgejo issue should be created, and if yes, use the `forgejo-issue-create` skill and follow the instructions from that skill.
 
+For each question, provide your recommended answer.
+
+---
+
 If the user denies that a new Forgejo issue should be created, ask them what they want to do with the output of this interview. If the user wants to start working, ask him, if a OpenSpec should be created with that information.
 
 If both options are not used, create a spec file in `./docs` folder.
