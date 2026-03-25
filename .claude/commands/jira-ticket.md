@@ -1,1 +1,0 @@
-/home/jan/Projects/jira-mcp-server/command/jira-ticket.md
