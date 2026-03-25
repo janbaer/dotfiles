@@ -6,11 +6,11 @@ description: Use when reviewing an open Pull Request on a Forgejo repository - r
 ## Pre-requisites
 
 - forgejo-mcp server must be available and successfully connected. Verify by checking that forgejo-mcp tools are listed. If not available: inform the user that the forgejo-mcp MCP server is not connected, and **abort immediately**. Do NOT attempt workarounds such as REST API calls, curl, or any other method — the MCP server is the only supported interface.
-- **REQUIRED SUB-SKILL:** `code-review-excellence` — for the actual review process (feedback quality, severity labels, checklists, and templates). This skill handles only the Forgejo-specific parts. If the skill is not available, tell the user how to install it: `npx skills add https://github.com/wshobson/agents --skill code-review-excellence`
+- **REQUIRED AGENT:** `code-reviewer` — performs the actual diff analysis. Must be available in `.claude/agents/`. If not found, inform the user and abort — they can add the agent by creating `.claude/agents/code-reviewer.md` in their dotfiles.
 
 # Forgejo Pull Request Review
 
-Uses the `forgejo-mcp` MCP server and git to review PRs on any Forgejo project.
+Uses the `forgejo-mcp` MCP server, git, and the `code-reviewer` agent to review PRs on any Forgejo project.
 
 ## Workflow
 
@@ -47,12 +47,13 @@ git diff origin/{base}...origin/{head}
 
 ### 4. Perform the review
 
-Apply the **code-review-excellence** skill to analyse the diff — work through context gathering, high-level review, and line-by-line review.
+Delegate the review to the **code-reviewer** agent. Pass the diff from step 3 as input. The agent returns a JSON object with `verdict`, `summary`, and `comments`.
 
-Produce **two outputs**:
-
-1. **Summary** — overall verdict, high-level observations, and any blocking issues (using the template from `code-review-excellence`)
-2. **Inline comments** — for every concrete change suggestion, note the file path, line number, and feedback text. These will be posted as inline code comments directly on the diff.
+Parse the agent's JSON response to extract:
+1. **verdict** — `approve`, `request_changes`, or `comment`
+2. **summary** — overall review text
+3. **comments** — array of inline comments with `path`, `position`, `body`, and `severity`
+   - `critical`/`warning` comments are always posted; `note` comments are shown in the terminal but omitted from the Forgejo review unless the user confirms
 
 ### 5. Show the review result
 
@@ -60,18 +61,19 @@ Produce **two outputs**:
 
 ### 6. Post the review
 
+Map the agent's verdict to a Forgejo event:
+- `approve` → `APPROVED`
+- `request_changes` → `REQUEST_CHANGES`
+- `comment` → `COMMENT`
+
 Use `create_pull_review` to post the summary and all inline comments in a single review:
 
 ```
 create_pull_review(
   owner, repo, index=N,
-  body="<summary from step 4>",
-  event="COMMENT",           ← use "APPROVED" or "REQUEST_CHANGES" if appropriate
-  comments=[
-    { path: "src/foo.ts", position: 12, body: "This can be null — add a null check" },
-    { path: "src/bar.ts", position: 34, body: "Extract this into a named constant" },
-    ...
-  ]
+  body="<summary from agent>",
+  event="<mapped verdict>",
+  comments=[...]
 )
 ```
 
