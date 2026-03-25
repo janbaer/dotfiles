@@ -28,7 +28,7 @@ Edit `~/.claude/settings.json` directly for these settings (only if they differ 
 ```json
 "statusLine": {
   "type": "command",
-  "command": "~/.claude/statusline-command.sh"
+  "command": "~/Projects/dotfiles/.claude/statusline-command.sh"
 }
 ```
 
@@ -36,8 +36,7 @@ Edit `~/.claude/settings.json` directly for these settings (only if they differ 
 ```json
 "extraKnownMarketplaces": {
   "claude-plugins-official": { "source": { "source": "github", "repo": "anthropics/claude-code" } },
-  "superpowers-marketplace": { "source": { "source": "github", "repo": "obra/superpowers" } },
-  "thedotmack": { "source": { "source": "github", "repo": "thedotmack/claude-mem" } }
+  "anthropic-agent-skills": { "source": { "source": "github", "repo": "anthropics/skills" } }
 }
 ```
 
@@ -45,7 +44,7 @@ Preserve any existing marketplaces not in this list (like `context-mode`).
 
 ### Step 3: Add MCP servers
 
-For each MCP server below, check if it already exists in `claude mcp list` output. Only add missing ones.
+For each MCP server below, check if it already exists in `claude mcp list` output (note: `mcp list` does not support `-s`). Only add missing ones.
 
 Run via Bash tool:
 
@@ -71,19 +70,9 @@ Run via Bash tool:
   claude plugin install -s user frontend-design
   ```
 
-- **code-mem**
+- **example-skills** (from anthropic-agent-skills marketplace — includes skill-creator, frontend-design, mcp-builder, and more)
   ```bash
-  claude plugin install -s user code-mem
-  ```
-
-- **context-mode**
-  ```bash
-  claude plugin install -s user context-mode
-  ```
-
-- **typescript-lsp**
-  ```bash
-  claude plugin install -s user typescript-lsp
+  claude plugin install -s user example-skills@anthropic-agent-skills
   ```
 
 ### Step 5: Report results
@@ -92,7 +81,7 @@ Summarize what was done in a table:
 
 | Component | Status |
 |-----------|--------|
-| Model     | set to sonnet / already sonnet |
+| Model     | set to opus / already opus |
 | Statusline | configured / already configured |
 | Marketplaces | added N / all present |
 | MCP servers | added N / all present |
