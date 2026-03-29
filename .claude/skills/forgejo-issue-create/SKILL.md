@@ -36,7 +36,15 @@ Collect label names and their numeric IDs from the results.
 
 If no labels can be discovered, create the issue without labels.
 
-### 3. Ask Structured Questions
+### 3. Explore the Issue with grill-me
+
+Invoke the `grill-me` skill to deeply explore the topic before collecting the formal fields. Tell it:
+
+> "We are gathering context for a Forgejo issue. Do NOT ask at the end whether to create a Forgejo issue — that will be handled automatically after this interview."
+
+Use the interview to surface motivation, edge cases, design decisions, and acceptance criteria. This context will inform the answers to the structured questions below.
+
+### 4. Ask Structured Questions
 
 Use the `AskUserQuestion` tool to collect each field **one at a time**, in the order below. For fields with predefined options, present them as a selection list. For free-text fields, ask an open question.
 
@@ -54,14 +62,29 @@ Use the `AskUserQuestion` tool to collect each field **one at a time**, in the o
 
 If the `ntfy-me` skill is available, use it (topic: `claude`) to notify the user that input is needed before starting the questions.
 
-### 4. Map Answers to Label IDs
+### 5. Map Answers to Label IDs
 
 Match the IssueType and Severity answers to numeric label IDs from step 2.
 
 - If a matching label exists → use its numeric ID
 - If no matching label exists → skip it (do not invent label names or IDs)
 
-### 5. Create the Issue
+### 6. Confirm Before Creating
+
+Before calling `create_issue`, show the user a preview of the issue:
+
+```
+**Title:** {derived title}
+**Labels:** {IssueType}, {Severity}
+**Body:**
+{full rendered body}
+```
+
+Ask: "Does this look right? Shall I create the issue?"
+
+Only proceed if the user confirms. If they want changes, update the relevant fields and re-show the preview.
+
+### 7. Create the Issue
 
 Build the issue body using **exactly** this template — do not add extra sections like "Steps to Reproduce" or "Expected Behavior":
 
@@ -98,13 +121,13 @@ create_issue(
 )
 ```
 
-### 6. Notify When Done
+### 8. Notify When Done
 
 Use the **ntfy-me** skill (if available) to notify with topic `claude`:
 - Title: `Issue Created – #{N}: {title}`
 - Body: link to the created issue
 
-### 7. Ask Whether to Implement
+### 9. Ask Whether to Implement
 
 After notifying, always ask the user:
 

@@ -7,7 +7,7 @@ Interview me relentlessly about every aspect of this plan until we reach a share
 
 If a question can be answered by exploring the codebase, explore the codebase instead.
 
-Once the interview is done, ask the user, if a new Forgejo issue should be created, and if yes, use the `forgejo-issue-create` skill and follow the instructions from that skill.
+Once the interview is done, and **only if not already being called from within the `forgejo-issue-create` skill**, ask the user if a new Forgejo issue should be created. If yes, use the `forgejo-issue-create` skill and follow the instructions from that skill.
 
 For each question, provide your recommended answer.
 
