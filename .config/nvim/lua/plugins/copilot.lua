@@ -9,7 +9,7 @@ return {
     config = function()
       require("copilot").setup({
         suggestion = {
-          enabled = true,
+          enabled = false,
           auto_trigger = false,
           accept = false,
         },
