@@ -91,8 +91,8 @@ When the user wants to add a new note:
 3. **Create with template and set properties** — suggest 3–5 relevant tags based on the note's topic and content, then create the note and set its properties:
    ```bash
    obsidian vault="Obsidian" create name="note-name" template="page" silent
-   obsidian vault="Obsidian" property:set name="tags" value="tag1,tag2,tag3" file="note-name"
    obsidian vault="Obsidian" property:set name="created" value="YYYY-MM-DD" file="note-name"
+   obsidian vault="Obsidian" property:set name="tags" value="[tag1,tag2,tag3]" file="note-name"
    ```
    Use today's date. Tags should be lowercase, hyphenated, and specific enough to be useful for cross-referencing (e.g. `git`, `shell-scripting`, `docker-compose`).
 
