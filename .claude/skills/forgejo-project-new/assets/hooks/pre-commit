@@ -1,0 +1,2 @@
+#!/bin/sh
+# Add pre-commit checks here (e.g. linting, formatting)

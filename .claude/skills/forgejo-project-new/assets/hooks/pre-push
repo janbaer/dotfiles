@@ -1,0 +1,2 @@
+#!/bin/sh
+# Add pre-push checks here (e.g. build, tests)
