@@ -1,0 +1,88 @@
+{
+  "skill_name": "photo-organizer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Please organize my photos from this trip and rename them with descriptive names.",
+      "expected_output": "A renamed/ subfolder containing 8 files named YYYYMMDD - Erfurt - NNN - <description>.jpg. The two Haus zum Breiten Herd shots (_G915626 and _G915627) should be detected as duplicates. Event name 'Erfurt' detected from folder '202604 - Erfurt'.",
+      "working_directory": "/tmp/photo-organizer-evals/202604 - Erfurt",
+      "files": [],
+      "assertions": [
+        {
+          "name": "renamed_folder_created",
+          "description": "A renamed/ subfolder is created inside the working directory"
+        },
+        {
+          "name": "correct_file_count",
+          "description": "renamed/ contains exactly 8 files (same as input)"
+        },
+        {
+          "name": "filenames_start_with_date",
+          "description": "All files in renamed/ start with 20260403 (the EXIF date)"
+        },
+        {
+          "name": "event_name_in_filenames",
+          "description": "All filenames contain 'Erfurt'"
+        },
+        {
+          "name": "duplicate_marked",
+          "description": "One file is marked as a duplicate (duplicate 2 or Duplikat 2)"
+        },
+        {
+          "name": "originals_untouched",
+          "description": "The 8 original files still exist in the source directory"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Bitte benenne meine Fotos um und gib ihnen deutsche Beschreibungen was auf den Fotos zu sehen ist.",
+      "expected_output": "A renamed/ subfolder with 8 files. Descriptions are in German. Event name 'Erfurt' detected. Duplicate detected.",
+      "working_directory": "/tmp/photo-organizer-evals/202604 - Erfurt",
+      "files": [],
+      "assertions": [
+        {
+          "name": "renamed_folder_created",
+          "description": "A renamed/ subfolder is created"
+        },
+        {
+          "name": "correct_file_count",
+          "description": "renamed/ contains exactly 8 files"
+        },
+        {
+          "name": "german_descriptions",
+          "description": "File descriptions appear to be in German (contain German words like 'Ansicht', 'Brücke', 'Fassade', 'Fluss', etc.)"
+        },
+        {
+          "name": "duplicate_marked_german",
+          "description": "Duplicate file is marked with 'Duplikat' (German)"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Can you rename the photos in this folder for me? Use English descriptions.",
+      "expected_output": "A renamed/ subfolder with 3 files. Event name 'Mallorca' detected from folder '2026-07 Mallorca'. Date extracted as 20260403 from EXIF. English descriptions used.",
+      "working_directory": "/tmp/photo-organizer-evals/2026-07 Mallorca",
+      "files": [],
+      "assertions": [
+        {
+          "name": "renamed_folder_created",
+          "description": "A renamed/ subfolder is created"
+        },
+        {
+          "name": "correct_file_count",
+          "description": "renamed/ contains exactly 3 files"
+        },
+        {
+          "name": "mallorca_in_filenames",
+          "description": "All filenames contain 'Mallorca'"
+        },
+        {
+          "name": "filenames_start_with_date",
+          "description": "All files start with a YYYYMMDD date prefix"
+        }
+      ]
+    }
+  ]
+}
