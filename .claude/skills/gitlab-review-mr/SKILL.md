@@ -106,3 +106,4 @@ The `gitlab-mcp` MCP server is not active, do not try to find any alternative so
 
 - If you see in the package json, that also NPM packages were changed with that ticket, this is not a blocker, since everything will be merged later in a code-migration.
 - Please do not praise the developers for doing a good job. They are not used to get such feedback and don't want to see it, they are just used to get critical feedback from the team-lead.
+- Never flag variables, imports, or functions as "unused" based solely on what's visible in the diff. Diffs show limited context and will miss usages outside the visible window. Before making any "unused/dead code" claim, use `get_repository_file_contents` to fetch the full file from the source branch and verify there are no other usages.

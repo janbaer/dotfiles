@@ -106,3 +106,8 @@ add_issue_labels(owner, repo, index=N, labels="approved")
 | `submit_pull_review` | Submit a pending review if created in draft state |
 | `create_issue_comment` | Fallback: post summary-only comment if review tool unavailable |
 | `add_issue_labels` | Label outcome (approved, needs-changes) |
+
+## Notes
+
+- Never flag variables, imports, or functions as "unused" based solely on what's visible in the diff. Diffs show limited context and will miss usages outside the visible window. Before making any "unused/dead code" claim, fetch the full file from the head branch (e.g. `git show origin/{head}:path/to/file`) and verify there are no other usages.
+- Please do not praise the developers for doing a good job — stick to critical, actionable feedback.
