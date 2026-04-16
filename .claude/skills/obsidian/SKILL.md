@@ -104,9 +104,16 @@ When the user wants to add a new note:
    ```bash
    obsidian vault="Obsidian" create name="note-name" template="page" silent
    obsidian vault="Obsidian" property:set name="created" value="YYYY-MM-DD" file="note-name"
-   obsidian vault="Obsidian" property:set name="tags" value="[tag1,tag2,tag3]" file="note-name"
    ```
    Use today's date. Tags should be lowercase, hyphenated, and specific enough to be useful for cross-referencing (e.g. `git`, `shell-scripting`, `docker-compose`).
+
+   > **Important:** `property:set` does not handle YAML arrays correctly — it wraps `[]` values in quotes, producing invalid frontmatter like `tags: "[a,b,c]"`. To set tags, locate the file on disk (use `locate` or `find` under `/mnt/zb-data/webdav/data/Obsidian/`) and use the Edit tool to write proper YAML:
+   > ```yaml
+   > tags:
+   >   - tag1
+   >   - tag2
+   >   - tag3
+   > ```
 
 4. **Write content** — append the note body after template creation:
    ```bash
