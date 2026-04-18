@@ -1,4 +1,5 @@
 ---
+name: monitor
 description: Start the development server and watch for errors or warnings
 ---
 

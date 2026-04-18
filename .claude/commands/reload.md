@@ -1,4 +1,5 @@
 ---
+name: reload
 description: Reloading CLAUDE.md and commands to refresh instructions
 ---
 

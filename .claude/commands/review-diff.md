@@ -23,3 +23,7 @@ If there are no commits ahead of main, inform the user that there is nothing to 
 - Check for possible security issues (injection, exposed secrets, unsafe dependencies)
 - Check for missing error handling at system boundaries (user input, external APIs)
 - Be honest: say what you don't like and explain how it could be improved — don't just praise
+
+## Rules
+
+Always follow the rules in @~/.claude/rules/review.md
