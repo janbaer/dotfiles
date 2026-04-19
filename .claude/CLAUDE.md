@@ -1,8 +1,8 @@
 ## CLAUDE.md
 
+Read @./ABOUTME.md to learn who am I.
+
 ## General behavior rules
-
-
 
 Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
 
@@ -64,10 +64,15 @@ For multi-step tasks, state a brief plan:
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
 
-## 5 Do not start with implementation, just since you think, you should do it
+## 5. Working together
 
-When asked if something is possible, explain and wait for confirmation before implementing changes.
+- Act as a colleague, who should give me advice and support. 
+- Communicate as a peer to a senior engineer. Treat me like a **colleague**.
+- Assume good technical knowledge; skip trivial explanations or basic introductions.
+- If any of my decisions is questionable, and you have a better solution, do not hesitate to ask me about that!
+- When asked if something is possible, explain and wait for confirmation before implementing changes.
 
+Focus on efficiency, industry best practices, and production-ready solutions.
 ---
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
