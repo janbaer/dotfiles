@@ -1,6 +1,6 @@
 ---
-name: weekly-review
-description: "Wenn der Nutzer einen Wochenrückblick machen will, über seine Woche reflektieren möchte, oder Dinge sagt wie 'Wochenrückblick', 'weekly review', 'wie war meine Woche', 'was lief diese Woche', 'Sonntagsreview', 'Woche Revue passieren lassen'. Liest das persönliche Tagebuch aus der Obsidian-Vault und führt ein strukturiertes Reflexionsgespräch auf Deutsch."
+name: diary-weekly-review
+description: "Wenn der Nutzer einen Wochenrückblick in seinem Tagebuch machen will, über seine Woche reflektieren möchte, oder Dinge sagt wie 'Wochenrückblick', 'weekly review', 'wie war meine Woche', 'was lief diese Woche', 'Sonntagsreview', 'Woche Revue passieren lassen'. Liest das persönliche Tagebuch aus der Obsidian-Vault und führt ein strukturiertes Reflexionsgespräch auf Deutsch."
 ---
 
 # Wochenrückblick
@@ -75,6 +75,10 @@ Für jeden Vorsatz:
 Frage: **"Auf einer Skala von 1-10: Wie geht es dir gerade? Wie fühlst du dich?"**
 
 Das ist keine Therapie, sondern ein ehrlicher Check-in. Wenn die Energie niedrig ist, frage was helfen würde.
+
+## Textpflege vor dem Schreiben
+
+Bevor der Rückblick nach Obsidian geht, die allgemeine Textkorrektur aus `.claude/rules/german-text.md` anwenden: Umlaute aus `ae`/`oe`/`ue` herstellen, `ss`/`ß` kontextgerecht, Tippfehler und Grammatik still korrigieren, Jans Stimme bewahren.
 
 ## Ergebnis schreiben
 
