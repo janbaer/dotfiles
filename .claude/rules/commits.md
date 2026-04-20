@@ -34,11 +34,3 @@ Examples: `itemlist ♻️: Extracting masonry column width into CSS variable`, 
 ## General checks before creating a commit
 
 - Verify which repo a file lives in (check for symlinks) before committing dotfiles changes.
-
-  ## CHECK24 commit rules
-
-When the current directory is in a sub-directory of a directory with the name `check24`, the following rules apply:
-
-- Commit messages should always start with a ticket number
-- The ticket number always starts with `VERBU-` followed bu 5 numbers.
-- Don't add `:` behind the ticket number or the scope, since by convention using `:` is not allowed in commit messages.
