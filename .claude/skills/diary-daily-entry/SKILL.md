@@ -65,7 +65,15 @@ Stelle die Fragen **einzeln**, eine nach der anderen. Warte jeweils auf die Antw
 
 ### 1. Heute oder gestern?
 
-Frage: **"Geht es heute um gestern oder um heute?"**
+Ermittle per Bash die aktuelle Stunde:
+
+```bash
+date +%H
+```
+
+Verwende `AskUserQuestion` mit einer Single-Select-Auswahl. Stelle die Optionen so zusammen:
+- Vor 10 Uhr: Optionen `["Gestern", "Heute"]` — Gestern ist die erste und damit vorausgewählte Option.
+- Ab 10 Uhr: Optionen `["Heute", "Gestern"]` — Heute ist die erste und damit vorausgewählte Option.
 
 Das steuert nur die Zeitform im geschriebenen Text — die Einordnung in die Datei bleibt unberührt (immer heutiger Wochentag).
 
