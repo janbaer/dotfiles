@@ -9,12 +9,21 @@ return {
     config = function()
       require("copilot").setup({
         suggestion = {
-          enabled = false,
+          enabled = true,
           auto_trigger = false,
-          accept = false,
+          hide_during_completion = true,
+          -- debounce = 150,
+          keymap = {
+            accept = "<M-l>",
+            accept_word = "<M-w>",
+            accept_line = "<M-j>",
+            next = "<M-]>",
+            prev = "<M-[>",
+            dismiss = "<C-]>",
+          },
         },
         panel = {
-          enabled = false,
+          enabled = true,
         },
         filetypes = {
           markdown = true,
@@ -30,6 +39,7 @@ return {
         pattern = "BlinkCmpMenuOpen",
         callback = function()
           vim.b.copilot_suggestion_hidden = true
+          require("copilot.suggestion").dismiss()
         end,
       })
 
