@@ -139,7 +139,14 @@ je nach Antwort auf Frage 1 im Tempus passend: "Gestern habe ich…" vs. "Heute 
 
 ### Textpflege vor dem Schreiben
 
-Bevor der Eintrag nach Obsidian geht, die allgemeine Textkorrektur aus `.claude/rules/german-text.md` anwenden: Umlaute aus `ae`/`oe`/`ue` herstellen, `ss`/`ß` kontextgerecht, Tippfehler und Grammatik still korrigieren, Jans Stimme bewahren.
+Bevor der Eintrag nach Obsidian geht:
+
+1. **Korrekturen** laut `german-text.md`: Umlaute aus `ae`/`oe`/`ue` herstellen, `ss`/`ß` kontextgerecht, Tippfehler und Grammatik still korrigieren.
+2. **Leichte stilistische Überarbeitung** erlaubt: Sätze flüssiger machen, holprige Formulierungen glätten, Wiederholungen entfernen — solange Sinn und Jans Stimme erhalten bleiben. Keine inhaltlichen Änderungen, keine fremden Formulierungen, die nicht nach Jan klingen.
+
+### Eintrag anzeigen
+
+Nach dem Schreiben in Obsidian den fertigen Eintrag im Chat ausgeben — vollständig, als Markdown-Codeblock — damit Jan ihn direkt lesen und bei Bedarf korrigieren kann.
 
 ### Schreiben in Obsidian
 
