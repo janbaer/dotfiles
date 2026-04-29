@@ -1,0 +1,23 @@
+{
+  "skill_name": "diary-daily-entry",
+  "evals": [
+    {
+      "id": 1,
+      "eval_name": "full_interview_new_day",
+      "prompt": "Guten Morgen, heute ist ein guter Tag. Gestern war ich bei der Arbeit und habe an einem spannenden Projekt gearbeitet. Das hat mir viel Freude bereitet. Was mich geaergert hat: zwei Meetings, die eigentlich keine Meetings haetten sein muessen — eine E-Mail haette gereicht. Heute will ich frueh Feierabend machen und etwas Sport machen. Und heute Abend vielleicht noch einen Film schauen.",
+      "expected_output": "A coherent diary entry with corrected umlauts, structured with positive/negative reflection and today's goals as tasks"
+    },
+    {
+      "id": 2,
+      "eval_name": "update_mid_day",
+      "prompt": "Update: Die morgendliche Laufrunde war super, 12 km geschafft. Das war eine gute Erwaermung fuer die restliche Woche.",
+      "expected_output": "Brief update appended to existing entry with **Update:** prefix, umlauts corrected, no interview conducted"
+    },
+    {
+      "id": 3,
+      "eval_name": "new_week_creation",
+      "prompt": "Guten Morgen zu einer neuen Woche! Letzte Woche war stressig, aber diese Woche wird besser. Heute moechte ich mit einem klaren Kopf starten und mich auf die wichtigsten Dinge konzentrieren. Vielleicht noch einen Spaziergang machen?",
+      "expected_output": "New weekly file created with Monday entry, full interview conducted, proper structure established"
+    }
+  ]
+}
