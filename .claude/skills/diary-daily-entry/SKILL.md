@@ -44,20 +44,35 @@ Daraus folgt:
 
 Lies zusätzlich den Abschnitt des Vortags (falls vorhanden), um im Gespräch konkret Bezug nehmen zu können statt generische Fragen zu stellen.
 
+### 3. Vortags-Todos abhaken
+
+Die Vault-Dateien liegen unter `/mnt/zb-data/webdav/data/Notes/`. Nach dem Interview, wenn klar ist, was erledigt wurde, die offenen Todos aus dem Vortags-Abschnitt per `sed -i` abhaken:
+
+```bash
+sed -i 's/- \[ \] {todo-text}/- [x] {todo-text} ✅ {YYYY-MM-DD}/' "/mnt/zb-data/webdav/data/Notes/Weekly/Wochenbericht KW NN.md"
+```
+
+- Datum = das Datum des Vortags (nicht heute)
+- Nur abhaken, was Jan im Interview als erledigt bestätigt hat
+- Nicht erledigte Todos unangetastet lassen
+
 ## Schnellmodus: Update ohne Interview
 
-Wenn Jans Nachricht mit `update:` beginnt (Kleinschreibung, mit Doppelpunkt), überspring das komplette Interview. Jan hat den Text schon selbst formuliert und will ihn nur eingetragen haben.
+Wenn Jans Nachricht mit `Update:` beginnt (Kleinschreibung, mit Doppelpunkt), überspring das komplette Interview. Jan hat den Text schon selbst formuliert und will ihn nur als Nachtrag zu einem bestehenden Eintrag eingetragen haben.
 
 Vorgehen:
 
-1. Entferne das `update:`-Präfix aus Jans Nachricht.
+1. Entferne das `Update:`-Präfix aus Jans Nachricht.
 2. Wende die Textpflege (siehe unten, `german-text.md`) auf den übrigen Text an.
 3. Schreibe in den Wochenbericht:
-   - **Heutiger Abschnitt existiert schon** → hänge den bereinigten Text unter dem Abschnitt an, eingeleitet mit `**update:**` (Englisch, genau so), z. B.: `\n\n**update:** {bereinigter Text}\n`.
-   - **Heutiger Abschnitt existiert noch nicht** → lege `## {Wochentag}` neu an und füge den bereinigten Text direkt darunter ein — ohne `**update:**`-Präfix, denn es ist der erste Eintrag des Tages.
-4. Kurze Rückmeldung: in welche Datei und unter welchen Abschnitt geschrieben wurde. Keine Fragen, keine Nachhaken.
+   - **Heutiger Abschnitt existiert schon** → hänge den bereinigten Text unter dem Abschnitt an, eingeleitet mit `**Update:**` (Englisch, genau so), z. B.: `\n\n**Update:** {bereinigter Text}\n`.
+   - **Heutiger Abschnitt existiert noch nicht** → lege `## {Wochentag}` neu an und füge den bereinigten Text direkt darunter ein — ohne `**Update:**`-Präfix, denn es ist der erste Eintrag des Tages.
+4. Danach: Todos abhaken (wie üblich).
+5. Kurze Rückmeldung: in welche Datei und unter welchen Abschnitt geschrieben wurde. Keine Fragen, keine Nachhaken.
 
-Das `update:`-Signal ist bewusst — Jan hat keine Lust auf Interview und will einfach tippen.
+Das `Update:`-Signal ist bewusst — das Interview zum Vortag ist bereits gelaufen. Jan trägt jetzt nur noch eine zusätzliche Information nach, die später am Tag eingefallen ist.
+
+**Wichtig:** Wenn Jan einen neuen Eintrag schreibt (ohne `Update:`-Präfix), führe immer die vier Interview-Fragen durch, auch wenn Jan den Text schon selbst formuliert hat. Das hilft beim Strukturieren und Gewichten.
 
 ## Das Gespräch
 
@@ -132,7 +147,7 @@ je nach Antwort auf Frage 1 im Tempus passend: "Gestern habe ich…" vs. "Heute 
 
 ```markdown
 
-**update:** {fließender Text mit den neuen Antworten}
+**Update:** {fließender Text mit den neuen Antworten}
 
 {Falls neue Ziele genannt wurden, als zusätzliche `- [ ]`-Tasks unter dem bestehenden Ziele-Block oder — falls keiner da ist — als neuer kleiner Block.}
 ```
@@ -161,11 +176,11 @@ Nach dem Schreiben in Obsidian den fertigen Eintrag im Chat ausgeben — vollst�
    obsidian vault="Notes" append file="Weekly/Wochenbericht KW NN" content="..."
    ```
 
-Der `append`-Befehl fügt am Dateiende an — genau richtig, wenn die Wochentage chronologisch aufsteigend sind und der heutige Abschnitt neu ist. Für das Update in einen bereits existierenden Abschnitt fügt `append` am Dateiende an; das ist akzeptabel, weil der Update-Block direkt unter dem letzten Inhalt des Tages landet und durch den `**update:**`-Präfix klar erkennbar ist.
+Der `append`-Befehl fügt am Dateiende an — genau richtig, wenn die Wochentage chronologisch aufsteigend sind und der heutige Abschnitt neu ist. Für das Update in einen bereits existierenden Abschnitt fügt `append` am Dateiende an; das ist akzeptabel, weil der Update-Block direkt unter dem letzten Inhalt des Tages landet und durch den `**Update:**`-Präfix klar erkennbar ist.
 
 ## Regeln
 
-1. **Alles auf Deutsch** — außer dem `**update:**`-Präfix, der bewusst Englisch bleibt.
+1. **Alles auf Deutsch** — außer dem `**Update:**`-Präfix, der bewusst Englisch bleibt.
 2. **Fließtext, keine Bullets** — außer bei den Tages-Zielen (die sind Tasks).
 3. **Heutiger Wochentag ist heutiger Wochentag** — auch wenn der Inhalt sich auf gestern bezieht. Nicht verwechseln.
 4. **Eine Frage nach der anderen** — nicht alle gleichzeitig stellen.
