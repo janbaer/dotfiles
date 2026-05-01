@@ -40,9 +40,28 @@ Lies die Datei (Pfad siehe Kontext) mit dem `Read` tool. Drei Fälle:
 
 Im selben `Read`-Aufruf hast du auch den Vortagsabschnitt (falls vorhanden) — nutze ihn, um im Gespräch konkret Bezug zu nehmen statt generische Fragen zu stellen, und merk dir die offenen Todos vom Vortag (`- [ ]`) — die werden später abgehakt.
 
+### 3. Vikunja-Check im Hintergrund starten
+
+Starte den Vikunja-Check **im Hintergrund**, damit das Interview sofort losgehen kann. Sinn der Sache: Jan trägt Termine und Wartungs-Todos in Vikunja ein und vergisst sie zwischen Tagebuch-Sessions — wenn sie morgens automatisch in den Tages-Ziele-Block wandern, kann er sie über das Tagebuch abhaken. Den Check parallel zum Interview laufen zu lassen spart spürbar Wartezeit am Morgen.
+
+Vorgehen: Rufe per `Agent` tool den Subagent `vikunja-agent` mit `run_in_background: true` auf:
+
+- `subagent_type`: `vikunja-agent`
+- `description`: kurz, z. B. „Vikunja-Tasks heute/überfällig"
+- `prompt`: `Operation: list-due-today-or-overdue. Heutige fällige und überfällige Tasks als Markdown-Liste zurückgeben (oder 'keine'), wie in der Agent-Doku.`
+- `run_in_background`: `true`
+
+Der Agent retourniert eine Markdown-Liste mit Titeln (oder das Wort `keine`). Bis du Frage 4 erreichst, ist die Notification mit dem Ergebnis typischerweise da — der Agent macht 5–6 MCP-Calls auf Haiku, das dauert grob 5–10 Sekunden, und dazwischen liegen mindestens zwei Q&A-Turns.
+
+**Fehlerfall:** Wenn der Agent eine `⚠️ Vikunja-Server nicht erreichbar`-Antwort liefert, gib einmalig eine kurze Notiz im Chat aus:
+
+> ⚠️ Vikunja-Server gerade nicht erreichbar — ich überspringe den Task-Check und mach mit dem Tagebuch weiter.
+
+Dann ohne Vikunja-Liste fortfahren. Der Tagebucheintrag ist wichtiger als der Task-Check, und Jan soll den Ausfall mitbekommen — aber abbrechen tut die Skill nicht.
+
 ## Schnellmodus: Update ohne Interview
 
-Wenn Jans Nachricht mit `Update:` beginnt (großes U, mit Doppelpunkt), überspring das komplette Interview. Jan hat den Text schon selbst formuliert und will ihn nur als Nachtrag zu einem bestehenden Eintrag eingetragen haben.
+Wenn Jans Nachricht mit `Update:` beginnt (großes U, mit Doppelpunkt), überspring das komplette Interview **und auch den Vikunja-Task-Check (Schritt 3)**. Jan hat den Text schon selbst formuliert und will ihn nur als Nachtrag zu einem bestehenden Eintrag eingetragen haben — ein neuer Tagesplan steht nicht an.
 
 Vorgehen:
 
@@ -90,9 +109,21 @@ Ehrlich, nicht verurteilend. Wenn du Muster siehst (z. B. dasselbe Ärgernis tau
 
 ### 4. Ziele für heute
 
-Frage: **"Was nimmst du dir für heute vor?"**
+**Vor der Frage:** Hol das Ergebnis des Hintergrund-Agents aus Schritt 3 ab.
 
-Diese Antworten werden später als Obsidian-Tasks (`- [ ]`) in den Eintrag eingefügt, damit Jan sie abhaken kann. Frage konkret nach, wenn etwas zu schwammig ist ("heute produktiv sein" → was heißt das?).
+- **Notification kam schon an** (Regelfall) → du kennst die Liste.
+- **Agent läuft noch** → kurz warten, bis die Notification eintrifft. Sollte selten vorkommen; falls doch und der Agent merklich hängt, ohne Liste weitermachen und das im Chat erwähnen.
+- **Agent hat eine `⚠️`-Meldung geliefert** → kein zweiter Hinweis, der wurde in Schritt 3 schon abgegeben. Einfach ohne Liste weiter.
+
+Wenn die Liste **Treffer enthält** (also nicht `keine`), erwähne sie kurz vor der Frage, damit Jan sieht, was sowieso schon ansteht. Beispiel:
+
+> Bevor wir zu deinen Tageszielen kommen: in Vikunja stehen heute drei offene/überfällige Tasks — *„Heizungsrechnung bezahlen"*, *„Backup Hermes-agent konfigurieren"*, *„Mailbox-Vertrag reduzieren"*. Die nehm ich automatisch in deine Ziele auf.
+
+Dann die Frage: **"Was nimmst du dir darüber hinaus für heute vor?"**
+
+Wenn die Liste leer ist (`keine`) oder nicht verfügbar, einfach die Standardvariante: **"Was nimmst du dir für heute vor?"**
+
+Jans Antworten **plus** die Vikunja-Tasks landen später als Obsidian-Tasks (`- [ ]`) im Eintrag — Jans eigene Ziele zuerst, danach die Vikunja-Einträge mit reinem Titel (kein Projekt-Präfix, keine Markierung als „aus Vikunja"). Frage konkret nach, wenn Jans eigene Antwort zu schwammig ist ("heute produktiv sein" → was heißt das?).
 
 ### 5. Sonst noch was?
 

@@ -3,6 +3,14 @@
     "forgejo-mcp": {
       "type": "sse",
       "url": "https://forgejo.home.janbaer.de/sse"
+    },
+    "vikunja": {
+      "command": "npx",
+      "args": ["-y", "@democratize-technology/vikunja-mcp"],
+      "env": {
+        "VIKUNJA_URL": "https://todo.home.janbaer.de/api/v1",
+        "VIKUNJA_API_TOKEN": "${VIKUNJA_API_TOKEN}"
+      }
     }
   }
 }
