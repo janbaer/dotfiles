@@ -3,27 +3,16 @@ name: review-diff
 description: Review the diff between the current feature and the master or main branch
 ---
 
-Review all commits made on this feature branch since it diverged from main.
+Delegate the work to the `review-diff-executor` subagent and pass its output through verbatim. The agent owns the workflow (fetch the diff, run lint/test, review against `~/.claude/rules/review.md`) — this command file is intentionally thin so that diff and lint output do not land in the main context.
 
-## Getting the diff
+## Workflow
 
-```bash
-git log main..HEAD --oneline        # overview of commits on this branch
-git diff main...HEAD                # full diff since branch point
-```
+Invoke the `review-diff-executor` subagent via the `Agent` tool:
 
-If the base branch is `master` instead of `main`, substitute accordingly.
+- `subagent_type`: `review-diff-executor`
+- `description`: short, e.g. "Review feature branch against main"
+- `prompt`: `Review the current feature branch against main (or master if main does not exist). Return the review per ~/.claude/rules/review.md.`
 
-If there are no commits ahead of main, inform the user that there is nothing to review.
+Pass the result through to the user without further editing.
 
-## Best Practices for Reviews
-
-- Check if it's a Node.js project and if `package.json` supports `yarn test` and `yarn lint` — if so, run both and report the results
-- Check the changes for best practices based on the type of project
-- Check for possible security issues (injection, exposed secrets, unsafe dependencies)
-- Check for missing error handling at system boundaries (user input, external APIs)
-- Be honest: say what you don't like and explain how it could be improved — don't just praise
-
-## Rules
-
-Always follow the rules in @~/.claude/rules/review.md
+**Error case:** if the agent reports that there are no commits ahead of the base branch, just relay that — no workaround.
