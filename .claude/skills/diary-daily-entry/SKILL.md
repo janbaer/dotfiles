@@ -75,15 +75,27 @@ Vorgehen:
 
 Das `Update:`-Signal ist bewusst — das Interview zum Vortag ist bereits gelaufen. Jan trägt jetzt nur noch eine zusätzliche Information nach, die später am Tag eingefallen ist.
 
-**Wichtig:** Wenn Jan einen neuen Eintrag schreibt (ohne `Update:`-Präfix), führe immer die vier Interview-Fragen durch, auch wenn Jan den Text schon selbst formuliert hat. Das hilft beim Strukturieren und Gewichten.
+## Text analysieren
+
+Wenn Jan beim Skill-Aufruf bereits Text mitgegeben hat, analysiere ihn **bevor** du Fragen stellst. Extrahiere daraus, was schon klar ist:
+
+- **Zeitbezug (Gestern/Heute):** Meist aus dem Kontext ableitbar (Vergangenheitsform, „Guten Morgen", „Gestern habe ich..."). Nur fragen, wenn wirklich unklar.
+- **Was gut lief:** Positiv formulierte Aktivitäten, Erfolge, Freude → kein Nachfragen nötig.
+- **Was nicht gut lief:** Negative Formulierungen oder ein klares „eigentlich nichts" → kein Nachfragen nötig.
+- **Ziele für heute:** Wenn Jan konkrete Pläne nennt → übernehmen. Wenn unklar oder fehlend → nachfragen.
+- **Sonstiges:** Weitere Gedanken, Beobachtungen, Gefühle → einweben, nicht nochmal fragen.
+
+**Faustregel:** Frag nur, was du wirklich nicht weißt. Ein Text, der alle fünf Dimensionen abdeckt, braucht kein Interview — dann geht es direkt zum Entwurf. Bei lückenhaftem Text fragst du gezielt nach, was fehlt.
 
 ## Das Gespräch
 
-Stelle die Fragen **einzeln**, eine nach der anderen. Warte jeweils auf die Antwort. Drei bis fünf Fragen, in dieser Reihenfolge:
+Stelle nur die Fragen, die der Starttext nicht beantwortet hat — **einzeln**, eine nach der anderen, mit Pause für die Antwort. Wenn alle Dimensionen bereits klar sind, überspring das Gespräch vollständig und geh direkt zum Entwurf.
 
 ### 1. Heute oder gestern?
 
-Ermittle per Bash die aktuelle Stunde:
+**Überspringen wenn:** der Zeitbezug aus dem Starttext eindeutig hervorgeht (z. B. Vergangenheitsform + „Gestern habe ich...", oder explizites „Heute").
+
+Falls unklar: Ermittle per Bash die aktuelle Stunde:
 
 ```bash
 date +%H
@@ -97,17 +109,23 @@ Das steuert nur die Zeitform im geschriebenen Text — die Einordnung in die Dat
 
 ### 2. Was lief gut?
 
-Frage: **"Was lief gut?"**
+**Überspringen wenn:** der Starttext klare positive Momente enthält (Erfolge, Freude, erledigte Aufgaben).
+
+Falls unklar oder fehlend — Frage: **"Was lief gut?"**
 
 Wenn aus dem Vortags-Abschnitt schon etwas Positives hervorgeht, das Jan nicht nennt, sprich es kurz an. Jan neigt dazu, sich auf Probleme zu fokussieren — hilf ihm, die guten Dinge bewusst zu machen.
 
 ### 3. Was lief nicht so gut?
 
-Frage: **"Was lief nicht so gut oder hat dich geärgert?"**
+**Überspringen wenn:** der Starttext negative Momente erwähnt oder sinngemäß „eigentlich nichts" signalisiert.
+
+Falls unklar oder fehlend — Frage: **"Was lief nicht so gut oder hat dich geärgert?"**
 
 Ehrlich, nicht verurteilend. Wenn du Muster siehst (z. B. dasselbe Ärgernis taucht mehrfach auf), nenne es beiläufig, aber mach keine Therapie draus.
 
 ### 4. Ziele für heute
+
+**Überspringen wenn:** der Starttext bereits konkrete Tagesziele nennt (z. B. „Heute fahre ich zu...", „Am Abend will ich..."). Vikunja-Tasks trotzdem einbauen — die kommen immer dazu, unabhängig davon, ob die Frage gestellt wird.
 
 **Vor der Frage:** Hol das Ergebnis des Hintergrund-Agents aus Schritt 3 ab.
 
@@ -127,7 +145,9 @@ Jans Antworten **plus** die Vikunja-Tasks landen später als Obsidian-Tasks (`- 
 
 ### 5. Sonst noch was?
 
-Frage: **"Sonst noch was auf dem Herzen?"**
+**Überspringen wenn:** der Starttext bereits persönliche Beobachtungen, spontane Gedanken oder sonstige Notizen enthält, die nicht in die anderen Kategorien passen.
+
+Falls der Text noch Raum lässt — Frage: **"Sonst noch was auf dem Herzen?"**
 
 Freitext-Raum für alles, was nicht in die Schubladen oben passt — Träume, Beobachtungen, spontane Gedanken, geplante Treffen. Jan schreibt sowas gerne und es gehört zum Tagebuch-Charakter.
 
