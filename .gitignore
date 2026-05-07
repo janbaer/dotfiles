@@ -33,3 +33,4 @@ tags
 .claude/skills/skill-creator
 .claude/skills/find-skills
 .claude/commands/jira-ticket.md
+.claude/skills/*-workspace/
