@@ -192,7 +192,8 @@ je nach Antwort auf Frage 1 im Tempus passend: "Gestern habe ich…" vs. "Heute 
 Bevor der Eintrag rausgeht:
 
 1. **Korrekturen** laut `german-text.md`: Umlaute aus `ae`/`oe`/`ue` herstellen, `ss`/`ß` kontextgerecht, Tippfehler und Grammatik still korrigieren.
-2. **Leichte stilistische Überarbeitung** erlaubt: Sätze flüssiger machen, holprige Formulierungen glätten, Wiederholungen entfernen — solange Sinn und Jans Stimme erhalten bleiben. Keine inhaltlichen Änderungen, keine fremden Formulierungen, die nicht nach Jan klingen.
+2. **ASCII-Smileys ersetzen**: Alle Textemoticons durch passende Emoji ersetzen — z. B. `:-)` → 😊, `:-(` → 😢, `;-)` → 😉, `:-D` → 😄, `:-P` → 😛, `:-/` → 😕. Kontext beachten, damit das Emoji zur Stimmung passt.
+3. **Leichte stilistische Überarbeitung** erlaubt: Sätze flüssiger machen, holprige Formulierungen glätten, Wiederholungen entfernen — solange Sinn und Jans Stimme erhalten bleiben. Keine inhaltlichen Änderungen, keine fremden Formulierungen, die nicht nach Jan klingen.
 
 ### Entwurf zeigen und bestätigen lassen
 
