@@ -11,7 +11,7 @@ Send push notifications via [ntfy](https://ntfy.sh) using the `ntfy` script in `
 ## Command
 
 ```bash
-ntfy [--title <title>] [--tags <tag1,tag2>] [--topic <topic>] [--priority <level>] "<message>"
+ntfy [--title <title>] [--tags <tag1,tag2>] [--topic <topic>] [--priority <level>] [--markdown] "<message>"
 ```
 
 | Flag | Description | Default |
@@ -20,6 +20,7 @@ ntfy [--title <title>] [--tags <tag1,tag2>] [--topic <topic>] [--priority <level
 | `--tags` | Emoji names (see table below) | (none) |
 | `--topic` | ntfy topic | `claude` |
 | `--priority` / `-p` | `min` `low` `default` `high` `max` | `default` |
+| `--markdown` / `-m` | Render body as Markdown (web client only — Android/iOS show raw text) | off |
 | `--server` | Override server URL | from config or `https://ntfy.home.janbaer.de` |
 
 ## Common Tags
