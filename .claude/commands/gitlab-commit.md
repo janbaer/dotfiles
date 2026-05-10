@@ -23,5 +23,7 @@ If there are no staged changes, inform the user that there's nothing to commit.
 
 ## Formatting
 
-- A commit message should be in the following format: `{Jira ticket number} {commit message}`
-- Do not add any emojis. Ignore this part from the @../rules/commits.md file.
+- A commit message must follow exactly this format: `{Jira ticket number} {commit message}`
+- Do not add a component scope or colon (e.g. no `k3s-maintenance:` prefix).
+- Do not add any emojis.
+- These rules override anything defined in `@../rules/commits.md`.
