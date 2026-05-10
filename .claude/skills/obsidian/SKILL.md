@@ -1,5 +1,6 @@
 ---
 name: obsidian
+model: sonnet
 description: Use when searching, reading, creating, or editing notes in the user's Obsidian vault — a directory tree of Markdown files used as a personal knowledge base. Trigger on phrases like "search Obsidian", "check Obsidian", "add to Obsidian", "update the Obsidian note", "what do I have on...", "save this to my notes", or when the user references an existing Obsidian file by name. Also trigger when the user wants to look something up in their personal notes or store new knowledge for later reference. Additionally handles wiki maintenance workflows: ingesting new sources, querying the wiki with write-back, and running lint/health-check passes.
 ---
 

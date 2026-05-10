@@ -1,5 +1,6 @@
 ---
 name: forgejo-pr-create
+model: sonnet
 description: Use when creating a Pull Request on a Forgejo repository. Trigger on phrases like "create a PR", "open a PR", "submit a PR", "make a pull request", "create PR for issue #N", or "create PR for the current branch".
 ---
 

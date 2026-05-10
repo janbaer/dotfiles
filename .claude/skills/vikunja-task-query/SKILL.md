@@ -1,5 +1,6 @@
 ---
 name: vikunja-task-query
+model: haiku
 description: "Beantwortet Fragen wie 'Was ist der nächste Task, den ich erledigen muss?', 'Was steht heute an?', 'Welche Vikunja-Tasks habe ich offen?', 'Was muss ich noch erledigen?', 'Hab ich noch was offen?', 'Was kommt als nächstes?', 'Liste meine Todos'. Holt alle offenen Tasks aus Vikunja, sortiert nach Dringlichkeit (überfällig → heute → bald → später → ohne Datum) und gibt eine priorisierte Liste mit dem dringendsten Task hervorgehoben zurück. Unbedingt verwenden, sobald Jan nach offenen Aufgaben, Tasks, Todos oder seiner To-do-Liste fragt — auch wenn er das Wort 'Vikunja' nicht explizit nennt."
 ---
 

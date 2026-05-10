@@ -1,5 +1,6 @@
 ---
 name: forgejo-project-update
+model: sonnet
 description: Audit an existing project against Jan's standard project configuration and apply missing items. Use this skill when the user wants to update an existing project's config, sync project standards, or notices something missing like .editorconfig, .code-review.md, git hooks, CLAUDE.md, or CHANGELOG.md. Trigger on phrases like "update project config", "sync project standards", "add code review guidelines to my project", "bring this project up to standard", or "what config is missing from this project".
 ---
 

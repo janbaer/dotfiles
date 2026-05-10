@@ -1,5 +1,6 @@
 ---
 name: forgejo-pr-feedback
+model: sonnet
 description: Use when reading review comments on a Forgejo pull request to understand received feedback, assess whether each comment is correct, estimate the effort to address it, and post a follow-up comment summarising what was fixed and what was not. Trigger on phrases like "read PR comments", "check PR feedback", "what feedback did I get", "review comments on my PR", "what do the reviewers say", "assess PR review", "post review response", or "reply to review comments".
 ---
 

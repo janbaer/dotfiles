@@ -1,5 +1,6 @@
 ---
 name: diary-daily-entry
+model: haiku
 description: "Wenn der Nutzer einen neuen Tagebucheintrag in Obsidian schreiben will oder Dinge sagt wie 'Tagebuch', 'Tageseintrag', 'diary entry', 'Eintrag für heute', 'daily note', 'Wie war gestern', 'Morgenreflexion'. Führt ein kurzes Interview auf Deutsch und hängt den Eintrag an den aktuellen Wochenbericht in der Obsidian-Vault `Notes` an. Unbedingt verwenden, sobald es um das tägliche Tagebuch geht — auch wenn der Nutzer das Wort 'Tagebuch' nicht explizit benutzt, sondern z. B. sagt 'ich möchte kurz reflektieren', 'lass uns über gestern sprechen' oder 'was nehme ich mir heute vor'."
 ---
 

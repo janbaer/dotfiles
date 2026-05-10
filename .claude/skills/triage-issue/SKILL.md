@@ -1,5 +1,6 @@
 ---
 name: triage-issue
+model: sonnet
 description: Triage a bug or issue by exploring the codebase to find root cause, then create an issue with a TDD-based fix plan. Use when user reports a bug, wants to file an issue, mentions "triage", or wants to investigate and plan a fix for a problem.
 ---
 

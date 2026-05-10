@@ -1,5 +1,6 @@
 ---
 name: forgejo-pr-merge
+model: haiku
 description: Use when merging (closing) a Pull Request on a Forgejo repository via squash commit. Trigger on phrases like "merge this PR", "merge a PR", "close this PR", "close the PR", "merge PR #N", "squash and merge", or "land this PR". Always use this skill when the user wants to merge or close a PR — even if they don't explicitly say "squash".
 ---
 

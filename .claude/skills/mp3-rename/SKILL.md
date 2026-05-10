@@ -1,5 +1,6 @@
 ---
 name: mp3-rename
+model: haiku
 description: >
   Renames all MP3 files in the current directory using their ID3 tags, following
   the convention "Artist - Title.mp3". Strips non-ASCII characters, [ ] /, collapses

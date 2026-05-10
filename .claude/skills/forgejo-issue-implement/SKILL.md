@@ -1,5 +1,6 @@
 ---
 name: forgejo-issue-implement
+model: opus
 description: Use when working with Forgejo issues in the current project - listing open issues, selecting one to implement, or following the full implementation workflow through OpenSpec to PR. Trigger on phrases like "implement issue", "work on issue", "pick up an issue", "start working on a ticket", or "fix issue".
 ---
 

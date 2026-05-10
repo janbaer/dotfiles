@@ -1,5 +1,6 @@
 ---
 name: forgejo-issue-finish
+model: sonnet
 description: Use after manually verifying a forgejo-issue-implement implementation to archive the OpenSpec change and open a Pull Request. Trigger on phrases like "finish the issue", "complete the issue", "archive and create PR", "create PR for the issue", or "open a PR for issue #N".
 ---
 

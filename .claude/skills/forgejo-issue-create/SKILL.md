@@ -1,5 +1,6 @@
 ---
 name: forgejo-issue-create
+model: haiku
 description: Use when creating a new issue on a Forgejo repository - guiding the user through structured questions about the issue type, severity, motivation, and testing approach before submitting. Trigger on phrases like "create issue", "file an issue", "open a ticket", "report a bug", or "add an issue".
 ---
 

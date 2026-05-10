@@ -1,5 +1,6 @@
 ---
 name: tailwind-css
+model: sonnet
 description: >
   Best practices and rules for writing optimal Tailwind CSS code in modern
   projects (v4+). Use this skill whenever the user asks you to write, generate,

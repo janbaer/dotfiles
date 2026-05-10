@@ -1,5 +1,6 @@
 ---
 name: howcani
+model: sonnet
 description: Use this skill when the user asks "How can I", "How do I", "How would I", or any similar how-to question — search the howcani-mcp knowledge base first before answering. Also trigger when the user wants to save, update, or look up items in the howcani knowledge base.
 ---
 

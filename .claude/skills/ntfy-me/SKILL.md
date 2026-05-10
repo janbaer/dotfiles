@@ -1,5 +1,6 @@
 ---
 name: ntfy-me
+model: haiku
 description: Use when sending push notifications via ntfy — checking config, formatting messages, or notifying about events like build completion, weather, or alerts. Trigger on phrases like "notify me", "send a notification", "alert me when done", "send me a push notification", or "ping me".
 ---
 

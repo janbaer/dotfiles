@@ -1,5 +1,6 @@
 ---
 name: request-refactor-plan
+model: sonnet
 description: Create a detailed refactor plan with tiny commits via user interview. Use when user wants to plan a refactor, create a refactoring RFC, or break a refactor into safe incremental steps.
 ---
 

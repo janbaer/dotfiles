@@ -1,5 +1,6 @@
 ---
 name: forgejo-project-new
+model: sonnet
 description: Bootstrap a new software project — creates a local directory under ~/Projects/, initializes git, creates a private Forgejo repository, and scaffolds standard project files. Use this skill whenever the user wants to start a new project, create a new repo, bootstrap a codebase, or set up a new project from scratch. Trigger on phrases like "new project", "create a project called", "start a new project", "set up a new repo", or "forgejo-project-new".
 ---
 

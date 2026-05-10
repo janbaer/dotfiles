@@ -1,5 +1,6 @@
 ---
 name: photo-organizer
+model: sonnet
 description: >
   Organizes and renames a folder of trip or event photos by analyzing each image
   visually, generating descriptive names, detecting near-duplicate burst shots, and

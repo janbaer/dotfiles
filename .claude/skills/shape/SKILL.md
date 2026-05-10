@@ -1,5 +1,6 @@
 ---
 name: shape
+model: sonnet
 description: Use when you have a rough product idea and want a complete PRD without sitting through an interactive grilling. Claude walks the full decision tree (edge cases, modules, schema, testing, security), self-answers with software-engineering best practices, streams the Q&A live so you can override, and writes the PRD locally with an option to push as a GitHub issue.
 ---
 
