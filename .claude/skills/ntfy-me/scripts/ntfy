@@ -6,6 +6,7 @@ TITLE=""
 TAGS=""
 TOPIC="claude"
 PRIORITY="default"
+MARKDOWN=false
 MESSAGE=""
 SERVER=""
 
@@ -23,6 +24,7 @@ usage() {
   echo "  --tags          Comma-separated emoji tag names (e.g. white_check_mark,rocket)"
   echo "  --topic         Topic (default: claude)"
   echo "  --priority, -p  Priority: min|low|default|high|max (default: default)"
+  echo "  --markdown, -m  Send body as Markdown (sets Content-Type: text/markdown)"
   echo "  --server        Override server URL"
   echo "  --help, -h      Show this help"
   echo ""
@@ -33,14 +35,16 @@ usage() {
 
 while [[ $# -gt 0 ]]; do
   case $1 in
-    --title|-t)   TITLE="$2";    shift 2 ;;
-    --tags)       TAGS="$2";     shift 2 ;;
-    --topic)      TOPIC="$2";    shift 2 ;;
-    --priority|-p) PRIORITY="$2"; shift 2 ;;
-    --server)     SERVER="$2";   shift 2 ;;
-    --help|-h)    usage ;;
-    -*)           echo "Unknown option: $1"; usage ;;
-    *)            MESSAGE="$1";  shift ;;
+    --title|-t)     TITLE="$2";    shift 2 ;;
+    --tags)         TAGS="$2";     shift 2 ;;
+    --topic)        TOPIC="$2";    shift 2 ;;
+    --priority|-p)  PRIORITY="$2"; shift 2 ;;
+    --markdown|-m)  MARKDOWN=true; shift ;;
+    --server)       SERVER="$2";   shift 2 ;;
+    --help|-h)      usage ;;
+    --)             shift; MESSAGE="$*"; break ;;
+    --*)            echo "Unknown option: $1"; usage ;;
+    *)              MESSAGE="$1";  shift ;;
   esac
 done
 
@@ -52,5 +56,6 @@ fi
 HEADERS=(-H "Priority: $PRIORITY")
 [[ -n "$TITLE" ]] && HEADERS+=(-H "Title: $TITLE")
 [[ -n "$TAGS" ]] && HEADERS+=(-H "Tags: $TAGS")
+[[ "$MARKDOWN" == true ]] && HEADERS+=(-H "Content-Type: text/markdown")
 
 curl -s "${HEADERS[@]}" -d "$MESSAGE" "$SERVER/$TOPIC"

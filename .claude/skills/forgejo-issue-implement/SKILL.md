@@ -66,11 +66,13 @@ digraph issue_workflow {
 **Minimize user interaction.** Only stop to ask if genuinely blocked. Never pause to confirm next steps when the path forward is clear. Keep moving.
 
 The only required user input in the entire workflow is choosing which issue to work on (step 1, when no issue number is given). Everything else runs automatically.
-If any user input is required or the whole workflow is done, notify via:
+If any user input is required or the whole workflow is done, notify by delegating to the **`ntfy-me`** skill with:
 
-```bash
-~/bin/ntfy --topic "claude" --title "<status title>" "<message>"
-```
+| Parameter | Value |
+|-----------|-------|
+| `--topic` | `claude` |
+| `--title` | `<status title>` |
+| body | `<message>` |
 
 ## Steps
 
@@ -173,11 +175,13 @@ git commit -m "<message>"
 git push -u origin feature/42-fix-login-redirect
 ```
 
-After pushing, send a notification:
+After pushing, send a notification via the **`ntfy-me`** skill:
 
-```bash
-~/bin/ntfy --topic "claude" --title "Implementation pushed" "Ready for your review. Run /forgejo-issue-finish when done."
-```
+| Parameter | Value |
+|-----------|-------|
+| `--topic` | `claude` |
+| `--title` | `Implementation pushed` |
+| body | `Ready for your review. Run /forgejo-issue-finish when done.` |
 
 The skill ends here. Archive and PR creation are handled by `/forgejo-issue-finish` once the user has verified the implementation manually.
 

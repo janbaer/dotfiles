@@ -99,9 +99,13 @@ Filter by `head` branch matching the current feature branch.
 
 ### 6. Send notification
 
-```bash
-~/bin/ntfy --topic "claude" --title "PR ready" "#N: <issue title>"
-```
+Delegate to the **`ntfy-me`** skill with:
+
+| Parameter | Value |
+|-----------|-------|
+| `--topic` | `claude` |
+| `--title` | `PR ready` |
+| body | `#N: <issue title>` |
 
 Send this whether the PR was newly created or already existed.
 

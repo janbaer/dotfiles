@@ -1,12 +1,22 @@
 ---
 name: security-check
-description: Use to check for new critical Linux security advisories from public sources (Ubuntu USN, Debian Tracker, GitHub Advisories, Heise) and push a concise ntfy notification when relevant items are found. Designed for unattended cron-style runs (e.g. once daily). Use this skill whenever the user wants a daily security check, mentions "scan for CVEs", "check for security updates", "any new advisories", or schedules a recurring security review — even if they don't explicitly say "security-check".
+description: Use to check for new critical Linux security advisories from public sources (Ubuntu USN, Debian Tracker, GitHub Advisories, OpenCVE) and push a concise ntfy notification when relevant items are found. Designed for unattended cron-style runs (e.g. once daily). Use this skill whenever the user wants a daily security check, mentions "scan for CVEs", "check for security updates", "any new advisories", or schedules a recurring security review — even if they don't explicitly say "security-check".
 model: sonnet
 ---
 
 # security-check
 
-Scans public security feeds for high/critical advisories from the last 24 hours that affect Jan's stack, then pushes a short markdown summary to ntfy. Built to run unattended via cron — quiet on a clean day, informative on a bad day.
+Scans public security feeds for high/critical advisories from the last N days (default: 1) that affect Jan's stack, then pushes a short markdown summary to ntfy. Built to run unattended via cron — quiet on a clean day, informative on a bad day.
+
+## Argument
+
+The skill accepts an optional `--days N` argument controlling the lookback window:
+
+- `/security-check` → last 1 day (default)
+- `/security-check --days 7` → last 7 days
+- `/security-check 3` → last 3 days (bare integer also accepted; pass it through as `--days 3`)
+
+Pass the value straight through to the fetcher.
 
 ## What counts as relevant
 
@@ -27,14 +37,14 @@ The flow is: **fetcher script → semantic filter (you) → ntfy notification**.
 
 1. Run the fetcher to get a JSON document with pre-filtered candidates from all four sources.
 2. Read the candidates and apply the inclusion/exclusion rules above. The fetcher is conservative — it pulls anything that *might* match. Your job is to keep only items that genuinely affect Jan's stack at high/critical severity.
-3. Build a markdown summary, max 5 lines, one bullet per finding.
+3. Build a markdown summary, max 15 lines, one bullet per finding.
 4. Send via the `ntfy` CLI (see "Sending the notification" below).
 5. If nothing matches, exit silently — no notification. Cron should not produce daily noise on clean days.
 
 ### Step 1: fetch
 
 ```bash
-python3 ~/Projects/dotfiles/.claude/skills/security-check/scripts/fetch_advisories.py
+python3 ~/Projects/dotfiles/.claude/skills/security-check/scripts/fetch_advisories.py [--days N]
 ```
 
 The script returns JSON with this shape:
@@ -42,19 +52,20 @@ The script returns JSON with this shape:
 ```json
 {
   "cutoff": "2026-05-09T...",
+  "days": 1,
   "ubuntu": [{"source": "ubuntu-usn", "id": "USN-1234-1", "title": "...", "summary": "...", "cves": ["CVE-..."], "published": "...", "url": "...", "products": ["Ubuntu 22.04"], "severity": "unknown"}],
   "debian": [...],
   "ghsa": [...],
-  "heise": [...]
+  "opencve": [...]
 }
 ```
 
-Notes on each source's pre-filter:
+Notes on each source's pre-filter (lookback window = `--days`, default 1):
 
-- **ubuntu**: only USNs that touch `jammy` (22.04) and were published in the last 24h. Severity comes as `unknown` because USN doesn't ship a single field — judge from the title.
-- **debian**: CVEs that are `open` in Trixie with `urgency` of `high` or `critical`. No timestamp — Debian's tracker doesn't publish per-CVE dates, so this is "currently open and high-urgency", not strictly "last 24h". Treat it as a standing watchlist rather than fresh news.
-- **ghsa**: GitHub advisories, severity high/critical, published in the last 24h. The `products` field carries the npm/maven/etc. ecosystem name — useful for Node.js relevance, but ignore non-relevant ecosystems (rubygems, composer, etc.).
-- **heise**: prose articles in the last 24h. No structured severity. Read the title/summary and judge — if it's clearly about a high-impact issue affecting one of the listed products, keep it; otherwise drop.
+- **ubuntu**: only USNs that touch `jammy` (22.04) and were published within the lookback window. Severity comes as `unknown` because USN doesn't ship a single field — judge from the title. The `cves` field carries the underlying CVE IDs; prefer those over the USN ID when listing findings.
+- **debian**: CVEs that are `open` in Trixie with `urgency` of `high` or `critical`. No timestamp — Debian's tracker doesn't publish per-CVE dates, so this is "currently open and high-urgency" regardless of `--days`. Treat it as a standing watchlist rather than fresh news.
+- **ghsa**: GitHub advisories, severity high/critical, published within the lookback window. The `cves` field carries the underlying CVE ID; prefer that over the GHSA ID when listing findings. The `products` field carries the npm/maven/etc. ecosystem name — useful for Node.js relevance, but ignore non-relevant ecosystems (rubygems, composer, etc.).
+- **opencve**: CVEs with CVSS ≥ 7.0 published within the lookback window. Requires the `OPENCVE_API_TOKEN` environment variable (sent as a Bearer token against `app.opencve.io`). If the token is missing, this source returns `_error` and the rest of the check continues normally. The `cvss` field carries the numeric score; severity is derived (≥9 → critical, ≥7 → high).
 
 If a source returns `[{"_error": "..."}]`, that source failed (network, parse error). Mention it in the notification only if **all** sources failed; otherwise just note it briefly and continue with what you have.
 
@@ -70,17 +81,24 @@ For each candidate, ask: does this affect Debian Trixie, Ubuntu 22.04, Kubernete
 
 ### Step 3: build the summary
 
-Max 5 lines (5 bullets). Each bullet: severity tag, CVE/USN/GHSA id, affected product, one-line note. Keep it scannable on a phone.
+Max 15 lines (15 bullets). Each bullet: severity tag, **CVE ID**, affected product, one-line note. Keep it scannable on a phone.
+
+**ID rule:** Always prefer the CVE ID. Fall back to USN or GHSA **only** when no CVE is available for the finding.
+
+- USN/GHSA with one or more CVEs in `cves`: show the CVE(s). If multiple CVEs map to the same advisory, list the primary one (or the most severe) and add `+N more` inline.
+- USN/GHSA with empty `cves`: show the USN/GHSA ID as the fallback.
+- OpenCVE entries are already CVE-keyed — use the ID as-is.
 
 **Example:**
 
 ```markdown
 - 🔴 **CVE-2026-12345** (containerd 1.7.x): privilege escalation via crafted image manifest. Patch in 1.7.20.
-- 🟠 **USN-7890-1** (Ubuntu 22.04, openssl): memory corruption in DTLS handshake. Update available.
-- 🟠 **GHSA-abcd-1234** (Node.js 20.x): prototype pollution in url parser. Fixed in 20.18.2.
+- 🟠 **CVE-2026-23273** (Ubuntu 22.04, Linux kernel, via USN-8255-1): memory corruption in network stack. Update available.
+- 🟠 **CVE-2026-67890** (Node.js 20.x, via GHSA-abcd-1234): prototype pollution in url parser. Fixed in 20.18.2.
+- 🟠 **GHSA-xyz9-1234-5678** (k3s plugin foo): no CVE assigned yet — auth bypass.
 ```
 
-Use 🔴 for critical, 🟠 for high. If there are more than 5 hits, show the 5 most severe and append a final line `…and N more — see {topmost source URL}`.
+Use 🔴 for critical, 🟠 for high. If there are more than 15 hits, show the 15 most severe and append a final line `…and N more — see {topmost source URL}`.
 
 If after filtering **nothing remains**, exit without sending.
 

@@ -1,36 +1,44 @@
 #!/usr/bin/env python3
 """Fetch and pre-filter security advisories from public sources.
 
-Gathers advisories from the last 24h, applies coarse filters (severity,
-exclusion keywords), and emits a JSON list on stdout for Claude to
+Gathers advisories from the last N days (default: 1), applies coarse filters
+(severity, exclusion keywords), and emits a JSON list on stdout for Claude to
 semantically filter and summarise.
 
 Sources:
 - Ubuntu USN (https://ubuntu.com/security/notices.json)
 - Debian Security Tracker (https://security-tracker.debian.org/tracker/data/json)
 - GitHub Security Advisories (https://api.github.com/advisories)
-- Heise Security RSS (https://www.heise.de/security/rss/news-atom.xml)
+- OpenCVE (https://app.opencve.io/api/cve)  — requires OPENCVE_API_TOKEN env var (Bearer)
 """
 
 from __future__ import annotations
 
+import argparse
+import concurrent.futures
 import json
+import os
 import re
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
-import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 
-CUTOFF = datetime.now(timezone.utc) - timedelta(hours=24)
 EXCLUDE_PATTERN = re.compile(r"\b(php|apache(?!\s*kafka)|java(?!script))\b", re.IGNORECASE)
 HIGH_SEVERITY = {"high", "critical"}
 USER_AGENT = "security-check-skill/1.0 (+https://github.com/anthropics/claude-code)"
 TIMEOUT = 15
+MAX_RESULTS_PER_SOURCE = 50
+TITLE_MAX = 200
+SUMMARY_MAX = 500
 
 
-def fetch(url: str, accept: str = "application/json") -> bytes:
-    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": accept})
+def fetch(url: str, *, accept: str = "application/json", extra_headers: dict | None = None) -> bytes:
+    headers = {"User-Agent": USER_AGENT, "Accept": accept}
+    if extra_headers:
+        headers.update(extra_headers)
+    req = urllib.request.Request(url, headers=headers)
     with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
         return resp.read()
 
@@ -51,17 +59,41 @@ def is_excluded(text: str) -> bool:
     return bool(EXCLUDE_PATTERN.search(text or ""))
 
 
-def fetch_ubuntu() -> list[dict]:
-    out: list[dict] = []
+def make_row(
+    source: str,
+    *,
+    id: str | None,
+    title: str,
+    summary: str,
+    cves: list[str],
+    published: str | None,
+    url: str | None,
+    products: list[str],
+    severity: str,
+) -> dict:
+    return {
+        "source": source,
+        "id": id,
+        "title": title,
+        "summary": summary,
+        "cves": cves,
+        "published": published,
+        "url": url,
+        "products": products,
+        "severity": severity,
+    }
+
+
+def fetch_ubuntu(cutoff: datetime) -> list[dict]:
     try:
         data = json.loads(fetch("https://ubuntu.com/security/notices.json?release=jammy&order=newest"))
     except (urllib.error.URLError, json.JSONDecodeError) as e:
         return [{"_error": f"ubuntu: {e}"}]
+    out: list[dict] = []
     for n in data.get("notices", []):
         published = parse_iso(n.get("published", ""))
-        if not published or published < CUTOFF:
+        if not published or published < cutoff:
             continue
-        # API filters by release; defensively re-check
         releases = n.get("release_packages", {}) or {}
         if releases and "jammy" not in releases:
             continue
@@ -70,151 +102,176 @@ def fetch_ubuntu() -> list[dict]:
         if is_excluded(f"{title} {summary}"):
             continue
         cves = n.get("cves_ids", []) or n.get("cves", [])
-        out.append({
-            "source": "ubuntu-usn",
-            "id": n.get("id"),
-            "title": title,
-            "summary": summary,
-            "cves": cves if isinstance(cves, list) else [],
-            "published": n.get("published"),
-            "url": f"https://ubuntu.com/security/notices/{n.get('id')}",
-            "products": ["Ubuntu 22.04"] if "jammy" in releases else list(releases.keys()),
-            "severity": "unknown",  # USN doesn't ship a single severity
-        })
+        out.append(make_row(
+            "ubuntu-usn",
+            id=n.get("id"),
+            title=title,
+            summary=summary,
+            cves=cves if isinstance(cves, list) else [],
+            published=n.get("published"),
+            url=f"https://ubuntu.com/security/notices/{n.get('id')}",
+            products=["Ubuntu 22.04"] if "jammy" in releases else list(releases.keys()),
+            severity="unknown",  # USN doesn't ship a single severity
+        ))
     return out
 
 
-def fetch_debian() -> list[dict]:
-    """Debian's tracker JSON is large (~50MB). We pull the recent CVE list instead."""
-    out: list[dict] = []
+def fetch_debian(cutoff: datetime) -> list[dict]:
+    """Debian's tracker JSON is ~50MB and has no per-CVE timestamp — we approximate
+    'recent' by keeping CVEs that are still 'open' in Trixie at high/critical urgency.
+    """
     try:
-        # Smaller endpoint: list of recent CVEs as plain text
-        raw = fetch("https://security-tracker.debian.org/tracker/data/json").decode("utf-8")
-        data = json.loads(raw)
+        data = json.loads(fetch("https://security-tracker.debian.org/tracker/data/json").decode("utf-8"))
     except (urllib.error.URLError, json.JSONDecodeError, MemoryError) as e:
         return [{"_error": f"debian: {e}"}]
-
-    # Walk packages; keep entries that affect trixie and have a recent debianbug or release info.
-    # Debian's JSON has no per-CVE timestamp, so we approximate "recent" via "open in trixie".
+    out: list[dict] = []
     for pkg, cves in data.items():
         if is_excluded(pkg):
             continue
         for cve_id, info in cves.items():
-            releases = info.get("releases", {})
-            trixie = releases.get("trixie")
-            if not trixie:
-                continue
-            if trixie.get("status") != "open":
+            trixie = info.get("releases", {}).get("trixie")
+            if not trixie or trixie.get("status") != "open":
                 continue
             urgency = (trixie.get("urgency") or "").lower()
-            # Debian "urgency" maps roughly: high/critical → high; medium/low/unimportant → skip
-            if urgency not in {"high", "critical"}:
+            if urgency not in HIGH_SEVERITY:
                 continue
             description = info.get("description", "")
             if is_excluded(description):
                 continue
-            out.append({
-                "source": "debian-tracker",
-                "id": cve_id,
-                "title": f"{cve_id} ({pkg})",
-                "summary": description,
-                "cves": [cve_id],
-                "published": None,  # tracker has no timestamp; user accepts this
-                "url": f"https://security-tracker.debian.org/tracker/{cve_id}",
-                "products": [f"Debian Trixie ({pkg})"],
-                "severity": urgency,
-            })
-            if len(out) >= 50:
+            out.append(make_row(
+                "debian-tracker",
+                id=cve_id,
+                title=f"{cve_id} ({pkg})",
+                summary=description,
+                cves=[cve_id],
+                published=None,
+                url=f"https://security-tracker.debian.org/tracker/{cve_id}",
+                products=[f"Debian Trixie ({pkg})"],
+                severity=urgency,
+            ))
+            if len(out) >= MAX_RESULTS_PER_SOURCE:
                 return out
     return out
 
 
-def fetch_ghsa() -> list[dict]:
-    """GitHub Security Advisories — published in the last 24h, severity high/critical."""
-    out: list[dict] = []
-    cutoff_iso = CUTOFF.strftime("%Y-%m-%dT%H:%M:%SZ")
-    url = (
-        "https://api.github.com/advisories"
-        f"?per_page=100&severity=high&published=%3E{cutoff_iso}"
-    )
+def fetch_ghsa(cutoff: datetime) -> list[dict]:
+    """GitHub Security Advisories — published in the lookback window, severity high/critical."""
+    qs = urllib.parse.urlencode({
+        "per_page": 100,
+        "severity": "high",
+        "published": f">{cutoff.strftime('%Y-%m-%dT%H:%M:%SZ')}",
+    })
     try:
-        data = json.loads(fetch(url, accept="application/vnd.github+json"))
+        data = json.loads(fetch(
+            f"https://api.github.com/advisories?{qs}",
+            accept="application/vnd.github+json",
+        ))
     except (urllib.error.URLError, json.JSONDecodeError) as e:
         return [{"_error": f"ghsa: {e}"}]
-
+    out: list[dict] = []
     for adv in data:
         sev = (adv.get("severity") or "").lower()
         if sev not in HIGH_SEVERITY:
             continue
         summary = adv.get("summary", "")
         description = adv.get("description", "")
-        text = f"{summary} {description}"
-        if is_excluded(text):
+        if is_excluded(f"{summary} {description}"):
             continue
-        # Capture ecosystem hints — Claude will judge K8s/Docker/Node relevance
         ecosystems = sorted({
             (v.get("package") or {}).get("ecosystem", "")
             for v in adv.get("vulnerabilities", [])
             if v.get("package")
         })
-        out.append({
-            "source": "ghsa",
-            "id": adv.get("ghsa_id"),
-            "title": summary,
-            "summary": description[:500],
-            "cves": [c for c in [adv.get("cve_id")] if c],
-            "published": adv.get("published_at"),
-            "url": adv.get("html_url"),
-            "products": ecosystems,
-            "severity": sev,
-        })
+        out.append(make_row(
+            "ghsa",
+            id=adv.get("ghsa_id"),
+            title=summary,
+            summary=description[:SUMMARY_MAX],
+            cves=[c for c in [adv.get("cve_id")] if c],
+            published=adv.get("published_at"),
+            url=adv.get("html_url"),
+            products=ecosystems,
+            severity=sev,
+        ))
     return out
 
 
-def fetch_heise() -> list[dict]:
-    out: list[dict] = []
-    try:
-        raw = fetch("https://www.heise.de/security/rss/news-atom.xml", accept="application/atom+xml")
-    except urllib.error.URLError as e:
-        return [{"_error": f"heise: {e}"}]
-    try:
-        root = ET.fromstring(raw)
-    except ET.ParseError as e:
-        return [{"_error": f"heise-parse: {e}"}]
+def fetch_opencve(cutoff: datetime) -> list[dict]:
+    """OpenCVE API — CVEs with CVSS ≥ 7.0 created within the lookback window.
 
-    ns = {"atom": "http://www.w3.org/2005/Atom"}
-    for entry in root.findall("atom:entry", ns):
-        updated = parse_iso((entry.findtext("atom:updated", default="", namespaces=ns) or ""))
-        if not updated or updated < CUTOFF:
-            continue
-        title = (entry.findtext("atom:title", default="", namespaces=ns) or "").strip()
-        summary = (entry.findtext("atom:summary", default="", namespaces=ns) or "").strip()
-        if is_excluded(f"{title} {summary}"):
-            continue
-        link_el = entry.find("atom:link", ns)
-        url = link_el.get("href") if link_el is not None else None
-        out.append({
-            "source": "heise",
-            "id": entry.findtext("atom:id", default="", namespaces=ns),
-            "title": title,
-            "summary": summary,
-            "cves": [],
-            "published": entry.findtext("atom:updated", default="", namespaces=ns),
-            "url": url,
-            "products": [],
-            "severity": "unknown",  # Heise prose; Claude judges relevance
-        })
+    The listing endpoint doesn't return CVSS scores (server filters by `cvss=7`)
+    and isn't strictly chronological; we filter client-side and walk up to
+    OPENCVE_MAX_PAGES pages (default 5).
+    """
+    token = os.environ.get("OPENCVE_API_TOKEN")
+    if not token:
+        return [{"_error": "opencve: OPENCVE_API_TOKEN not set"}]
+    max_pages = int(os.environ.get("OPENCVE_MAX_PAGES", "5"))
+    auth_header = {"Authorization": f"Bearer {token}"}
+    out: list[dict] = []
+    for page in range(1, max_pages + 1):
+        try:
+            data = json.loads(fetch(
+                f"https://app.opencve.io/api/cve?cvss=7&page={page}",
+                extra_headers=auth_header,
+            ))
+        except urllib.error.HTTPError as e:
+            return [{"_error": f"opencve: HTTP {e.code} on page {page}"}]
+        except (urllib.error.URLError, json.JSONDecodeError) as e:
+            return [{"_error": f"opencve: {e}"}]
+        items = data.get("results", [])
+        if not items:
+            break
+        for cve in items:
+            cve_id = cve.get("cve_id") or cve.get("id")
+            if not cve_id:
+                continue
+            published = parse_iso(cve.get("created_at") or cve.get("updated_at") or "")
+            if not published or published < cutoff:
+                continue
+            description = cve.get("description") or cve.get("summary") or ""
+            if is_excluded(description):
+                continue
+            out.append(make_row(
+                "opencve",
+                id=cve_id,
+                title=description[:TITLE_MAX].strip(),
+                summary=description[:SUMMARY_MAX].strip(),
+                cves=[cve_id],
+                published=cve.get("created_at"),
+                url=f"https://app.opencve.io/cve/{cve_id}",
+                products=[],
+                severity="high",  # server-filtered cvss>=7; exact score via detail endpoint
+            ))
+            if len(out) >= MAX_RESULTS_PER_SOURCE:
+                return out
     return out
 
 
 def main() -> int:
-    results = {
-        "cutoff": CUTOFF.isoformat(),
-        "ubuntu": fetch_ubuntu(),
-        "debian": fetch_debian(),
-        "ghsa": fetch_ghsa(),
-        "heise": fetch_heise(),
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument(
+        "--days",
+        type=int,
+        default=1,
+        help="Look back this many days from now (default: 1).",
+    )
+    args = parser.parse_args()
+    if args.days < 1:
+        parser.error("--days must be >= 1")
+    cutoff = datetime.now(timezone.utc) - timedelta(days=args.days)
+
+    sources = {
+        "ubuntu": fetch_ubuntu,
+        "debian": fetch_debian,
+        "ghsa": fetch_ghsa,
+        "opencve": fetch_opencve,
     }
+    results: dict = {"cutoff": cutoff.isoformat(), "days": args.days}
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(sources)) as pool:
+        futures = {name: pool.submit(fn, cutoff) for name, fn in sources.items()}
+        for name, future in futures.items():
+            results[name] = future.result()
     json.dump(results, sys.stdout, indent=2, ensure_ascii=False)
     sys.stdout.write("\n")
     return 0

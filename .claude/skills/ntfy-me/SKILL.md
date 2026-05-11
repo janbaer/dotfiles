@@ -6,12 +6,12 @@ description: Use when sending push notifications via ntfy — checking config, f
 
 # ntfy
 
-Send push notifications via [ntfy](https://ntfy.sh) using the `ntfy` script in `~/bin/ntfy`.
+Send push notifications via [ntfy](https://ntfy.sh) using the bundled `scripts/ntfy` script (relative to this `SKILL.md`).
 
 ## Command
 
 ```bash
-ntfy [--title <title>] [--tags <tag1,tag2>] [--topic <topic>] [--priority <level>] [--markdown] "<message>"
+./scripts/ntfy [--title <title>] [--tags <tag1,tag2>] [--topic <topic>] [--priority <level>] [--markdown] "<message>"
 ```
 
 | Flag | Description | Default |
@@ -41,7 +41,7 @@ ntfy [--title <title>] [--tags <tag1,tag2>] [--topic <topic>] [--priority <level
 ## Example
 
 ```bash
-ntfy --title "Weather Munich – Feb 22" --tags "cloud,umbrella" --topic test \
+./scripts/ntfy --title "Weather Munich – Feb 22" --tags "cloud,umbrella" --topic test \
   "🌤 Partly cloudy, 5°C (feels like 1°C)
 ☔ Rain chance: 72% | 💨 Wind: 19 km/h WSW"
 ```
@@ -50,4 +50,4 @@ ntfy --title "Weather Munich – Feb 22" --tags "cloud,umbrella" --topic test \
 
 - **Using full emoji in --tags** — takes emoji *names* (`umbrella`), not emoji characters (`☂`)
 - **Forgetting --title** — notification shows raw body only, no heading
-- **Script not found** — if `~/bin/ntfy` is missing, check that `~/bin` is in `$PATH` and the script exists
+- **Script not found** — the script lives at `scripts/ntfy` next to this `SKILL.md`; invoke it relative to the skill folder, not via `$PATH`

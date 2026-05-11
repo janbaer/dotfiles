@@ -91,10 +91,14 @@ add_issue_labels(owner, repo, index=N, labels="approved")
 
 ### 8. Notify when done
 
-```bash
-~/bin/ntfy --title "PR Review Done – <PR title>" --tags "mag,white_check_mark" --topic "code-review" \
-  "PR #<N> · <verdict> · <repo>"
-```
+Delegate to the **`ntfy-me`** skill:
+
+| Parameter | Value |
+|-----------|-------|
+| `--title` | `PR Review Done – <PR title>` |
+| `--tags` | `mag,white_check_mark` |
+| `--topic` | `code-review` |
+| body | `PR #<N> · <verdict> · <repo>` |
 
 ## MCP Tools Reference
 
