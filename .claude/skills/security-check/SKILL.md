@@ -1,12 +1,12 @@
 ---
 name: security-check
-description: Use to check for new critical Linux security advisories from public sources (Ubuntu USN, Debian Tracker, GitHub Advisories, OpenCVE) and push a concise ntfy notification when relevant items are found. Designed for unattended cron-style runs (e.g. once daily). Use this skill whenever the user wants a daily security check, mentions "scan for CVEs", "check for security updates", "any new advisories", or schedules a recurring security review — even if they don't explicitly say "security-check".
+description: Use to check for new critical Linux security advisories from public sources (Ubuntu USN, Debian Tracker, GitHub Advisories, OpenCVE) and print a concise summary to the terminal when relevant items are found. Use this skill whenever the user wants a daily security check, mentions "scan for CVEs", "check for security updates", "any new advisories", or schedules a recurring security review — even if they don't explicitly say "security-check".
 model: sonnet
 ---
 
 # security-check
 
-Scans public security feeds for high/critical advisories from the last N days (default: 1) that affect Jan's stack, then pushes a short markdown summary to ntfy. Built to run unattended via cron — quiet on a clean day, informative on a bad day.
+Scans public security feeds for high/critical advisories from the last N days (default: 1) that affect Jan's stack, then prints a short markdown summary to the terminal. Quiet on a clean day, informative on a bad day.
 
 ## Argument
 
@@ -26,6 +26,7 @@ Pass the value straight through to the fetcher.
 - Kubernetes / k3s
 - Docker / containerd / runc
 - Node.js (the runtime itself, not arbitrary npm packages — those are too noisy)
+- MongoDB (the database server itself, not arbitrary drivers or ODM libraries)
 
 **Severity:** Critical or High only. Medium/low get dropped.
 
@@ -33,13 +34,13 @@ Pass the value straight through to the fetcher.
 
 ## How it works
 
-The flow is: **fetcher script → semantic filter (you) → ntfy notification**.
+The flow is: **fetcher script → semantic filter (you) → terminal output**.
 
 1. Run the fetcher to get a JSON document with pre-filtered candidates from all four sources.
 2. Read the candidates and apply the inclusion/exclusion rules above. The fetcher is conservative — it pulls anything that *might* match. Your job is to keep only items that genuinely affect Jan's stack at high/critical severity.
 3. Build a markdown summary, max 15 lines, one bullet per finding.
-4. Send via the `ntfy` CLI (see "Sending the notification" below).
-5. If nothing matches, exit silently — no notification. Cron should not produce daily noise on clean days.
+4. Print the summary to the terminal.
+5. If nothing matches, print a single line: `No high/critical advisories found.`
 
 ### Step 1: fetch
 
@@ -100,32 +101,19 @@ Max 15 lines (15 bullets). Each bullet: severity tag, **CVE ID**, affected produ
 
 Use 🔴 for critical, 🟠 for high. If there are more than 15 hits, show the 15 most severe and append a final line `…and N more — see {topmost source URL}`.
 
-If after filtering **nothing remains**, exit without sending.
+If after filtering **nothing remains**, print: `No high/critical advisories found.`
 
-### Step 4: send via the ntfy-me skill
+### Step 4: print to terminal
 
-Delegate the actual send to the **`ntfy-me`** skill — it owns the CLI flags, server URL, tag vocabulary, and common-mistake guardrails. This skill only specifies *what* to send, not *how*. Read `ntfy-me`'s SKILL.md if you need the exact flag reference; the parameters this skill needs are:
-
-| Parameter   | Value |
-|-------------|-------|
-| `--title`   | `Linux Security Update` |
-| `--topic`   | `security-issues` (fixed — Jan's dedicated channel for this skill) |
-| `--tags`    | `warning,shield` (names, not emoji characters) |
-| `--priority`| `high` (these are critical/high CVEs and should bypass Do Not Disturb) |
-| `--markdown`| on (summary uses bullets and bold) |
-| body        | the markdown summary from step 3 |
+Output the markdown summary directly. No external service calls needed.
 
 ## When all sources fail
 
-If every source in the fetcher output contains `_error`, delegate one low-priority send via `ntfy-me` so Jan knows the check ran but couldn't reach upstream:
+If every source in the fetcher output contains `_error`, print:
 
-| Parameter | Value |
-|-----------|-------|
-| `--title` | `Linux Security Update — sources unreachable` |
-| `--topic` | `security-issues` |
-| `--tags`  | `x` |
-| `--priority` | `low` |
-| body | `All four feed sources returned errors. Network or upstream issue.` |
+```
+Security check: all feed sources returned errors. Network or upstream issue.
+```
 
 Don't retry from inside the skill — cron will run again tomorrow.
 
