@@ -27,6 +27,7 @@ Pass the value straight through to the fetcher.
 - Docker / containerd / runc
 - Node.js (the runtime itself, not arbitrary npm packages — those are too noisy)
 - MongoDB (the database server itself, not arbitrary drivers or ODM libraries)
+- NGINX (the web server itself, including its bundled modules like `ngx_http_*`; F5/BIG-IP-only advisories don't count). Note: F5 owns NGINX since 2019, so NGINX advisories often arrive inside the F5/BIG-IP batch — `ngx_http_*` module names in the title are the giveaway.
 
 **Severity:** Critical or High only. Medium/low get dropped.
 
@@ -72,7 +73,7 @@ If a source returns `[{"_error": "..."}]`, that source failed (network, parse er
 
 ### Step 2: semantic filter
 
-For each candidate, ask: does this affect Debian Trixie, Ubuntu 22.04, Kubernetes, Docker, or Node.js, at high/critical severity? If unsure, lean toward **dropping** rather than including — Jan would rather miss a borderline item than get cried-wolf. Drop:
+For each candidate, ask: does this affect any product in the "Affected products" list above, at high/critical severity? If unsure, lean toward **dropping** rather than including — Jan would rather miss a borderline item than get cried-wolf. Drop:
 
 - npm package CVEs that aren't the Node.js runtime (e.g. `lodash` or `axios` advisories)
 - Java/JVM/Tomcat/Apache HTTPD even when phrased without the keyword (e.g. "log4j", "Tomcat", "Spring")
