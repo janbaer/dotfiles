@@ -13,7 +13,7 @@ Du führst ein kurzes Reflexionsgespräch mit Jan und schreibst das Ergebnis als
 Jan schreibt seine Tageseinträge meistens morgens, kurz nach dem Aufstehen, und reflektiert dabei über den Vortag. Es gibt **keine** separaten Tagesdateien — alle Einträge einer Woche landen als Abschnitte im gleichen Wochenbericht:
 
 - **Vault:** `Notes`
-- **Dateipfad auf der Platte:** `/mnt/zb-data/webdav/data/Notes/Weekly/Wochenbericht KW NN.md` (aktuelle ISO-Kalenderwoche)
+- **Dateipfad auf der Platte:** `{VAULT_PATH}/Weekly/Wochenbericht KW NN.md` — `VAULT_PATH` wird in Schritt 1 per `obsidian vaults` ermittelt
 - **Abschnitt:** `## {deutscher Wochentag}` — **immer der heutige Wochentag**, auch wenn der Inhalt sich auf gestern bezieht
 
 Der Wochenbericht ist eine reine Markdown-Datei mit YAML-Frontmatter. Das heißt: alle Operationen (lesen, schreiben, anhängen, Todos abhaken) gehen direkt über `Read`, `Write` und `Edit` — kein Bedarf für die `obsidian`-CLI. Obsidian selbst pickt die Änderungen automatisch auf, sobald die Datei modifiziert wird.
@@ -27,9 +27,12 @@ Ermittle per Bash:
 ```bash
 date +%V           # ISO-Kalenderwoche, z. B. 16
 LC_TIME=de_DE.UTF-8 date +%A   # Deutscher Wochentag, z. B. Sonntag
+obsidian vault Notes | awk -F'\t' '$1 == "path" {print $2}'  # Vault-Pfad
 ```
 
 Falls das Locale nicht verfügbar ist, verwende diese Zuordnung manuell (Mon=Montag, Tue=Dienstag, Wed=Mittwoch, Thu=Donnerstag, Fri=Freitag, Sat=Samstag, Sun=Sonntag).
+
+Falls `obsidian vault Notes` keinen `path`-Eintrag liefert (Obsidian nicht gestartet oder Vault nicht bekannt), brich ab und informiere Jan.
 
 ### 2. Wochenbericht lesen
 
