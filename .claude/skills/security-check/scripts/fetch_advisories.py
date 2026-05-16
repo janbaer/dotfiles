@@ -118,8 +118,58 @@ def fetch_ubuntu(cutoff: datetime) -> list[dict]:
     return out
 
 
+def _fetch_dsa_cves(dsa_id: str) -> list[str]:
+    """Return deduplicated CVE IDs referenced on a DSA tracker page."""
+    try:
+        html = fetch(
+            f"https://security-tracker.debian.org/tracker/{dsa_id}",
+            accept="text/html",
+        ).decode("utf-8", errors="replace")
+        return list(dict.fromkeys(re.findall(r"/tracker/(CVE-\d{4}-\d+)", html)))
+    except (urllib.error.URLError, UnicodeDecodeError):
+        return []
+
+
+_KERNEL_BOILERPLATE = "In the Linux kernel, the following vulnerability has been resolved:"
+
+
+def _nvd_short_desc(cve_id: str) -> str | None:
+    """First meaningful English line from NVD for a CVE. Returns None on any error."""
+    try:
+        extra = {}
+        key = os.environ.get("NVD_API_KEY")
+        if key:
+            extra = {"apiKey": key}
+        data = json.loads(fetch(
+            f"https://services.nvd.nist.gov/rest/json/cves/2.0?cveId={cve_id}",
+            extra_headers=extra or None,
+        ))
+        vulns = data.get("vulnerabilities", [])
+        if not vulns:
+            return None
+        descs = vulns[0]["cve"].get("descriptions", [])
+        en = next((d["value"] for d in descs if d["lang"] == "en"), None)
+        if not en:
+            return None
+        # Linux kernel CVEs open with an uninformative boilerplate line — skip it
+        if en.startswith(_KERNEL_BOILERPLATE):
+            en = en[len(_KERNEL_BOILERPLATE):].lstrip()
+        for line in en.splitlines():
+            line = line.strip()
+            if line:
+                return line[:200]
+        return None
+    except Exception:
+        return None
+
+
 def fetch_debian(cutoff: datetime) -> list[dict]:
-    """Debian Security Advisories via the official RSS feed (~22 KB vs ~73 MB JSON blob)."""
+    """Debian Security Advisories via the official RSS feed (~22 KB vs ~73 MB JSON blob).
+
+    For each DSA in the lookback window the tracker page is fetched to extract CVE IDs,
+    then NVD is queried for a one-line description per CVE (sequential, capped at 20
+    to stay within NVD's public rate limit of 5 req/30 s).
+    """
     _NS = {
         "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
         "rss": "http://purl.org/rss/1.0/",
@@ -134,7 +184,7 @@ def fetch_debian(cutoff: datetime) -> list[dict]:
     except ET.ParseError as e:
         return [{"_error": f"debian: XML parse error: {e}"}]
 
-    out: list[dict] = []
+    pending = []
     for item in root.findall("rss:item", _NS):
         title       = (item.findtext("rss:title",       "", _NS) or "").strip()
         link        = (item.findtext("rss:link",        "", _NS) or "").strip()
@@ -161,24 +211,56 @@ def fetch_debian(cutoff: datetime) -> list[dict]:
             else f"https://security-tracker.debian.org/tracker/{dsa_id}" if dsa_id
             else link
         )
-        # CVEs are not embedded in the RSS body; extract any that appear anyway
-        cves = re.findall(r"CVE-\d{4}-\d+", description)
-
         plain = _TAG_RE.sub("", description).strip()
-        # drop the tracker URL that Debian appends to every description
         plain = re.sub(r"https://security-tracker\.debian\.org/tracker/\S+", "", plain).strip()
 
-        out.append(make_row(
+        pending.append({
+            "dsa_id": dsa_id,
+            "title": title,
+            "summary": plain,
+            "published": date_str,
+            "url": tracker_url,
+        })
+
+    if not pending:
+        return []
+
+    # Fetch CVE IDs for each DSA concurrently (separate endpoint, no rate limit)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=min(len(pending), 10)) as pool:
+        cve_futures = {
+            p["dsa_id"]: pool.submit(_fetch_dsa_cves, p["dsa_id"])
+            for p in pending if p["dsa_id"]
+        }
+    cve_ids_by_dsa: dict[str, list[str]] = {
+        dsa_id: fut.result() for dsa_id, fut in cve_futures.items()
+    }
+
+    # Fetch NVD descriptions sequentially; cap at 10 per DSA so a large DSA (e.g.
+    # chromium with 80+ CVEs) doesn't starve more-relevant entries that follow.
+    cve_descriptions: dict[str, str | None] = {}
+    for dsa_id, cves in cve_ids_by_dsa.items():
+        for cve_id in cves[:10]:
+            if cve_id not in cve_descriptions:
+                cve_descriptions[cve_id] = _nvd_short_desc(cve_id)
+
+    out = []
+    for p in pending:
+        dsa_id = p["dsa_id"]
+        cves = cve_ids_by_dsa.get(dsa_id or "", [])
+        row = make_row(
             "debian-dsa",
-            id=dsa_id or link,
-            title=title[:TITLE_MAX],
-            summary=plain[:SUMMARY_MAX],
+            id=dsa_id or p["url"],
+            title=p["title"][:TITLE_MAX],
+            summary=p["summary"][:SUMMARY_MAX],
             cves=cves,
-            published=date_str,
-            url=tracker_url,
+            published=p["published"],
+            url=p["url"],
             products=["Debian Trixie"],
             severity="unknown",
-        ))
+        )
+        row["cve_descriptions"] = {cve: cve_descriptions.get(cve) for cve in cves}
+        out.append(row)
+
     return out
 
 

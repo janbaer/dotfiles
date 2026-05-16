@@ -65,7 +65,7 @@ The script returns JSON with this shape:
 Notes on each source's pre-filter (lookback window = `--days`, default 1):
 
 - **ubuntu**: only USNs that touch `jammy` (22.04) and were published within the lookback window. Severity comes as `unknown` because USN doesn't ship a single field — judge from the title. The `cves` field carries the underlying CVE IDs; prefer those over the USN ID when listing findings.
-- **debian**: CVEs that are `open` in Trixie with `urgency` of `high` or `critical`. No timestamp — Debian's tracker doesn't publish per-CVE dates, so this is "currently open and high-urgency" regardless of `--days`. Treat it as a standing watchlist rather than fresh news.
+- **debian**: DSAs (Debian Security Advisories) published within the lookback window, fetched from the official RSS feed. Each item has `cves` (list of CVE IDs extracted from the tracker page) and `cve_descriptions` (dict mapping each CVE ID to a one-line NVD description, or `null` if NVD had no data). NVD lookups are capped at 10 CVEs per DSA; any beyond that will have `null` descriptions — list the CVE ID alone in that case.
 - **ghsa**: GitHub advisories, severity high/critical, published within the lookback window. The `cves` field carries the underlying CVE ID; prefer that over the GHSA ID when listing findings. The `products` field carries the npm/maven/etc. ecosystem name — useful for Node.js relevance, but ignore non-relevant ecosystems (rubygems, composer, etc.).
 - **opencve**: CVEs with CVSS ≥ 7.0 published within the lookback window. Requires the `OPENCVE_API_TOKEN` environment variable (sent as a Bearer token against `app.opencve.io`). If the token is missing, this source returns `_error` and the rest of the check continues normally. The `cvss` field carries the numeric score; severity is derived (≥9 → critical, ≥7 → high).
 
@@ -85,17 +85,21 @@ For each candidate, ask: does this affect any product in the "Affected products"
 
 Max 15 lines (15 bullets). Each bullet: severity tag, **CVE ID**, affected product, one-line note. Keep it scannable on a phone.
 
-**ID rule:** Always prefer the CVE ID. Fall back to USN or GHSA **only** when no CVE is available for the finding.
+**ID rule:** Always prefer the CVE ID. Fall back to USN, DSA, or GHSA **only** when no CVE is available for the finding.
 
-- USN/GHSA with one or more CVEs in `cves`: show the CVE(s). If multiple CVEs map to the same advisory, list the primary one (or the most severe) and add `+N more` inline.
-- USN/GHSA with empty `cves`: show the USN/GHSA ID as the fallback.
-- OpenCVE entries are already CVE-keyed — use the ID as-is.
+- **Debian DSA** with CVEs: render as a parent bullet for the DSA, then one indented sub-bullet per CVE with its description. Use the description from `cve_descriptions`; if `null`, just list the CVE ID without a description.
+- **USN/GHSA** with one or more CVEs in `cves`: show the CVE(s). If multiple CVEs map to the same advisory, list the primary one (or the most severe) and add `+N more` inline.
+- **USN/GHSA** with empty `cves`: show the USN/GHSA ID as the fallback.
+- **OpenCVE** entries are already CVE-keyed — use the ID as-is.
 
 **Example:**
 
 ```markdown
 - 🔴 **CVE-2026-12345** (containerd 1.7.x): privilege escalation via crafted image manifest. Patch in 1.7.20.
-- 🟠 **CVE-2026-23273** (Ubuntu 22.04, Linux kernel, via USN-8255-1): memory corruption in network stack. Update available.
+- 🟠 **DSA-6274-1** (Debian Trixie, Linux kernel): privilege escalation, DoS, information leaks.
+  - **CVE-2026-31499**: Bluetooth L2CAP — deadlock in `l2cap_conn_del()` leading to DoS.
+  - **CVE-2026-43088**: `af_key` — uninitialized sockaddr tail leaks kernel memory.
+  - **CVE-2026-43490**: ksmbd — missing length validation on inherited ACE SIDs.
 - 🟠 **CVE-2026-67890** (Node.js 20.x, via GHSA-abcd-1234): prototype pollution in url parser. Fixed in 20.18.2.
 - 🟠 **GHSA-xyz9-1234-5678** (k3s plugin foo): no CVE assigned yet — auth bypass.
 ```
