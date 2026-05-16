@@ -23,9 +23,11 @@ import sys
 import urllib.error
 import urllib.parse
 import urllib.request
+import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 
 EXCLUDE_PATTERN = re.compile(r"\b(php|apache(?!\s*kafka)|java(?!script))\b", re.IGNORECASE)
+_TAG_RE = re.compile(r"<[^>]+>")
 HIGH_SEVERITY = {"high", "critical"}
 USER_AGENT = "security-check-skill/1.0 (+https://github.com/anthropics/claude-code)"
 TIMEOUT = 15
@@ -117,40 +119,66 @@ def fetch_ubuntu(cutoff: datetime) -> list[dict]:
 
 
 def fetch_debian(cutoff: datetime) -> list[dict]:
-    """Debian's tracker JSON is ~50MB and has no per-CVE timestamp — we approximate
-    'recent' by keeping CVEs that are still 'open' in Trixie at high/critical urgency.
-    """
+    """Debian Security Advisories via the official RSS feed (~22 KB vs ~73 MB JSON blob)."""
+    _NS = {
+        "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+        "rss": "http://purl.org/rss/1.0/",
+        "dc":  "http://purl.org/dc/elements/1.1/",
+    }
     try:
-        data = json.loads(fetch("https://security-tracker.debian.org/tracker/data/json").decode("utf-8"))
-    except (urllib.error.URLError, json.JSONDecodeError, MemoryError) as e:
+        xml_bytes = fetch("https://www.debian.org/security/dsa-long", accept="application/rss+xml, application/rdf+xml, */*")
+    except urllib.error.URLError as e:
         return [{"_error": f"debian: {e}"}]
+    try:
+        root = ET.fromstring(xml_bytes)
+    except ET.ParseError as e:
+        return [{"_error": f"debian: XML parse error: {e}"}]
+
     out: list[dict] = []
-    for pkg, cves in data.items():
-        if is_excluded(pkg):
+    for item in root.findall("rss:item", _NS):
+        title       = (item.findtext("rss:title",       "", _NS) or "").strip()
+        link        = (item.findtext("rss:link",        "", _NS) or "").strip()
+        date_str    = (item.findtext("dc:date",         "", _NS) or "").strip()
+        description = (item.findtext("rss:description", "", _NS) or "")
+
+        if not date_str:
             continue
-        for cve_id, info in cves.items():
-            trixie = info.get("releases", {}).get("trixie")
-            if not trixie or trixie.get("status") != "open":
-                continue
-            urgency = (trixie.get("urgency") or "").lower()
-            if urgency not in HIGH_SEVERITY:
-                continue
-            description = info.get("description", "")
-            if is_excluded(description):
-                continue
-            out.append(make_row(
-                "debian-tracker",
-                id=cve_id,
-                title=f"{cve_id} ({pkg})",
-                summary=description,
-                cves=[cve_id],
-                published=None,
-                url=f"https://security-tracker.debian.org/tracker/{cve_id}",
-                products=[f"Debian Trixie ({pkg})"],
-                severity=urgency,
-            ))
-            if len(out) >= MAX_RESULTS_PER_SOURCE:
-                return out
+        try:
+            pub_date = datetime.fromisoformat(date_str).replace(tzinfo=timezone.utc)
+        except ValueError:
+            continue
+        # dc:date has no time component — compare dates to avoid same-day cutoff edge case
+        if pub_date.date() < cutoff.date():
+            continue
+
+        if is_excluded(f"{title} {description}"):
+            continue
+
+        dsa_id = title.split()[0] if title.startswith("DSA-") else None
+        tracker_match = re.search(r"https://security-tracker\.debian\.org/tracker/[^\s\"<]+", description)
+        tracker_url = (
+            tracker_match.group(0) if tracker_match
+            else f"https://security-tracker.debian.org/tracker/{dsa_id}" if dsa_id
+            else link
+        )
+        # CVEs are not embedded in the RSS body; extract any that appear anyway
+        cves = re.findall(r"CVE-\d{4}-\d+", description)
+
+        plain = _TAG_RE.sub("", description).strip()
+        # drop the tracker URL that Debian appends to every description
+        plain = re.sub(r"https://security-tracker\.debian\.org/tracker/\S+", "", plain).strip()
+
+        out.append(make_row(
+            "debian-dsa",
+            id=dsa_id or link,
+            title=title[:TITLE_MAX],
+            summary=plain[:SUMMARY_MAX],
+            cves=cves,
+            published=date_str,
+            url=tracker_url,
+            products=["Debian Trixie"],
+            severity="unknown",
+        ))
     return out
 
 
