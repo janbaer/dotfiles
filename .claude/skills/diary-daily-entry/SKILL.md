@@ -27,12 +27,12 @@ Ermittle per Bash:
 ```bash
 date +%V           # ISO-Kalenderwoche, z. B. 16
 LC_TIME=de_DE.UTF-8 date +%A   # Deutscher Wochentag, z. B. Sonntag
-obsidian vault Notes | awk -F'\t' '$1 == "path" {print $2}'  # Vault-Pfad
+gojq -r '[.vaults[] | .path] | map(select(endswith("/Notes"))) | first' ~/.config/obsidian/obsidian.json  # Vault-Pfad
 ```
 
 Falls das Locale nicht verfügbar ist, verwende diese Zuordnung manuell (Mon=Montag, Tue=Dienstag, Wed=Mittwoch, Thu=Donnerstag, Fri=Freitag, Sat=Samstag, Sun=Sonntag).
 
-Falls `obsidian vault Notes` keinen `path`-Eintrag liefert (Obsidian nicht gestartet oder Vault nicht bekannt), brich ab und informiere Jan.
+Falls `gojq` keinen Pfad liefert (Vault nicht bekannt oder falsch konfiguriert), brich ab und informiere Jan.
 
 ### 2. Wochenbericht lesen
 
