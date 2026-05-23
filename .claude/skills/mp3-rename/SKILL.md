@@ -5,17 +5,29 @@ description: >
   Renames all MP3 files in the current directory using their ID3 tags, following
   the convention "Artist - Title.mp3". Strips non-ASCII characters, [ ] /, collapses
   whitespace, and sets the year tag to the current year if missing. Shows a numbered
-  review table before renaming so the user can correct individual proposals.
+  preview before any change is applied.
+  With the --tags argument the direction is reversed: the ID3 tags are derived from
+  the filename instead (artist/title split on the first " - ").
   Use this skill whenever the user wants to rename, clean up, or normalize MP3 filenames
   based on their tags — triggered by phrases like "rename my mp3 files", "clean up the
   filenames", "normalize mp3 names", "rename using id3 tags", or when the working
-  directory contains MP3 files and the user wants consistent naming.
+  directory contains MP3 files and the user wants consistent naming. Also use it when
+  the user wants to set the tags from the filenames ("--tags", "fix the tags from the
+  filename", "tag from filename").
 ---
 
 # MP3 Rename
 
-Rename every `.mp3` in the current directory to `Artist - Title.mp3` using ID3 tags,
-with an interactive review step before anything is touched.
+Two directions, depending on the invocation argument:
+
+- **Default** — rename every `.mp3` in the current directory to `Artist - Title.mp3`
+  using its ID3 tags.
+- **`--tags`** — leave the filenames alone and instead write the ID3 tags *from* the
+  filename. Artist is the part before the first `" - "`, title the part after it.
+
+Both directions preview the plan first, then apply on confirmation.
+
+Check the invocation arguments for `--tags` to pick the direction.
 
 ---
 
@@ -29,71 +41,92 @@ If not found, tell the user to run `nix shell nixpkgs#id3` and stop.
 
 ---
 
-## Step 2 — Collect proposals
+## Step 2 — Preview
 
-Run the bundled script in JSON mode from the user's current working directory:
+Run the bundled script with `--dry-run` (and `--tags` if applicable):
 
 ```bash
-/home/jan/.claude/skills/mp3-rename/scripts/rename_mp3.py --json
+# default direction
+/home/jan/.claude/skills/mp3-rename/scripts/rename_mp3.py --dry-run
+
+# --tags direction
+/home/jan/.claude/skills/mp3-rename/scripts/rename_mp3.py --dry-run --tags
 ```
 
 This outputs a JSON array. Each entry has:
 - `original_file`, `original_artist`, `original_title`
-- `new_artist`, `new_title`, `new_filename`
+- `new_artist`, `new_title`
+- `new_filename` (default direction only — absent in `--tags` mode)
 - `set_year` (string like "2026", or null if year tag already set)
-- `skip` (true if the file is missing artist/title tags)
+- `skip` (true if the entry can't be processed — see `reason`)
+
+Skip reasons:
+- Default: file is missing its artist or title tag.
+- `--tags`: filename has no `" - "` separator, or empty artist/title after splitting.
 
 ---
 
 ## Step 3 — Present the numbered review table
 
-Show ALL entries (including skipped ones) as a markdown table with a `#` column:
+Show ALL entries (including skipped ones) as a markdown table with a `#` column.
+
+**Default direction:**
 
 | # | Original Artist | Original Title | New Artist | New Title | New Filename |
 |---|---|---|---|---|---|
 | 1 | … | … | … | … | … |
 
-- For skipped files, put `—` in the New columns and note the reason.
-- Keep the table concise — truncate very long titles with `…` if needed for readability,
-  but use the full values when writing the plan file.
+**`--tags` direction** — same shape, showing how the tags will look afterwards
+(the filename is the source and stays unchanged):
 
-Then ask:
+| # | Filename | Original Artist | Original Title | New Artist | New Title |
+|---|---|---|---|---|---|
+| 1 | … | … | … | … | … |
 
-> "Enter the numbers you'd like to edit (comma-separated), or say 'go' / 'apply all' to rename everything."
+For skipped files, put `—` in the New columns and note the reason. Truncate very
+long titles with `…` if needed for readability.
+
+**No-op guard:** before asking the user, check whether any entry would actually
+change something. An entry is a real change if any of the following is true:
+- `original_artist != new_artist`
+- `original_title != new_title`
+- `set_year` is not null
+- (default direction only) `original_file != new_filename`
+
+If every non-skipped entry is a no-op, tell the user "Nothing to do — all files
+already match." and stop. Do **not** ask "Apply these changes?" in that case.
+
+Otherwise ask:
+
+> "Apply these changes?"
 
 ---
 
-## Step 4 — Handle corrections
+## Step 4 — Apply
 
-For each number the user provides:
-
-1. Show the current proposed filename for that entry.
-2. Ask: "New filename?" (they type the full `Artist - Title.mp3` string).
-3. Parse `Artist - Title` out of their input and update `new_artist`, `new_title`,
-   and `new_filename` in the entry accordingly.
-4. After all corrections, briefly confirm the updated proposals.
-
-If the user just presses Enter (no numbers), skip this step entirely.
-
----
-
-## Step 5 — Write the plan and apply
-
-Write the (possibly corrected) JSON array to a temp file, then run:
+On confirmation, run the script again *without* `--dry-run` (keep `--tags` if applicable):
 
 ```bash
-/home/jan/.claude/skills/mp3-rename/scripts/rename_mp3.py --apply /tmp/mp3-rename-plan.json
+# default direction
+/home/jan/.claude/skills/mp3-rename/scripts/rename_mp3.py
+
+# --tags direction
+/home/jan/.claude/skills/mp3-rename/scripts/rename_mp3.py --tags
 ```
 
-Relay the script output to the user: how many renamed, how many skipped, and which
-files had their year tag set for the first time.
+The script re-scans the directory and applies the same logic that produced the
+preview. Relay the output: how many files were renamed/tagged, how many skipped,
+and which had their year tag set for the first time.
 
 ---
 
 ## Notes
 
-- The script's cleaning rules: keep printable ASCII (0x20–0x7E), strip `[`, `]`, `/`, `|`,
-  collapse multiple spaces, trim leading/trailing whitespace.
-- Year is only set when the tag was absent or empty — existing years are never overwritten.
-- If a file's proposed new name is the same as the current name, the script skips the
-  rename but still updates the tags (cleaned values + year if needed).
+- The script re-scans between preview and apply. Don't modify the files in between.
+- Cleaning rules (default direction only): keep printable ASCII (0x20–0x7E), strip
+  `[`, `]`, `/`, `|`, collapse multiple spaces, trim whitespace. The `--tags` direction
+  takes filename values literally (just trimmed).
+- Year is only set when the tag was absent or empty — existing years are never
+  overwritten. This applies to both directions.
+- Default direction: if a file's proposed new name equals the current name, the
+  rename is skipped but the tags are still updated (cleaned values + year if needed).

@@ -3,10 +3,12 @@
 # Convention: "Artist - Title.mp3"
 # Strips non-ASCII, [ ] /, and collapses whitespace. Sets year if missing.
 #
-# Modes:
-#   --json           Output rename proposals as JSON (for Claude to present as table)
-#   --apply <file>   Execute renames from a JSON plan file produced by --json (possibly
-#                    edited by the user via Claude's interactive review step)
+# Usage:
+#   rename_mp3.py              Apply renames using ID3 tags.
+#   rename_mp3.py --dry-run    Print JSON proposals; make no changes.
+#   rename_mp3.py --tags       Reverse direction: derive ID3 tags from filenames
+#                              (artist/title split on the first ' - ').
+#   --dry-run and --tags combine freely.
 
 import json
 import re
@@ -32,18 +34,51 @@ def query_tag(flag, path):
   ).stdout.strip()
 
 
-def cmd_json():
+def parse_filename(name):
+  """Split 'Artist - Title.mp3' on the first ' - '. Returns (artist, title) or None."""
+  stem = name[:-4] if name.lower().endswith(".mp3") else name
+  if " - " not in stem:
+    return None
+  artist, title = stem.split(" - ", 1)
+  return artist.strip(), title.strip()
+
+
+def collect(tag_mode):
   current_year = str(datetime.now().year)
   entries = []
 
   for f in sorted(Path(".").glob("*.mp3")):
-    name   = f.name
+    name = f.name
+    year = query_tag("%y", f)
+
+    if tag_mode:
+      parsed = parse_filename(name)
+      if parsed is None:
+        entries.append({"original_file": name, "skip": True,
+                        "reason": "filename has no ' - ' separator"})
+        continue
+      new_artist, new_title = parsed
+      if not new_artist or not new_title:
+        entries.append({"original_file": name, "skip": True,
+                        "reason": "empty artist or title parsed from filename"})
+        continue
+      entries.append({
+        "original_file":   name,
+        "original_artist": query_tag("%a", f),
+        "original_title":  query_tag("%t", f),
+        "new_artist":      new_artist,
+        "new_title":       new_title,
+        "set_year":        current_year if not year else None,
+        "skip":            False,
+      })
+      continue
+
     artist = query_tag("%a", f)
     title  = query_tag("%t", f)
-    year   = query_tag("%y", f)
 
     if not artist or not title:
-      entries.append({"original_file": name, "skip": True, "reason": "missing artist or title tag"})
+      entries.append({"original_file": name, "skip": True,
+                      "reason": "missing artist or title tag"})
       continue
 
     clean_artist = clean(artist)
@@ -59,13 +94,10 @@ def cmd_json():
       "skip":            False,
     })
 
-  print(json.dumps(entries, indent=2))
+  return entries
 
 
-def cmd_apply(plan_file):
-  with open(plan_file) as f:
-    entries = json.load(f)
-
+def apply(entries, tag_mode):
   processed = 0
   skipped = 0
 
@@ -84,7 +116,6 @@ def cmd_apply(plan_file):
 
     new_artist = entry["new_artist"]
     new_title  = entry["new_title"]
-    new_name   = entry["new_filename"]
     set_year   = entry.get("set_year")
 
     cmd = ["id3", "--artist", new_artist, "--title", new_title]
@@ -94,38 +125,46 @@ def cmd_apply(plan_file):
     subprocess.run(cmd, check=True, capture_output=True)
 
     year_note = f"  (year set to {set_year})" if set_year else ""
-    if orig != new_name:
-      Path(orig).rename(new_name)
-      print(f"RENAMED:  {orig}")
-      print(f"       →  {new_name}{year_note}")
+
+    if tag_mode:
+      print(f"TAGGED: {orig}")
+      print(f"     →  artist={new_artist!r}, title={new_title!r}{year_note}")
     else:
-      print(f"OK (unchanged): {orig}{year_note}")
+      new_name = entry["new_filename"]
+      if orig != new_name:
+        Path(orig).rename(new_name)
+        print(f"RENAMED:  {orig}")
+        print(f"       →  {new_name}{year_note}")
+      else:
+        print(f"OK (unchanged): {orig}{year_note}")
 
     processed += 1
 
-  print(f"\nDone — renamed: {processed}, skipped: {skipped}")
+  verb = "tagged" if tag_mode else "renamed"
+  print(f"\nDone — {verb}: {processed}, skipped: {skipped}")
 
 
 def main():
-  if len(sys.argv) < 2 or sys.argv[1] not in ("--json", "--apply"):
-    print("Usage: rename_mp3.py --json | --apply <plan.json>", file=sys.stderr)
+  args = sys.argv[1:]
+  tag_mode = "--tags" in args
+  dry_run = "--dry-run" in args
+  extras = [a for a in args if a not in ("--tags", "--dry-run")]
+
+  if extras:
+    print("Usage: rename_mp3.py [--dry-run] [--tags]", file=sys.stderr)
     sys.exit(1)
 
   if shutil.which("id3") is None:
     print("ERROR: 'id3' is not installed. Run: nix shell nixpkgs#id3", file=sys.stderr)
     sys.exit(1)
 
-  if sys.argv[1] == "--json":
-    cmd_json()
-  elif sys.argv[1] == "--apply":
-    if len(sys.argv) < 3:
-      print("ERROR: --apply requires a JSON plan file argument.", file=sys.stderr)
-      sys.exit(1)
-    plan_file = sys.argv[2]
-    if not Path(plan_file).is_file():
-      print("ERROR: --apply requires a valid JSON plan file.", file=sys.stderr)
-      sys.exit(1)
-    cmd_apply(plan_file)
+  entries = collect(tag_mode)
+
+  if dry_run:
+    print(json.dumps(entries, indent=2))
+    return
+
+  apply(entries, tag_mode)
 
 
 if __name__ == "__main__":
