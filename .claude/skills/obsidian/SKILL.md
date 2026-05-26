@@ -106,6 +106,8 @@ When the user wants to add a new note:
    obsidian vault="Obsidian" create name="note-name" template="page" silent
    obsidian vault="Obsidian" property:set name="created" value="YYYY-MM-DD" file="note-name"
    ```
+
+   > **Important:** After `obsidian create`, always `Read` the file before using `Write` on it. The CLI creates the file on disk, so the Write tool treats it as an existing file and will reject the call if it hasn't been read in the current session. A `Read` immediately after `create` registers it and unblocks `Write`.
    Use today's date. Tags should be lowercase, hyphenated, and specific enough to be useful for cross-referencing (e.g. `git`, `shell-scripting`, `docker-compose`).
 
    > **Important:** `property:set` does not handle YAML arrays correctly — it wraps `[]` values in quotes, producing invalid frontmatter like `tags: "[a,b,c]"`. To set tags, locate the file on disk (use `locate` or `find` under `/mnt/zb-data/webdav/data/Obsidian/`) and use the Edit tool to write proper YAML:
@@ -381,6 +383,46 @@ This entire block is hidden in reading view.
 
 ==Highlighted text==
 ```
+
+### Visualizations
+
+When the user asks for a visualization, diagram, or chart in an Obsidian note, **always use Mermaid** — it is built into Obsidian and requires no plugin.
+
+```markdown
+```mermaid
+flowchart TD
+    A["Node A"] --> B["Node B"]
+```
+```
+
+**Important:** Use `<br/>` for line breaks inside node labels — `\n` is rendered literally and does not produce a line break:
+
+```
+✅  A["First line<br/>Second line"]
+❌  A["First line\nSecond line"]
+```
+
+Supported Mermaid diagram types (all work natively in Obsidian):
+
+| Type | Syntax | Use case |
+|---|---|---|
+| Flowchart | `flowchart TD` / `LR` | Prozesse, Abhängigkeiten, Entscheidungsbäume |
+| Sequence | `sequenceDiagram` | Kommunikation zwischen Systemen/Services |
+| Gantt | `gantt` | Zeitpläne, Projektplanung |
+| Class | `classDiagram` | Datenmodelle, OOP-Strukturen |
+| State | `stateDiagram-v2` | Zustandsautomaten, Lifecycle-Diagramme |
+| Pie | `pie` | Einfache Anteile/Verteilungen |
+| Git | `gitGraph` | Branch-Strategien |
+| ER | `erDiagram` | Datenbankschemas |
+
+**Other visualization options (require plugins):**
+
+- **Excalidraw** (`obsidian-excalidraw-plugin`) — Hand-drawn style, freie Zeichenfläche, sehr beliebt für Architekturen
+- **Dataview** (`dataview`) — Tabellen und Listen aus Vault-Metadaten abfragen (kein Chart, aber strukturierte Daten)
+- **Charts** (`obsidian-charts`) — Bar-, Line-, Pie-Charts via YAML-Block
+- **PlantUML** (`plantuml`) — Alternative zu Mermaid für UML
+
+Für den Standardfall immer **Mermaid** verwenden — kein Plugin, kein Setup, funktioniert sofort.
 
 ## Guidelines
 
