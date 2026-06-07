@@ -1,0 +1,81 @@
+{
+  "skill_name": "fitness-coach",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Ich trainiere 4x pro Woche und will einen neuen Trainingsplan. Schwerpunkt Hypertrophie, Vollausstattung Gym. Körpergewicht 82kg, ich mache das schon ein paar Jahre, also keine Grundlagen-Erklärungen nötig. Brust und Schultern sind meine Schwachstellen.",
+      "expected_output": "Strukturierter 4-Tage-Split (z.B. PPL oder Upper/Lower), mit Übungen, Sets x Reps, RPE-Angaben, Progressionsstrategie und Deload-Empfehlung. Brust/Schultern bekommen mehr Volumen.",
+      "assertions": [
+        {
+          "name": "Enthält Split-Struktur",
+          "type": "contains",
+          "value": "Split"
+        },
+        {
+          "name": "Enthält RPE oder Intensitätsangaben",
+          "type": "contains_any",
+          "value": ["RPE", "%", "Wiederholung"]
+        },
+        {
+          "name": "Enthält Progressionsstrategie",
+          "type": "contains_any",
+          "value": ["Progression", "steigern", "Gewicht erhöhen", "Progression"]
+        },
+        {
+          "name": "Erwähnt Brust oder Schultern explizit",
+          "type": "contains_any",
+          "value": ["Brust", "Schulter"]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Ich wiege 82kg, trainiere 4x pro Woche Krafttraining. Ich will abnehmen aber keine Muskeln verlieren — so ein klassisches Recomp. Ich esse kein Fleisch außer gelegentlich Fisch. Erstell mir einen groben Ernährungsplan für einen Tag, inklusive Makros.",
+      "expected_output": "Kalorienziel (leichtes Defizit ~300-400 kcal), Makros mit min. 160g Protein/Tag, fleischfreie Proteinquellen (Quark, Hülsenfrüchte, Eier, Tofu), Tagesplan mit 3-4 Mahlzeiten und Kalorienangaben.",
+      "assertions": [
+        {
+          "name": "Enthält Kalorienangabe",
+          "type": "contains_any",
+          "value": ["kcal", "Kalorien"]
+        },
+        {
+          "name": "Enthält Proteinmenge in Gramm",
+          "type": "regex",
+          "value": "\\d+\\s*g\\s*(Protein|Eiweiß)"
+        },
+        {
+          "name": "Keine Fleischempfehlung als Hauptproteinquelle",
+          "type": "not_contains_any",
+          "value": ["Hähnchen", "Rindfleisch", "Schwein"]
+        },
+        {
+          "name": "Enthält vegetarische Proteinquellen",
+          "type": "contains_any",
+          "value": ["Quark", "Hülsenfrüchte", "Tofu", "Eier", "Skyr", "Joghurt"]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Was kann ich direkt nach dem Training essen? Ich hab grad Beine gemacht, bin am Schwitzen und will schnell was mit viel Protein. Kein Fleisch, soll aber sättigend sein und nicht zu kompliziert.",
+      "expected_output": "2-3 konkrete Post-Workout-Mahlzeiten ohne Fleisch mit Proteinangabe, schnell zuzubereiten. Erklärt kurz das Timing (Protein innerhalb 1-2h). Kalorien und Makros pro Option.",
+      "assertions": [
+        {
+          "name": "Enthält Proteinangabe pro Mahlzeit",
+          "type": "contains_any",
+          "value": ["g Protein", "g Eiweiß", "Protein:"]
+        },
+        {
+          "name": "Kein Fleisch als Empfehlung",
+          "type": "not_contains_any",
+          "value": ["Hähnchen", "Thunfisch in Dosen", "Rindfleisch", "Pute"]
+        },
+        {
+          "name": "Erwähnt Post-Workout Timing",
+          "type": "contains_any",
+          "value": ["Post-Workout", "nach dem Training", "innerhalb", "Stunde"]
+        }
+      ]
+    }
+  ]
+}
