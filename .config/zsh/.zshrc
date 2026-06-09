@@ -35,11 +35,11 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 autoload -Uz compinit
-# Load zcompdump only once a day
-for dump in $HOME/.zcompdump(N.mh+24); do
-  compinit
+zcompdump="${ZDOTDIR:-$HOME}/.zcompdump-${HOST}-${ZSH_VERSION}"
+for dump in "$zcompdump"(N.mh+24); do
+  compinit -d "$zcompdump"
 done
-compinit -C
+compinit -C -d "$zcompdump"
 
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 # Download Zinit, if it's not there yet
