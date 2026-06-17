@@ -1,9 +1,9 @@
 ---
 name: security-advisory-triage
-description: Parses security vulnerability reports in Slack bot format (entries with Severity/Package/Identifiers and emoji severity markers like `:red_circle:`, `:large_orange_circle:`) into a deduped table, fetches GitHub advisory descriptions, checks for existing Jira tickets, then creates new Jira tickets under the security parent epic. Trigger when the user provides a security.txt or security report file, pastes Slack security bot alerts, says "parse security report", "process vulnerability alerts", "security advisory report", "create jira tickets for security issues", or shares any file containing GHSA identifiers with Package/Severity entries.
+description: Parses security vulnerability reports in Slack bot format (entries with Severity/Package/Identifiers and emoji severity markers like `:red_circle:`, `:large_orange_circle:`) into a deduped table, fetches GitHub advisory descriptions, and checks which packages already have a Jira ticket. Read-only — it reports which packages are new vs. already tracked, but never creates Jira tickets. Trigger when the user provides a security.txt or security report file, pastes Slack security bot alerts, says "parse security report", "process vulnerability alerts", "security advisory report", or shares any file containing GHSA identifiers with Package/Severity entries.
 ---
 
-Triage a security vulnerability report: parse, deduplicate, look up advisories, check Jira, create tickets.
+Triage a security vulnerability report: parse, deduplicate, look up advisories, and check which packages already have a Jira ticket. This skill is **read-only** — it never creates Jira tickets.
 
 ## Input format
 
@@ -60,8 +60,8 @@ project = VERBU AND summary ~ "{package-name}" AND status != Done ORDER BY creat
 ```
 
 Run all searches in parallel. For each package note:
-- **Open ticket found** → record the issue key (e.g. `VERBU-12345`) — skip ticket creation for this package
-- **Only closed tickets or none** → mark as `None` — candidate for ticket creation
+- **Open ticket found** → record the issue key (e.g. `VERBU-12345`) — already tracked
+- **Only closed tickets or none** → mark as `None` — not yet tracked
 
 ## Step 4: Display the summary table
 
@@ -75,41 +75,18 @@ Show a markdown table sorted by severity (CRITICAL first, then HIGH, then MEDIUM
 Make each GHSA identifier and each ticket key a clickable link.
 
 After the table show a one-line summary:
-> `{N} unique packages — {X} already have open tickets, {Y} are new.`
+> `{N} unique packages — {X} already have open tickets, {Y} are not yet tracked.`
 
-Then ask: **"Should I create Jira tickets for all {Y} new packages?"**
-
-Wait for the user's answer. If yes, proceed directly to step 5 without any further per-ticket confirmation.
-
-## Step 5: Create all tickets
-
-Create tickets for all new packages in order (CRITICAL → HIGH → MEDIUM) without stopping to ask for each one. Use `mcp__jira-mcp__jira-create-issue` with these fields:
-- **Summary**: `Security | {package-name} - {Severity} Severity`
-- **Description**: Use ADF format (not plain text) so identifiers render as real hyperlinks. Structure:
-  1. Paragraph: short advisory description
-  2. Paragraph: `Affected versions: ...`
-  3. Paragraph: `Patched versions: ...`
-  4. Paragraph: `CVSS score: x.x / 10`
-  5. Paragraph: `Identifiers:`
-  6. bulletList: one listItem per GHSA ID, each a paragraph with a single text node carrying a `link` mark:
-     `{"type":"text","text":"GHSA-xxx-yyy-zzz","marks":[{"type":"link","attrs":{"href":"https://github.com/advisories/GHSA-xxx-yyy-zzz"}}]}`
-- **parentKey**: `VERBU-25054` (the security epic)
-- **Priority**: map from severity:
-  - CRITICAL → Critical
-  - HIGH → High
-  - MEDIUM → Medium
-  - LOW → Low
-- **Issue type**: Task (or Story — whichever the Jira project defaults to)
-
-After all tickets are created, show a summary list:
+Then list the not-yet-tracked packages explicitly, so the user knows which ones still need a ticket created manually:
 
 ```
-Created tickets:
-- [VERBU-XXXXX](https://c24-vorsorge.atlassian.net/browse/VERBU-XXXXX) — {package-name} ({Severity})
-- [VERBU-YYYYY](https://c24-vorsorge.atlassian.net/browse/VERBU-YYYYY) — {package-name} ({Severity})
+Not yet tracked ({Y}):
+- {package-name} ({Severity}) — {GHSA-IDs}
+- ...
 ```
+
+This skill stops here. It is read-only and never creates Jira tickets — the user creates any needed tickets manually.
 
 ## Notes
 
-- If the user specifies a different parent issue than VERBU-25054, use that instead.
-- Step 4 asks once for all packages; the user is the final authority on which packages to skip.
+- The security epic for these tickets is `VERBU-25054` (informational — the user creates tickets there manually).

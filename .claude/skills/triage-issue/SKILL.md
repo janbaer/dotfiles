@@ -58,10 +58,8 @@ Rules:
 ### 5. Create the issue
 
 Detect the platform by checking `git remote -v`:
-- If the remote URL contains `forgejo` → invoke the `/forgejo-issue-create` skill, passing the issue details from the template below
-- If the remote URL contains `gitlab` → invoke the `/jira-ticket` command, passing the issue details from the template below
-
-Do NOT ask the user to review before creating - just create it and share the URL.
+- If the remote URL contains `forgejo` → invoke the `/forgejo-issue-create` skill, passing the issue details from the template below. Do NOT ask the user to review before creating — just create it and share the URL.
+- If the remote URL contains `gitlab` → **do not create anything**. Output the filled-in template below in the terminal so the user can create the Jira ticket manually. AI-created tickets are not used for GitLab/Jira work.
 
 <issue-template>
 

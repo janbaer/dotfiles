@@ -10,7 +10,7 @@ If `-y` is passed as an argument, skip the confirmation step (5) and commit dire
 
 1. Check the git remote: run `git remote get-url origin`. If the URL points to `gitlab.com` (host match, so `https://gitlab.com/...` or `git@gitlab.com:...`), stop immediately. Do not stage, diff, or commit anything. Tell the user:
 
-   > This repository's origin is on gitlab.com. Use `/gitlab-commit` instead — it enforces the GitLab commit format (mandatory Jira ticket, no emojis).
+   > This repository's origin is on gitlab.com. AI-generated commits are not used for GitLab repositories — please write the commit manually.
 
    Then exit without further action. If the origin is not on gitlab.com, say nothing about this check and proceed silently to step 2.
 2. Run `git status` to see what files are staged

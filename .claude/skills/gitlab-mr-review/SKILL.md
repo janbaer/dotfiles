@@ -1,7 +1,7 @@
 ---
 name: gitlab-mr-review
 model: opus
-description: Use when reviewing an open Merge Request on a GitLab repository - reading changes, analysing the diff, and labelling the outcome. Trigger on any phrase like "review MR", "review the merge request", "code review", "check the MR", "look at the PR", or "give feedback on the changes".
+description: Use when reviewing an open Merge Request on a GitLab repository - reading changes and analysing the diff. Read-only: the review is shown in the terminal and never written back to GitLab. Trigger on any phrase like "review MR", "review the merge request", "code review", "check the MR", "look at the PR", or "give feedback on the changes".
 ---
 
 # GitLab Merge Request Review
@@ -43,7 +43,6 @@ discussion_list(project_id="group/repo", mr_iid=N)
 ```
 
 Note the `source_branch` and `target_branch` from the response.
-Also note the `diff_refs` object — you will need `base_sha`, `head_sha`, and `start_sha` to post inline comments.
 
 ### 3. Optionally, read the original Jira issue from the title
 
@@ -68,27 +67,15 @@ git diff origin/{target_branch}...origin/{source_branch}
 
 Apply the **code-review-excellence** skill to analyse the diff — work through context gathering, high-level review, and line-by-line review. Produce a structured review comment using the template from that skill.
 
-### 6. Show the review result and wait for approval
+### 6. Show the review result
 
-Show the full review result in the terminal. This includes inline comments and a summary — the summary is for local reference only and will never be posted to GitLab.
+Show the full review result in the terminal. This includes inline comments and a summary.
 
-**STOP HERE. Do not post anything to GitLab yet.** Ask the user explicitly:
-> "Should I go through the inline comments with you and ask which ones to post?"
+**This skill is read-only. It never writes anything back to GitLab** — no inline comments, no discussions, no labels. The review exists solely for the user's local reference; the user decides what to do with it manually in GitLab.
 
-Only proceed to step 7 if the user confirms. If they ask for changes to the review, update it and ask again before proceeding.
+### 7. Done
 
-### 7. Post inline comments selectively (only after explicit user approval in step 6)
-
-For each inline comment in the review, present it to the user and ask:
-> "Post this comment to GitLab?"
-
-Only post comments the user explicitly approves. Skip any they decline. The summary comment is **never posted** — it exists solely for the user's local reference.
-
-Use the appropriate MCP tool to post each approved inline comment.
-
-### 8. Done
-
-The workflow is complete after posting the approved inline comments. Do not apply any labels — the user handles all labelling manually in GitLab.
+The workflow is complete once the review is shown in the terminal.
 
 ## MCP Tools Reference
 
@@ -98,7 +85,6 @@ The workflow is complete after posting the approved inline comments. Do not appl
 | `get_merge_request` | Read MR metadata (branches, title, description) |
 | `discussion_list` | Read existing discussion and review comments |
 | `list_merge_request_diffs` | Get the file diffs for the MR |
-| `create_merge_request_discussion` | Post an inline comment on a specific line |
 | `jira-get-issue` | Read the original Jira ticket (optional, requires `jira-mcp`) |
 
 ## If MCP Tools Are Unavailable
