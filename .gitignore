@@ -35,3 +35,5 @@ tags
 .claude/commands/jira-ticket.md
 .claude/skills/*-workspace/
 /.claude/skills/diagnosing-bugs
+/.claude/skills/ponytail/SKILL.md
+/.claude/skills/thermo-nuclear-code-quality-review/SKILL.md
