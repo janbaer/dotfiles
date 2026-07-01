@@ -45,3 +45,22 @@ customCommands:
     context: 'localBranches'
     command: "git push --no-verify --force-with-lease"
     loadingText: "Git pushing without verifying..."
+  - key: 'H'
+    context: 'files'
+    command: 'hunk diff HEAD'
+    output: terminal
+    description: 'Review all uncommitted changes in hunk'
+  - key: 'H'
+    context: 'commits'
+    command: 'hunk show {{.SelectedLocalCommit.Hash}}'
+    output: terminal
+    description: 'Review the selected commit in hunk'
+  - key: 'H'
+    context: 'localBranches'
+    command: 'hunk diff main...{{.SelectedLocalBranch.Name}}'
+    output: terminal
+    description: 'Review branch vs main in hunk'
+  - key: '<f2>'
+    context: 'files'
+    command: 'claude -p "/commit -y" --allowed-tools "Bash(git *)"'
+    description: 'Commit with Claude'
