@@ -137,6 +137,8 @@ Ehrlich, nicht verurteilend. Wenn du Muster siehst (z. B. dasselbe Ärgernis tau
 - **Agent läuft noch** → kurz warten, bis die Notification eintrifft. Sollte selten vorkommen; falls doch und der Agent merklich hängt, ohne Liste weitermachen und das im Chat erwähnen.
 - **Agent hat eine `⚠️`-Meldung geliefert** → kein zweiter Hinweis, der wurde in Schritt 3 schon abgegeben. Einfach ohne Liste weiter.
 
+**Wochenend-Filter (Arbeits-Tasks):** Ist der heutige Wochentag (aus Schritt 1) ein **Samstag oder Sonntag**, entferne alle Tasks aus dem Arbeitsprojekt **CHECK24-BU** aus der Vikunja-Liste, bevor du sie erwähnst oder in die Ziele übernimmst — erkennbar am Projekt-Label `*CHECK24-BU*` in der Agent-Ausgabe. Der Grund: Jan arbeitet am Wochenende nicht, und ein Arbeits-Task im Wochenend-Tagebuch ist nur Ballast, den er ohnehin erst am Montag anfassen kann. Fällige oder überfällige CHECK24-Tasks tauchen dadurch nicht am Wochenende auf, sondern erst wieder im nächsten Montags-Eintrag. Alle anderen Projekte (privat, Haushalt, Finanzen etc.) bleiben auch am Wochenende drin — der Filter gilt nur für die Arbeit. Bleibt nach dem Filtern nichts übrig, behandle die Liste wie `keine`.
+
 Wenn die Liste **Treffer enthält** (also nicht `keine`), erwähne sie kurz vor der Frage, damit Jan sieht, was sowieso schon ansteht. Beispiel:
 
 > Bevor wir zu deinen Tageszielen kommen: in Vikunja stehen heute drei offene/überfällige Tasks — *„Heizungsrechnung bezahlen"*, *„Backup Hermes-agent konfigurieren"*, *„Mailbox-Vertrag reduzieren"*. Die nehm ich automatisch in deine Ziele auf.

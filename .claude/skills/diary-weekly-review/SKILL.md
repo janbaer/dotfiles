@@ -21,6 +21,14 @@ Verwende den `obsidian`-Skill, um die Dateien in der Vault **Notes** zu finden u
 
 Nimm dir Zeit, den Inhalt wirklich zu verstehen. Beachte wiederkehrende Themen, Stimmungen, Selbstkritik und positive Momente.
 
+## Zusammenfassung der Woche
+
+Bevor das Gespräch startet, gib Jan eine kurze Zusammenfassung der Woche, wie du sie aus dem Tagebuch herausgelesen hast — ein paar Sätze Fließtext, keine Aufzählung. Der Sinn: Du hast die Woche gerade gelesen, also muss Jan sie nicht selbst noch mal im Kopf durchgehen, bevor er auf die erste Frage antwortet. Er steigt so mit dem gleichen Bild ein wie du.
+
+Fass zusammen, was tatsächlich in den Tageseinträgen steht: die roten Fäden, die Stimmung über die Woche, was gut lief und was ihn beschäftigt hat. Bleib konkret und beziehe dich auf echte Ereignisse aus den Einträgen — keine generischen Floskeln. Halte es kompakt (grob 4-8 Sätze); es ist der Aufschlag fürs Gespräch, nicht schon der fertige Rückblick.
+
+Danach gehst du direkt in die erste Frage über.
+
 ## Das Gespräch
 
 Führe das Gespräch Schritt für Schritt. Stelle jeweils eine Frage, warte auf die Antwort, und gehe dann zur nächsten über. Beziehe dich dabei konkret auf das, was im Tagebuch steht — keine generischen Fragen.
