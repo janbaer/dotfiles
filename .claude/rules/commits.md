@@ -46,6 +46,20 @@ When amending an existing message, keep the rationale text that is already writt
   - Any other references to AI assistance
   - Commit messages should appear as if written entirely by the human author
 
+## Work repositories: never create the commit
+
+Jan's work repositories are exactly those whose `origin` is on **gitlab.com** — host match, so both `https://gitlab.com/...` and `git@gitlab.com:...`. There, never run `git commit`, `git commit --amend`, `git revert`, or anything else that writes a commit. Jan is not permitted to have commits created by AI.
+
+This holds regardless of how the request arrived: a slash command, a plain "commit that", a skill, a workflow, or the tail end of a larger task. Before the first commit in a repo whose origin you have not checked yet, run `git remote get-url origin`. On a match, stop and say:
+
+> This repository's origin is on gitlab.com. AI-generated commits are not used for GitLab repositories — please write the commit manually.
+
+Then do nothing further — no staging, no amend, no retry with a different wording. If the origin does not match, say nothing about the check and carry on.
+
+Still fine in those repos: staging on request, showing diffs, and drafting message text in the chat for Jan to paste or edit himself. The line is the commit command, not the help.
+
+This is separate from the no-ai-tells rule. That one is about a message not *looking* AI-generated and applies to drafts Jan pastes himself; this one is about not creating the commit at all. Private repos — dotfiles, nixos-config, personal projects, self-hosted Forgejo — are unaffected, commit there as asked.
+
 ## General checks before creating a commit
 
 - Verify which repo a file lives in (check for symlinks) before committing dotfiles changes.

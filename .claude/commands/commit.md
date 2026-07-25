@@ -8,11 +8,7 @@ Create a commit for the currently staged changes. Follow these steps:
 
 If `-y` is passed as an argument, skip the confirmation step (5) and commit directly. The user will review the message afterwards and amend if needed.
 
-1. Check the git remote: run `git remote get-url origin`. If the URL points to `gitlab.com` (host match, so `https://gitlab.com/...` or `git@gitlab.com:...`), stop immediately. Do not stage, diff, or commit anything. Tell the user:
-
-   > This repository's origin is on gitlab.com. AI-generated commits are not used for GitLab repositories — please write the commit manually.
-
-   Then exit without further action. If the origin is not on gitlab.com, say nothing about this check and proceed silently to step 2.
+1. Check the git remote: run `git remote get-url origin`. On a gitlab.com origin, apply the "Work repositories: never create the commit" rule from the global commit rules — stop immediately, do not stage or diff, and exit with the wording given there. If the origin is not on gitlab.com, say nothing about this check and proceed silently to step 2.
 2. Run `git status` to see what files are staged
 3. Run `git diff --staged` to see the actual changes that will be committed
 4. Analyze the changes and create an appropriate commit message following the commit format rules (see global rules). Use the `writing-clearly-and-concisely` skill to make the message clear for later reading.
