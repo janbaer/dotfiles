@@ -20,6 +20,21 @@ All commit messages must follow: `{component} {emoji}: {message}`
 
 Examples: `itemlist ♻️: Extracting masonry column width into CSS variable`, `backup 🐛: Fixing path resolution to use volume mount`
 
+## The subject line says *why*, not *what*
+
+The first line states the motivation — the problem, the symptom, the goal. The mechanism goes in the body.
+
+Reading `git log --oneline` months later, the implementation is still visible in the diff; the reason it happened is the part that is lost and has to be guessed. A subject that only restates the diff wastes the one line that gets read most.
+
+| Bad (restates the diff) | Good (states the motivation) |
+| --- | --- |
+| `desktop: Pasting dictation output via clipboard instead of typing it` | `desktop: Fixing characters dropped in longer dictations` |
+| `backup 🔧: Switching rsync to --link-dest` | `backup 🔧: Cutting backup volume growth on unchanged files` |
+
+Applies to the subject only. The body still explains what was changed and how — put the mechanism, the trade-off, and the escape hatch there.
+
+When amending an existing message, keep the rationale text that is already written and only reorder it. Do not rewrite prose that was fine.
+
 ## Formatting rules
 
 - Commit message convention: use imperative gerund form (e.g., 'Adding' not 'Add').
