@@ -92,7 +92,18 @@ Zwei Dinge:
 
 Wenn diese Woche nichts Neues promotet werden muss und keine bestehende Note betroffen ist, sag das kurz und geh weiter — kein Zwang, jede Woche eine Note zu produzieren.
 
-### 8. Energie-Check (2 Minuten)
+### 8. Tagebuch-Handoff aktuell halten (1 Minute)
+
+Es gibt ein lebendes Handoff-Dokument `Handoffs/handoff-tagebuch-kontext.md` (im Notes-Vault), das den kompletten Tagebuch-Kontext für frische Sessions festhält: Speicherorte, Konventionen, laufender Lebenskontext (Arbeitskonflikt, Jobwechsel, wiederkehrende Muster). Der Wochenrückblick ist der richtige, niederfrequente Moment, es zu pflegen — nicht der tägliche Eintrag.
+
+Frag Jan einmal kurz: **"Hat sich am Lebenskontext oder am Workflow etwas geändert, das ins Tagebuch-Handoff soll?"**
+
+- **Ja** → den betroffenen Abschnitt im Handoff fortschreiben (anhängen/aktualisieren, nicht das ganze Dokument neu generieren — Jan editiert es auch von Hand). Den „Stand"-Teil (aktuelle KW) nicht pflegen, der ist für eine frische Session ohnehin trivial neu ableitbar.
+- **Nein** → nichts tun, weiter.
+
+Nicht jede Woche fällt hier etwas an — das ist normal. Der Schritt ist ein Sicherheitsnetz gegen ein veraltetes Handoff, kein Pflicht-Update.
+
+### 9. Energie-Check (2 Minuten)
 
 Frage: **"Auf einer Skala von 1-10: Wie geht es dir gerade? Wie fühlst du dich?"**
 
