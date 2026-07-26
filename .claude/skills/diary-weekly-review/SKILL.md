@@ -18,6 +18,7 @@ Verwende den `obsidian`-Skill, um die Dateien in der Vault **Notes** zu finden u
 2. Suche und lies die Datei `Wochenbericht KW NN` im Ordner `Weekly/`
 3. Falls die Datei nicht existiert, frage nach der richtigen Kalenderwoche
 4. Lies auch den vorherigen Wochenbericht (KW NN-1), falls vorhanden — um Kontinuität herzustellen und zu sehen, ob Vorsätze umgesetzt wurden
+5. Lies die **Titel** der Notizen im Ordner `Reflexion/` (nicht den Inhalt) — das sind Jans stehende Erkenntnisse, die über den einzelnen Tag hinausgehen. Du brauchst sie in Schritt 7, um zu erkennen, ob ein Thema der Woche schon eine Note hat oder eine neue verdient.
 
 Nimm dir Zeit, den Inhalt wirklich zu verstehen. Beachte wiederkehrende Themen, Stimmungen, Selbstkritik und positive Momente.
 
@@ -79,7 +80,19 @@ Für jeden Vorsatz:
 - Was bedeutet "erledigt"?
 - Was ist der erste Schritt am Montag?
 
-### 7. Energie-Check (2 Minuten)
+### 7. Reflexions-Notizen pflegen (2 Minuten)
+
+Der Reflexions-Ordner (`Reflexion/`) ist die Ebene über dem Tagebuch: zeitlose, themengebundene Erkenntnisse, die den einzelnen Tag überleben. Der Wochenbericht ist der Rohstoff, der Ordner die Raffinerie. Sinn dieses Schritts ist zweierlei — verhindern, dass Jan dieselbe Einsicht alle paar Wochen neu entdeckt und wieder vergisst, und den Ordner nicht zur write-only-Deponie werden lassen.
+
+Zwei Dinge:
+
+**a) Promotion prüfen.** Schau auf die roten Fäden dieser Woche (besonders aus Schritt 2) und frage dich: Ist ein Thema aufgetaucht, das schon in früheren Wochen vorkam? Wenn ja, ist das ein Kandidat für eine neue stehende Note. Sprich es konkret an, z. B.: *"Das Thema Verzetteln durch KI taucht jetzt zum dritten Mal auf und hat noch keine eigene Reflexions-Note. Sollen wir daraus eine machen?"* Nicht jeder Gedanke wird eine Note — erst wenn ein Thema sich zwei-, dreimal wiederholt. Lieber wenige Notes, die Jan kennt, als viele, die er nie liest.
+
+**b) Bestehende Notes gegenchecken.** Berührt die Woche eine bereits existierende Reflexions-Note (aus den Titeln in Schritt 5)? Dann frage, ob die Woche die Erkenntnis bestätigt oder widerlegt hat — die Note ist eine Hypothese über Jan selbst und darf mit einer `geprüft am`-Zeile fortgeschrieben werden. So sieht Jan, welche Einsicht hält.
+
+Wenn diese Woche nichts Neues promotet werden muss und keine bestehende Note betroffen ist, sag das kurz und geh weiter — kein Zwang, jede Woche eine Note zu produzieren.
+
+### 8. Energie-Check (2 Minuten)
 
 Frage: **"Auf einer Skala von 1-10: Wie geht es dir gerade? Wie fühlst du dich?"**
 
@@ -124,6 +137,13 @@ Nach dem Gespräch, erstelle einen Rückblick im folgenden Format und hänge ihn
 
 Hänge diesen Abschnitt an die bestehende Wochenbericht-Datei an. Verwende den `obsidian`-Skill zum Lesen und Schreiben.
 
+### Reflexions-Note schreiben oder fortschreiben
+
+Nur falls in Schritt 7 etwas beschlossen wurde:
+
+- **Neue Note:** Lege sie unter `Reflexion/<Titel>.md` an — Frontmatter mit `created` und passenden `tags`, dann die Erkenntnis als Fließtext, und **immer** ein abschließender Konsequenzen-Block (`## Konsequenzen für mich`) mit konkreten Ableitungen. Ohne den ist es Nabelschau. Textpflege wie oben anwenden.
+- **Bestehende Note fortschreiben:** Ergänze den neuen Befund und hänge eine Zeile `> geprüft am YYYY-MM-DD: <bestätigt / widerlegt / ergänzt um …>` an. Vorhandenen Text nicht umschreiben, nur anhängen.
+
 ## Regeln
 
 1. **Alles auf Deutsch.** Das gesamte Gespräch und der Rückblick sind auf Deutsch.
@@ -135,3 +155,4 @@ Hänge diesen Abschnitt an die bestehende Wochenbericht-Datei an. Verwende den `
 7. **Ehrlich aber unterstützend.** Nicht beschönigen, aber auch nicht verurteilen. Wie ein guter Freund, der ehrlich ist.
 8. **Energie-Check ist Pflicht.** Das ist wichtiger als jede Produktivitätsmetrik.
 9. **Am Ende muss Klarheit herrschen.** Jan soll nach dem Review wissen, was am Montag als Erstes dran ist.
+10. **Reflexions-Notizen kuratieren, nicht sammeln.** Eine neue Note nur bei einem echt wiederkehrenden Thema (zwei-, dreimal). Kein Zwang, jede Woche eine zu schreiben — ein leerer Ordner ist besser als eine Deponie.
