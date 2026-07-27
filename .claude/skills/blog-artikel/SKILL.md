@@ -55,29 +55,34 @@ Offene `[?]`-Marker blockieren diese Stufe. Sie werden abgearbeitet, nicht still
 
 ### Stufe 5 — Stilprüfung
 
-Gemessen gegen Jans eigene Artikel unter `~/Documents/Notes/Blog/`, nicht gegen ein abstraktes Ideal.
+Hier ist zuerst zu klären, wogegen überhaupt gemessen wird, weil die naheliegende Antwort falsch ist.
 
-Vorweg eine Warnung vor den Zahlen, weil Zählwerte mehr Autorität ausstrahlen, als sie hier verdienen: Die meisten trennen Jans Prosa **nicht** von generierter. `2026-03-28-myhomepage-redesign.md`, von Jan selbst, hat 13,7 Fettungen pro 1000 Wörter — der generierte Ansible-Entwurf nur 3,6. Gedankenstriche verhalten sich genauso wenig eindeutig. Wer auf diese Werte hin optimiert, poliert am falschen Ende und hält den Text danach für geprüft.
+Ein Korpus eigener Texte gibt es kaum: Alles ab 2026 ist KI-geschrieben, übrig bleiben rund 2300 Wörter Deutsch von 2013 bis 2020, davon die Hälfte Reiseberichte. Und selbst diese Texte sind **kein Stilziel**. Jan schreibt heute anders als 2013, er hat dazugelernt, und die Arbeit mit KI hat seine eigene Schreibweise mitverändert. Ein Entwurf, der auf den Korpus hin optimiert wird, trifft einen Jan, den es nicht mehr gibt.
 
-Zwei Muster halten der Gegenprobe stand, beide null mal in Jans eigenen Artikeln und mehrfach in den generierten:
+Der Korpus beantwortet deshalb nur eine schmale Frage: Welche Gewohnheiten sind über dreizehn Jahre stabil geblieben? Alles andere, also Länge, Gliederung, Dichte, Tonfall, entscheidet Jan am Entwurf. Bei Stilfragen ist er die Instanz, nicht die Datei von 2013.
 
-- **„nicht X, sondern Y“** — sechsmal im Homelab-Artikel, zweimal im Ansible-Entwurf. Die Konstruktion ist korrektes Deutsch; das Problem ist die Frequenz. Ein Modell greift zu ihr als rhetorischem Reflex, Jan tut das nie.
+Stabil und von Jan selbst bestätigt ist genau eine Sache:
+
+- **Typografische Gedankenstriche.** Er hat sie nie benutzt. In 2300 Wörtern eigener deutscher Prosa kommen `–` und `—` null mal vor, im Redesign-Artikel 14 mal, im Homelab-Artikel 4 mal. Das ist keine Statistik, aus der sich eine Regel ableiten lässt, sondern eine Gewohnheit, die Jan bestätigt hat. Deshalb gilt sie hart.
+
+Zwei weitere Muster sind verdächtig, aber aus eigener Logik heraus, nicht wegen des Korpus. Beide sind rhetorische Reflexe von Sprachmodellen und stehen dort, wo ein einfacher Aussagesatz gereicht hätte:
+
+- **„nicht X, sondern Y“** — im Homelab-Artikel 2,2 mal pro 1000 Wörter. Kein Verbot, die Konstruktion ist gutes Deutsch. Auffällig ist die Häufung.
 - **Angekündigte Merksätze** — „Entscheidend ist …“, „Genau das ist …“, „lässt sich in einen Satz fassen“, „Unterm Strich“. Sie kündigen eine Erkenntnis an, statt sie zu erzählen.
 
+Was **nicht** funktioniert, obwohl es sich nach Messung anfühlt: Fettungen zählen. Jans Git-Hooks-Artikel liegt bei 30,9 pro 1000 Wörter und damit über jedem KI-Text.
+
 ```sh
-draft=~/Documents/Notes/Blog/<entwurf>.md
-ref=~/Documents/Notes/Blog/2026-03-28-myhomepage-redesign.md
-for f in "$draft" "$ref"; do
-  w=$(wc -w < "$f")
-  s=$(grep -o 'sondern' "$f" | wc -l)
-  b=$(grep -o '\*\*' "$f" | wc -l)
-  a=$(grep -oE 'Entscheidend (ist|war)|Genau das|Unterm Strich|Was bleibt|lässt sich in einen Satz' "$f" | wc -l)
-  awk -v f="$(basename "$f")" -v w=$w -v s=$s -v b=$b -v a=$a \
-    'BEGIN{printf "%-40s %5d Wörter  sondern=%-3d Merksätze=%-3d Fettungen/1k=%.1f\n", f, w, s, a, b/2*1000/w}'
-done
+f=~/Documents/Notes/Blog/<entwurf>.md
+w=$(wc -w < "$f")
+awk -v w=$w \
+  -v d="$(grep -o '[–—]' "$f" | wc -l)" \
+  -v s="$(grep -o 'sondern' "$f" | wc -l)" \
+  -v a="$(grep -oE 'Entscheidend (ist|war)|Genau das|Unterm Strich|Was bleibt|lässt sich in einen Satz' "$f" | wc -l)" \
+  'BEGIN{printf "%d Wörter  Striche=%d  sondern/1k=%.1f  Merksätze=%d\n", w, d, s*1000/w, a}'
 ```
 
-Die Zählung ist ein Rauchmelder, kein Prüfsiegel. Sie findet zwei Muster; die übrigen KI-Fingerabdrücke findet nur das Lesen (siehe `~/Projects/dotfiles/.claude/rules/no-ai-tells.md`):
+Striche gehören auf 0, die beiden anderen Werte sind Rauchmelder ohne festen Grenzwert. Die Zählung ersetzt das Lesen nicht: Die übrigen KI-Fingerabdrücke findet nur der Durchgang von Hand (siehe `~/Projects/dotfiles/.claude/rules/no-ai-tells.md`):
 
 - Dreiergruppen als Stilmittel („kein A, kein B, kein C“)
 - jeder Abschnitt endet auf einer Pointe
@@ -134,3 +139,5 @@ Im Zweifel weglassen und im Chat erwähnen, statt es in den Text zu schreiben un
 ## Sprache
 
 Deutsch, in Jans Stimme: sachlich, erste Person, unprätentiös, gelegentlich trocken. Umlaute und `ß` korrekt setzen, auch wenn Jans Eingaben sie ASCII-ersetzen. Deutsche Anführungszeichen `„…“`, nie das gerade `"` als Schlusszeichen. Keine Emojis.
+
+Keine typografischen Gedankenstriche. Wo einer im Entwurf steht, gehört dort ein Komma, ein Doppelpunkt, ein Punkt oder eine Klammer hin. Jan schreibt so, und ein Text voller `—` liest sich sofort nach Maschine. Der Bindestrich in zusammengesetzten Wörtern bleibt davon unberührt.

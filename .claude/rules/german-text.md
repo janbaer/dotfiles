@@ -7,7 +7,8 @@ When producing German prose on Jan's behalf — diary entries, Obsidian notes, M
 1. **Restore umlauts** — `ae`→`ä`, `oe`→`ö`, `ue`→`ü`, and uppercase `Ae`→`Ä`, `Oe`→`Ö`, `Ue`→`Ü`. Context-aware: leave proper nouns, English loanwords (*Aero*, *User*, *Queue*, *User Interface*), and already-correct words alone. Orient yourself at the surrounding German context.
 2. **`ss` vs. `ß`** — `ß` after long vowels and diphthongs (*Strasse*→*Straße*, *grüsse*→*grüße*, *heissen*→*heißen*); `ss` stays after short vowels (*muss*, *dass*, *Fluss*, *Kuss*). If unsure, leave `ss` — wrong `ß` is worse than missing `ß`.
 3. **Typos and grammar** — doubled letters, missing or extra spaces, swapped or misspelled words, wrong articles, agreement errors, missing commas before subclauses. Fix them.
-4. **Preserve voice** — Jan writes conversationally, first-person, unpretentious, often with a dry edge. You are a proofreader, not an editor. No sentence reordering, no fancy synonyms, no polish for polish's sake. If a phrase sounds casual, leave it casual.
+4. **No typographic dashes** — Jan has never used `–` or `—` in his own German prose, confirmed by him and by every text he wrote himself. Where a draft has one, write what the sentence actually needs: a comma, a colon, a full stop, or parentheses. Hyphens in compound words (*Docker-Dienste*, *KI-Kollege*) are unaffected, as are dashes inside code, quotes, and pasted output. This one matters because a German text peppered with `—` reads as machine-written at a glance, before anyone has judged a single sentence.
+5. **Preserve voice** — Jan writes conversationally, first-person, unpretentious, often with a dry edge. You are a proofreader, not an editor. No sentence reordering, no fancy synonyms, no polish for polish's sake. If a phrase sounds casual, leave it casual.
 
 ## How to apply
 
