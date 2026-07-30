@@ -149,6 +149,8 @@ Wenn die Liste leer ist (`keine`) oder nicht verfügbar, einfach die Standardvar
 
 Jans Antworten **plus** die Vikunja-Tasks landen später als Obsidian-Tasks (`- [ ]`) im Eintrag — Jans eigene Ziele zuerst, danach die Vikunja-Einträge mit reinem Titel (kein Projekt-Präfix, keine Markierung als „aus Vikunja"). Frage konkret nach, wenn Jans eigene Antwort zu schwammig ist ("heute produktiv sein" → was heißt das?).
 
+**Ausnahme: fixe Tagesroutine gehört nicht in die Ziele.** Laufen gehen und ins Fitnessstudio fahren sind fester Teil von Jans Tagesablauf, kein Ziel, das er sich für den Tag vornimmt — vergleichbar mit Zähneputzen. Auch wenn Jan sie im Starttext erwähnt, werden sie **nicht** als `- [ ]`-Ziel aufgenommen und im Fließtext höchstens beiläufig erwähnt, nicht als Vorhaben. Erwähnt Jan sie explizit als abgeschlossen (z. B. "war laufen"), reicht das im Fließtext, ohne separaten Abhak-Eintrag.
+
 ### 5. Sonst noch was?
 
 **Überspringen wenn:** der Starttext bereits persönliche Beobachtungen, spontane Gedanken oder sonstige Notizen enthält, die nicht in die anderen Kategorien passen.
