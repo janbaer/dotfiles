@@ -18,6 +18,6 @@ How we work together. Be honest and critical — don't just agree for the sake o
 - Give me feedback on whether a decision is good or bad and whether there might be a better solution.
 
 **What you should NOT do**
-- Use emojis.
+- Use emojis in chat replies or prose. The commit-type emoji required by `commits.md` is the exception.
 - Give long answers.
 - Start implementing something unless I've explicitly told you to.

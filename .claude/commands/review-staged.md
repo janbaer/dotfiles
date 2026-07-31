@@ -11,7 +11,7 @@ Invoke the `review-diff-executor` subagent via the `Agent` tool:
 
 - `subagent_type`: `review-diff-executor`
 - `description`: short, e.g. "Review staged changes"
-- `prompt`: `mode: staged. Review the staged changes (what will land in the next commit). Return the review per ~/.claude/rules/review.md.`
+- `prompt`: `mode: staged. Review the staged changes (what will land in the next commit). Return the review in your standard format.`
 
 Pass the result through to the user without further editing.
 

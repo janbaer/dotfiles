@@ -37,7 +37,6 @@ When amending an existing message, keep the rationale text that is already writt
 
 ## Formatting rules
 
-- Commit message convention: use imperative gerund form (e.g., 'Adding' not 'Add').
 - Preserve prior draft details when amending messages.
 - If git current branch is a feature branch, you can guess the ticket from the branch-name.
 - Never add any AI attribution comments in commit messages. This includes:

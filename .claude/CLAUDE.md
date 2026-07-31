@@ -1,8 +1,5 @@
 ## CLAUDE.md
 
-Read @./ABOUTME.md to learn who am I.
+Read @./ABOUTME.md to learn who I am.
 
-Behavioral guidance lives in `.claude/rules/` (auto-loaded), notably:
-
-- `collaboration.md` — how we work together: tone, honesty, peer-level communication.
-- `coding-discipline.md` — guidelines to reduce common coding mistakes.
+Behavioral guidance lives in `.claude/rules/` (auto-loaded).

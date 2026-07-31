@@ -35,6 +35,7 @@ When editing existing code:
 - Don't refactor things that aren't broken.
 - Match existing style, even if you'd do it differently.
 - If you notice unrelated dead code, mention it - don't delete it.
+- Always respect .editorconfig in the working directory; fall back to the one in $HOME.
 
 When your changes create orphans:
 - Remove imports/variables/functions that YOUR changes made unused.
@@ -45,6 +46,8 @@ The test: Every changed line should trace directly to the user's request.
 ## 4. Goal-Driven Execution
 
 **Define success criteria. Loop until verified.**
+
+This governs execution once Jan has given the go-ahead. Whether to start at all is `collaboration.md`'s call — don't begin implementing unless asked, but once asked, run the task to completion instead of checking back at every step.
 
 Transform tasks into verifiable goals:
 - "Add validation" → "Write tests for invalid inputs, then make them pass"

@@ -13,11 +13,13 @@ Prepend this to every qualifying document:
 
 ```markdown
 > **Status:** Draft — YYYY-MM-DD
-> **Noch offen:** <what I could not verify, or "—" if nothing>
+> **Open:** <what I could not verify, or "—" if nothing>
 ```
 
+The header is always English, regardless of the document's language — a German banner on an English hand-off reads as machine-generated before anyone judges a sentence.
+
 - **Draft is the default. Always. No exceptions.** Even if the document looks complete.
-- The "Noch offen" line is honest, not decorative: list every claim I could not check against a source or against Jan's actual context. If genuinely nothing is open, write `—`.
+- The "Open" line is honest, not decorative: list every claim I could not check against a source or against Jan's actual context. If genuinely nothing is open, write `—`.
 
 ## Final is Jan's call, never mine
 

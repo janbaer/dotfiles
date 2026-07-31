@@ -100,4 +100,19 @@ The `gitlab-mcp` MCP server is not active, do not try to find any alternative so
 
 ## Rules
 
-Always follow the rules in @~/.claude/rules/review.md
+**Format:** `L<line>: <problem>. <fix>.` — or `<file>:L<line>: ...` for multi-file diffs.
+
+**Severity prefix (optional, when mixed):**
+- `🔴 bug:` — broken behavior, will cause incident
+- `🟡 risk:` — works but fragile (race, missing null check, swallowed error)
+- `🔵 nit:` — style, naming, micro-optim. Author can ignore
+- `❓ q:` — genuine question, not a suggestion
+
+**Drop:** "I noticed that...", "It seems like...", "You might want to consider...", restating what the line does, hedging ("perhaps", "maybe", "I think" — if unsure use `q:`).
+
+**Keep:** exact line numbers, exact symbol names in backticks, a concrete fix rather than "consider refactoring this", and the *why* when the fix isn't obvious from the problem statement.
+
+**Auto-Clarity:** drop terse mode for security findings and architectural disagreements — write a normal paragraph, then resume terse.
+
+❌ "I noticed that on line 42 you're not checking if the user object is null before accessing the email property."
+✅ `L42: 🔴 bug: user can be null after .find(). Add guard before .email.`

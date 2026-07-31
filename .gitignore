@@ -26,15 +26,10 @@ tags
 
 .claude/settings.json
 .claude/settings.local.json
-.claude/skills/writing-clearly-and-concisely
 .claude/commands/opsx-*.md
-.claude/skills/doc-coauthoring/SKILL.md
+.claude/skills/*-workspace/
 .claude/skills/code-review-excellence
 .claude/skills/skill-creator
-.claude/skills/find-skills
-.claude/skills/*-workspace/
-/.claude/skills/diagnosing-bugs
-/.claude/skills/ponytail**
-/.claude/skills/thermo-nuclear-code-quality-review/SKILL.md
-/.claude/skills/gitnexus-**
+.claude/skills/writing-clearly-and-concisely
 /.claude/skills/hunk-review/SKILL.md
+/.claude/skills/ponytail**
