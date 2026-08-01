@@ -4,82 +4,37 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is Jan's personal dotfiles repository containing system configurations, scripts, and Neovim setup for a Linux desktop environment (Manjaro/Hyprland).
+Jan's personal dotfiles: shell, terminal, git, and Claude Code configuration for his Linux and macOS machines. The Neovim setup and the Hyprland desktop environment (waybar, kitty, rofi, swaync, wlogout) previously lived here but have been removed — Neovim now lives in a separate `neovim-config` project. Do not reintroduce references to them.
 
-## Architecture
+## Deployment model (important)
 
-### Core Components
+There is **no** `sync.sh`, install script, or build step. This repo is the source of truth; deployment happens through NixOS **home-manager**, which symlinks files from here into `$HOME` and `~/.claude/`. The home-manager configuration itself lives in a separate NixOS repo, not here.
 
-- **Neovim Configuration** (`.config/nvim/`): Lua-based configuration using lazy.nvim plugin manager
-  - Core modules: `core/lsp.lua`, `core/options.lua`, `core/keymaps.lua`, `core/functions.lua`, `core/autocmd.lua`
-  - Plugins: Organized in `lua/plugins/` directory with lazy loading
-  - LSP configurations: Language-specific configs in `lsp/` directory
-  - File-type plugins: `ftplugin/` for language-specific settings
+Consequences when editing:
 
-- **System Scripts** (`bin/`): Utility scripts for system management
-  - Display management (mirror-display.sh, toggle-notebook-screen.sh)
-  - Backup utilities (backup-secure-data.sh, rsync-*.sh)
-  - Hardware controls (backlight-ctl.sh, pa-volume-ctl.sh)
-  - System utilities (slowtype.sh, curltime)
+- Editing a file in this repo is live immediately on the current machine (it's the symlink target). No sync step to run.
+- `~/.claude/commands/`, `~/.claude/skills/`, `~/.claude/rules/` are symlinks back to `.claude/` here. `~/.claude/agents/` is a real directory, so a new agent needs a manual symlink (see `.claude/rules/file-locations.md`).
+- Machine-local secrets (`.claude/settings.json`, `.zshrc.local`, `.zshrc.secrets`, OAuth/MCP credentials) are git-ignored and stay out of this repo.
 
-- **Desktop Environment** (`.config/`): Hyprland window manager configuration
-  - Waybar configuration with custom scripts
-  - Rofi launcher configurations
-  - Notification daemon (swaync)
-  - Terminal emulator (kitty)
+## Structure
 
-### Key Configuration Files
+- **`.claude/`** — the largest and most active part of the repo. Jan's Claude Code configuration, versioned so it syncs across machines:
+  - `skills/` — task-specific skills (Forgejo/GitLab PR workflows, Vikunja tasks, Obsidian diary, fitness/security/knowledge helpers). Many skills under `~/.claude/skills/` are external and git-ignored — only Jan's own live here.
+  - `commands/` — slash commands (`commit`, `review-diff`, `review-staged`, `jira-ticket`, etc.).
+  - `agents/` — subagent definitions (`code-reviewer`, `review-diff-executor`, `vikunja-agent`).
+  - `rules/` — behavioral rules auto-loaded into every session (see below).
+  - `hooks/` — shell hooks (e.g. `work-hours-check.sh` warns when private projects are touched during work hours; `howcani-reminder.sh` nudges toward the howcani skill).
+  - `knowledge-base/` — Jan's coding preferences and working agreement, read on demand.
+- **`.config/`** — tool configs: `zsh/` (the actual shell config; `ZDOTDIR=$HOME/.config/zsh`), `atuin/`, `ghostty/`, `lazygit/`, `powerline/`, `Code/`.
+- **`bin/`** — a handful of standalone utility scripts.
+- **Root dotfiles** — `.tmux.conf`, `.gitconfig` (+ `.gitconfig_check24`), `.p10k.zsh`, `.fzf-init.zsh`, `.zshenv`.
+- **Formatter/linter configs** — `.editorconfig`, `.prettierrc.yaml`, `rustfmt.toml` are provided to `$HOME` for use by other projects; this repo has no build, lint, or test pipeline of its own.
 
-- `sync.sh`: Main synchronization script for deploying dotfiles
-- `rustfmt.toml`: Rust code formatting configuration
-- `.config/nvim/init.lua`: Neovim entry point with lazy.nvim bootstrap
-- `.config/hypr/hyprland.conf`: Hyprland window manager configuration
-- `.config/waybar/config.jsonc`: Status bar configuration
+## Rules that govern work here
 
-## Common Development Tasks
+`.claude/rules/` is auto-loaded and overrides default behavior. The ones most likely to affect a change in this repo:
 
-### Deployment
-```bash
-./sync.sh
-```
-Synchronizes dotfiles to home directory, creates nvim symlink, and recompiles German spell files.
-
-### Neovim Setup
-```bash
-.config/nvim/setup.sh
-```
-Initial Neovim configuration setup script.
-
-### Neovim Cleanup
-```bash
-.config/nvim/cleanup-nvim.sh
-```
-Cleans up Neovim configuration and data.
-
-### Rust Formatting
-Uses `rustfmt.toml` configuration with 2-space indentation and 100-character line width.
-
-## Development Environment
-
-- **Primary Editor**: Neovim with extensive LSP support
-- **Terminal**: Kitty terminal emulator
-- **Shell**: Zsh with custom configurations
-- **Window Manager**: Hyprland (Wayland compositor)
-- **File Manager**: lf (terminal-based)
-
-## Neovim Plugin Architecture
-
-The Neovim configuration uses lazy.nvim for plugin management with:
-- Automatic plugin loading from `lua/plugins/`
-- LSP configurations for multiple languages
-- Custom keymaps and functions
-- Language-specific settings via ftplugin
-
-## System Integration
-
-Scripts in `bin/` provide system-level functionality:
-- Hardware control (brightness, volume, displays)
-- Data backup and synchronization
-- System utilities and automation
-
-The configuration is designed for a Linux desktop environment with focus on keyboard-driven workflows and terminal-based development.
+- `file-locations.md` — skills/commands/agents/rules must be created under this repo's `.claude/`, never directly in `~/.claude/`; new agents need a manual symlink.
+- `commits.md` — commit format is `{component} {emoji}: {message}` with imperative gerund messages; component is the top-level area (`claude`, `bin`, `zsh`, `git`, …). No AI attribution.
+- `skill-language.md` — code/git tooling skills are written in English; personal skills that produce German output are written in German.
+- `no-ai-tells.md`, `coding-discipline.md`, `editing.md` — keep changes surgical, comment-free unless the surrounding file comments, and mirror existing style.

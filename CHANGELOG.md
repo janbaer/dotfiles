@@ -2,6 +2,19 @@
 
 This file describes all changes in the project.
 
+## 2026-08-01
+---
+
+- Remove configs that home-manager already owns or that nothing reads anymore (nushell, stylua, eslintrc, codespellignore, empty gitattributes)
+- Update CLAUDE.md accordingly
+
+## 2026-07-17
+---
+
+- Remove the Neovim config — it now lives in its own dedicated repo
+- Remove obsolete files no longer in use (ctags, moc, pylintrc, dev tmux config, and several one-off `bin/` scripts)
+- Update CLAUDE.md to drop references to the removed Neovim and desktop setup
+
 ## 2025-10-26
 ---
 

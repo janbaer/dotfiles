@@ -1,1 +1,0 @@
--- MDX files (Markdown + JSX)

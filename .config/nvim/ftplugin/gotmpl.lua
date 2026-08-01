@@ -1,1 +1,0 @@
--- Go template files (.gotmpl)

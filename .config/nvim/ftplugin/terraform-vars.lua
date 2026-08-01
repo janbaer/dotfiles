@@ -1,1 +1,0 @@
--- Terraform variable files (.tfvars)
