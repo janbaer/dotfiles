@@ -33,3 +33,4 @@ tags
 .claude/skills/writing-clearly-and-concisely
 /.claude/skills/hunk-review/SKILL.md
 /.claude/skills/ponytail**
+/.claude/hooks/herdr-agent-state.sh
