@@ -32,13 +32,15 @@ For simple note lookups or quick searches, reading the schema is not required.
 
 ## Vault Selection
 
-All CLI commands require a `vault` parameter. The default vault name is **`Obsidian`**.
+All CLI commands require a `vault` parameter. The default vault name is **`Obsidian`**, located at `~/Documents/Obsidian`.
 
 If the user specifies a vault name (e.g. "search my vault Notes for…"), use that name. Otherwise use the default:
 
 ```bash
 obsidian vault="Obsidian" operation ...
 ```
+
+For direct file access (Edit tool, `find`, `grep`), resolve the path from `~/.config/obsidian/obsidian.json` instead of hardcoding it. Never write to `/mnt/zb-data/webdav/data/Obsidian` — that is an outdated replica the running Obsidian instance does not use.
 
 ## Tools
 
@@ -48,7 +50,7 @@ obsidian vault="Obsidian" operation ...
 | Search by tag | `obsidian vault="..." tag name="TagName"` |
 | List all tags with counts | `obsidian vault="..." tags sort=count counts` |
 | Read a note | `obsidian vault="..." read file="Note Name"` |
-| Create a new note | `obsidian vault="..." create name="..." template="page"` |
+| Create a new note | `obsidian vault="..." create path="Dir/note-name.md"` |
 | Write note content | `obsidian vault="..." append file="..." content="..."` |
 | Set note properties | `obsidian vault="..." property:set name="..." value="..." file="..."` |
 | Find backlinks | `obsidian vault="..." backlinks file="Note Name"` |
@@ -103,14 +105,16 @@ When the user wants to add a new note:
 
 3. **Create with template and set properties** — suggest 3–5 relevant tags based on the note's topic and content, then create the note and set its properties:
    ```bash
-   obsidian vault="Obsidian" create name="note-name" template="page" silent
+   obsidian vault="Obsidian" create path="Dir/note-name.md" silent
    obsidian vault="Obsidian" property:set name="created" value="YYYY-MM-DD" file="note-name"
    ```
+
+   > **Important:** Use `path=` with the full relative path including `.md` — `name=` rejects slashes, and `template="page"` fails with "No template folder configured".
 
    > **Important:** After `obsidian create`, always `Read` the file before using `Write` on it. The CLI creates the file on disk, so the Write tool treats it as an existing file and will reject the call if it hasn't been read in the current session. A `Read` immediately after `create` registers it and unblocks `Write`.
    Use today's date. Tags should be lowercase, hyphenated, and specific enough to be useful for cross-referencing (e.g. `git`, `shell-scripting`, `docker-compose`).
 
-   > **Important:** `property:set` does not handle YAML arrays correctly — it wraps `[]` values in quotes, producing invalid frontmatter like `tags: "[a,b,c]"`. To set tags, locate the file on disk (use `locate` or `find` under `/mnt/zb-data/webdav/data/Obsidian/`) and use the Edit tool to write proper YAML:
+   > **Important:** `property:set` does not handle YAML arrays correctly — it wraps `[]` values in quotes, producing invalid frontmatter like `tags: "[a,b,c]"`. To set tags, locate the file on disk (use `locate` or `find` under `~/Documents/Obsidian/`) and use the Edit tool to write proper YAML:
    > ```yaml
    > tags:
    >   - tag1
