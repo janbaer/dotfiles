@@ -1,19 +1,8 @@
 ---
 name: mp3-rename
 model: haiku
-description: >
-  Renames all MP3 files in the current directory using their ID3 tags, following
-  the convention "Artist - Title.mp3". Strips non-ASCII characters, [ ] /, collapses
-  whitespace, and sets the year tag to the current year if missing. Shows a numbered
-  preview before any change is applied.
-  With the --tags argument the direction is reversed: the ID3 tags are derived from
-  the filename instead (artist/title split on the first " - ").
-  Use this skill whenever the user wants to rename, clean up, or normalize MP3 filenames
-  based on their tags — triggered by phrases like "rename my mp3 files", "clean up the
-  filenames", "normalize mp3 names", "rename using id3 tags", or when the working
-  directory contains MP3 files and the user wants consistent naming. Also use it when
-  the user wants to set the tags from the filenames ("--tags", "fix the tags from the
-  filename", "tag from filename").
+description: "Renames the MP3 files in the current directory from their ID3 tags to 'Artist - Title.mp3', with a numbered preview before anything is changed. With --tags the direction reverses and the tags are derived from the filenames. Use whenever the user wants to rename, clean up or normalize MP3 filenames, or fix tags from filenames."
+disable-model-invocation: true
 ---
 
 # MP3 Rename

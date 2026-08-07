@@ -2,6 +2,7 @@
 name: jira-ticket
 description: Draft a well-structured JIRA ticket (Story, Bug, or Maintenance task) for manual creation, or view an existing issue, using the Jira MCP server
 argument-hint: summary or issue key (e.g. PROJ-123)
+disable-model-invocation: true
 ---
 
 # JIRA Ticket Drafter

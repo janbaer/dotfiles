@@ -1,7 +1,7 @@
 ---
 name: configure-claude
 model: sonnet
-description: Configure Claude Code installation with Jan's standard setup — model, MCP servers, plugins, marketplaces, and statusline. Use when setting up Claude on a new machine, syncing configuration across systems, or when the user says "configure claude", "set up claude", "install my plugins", "add my MCP servers", or "sync my claude config". Also trigger when the user mentions missing MCP servers, plugins, or wants to verify their Claude setup matches the standard.
+description: "Configure a Claude Code installation with Jan's standard setup: model, MCP servers, plugins, marketplaces, statusline. Use when setting up Claude on a new machine, when the user says 'configure claude' or 'sync my claude config', or when MCP servers or plugins are missing."
 ---
 
 # Configure Claude Code

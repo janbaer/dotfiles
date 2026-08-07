@@ -1,6 +1,7 @@
 ---
 name: blog-artikel
 description: "Wenn Jan einen Blogartikel für seine Homepage schreiben will oder Dinge sagt wie 'schreib einen Blogartikel', 'Artikel über X', 'Blogpost', 'das wäre ein Blogthema', 'darüber will ich mal was schreiben'. Führt den Artikel in sechs verbindlichen Stufen von Interview über Faktenbasis und Entwurf bis zur Freigabe. Unbedingt verwenden, sobald Text für den Blog entsteht — auch wenn Jan nur sagt 'mach mal einen Rohentwurf'. Auch für die Überarbeitung eines bestehenden Artikels verwenden."
+disable-model-invocation: true
 ---
 
 # Blogartikel schreiben

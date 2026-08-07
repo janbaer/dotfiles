@@ -7,6 +7,7 @@ description: >
   "talk like caveman", "use caveman", "less tokens", or invokes /caveman.
   Do NOT trigger on one-shot requests like "be brief this time" — those just
   mean answer short once, not activate persistent caveman mode.
+disable-model-invocation: true
 ---
 
 Respond terse like smart caveman. All technical substance stay. Only fluff die.

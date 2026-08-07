@@ -11,6 +11,7 @@ description: >
   photos", "rename the photos in this folder", "analyze and name my trip photos",
   "clean up my photo folder", or whenever the working directory looks like a photo
   collection (contains many .jpg/.JPG files).
+disable-model-invocation: true
 ---
 
 # Photo Organizer

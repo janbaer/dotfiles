@@ -1,6 +1,7 @@
 ---
 name: security-advisory-triage
-description: Parses security vulnerability reports in Slack bot format (entries with Severity/Package/Identifiers and emoji severity markers like `:red_circle:`, `:large_orange_circle:`) into a deduped table, fetches GitHub advisory descriptions, and checks which packages already have a Jira ticket. Read-only — it reports which packages are new vs. already tracked, but never creates Jira tickets. Trigger when the user provides a security.txt or security report file, pastes Slack security bot alerts, says "parse security report", "process vulnerability alerts", "security advisory report", or shares any file containing GHSA identifiers with Package/Severity entries.
+description: "Parses Slack security-bot vulnerability reports (Severity/Package/Identifiers entries, GHSA ids) into a deduped table, fetches the advisory descriptions and checks which packages already have a Jira ticket. Read-only, never creates tickets. Trigger on a security.txt, pasted security bot alerts, or 'parse security report'."
+disable-model-invocation: true
 ---
 
 Triage a security vulnerability report: parse, deduplicate, look up advisories, and check which packages already have a Jira ticket. This skill is **read-only** — it never creates Jira tickets.

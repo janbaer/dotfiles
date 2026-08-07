@@ -1,7 +1,7 @@
 ---
 name: vikunja-task-create
 model: haiku
-description: "Legt einen neuen Task in Vikunja an. Trigger: 'neuer Task: ...', 'merk vor: ...', 'füg in Vikunja hinzu: ...', 'leg einen Task an für ...', 'Task erstellen: ...', 'erinnere mich daran, ...', 'noch zu tun: ...', 'schreib das auf meine Liste'. Pflichtangaben sind Titel und Projekt (Standard: Inbox). Fälligkeit ist optional und wird aus natürlicher Sprache geparst (morgen, Freitag, in 3 Tagen, am 5.5.). Erkennt aus dem Titel, in welches Projekt der Task am besten passt — z. B. Rechnungen/Verträge → Finanzen, Server/Docker/k3s/Backups → Homelab, Putzen/Garten/Reparaturen → Haushalt, Job/CVE/Code-Themen → CHECK24 - BU. Unbedingt verwenden, sobald Jan etwas in Vikunja ablegen oder sich für später vormerken will — auch wenn er das Wort 'Vikunja' nicht nennt."
+description: "Legt einen neuen Task in Vikunja an. Trigger: 'neuer Task', 'merk vor', 'leg einen Task an', 'erinnere mich daran', 'schreib das auf meine Liste'. Titel und Projekt sind Pflicht (Standard: Inbox), Fälligkeit wird aus natürlicher Sprache geparst und das passende Projekt aus dem Titel erraten. Auch verwenden, wenn Jan das Wort 'Vikunja' nicht nennt."
 ---
 
 # Vikunja-Task anlegen

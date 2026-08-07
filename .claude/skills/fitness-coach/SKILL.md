@@ -1,13 +1,6 @@
 ---
 name: fitness-coach
-description: >
-  Persönlicher Fitness- und Ernährungscoach für Jan. Hilft beim Erstellen von Trainingsplänen
-  (Gym, Krafttraining), einzelnen Workout-Sessions, Ernährungsplänen und konkreten Mahlzeitenvorschlägen.
-  Unbedingt verwenden, wenn Jan über Training, Workouts, Gym, Übungen, Muskeln, Ernährung,
-  Kalorien, Makros, Rezepte, Pre-/Post-Workout-Ernährung oder Abnehmen spricht — auch wenn
-  er den Skill nicht explizit nennt. Auch bei Fragen wie "Was soll ich heute trainieren?",
-  "Was kann ich essen nach dem Training?", "Erstell mir einen Trainingsplan", "Wie viele
-  Kalorien brauche ich?" sofort verwenden.
+description: "Persönlicher Fitness- und Ernährungscoach für Jan: Trainingspläne, einzelne Workouts, Ernährungspläne, Mahlzeitenvorschläge. Verwenden, sobald Jan über Training, Gym, Übungen, Ernährung, Kalorien, Makros oder Abnehmen spricht, z. B. 'Was soll ich heute trainieren?' oder 'Was esse ich nach dem Training?'."
 ---
 
 # Fitness- und Ernährungscoach

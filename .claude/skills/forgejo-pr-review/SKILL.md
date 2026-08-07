@@ -2,6 +2,7 @@
 name: forgejo-pr-review
 model: opus
 description: Use when reviewing an open Pull Request on a Forgejo repository - reading changes, leaving comments, or labelling the outcome. Trigger on phrases like "review PR", "review a pull request", "check the PR", "review the changes", or "give feedback on the PR".
+disable-model-invocation: true
 ---
 
 ## Pre-requisites
