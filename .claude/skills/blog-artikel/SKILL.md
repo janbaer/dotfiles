@@ -34,10 +34,13 @@ Vor dem ersten Prosasatz eine Faktenliste anlegen, im Scratchpad-Verzeichnis der
 ```
 [JAN]     Über 20 IoT-Geräte, gewachsen seit dem Umzug
 [REPO]    services/hermes-agent/defaults.yml: OpenAI-kompatibles Gateway
+[MESSUNG] sox verwirft beim Abbruch den unvollständigen Block   (nicht Jans Wissen)
 [ANNAHME] Er richtet ein neues IoT-Gerät ein paar Mal im Jahr ein
 ```
 
 Alles mit `[ANNAHME]` wird Jan vorgelegt, bevor geschrieben wird. Er bestätigt, korrigiert oder streicht. Was ungeklärt bleibt, kommt entweder nicht in den Text oder wird in Stufe 3 sichtbar markiert.
+
+Der Zusatz **`(nicht Jans Wissen)`** ist die zweite Achse und wird oft vergessen: Die Herkunftsmarker sagen, ob eine Angabe belegt ist, nicht, ob Jan sie kennt. Ein Befund, den ich selbst gemessen oder aus dem Code gelesen habe, ist wahr und trotzdem nicht seiner. Solche Zeilen kriegen den Zusatz, damit Stufe 3 sie erkennt.
 
 ### Stufe 3 — Entwurf
 
@@ -47,6 +50,27 @@ Erst jetzt entsteht Prosa.
   `> **[?]** Wie oft richtest du ein neues Gerät ein?`
 - **Nie erfinden:** Häufigkeiten, Dauern, Mengen, Zeiträume, Gefühle („der Teil, auf den ich am meisten stolz bin“), berufliche Zuschreibungen, Ursachen für Entscheidungen.
 - Wenn beim Schreiben eine Lücke auffällt, die in Stufe 1 durchgerutscht ist: markieren und weiterschreiben, am Ende gesammelt nachfragen.
+
+#### Der Erklärtest
+
+Der Artikel steht in Jans Stimme. Ein Satz kann vollständig belegt sein und trotzdem nicht in den Text gehören, weil er aus meinem Kopf stammt und nicht aus seinem. Der Test dafür lautet:
+
+> Könnte Jan diesen Satz jemandem im Gespräch erklären, ohne nachzuschlagen?
+
+Beispiel aus dem Spracherkennungs-Artikel, beide Sätze waren belegt:
+
+- „Das Aufnahmeprogramm nimmt in feste Blöcke von 32.768 Byte auf.“ Nein. Das hat er nie gewusst und würde es nie so erzählen.
+- „Eine Umgebungsvariable erreicht den von Hyprland gestarteten Keybind nicht.“ Ja, ohne zu zögern. Das ist sein Fachgebiet.
+
+Die Grenze verläuft entlang seiner Expertise, nicht quer durch den ganzen Artikel. Linux, NixOS, Container, APIs, Infrastruktur: da schreibt er selbst so. Was das Thema des Artikels neu einführt, meistens nicht.
+
+Fällt ein Satz durch, gibt es drei Auswege, in dieser Reihenfolge:
+
+1. **Zuschreiben.** „Claude hat zwei Ursachen gefunden“ statt einer Erklärung aus dem Nichts. Das ist zugleich der ehrliche Weg, die Arbeitsteilung sichtbar zu machen.
+2. **Auf das Ergebnis eindampfen.** Symptom und Wirkung bleiben, der Mechanismus fällt weg.
+3. **Streichen.**
+
+Der Test läuft nebenbei gegen die Länge: Ein Artikel, der zu lang wird, ist oft einer, in dem ich meine Befunde ausgebreitet habe statt Jans Erfahrung.
 
 ### Stufe 4 — Faktencheck
 
