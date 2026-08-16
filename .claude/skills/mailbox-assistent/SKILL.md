@@ -202,7 +202,7 @@ Alle drei Server laufen aus lokalen Klonen unter `~/Projects`, keiner aus npm:
 
 | Server | Verzeichnis | Grund |
 | --- | --- | --- |
-| `imap-mini-mcp` | `~/Projects/imap-mini-mcp` | einziger IMAP-Server, der Entwürfe kann und nicht senden kann |
+| `imap-mini-mcp` | `~/Projects/imap-mini-mcp`, Branch `mailbox` | einziger IMAP-Server, der Entwürfe kann und nicht senden kann |
 | `caldav-mcp` | `~/Projects/caldav-mcp`, Branch `mailbox` | Original löst Serientermine nicht auf |
 | `carddav-mcp` | `~/Projects/carddav-mcp`, Branch `mailbox` | Original liefert bei Open-Xchange eine leere Kontaktliste |
 
