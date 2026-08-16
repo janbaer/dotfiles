@@ -1,6 +1,7 @@
 ---
 name: fitness-coach
 description: "Persönlicher Fitness- und Ernährungscoach für Jan: Trainingspläne, einzelne Workouts, Ernährungspläne, Mahlzeitenvorschläge. Verwenden, sobald Jan über Training, Gym, Übungen, Ernährung, Kalorien, Makros oder Abnehmen spricht, z. B. 'Was soll ich heute trainieren?' oder 'Was esse ich nach dem Training?'."
+model: sonnet
 ---
 
 # Fitness- und Ernährungscoach
