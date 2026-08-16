@@ -116,7 +116,10 @@ Werkzeug selbst, du lieferst nur den Text. Alternativ nimmt `create_draft`
 ein `in_reply_to` mit derselben Wirkung.
 
 Hat Jan einen Entwurf schon gesehen und will etwas geändert haben, nimm
-`update_draft` statt einen zweiten anzulegen.
+`update_draft` statt einen zweiten anzulegen. Beachte dabei: der Entwurf
+bekommt eine neue `id`, weil IMAP keine Nachricht ändern kann und der Server
+stattdessen anhängt und die alte löscht. Für eine zweite Änderung also die
+`id` aus der letzten Antwort nehmen, nicht die ursprüngliche.
 
 Für den Ton gilt `no-ai-tells`: Jans eigene Sprache, knapp, keine
 Aufzählungszeichen in Fließtext, keine Floskeln wie "ich hoffe, es geht dir
