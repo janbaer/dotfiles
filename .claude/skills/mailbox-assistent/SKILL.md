@@ -20,11 +20,11 @@ ignoriert, bekommt leere Ergebnisse oder Fehler ohne Meldung.
 
 ## Grundregeln
 
-**Es wird nie eine Mail verschickt.** Der IMAP-Server ist bewusst so
-konfiguriert, dass die Sendewerkzeuge gar nicht existieren. Es gibt nur
-Entwürfe. Wenn Jan "schick eine Mail" sagt, meint er trotzdem einen Entwurf.
-Sag ihm am Ende, dass der Entwurf im Ordner Drafts liegt und er ihn selbst
-abschickt.
+**Es wird nie eine Mail verschickt.** Der IMAP-Server kann es nicht, er
+bringt gar keine SMTP-Bibliothek mit, und das Passwort hat ohnehin keine
+Sendeberechtigung. Es gibt nur Entwürfe. Wenn Jan "schick eine Mail" sagt,
+meint er trotzdem einen Entwurf. Sag ihm am Ende, dass der Entwurf im Ordner
+Drafts liegt und er ihn selbst abschickt.
 
 **Entwürfe ohne Rückfrage, Termine mit Rückfrage.** Einen Entwurf liest Jan im
 Mailprogramm ohnehin noch einmal, bevor er ihn abschickt. Also direkt
@@ -46,7 +46,7 @@ fehl. Das passiert regelmäßig genug, um es vorher zu prüfen.
 Prüfe nur den Server, den du für die aktuelle Aufgabe brauchst, nicht alle
 drei. Ein billiger Leseaufruf genügt: `mcp__caldav-mcp__list-calendars` für
 Termine, `mcp__carddav-mcp__list-address-books` für Kontakte,
-`mcp__imap-mcp__imap_list_folders` für Mail.
+`mcp__imap-mcp__list_folders` für Mail.
 
 Kommt ein Verbindungsfehler, sag Jan:
 
@@ -96,26 +96,27 @@ Findest du niemanden, frag Jan nach der Adresse. Erfinde keine.
 
 ## E-Mail-Entwürfe
 
-Werkzeug: `mcp__imap-mcp__imap_save_draft`.
+Werkzeuge: `mcp__imap-mcp__create_draft`, `draft_reply`, `update_draft`.
 
-Der Entwurfsordner wird automatisch gefunden, der Ordner `Drafts` trägt das
-Kennzeichen `\Drafts`. Kommt trotzdem ein Fehler ohne Meldung zurück, gib
-`folder: "Drafts"` mit, dann läuft es.
+Der Entwurfsordner wird über das Kennzeichen `\Drafts` gefunden, du musst
+nichts angeben.
 
 Ablauf:
 
 1. Empfänger über die Kontakte auflösen, wenn Jan einen Namen statt einer
    Adresse nennt.
-2. Text schreiben. Sprache wie die Anfrage, im Zweifel Deutsch. Anrede aus dem
-   Skript übernehmen.
-3. `imap_save_draft` mit `to`, `subject`, `text`, `folder: "Drafts"`.
+2. Text schreiben. Sprache wie die Anfrage, im Zweifel Deutsch. Anrede aus
+   dem Kontakt übernehmen.
+3. `create_draft` mit `to`, `subject`, `body`, bei Bedarf `cc`.
 4. Jan kurz sagen, was im Entwurf steht und wo er liegt.
 
-Bei einer Antwort auf eine vorhandene Mail: erst
-`mcp__imap-mcp__imap_search_emails` oder `imap_get_latest_emails`, um die
-Nachricht zu finden, dann `imap_get_email` für den Volltext, dann
-`imap_save_draft` mit `inReplyTo` (die `messageId` der Originalmail) und
-`references`. Betreff mit `Re: ` davor. So bleibt der Thread zusammen.
+Bei einer Antwort auf eine vorhandene Mail nimm `draft_reply` mit der `id`
+der Originalmail. Betreff und die Kopfzeilen für den Thread setzt das
+Werkzeug selbst, du lieferst nur den Text. Alternativ nimmt `create_draft`
+ein `in_reply_to` mit derselben Wirkung.
+
+Hat Jan einen Entwurf schon gesehen und will etwas geändert haben, nimm
+`update_draft` statt einen zweiten anzulegen.
 
 Für den Ton gilt `no-ai-tells`: Jans eigene Sprache, knapp, keine
 Aufzählungszeichen in Fließtext, keine Floskeln wie "ich hoffe, es geht dir
@@ -158,17 +159,27 @@ welchen Termin du meinst, besonders wenn mehrere ähnlich heißen.
 
 ## Posteingang
 
-Werkzeuge: `imap_get_latest_emails`, `imap_search_emails`, `imap_get_email`,
-`imap_get_unread_count`, `imap_list_folders`, `imap_find_thread_messages`.
+Werkzeuge: `find_emails`, `fetch_email_content`, `fetch_email_attachment`,
+`list_folders`, `list_starred_emails`, `mark_read`, `mark_unread`,
+`star_email`, `unstar_email`, `move_email`.
 
-Bei "was ist neu" nimm `imap_get_latest_emails` mit `folder: "INBOX"` und einer
-kleinen Anzahl, etwa 10 bis 15. Fass zusammen, statt Betreffzeilen
-abzuschreiben: wer schreibt, worum geht es, ist etwas zu tun. Volltext nur über
-`imap_get_email` nachladen, wenn die Zusammenfassung ohne ihn nicht trägt, denn
-ganze Mails sind lang.
+`find_emails` filtert nach `folder`, `from`, `subject`, `after`, `before`,
+`unread_only` und `has_attachment`, wobei `after` auch relativ geht, etwa
+`"7d"`. Ohne Angaben nimmt es die neuesten Mails aus `INBOX`. Für die
+Entwürfe also `folder: "Drafts"`, ein eigenes Werkzeug dafür gibt es nicht.
 
-Markieren, Verschieben und Löschen ist nicht möglich, diese Werkzeuge sind
-abgeschaltet.
+Bei "was ist neu" nimm `find_emails` auf `INBOX` mit einer kleinen Anzahl,
+etwa 10 bis 15. Fass zusammen, statt Betreffzeilen abzuschreiben: wer
+schreibt, worum geht es, ist etwas zu tun. Den Volltext nur über
+`fetch_email_content` nachladen, wenn die Zusammenfassung ohne ihn nicht
+trägt, denn ganze Mails sind lang.
+
+Markieren, Sternen und Verschieben sind möglich, aber mach das nur, wenn Jan
+es ausdrücklich verlangt. Ungefragt im Postfach aufräumen ist nicht deine
+Aufgabe. Für `bulk_move_by_sender_email` und `bulk_move_by_sender_domain`
+gilt das doppelt: erst zeigen, wie viele Mails betroffen wären, dann fragen.
+
+Löschen gibt es nicht.
 
 ## Wenn etwas nicht geht
 
@@ -176,28 +187,30 @@ abgeschaltet.
 | --- | --- | --- |
 | Kontaktliste leer | Fork nicht gebaut, `npm run build` fehlt | siehe Konfiguration |
 | Termine mit Datum aus 2024 | dito, Serienauflösung fehlt | siehe Konfiguration |
-| Entwurf schlägt fehl, keine Meldung | Ordnererkennung hakt | `folder: "Drafts"` mitgeben |
 | Termin zwei Stunden verschoben | Zeit als UTC geschrieben | Offset `+02:00` benutzen |
 | Verbindungsfehler | Passwort fehlte beim Sessionstart | Jan bitten, `/mcp` auszuführen |
-| Sendewerkzeug fehlt | Absicht, nicht Fehler | Entwurf anlegen, Jan schickt selbst |
+| Kein Sendewerkzeug | Absicht, nicht Fehler | Entwurf anlegen, Jan schickt selbst |
 
 ## Konfiguration
 
-Die Server stehen in `/home/jan/Projects/.mcp.json`.
+Die Serverliste liegt in `~/Projects/nixos-config/modules/home/dev/files/claude/projects.mcp.json`
+und wird von home-manager nach `~/Projects/.mcp.json` verlinkt. Benutzername
+und Passwörter stehen dort nur als Platzhalter, die Werte legt der Wrapper
+`claudeRun` aus `gopass` in die Umgebung.
 
-**IMAP** ist `imap-mcp-server` von npm. Das Konto liegt in
-`~/.imap-mcp/accounts.json` mit leerem Passwortfeld, das Passwort kommt aus
-`MAILBOX_ORG_IMAP_PASSWORD`. Die Liste der erlaubten Werkzeuge steht in
-`IMAP_MCP_ENABLED_TOOLS`; alles, was senden oder löschen kann, fehlt dort
-absichtlich.
+Alle drei Server laufen aus lokalen Klonen unter `~/Projects`, keiner aus npm:
 
-**CalDAV und CardDAV** laufen aus gepatchten Forks in `~/Projects/caldav-mcp`
-und `~/Projects/carddav-mcp`, nicht aus npm. Beide Originale scheitern an
-Open-Xchange: `list-contacts` liefert eine leere Liste, weil die Bibliothek
-`tsdav` bei der Suche nach den Karten-URLs einen `prop-filter` ohne Bedingung
-schickt, den mailbox.org mit null Treffern beantwortet, und `list-events` gibt
-bei Serienterminen das Startdatum der Serie zurück statt der Termine im
-abgefragten Zeitraum. Die Forks beheben beides.
+| Server | Verzeichnis | Grund |
+| --- | --- | --- |
+| `imap-mini-mcp` | `~/Projects/imap-mini-mcp` | einziger IMAP-Server, der Entwürfe kann und nicht senden kann |
+| `caldav-mcp` | `~/Projects/caldav-mcp`, Branch `mailbox` | Original löst Serientermine nicht auf |
+| `carddav-mcp` | `~/Projects/carddav-mcp`, Branch `mailbox` | Original liefert bei Open-Xchange eine leere Kontaktliste |
 
-Nach einem `git pull` in einem der beiden Verzeichnisse muss `npm run build`
-laufen, sonst zeigt `.mcp.json` auf einen veralteten `dist`-Ordner.
+Die beiden DAV-Server sind Forks mit eigenen Patches, eingereicht als Pull
+Requests bei `dominik1001`. Werden sie angenommen, kann man wieder auf die
+npm-Pakete zurück.
+
+**Nach jedem `git pull` oder `git checkout` in einem dieser Verzeichnisse
+muss `npm run build` laufen.** Sonst zeigt die Konfiguration auf einen
+veralteten `dist`-Ordner, und der Fehler ist unsichtbar, weil ein bereits
+laufender Serverprozess den alten Code im Speicher behält.
