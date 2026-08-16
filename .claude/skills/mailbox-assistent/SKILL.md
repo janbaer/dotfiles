@@ -206,9 +206,18 @@ Alle drei Server laufen aus lokalen Klonen unter `~/Projects`, keiner aus npm:
 | `caldav-mcp` | `~/Projects/caldav-mcp`, Branch `mailbox` | Original löst Serientermine nicht auf |
 | `carddav-mcp` | `~/Projects/carddav-mcp`, Branch `mailbox` | Original liefert bei Open-Xchange eine leere Kontaktliste |
 
-Die beiden DAV-Server sind Forks mit eigenen Patches, eingereicht als Pull
-Requests bei `dominik1001`. Werden sie angenommen, kann man wieder auf die
-npm-Pakete zurück.
+Der Branch `mailbox` ist in allen drei Forks ein reiner Integrationszweig.
+Er enthält:
+
+| Fork | Inhalt von `mailbox` |
+| --- | --- |
+| `imap-mini-mcp` | Upstream `main` plus der HTML-Rückfall (PR #6) |
+| `caldav-mcp` | Upstream `main`, die Serienauflösung (PR #94) und der Ganztags-Fix des Maintainers (dessen PR #91, dort noch offen) |
+| `carddav-mcp` | Upstream-Standardbranch plus PR #3 und #4 |
+
+Der Branch ist wegwerfbar: nichts hängt an seiner Historie, nur am gebauten
+Ergebnis. Wenn upstream etwas davon annimmt, wird er neu aus dem aktuellen
+Stand plus den noch offenen Teilen aufgebaut, statt ihn fortzuschreiben.
 
 Zum Einrichten oder Aktualisieren gibt es `scripts/setup-mcp-servers.sh`
 neben dieser Datei. Es holt alle drei Repositories, stellt sie auf den
