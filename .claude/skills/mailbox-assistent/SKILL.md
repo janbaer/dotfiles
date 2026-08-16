@@ -210,7 +210,16 @@ Die beiden DAV-Server sind Forks mit eigenen Patches, eingereicht als Pull
 Requests bei `dominik1001`. Werden sie angenommen, kann man wieder auf die
 npm-Pakete zurück.
 
+Zum Einrichten oder Aktualisieren gibt es `scripts/setup-mcp-servers.sh`
+neben dieser Datei. Es holt alle drei Repositories, stellt sie auf den
+richtigen Branch und baut sie. Jan ruft es selbst auf, einmal pro Rechner,
+du brauchst es im Gespräch nicht.
+
+Das Skript ist Übergangswerk. Sobald die Pull Requests bei `dominik1001`
+angenommen sind und `imap-mini-mcp` auf npm liegt, laufen alle drei wieder
+per `npx`, und dann können das Skript und dieser Abschnitt weg.
+
 **Nach jedem `git pull` oder `git checkout` in einem dieser Verzeichnisse
-muss `npm run build` laufen.** Sonst zeigt die Konfiguration auf einen
-veralteten `dist`-Ordner, und der Fehler ist unsichtbar, weil ein bereits
-laufender Serverprozess den alten Code im Speicher behält.
+muss neu gebaut werden.** Sonst zeigt die Konfiguration auf einen veralteten
+`dist`-Ordner, und der Fehler ist unsichtbar, weil ein bereits laufender
+Serverprozess den alten Code im Speicher behält.
