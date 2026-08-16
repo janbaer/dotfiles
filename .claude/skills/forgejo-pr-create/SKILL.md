@@ -84,7 +84,19 @@ Keep the original structure — only update the sections that differ. Add a shor
 
 **If no deviations are found:** proceed directly to PR creation.
 
-### 6. Create the PR
+### 6. Review the branch before it becomes public
+
+Run `/simplify` first, then `/review-diff`. Act on what they report, and say
+plainly which findings you are leaving alone and why. The reasoning and the
+reason for that order live in `.claude/rules/pull-requests.md`.
+
+Run whatever the project itself demands as well, its test suite, linters and
+pre-commit hooks. If a hook regenerates a file, stage it before committing.
+
+Only proceed once both have run. If a finding leads to further commits, push
+them before creating the PR, so what the reviewer opens is the reviewed state.
+
+### 7. Create the PR
 
 ```
 create_pull_request(
@@ -112,7 +124,7 @@ closes #N   ← only if an issue is linked
 
 - Do **not** call `issue_state_change` manually — Forgejo closes the issue automatically on merge.
 
-### 7. Show the PR link
+### 8. Show the PR link
 
 Output the URL of the newly created PR so the user can open it directly.
 
