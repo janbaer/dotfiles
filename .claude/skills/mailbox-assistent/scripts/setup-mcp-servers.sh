@@ -12,8 +12,10 @@ set -euo pipefail
 
 PROJECTS="$HOME/Projects"
 
+# All three are forks, and all three carry their fixes on a branch called
+# mailbox, so there is one branch name to remember rather than one per repo.
 SERVERS=(
-  "https://github.com/florianbuetow/imap-mini-mcp.git|main"
+  "https://github.com/janbaer/imap-mini-mcp.git|mailbox"
   "https://github.com/janbaer/caldav-mcp.git|mailbox"
   "https://github.com/janbaer/carddav-mcp.git|mailbox"
 )
