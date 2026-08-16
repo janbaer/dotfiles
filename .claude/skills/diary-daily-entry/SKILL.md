@@ -151,6 +151,16 @@ Jans Antworten **plus** die Vikunja-Tasks landen später als Obsidian-Tasks (`- 
 
 **Ausnahme: fixe Tagesroutine gehört nicht in die Ziele.** Laufen gehen und ins Fitnessstudio fahren sind fester Teil von Jans Tagesablauf, kein Ziel, das er sich für den Tag vornimmt — vergleichbar mit Zähneputzen. Auch wenn Jan sie im Starttext erwähnt, werden sie **nicht** als `- [ ]`-Ziel aufgenommen und im Fließtext höchstens beiläufig erwähnt, nicht als Vorhaben. Erwähnt Jan sie explizit als abgeschlossen (z. B. "war laufen"), reicht das im Fließtext, ohne separaten Abhak-Eintrag.
 
+**Fester Punkt an Werktagen: 30 Minuten offline.** Ist der heutige Wochentag Montag bis Freitag, nimm ohne Nachfrage folgendes Ziel mit auf, ganz am Ende des Ziele-Blocks:
+
+```
+- [ ] 30 Minuten nach Feierabend offline, kein Computer
+```
+
+Am Wochenende entfällt der Punkt, ebenso an Urlaubstagen, weil der Anker „nach Feierabend" dort nicht existiert. Formuliere ihn immer als *offline*, nie als *spazieren gehen* — spazieren ist der Standardfall, aber bei Regen oder Hitze fiele sonst das ganze Ziel weg. Die halbe Stunde bleibt vorerst eine halbe Stunde; steigere sie nicht von dir aus, auch nicht, wenn Jan sie mehrere Tage hintereinander erfüllt hat.
+
+Hintergrund steht in der Reflexions-Note `Reflexion/Schnell mal wird ein Nachmittag.md`: Jan nimmt sich regelmäßig vor, den Rechner stehen zu lassen, und aus „schnell mal noch was mit Claude" wird der ganze Nachmittag. Der Punkt steht deshalb bewusst jeden Werktag da, ob Jan ihn erwähnt oder nicht — nicht abgehakt fällt beim Wochenrückblick auf.
+
 ### 5. Sonst noch was?
 
 **Überspringen wenn:** der Starttext bereits persönliche Beobachtungen, spontane Gedanken oder sonstige Notizen enthält, die nicht in die anderen Kategorien passen.
