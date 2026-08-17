@@ -2,6 +2,7 @@
 name: ai-image-prompt-generator
 model: haiku
 description: Generate optimal prompts for AI image generation tools (Nano Banana Pro, ChatGPT/DALL-E, Midjourney, etc.) through a structured questioning process
+disable-model-invocation: true
 ---
 
 ## ⚡ Welcome Message (Show ONCE at first use)
