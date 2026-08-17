@@ -1,7 +1,7 @@
 ---
 name: gitlab-mr-review
 model: opus
-description: Use when reviewing an open Merge Request on a GitLab repository - reading changes and analysing the diff. Read-only: the review is shown in the terminal and never written back to GitLab. Trigger on any phrase like "review MR", "review the merge request", "code review", "check the MR", "look at the PR", or "give feedback on the changes".
+description: 'Use when reviewing an open Merge Request on a GitLab repository - reading changes and analysing the diff. Read-only: the review is shown in the terminal and never written back to GitLab. Trigger on any phrase like "review MR", "review the merge request", "code review", "check the MR", "look at the PR", or "give feedback on the changes".'
 disable-model-invocation: true
 ---
 
