@@ -44,7 +44,7 @@ Lies die Datei (Pfad siehe Kontext) mit dem `Read` tool. Drei Fälle:
 
 Im selben `Read`-Aufruf hast du auch den Vortagsabschnitt (falls vorhanden) — nutze ihn, um im Gespräch konkret Bezug zu nehmen statt generische Fragen zu stellen, und merk dir die offenen Todos vom Vortag (`- [ ]`) — die werden später abgehakt.
 
-### 3. Vikunja-Check im Hintergrund starten
+### 3. Vikunja-Check im Hintergrund starten und Kalender abfragen
 
 Starte den Vikunja-Check **im Hintergrund**, damit das Interview sofort losgehen kann. Sinn der Sache: Jan trägt Termine und Wartungs-Todos in Vikunja ein und vergisst sie zwischen Tagebuch-Sessions — wenn sie morgens automatisch in den Tages-Ziele-Block wandern, kann er sie über das Tagebuch abhaken. Den Check parallel zum Interview laufen zu lassen spart spürbar Wartezeit am Morgen.
 
@@ -63,9 +63,31 @@ Der Agent retourniert eine Markdown-Liste mit Titeln (oder das Wort `keine`). Bi
 
 Dann ohne Vikunja-Liste fortfahren. Der Tagebucheintrag ist wichtiger als der Task-Check, und Jan soll den Ausfall mitbekommen — aber abbrechen tut die Skill nicht.
 
+**Kalender direkt danach abfragen.** Während der Vikunja-Agent im Hintergrund läuft, hol die heutigen Termine per `mcp__caldav-mcp__list-events` aus Jans Kalender bei mailbox.org. Das ist ein einzelner Aufruf und braucht keinen Subagent:
+
+- `calendarUrl`: `/caldav/Y2FsOi8vMC8zMQ/` (Kalender „Kalender", der Standardkalender)
+- `start`: heute `00:00:00` mit Offset, z. B. `2026-08-17T00:00:00+02:00`
+- `end`: heute `23:59:59` mit demselben Offset
+
+Stimmt die URL nicht mehr, hol sie über `mcp__caldav-mcp__list-calendars` neu. Die Kalender `Aufgaben`, `Computer`, `Erledigt` und `Soon` enthalten nur VTODO und bleiben außen vor, dafür ist Vikunja zuständig.
+
+**Der Offset im Zeitfenster ist Absicht, ersetz ihn nicht durch `Z`.** Ganztägige Termine liegen auf der lokalen Mitternacht ihres Tages, ein Termin am 17. August kommt also als `2026-08-16T22:00:00.000Z` zurück. Ein Fenster von lokal `00:00:00` bis `23:59:59` deckt Jans Tag genau ab, ein UTC-Fenster wäre um zwei Stunden verschoben.
+
+**Zeiten kommen in UTC zurück und müssen umgerechnet werden.** `list-events` liefert `...Z`, Jan lebt in Europe/Berlin: im Sommer plus zwei Stunden, im Winter plus eine. Ein Termin auf `12:30:00.000Z` ist im August 14:30 Uhr. Rechne einmal um und benutz danach nur noch die lokale Zeit, in der Rückmeldung wie im Eintrag. Das gilt auch für ganztägige Termine: `2026-08-16T22:00:00.000Z` ist der 17. August, nicht der 16. — nicht um einen Tag zurückschieben.
+
+**Serientermine sind schon aufgelöst.** Eine wöchentliche Besprechung liefert einen Eintrag für den heutigen Tag, erkennbar an `recurring: true`. Behandle sie wie jeden anderen Termin. Dass mehrere Einträge sich dieselbe `uid` teilen, spielt hier keine Rolle, weil nur gelesen wird.
+
+**Fehlerfall:** Ist der CalDAV-Server nicht verbunden, gib einmalig eine kurze Notiz im Chat aus:
+
+> ⚠️ CalDAV-Server nicht verbunden — führ bitte `/mcp` aus, wenn du die Termine brauchst. Ich mach solange ohne Kalender weiter.
+
+Dann ohne Termine fortfahren, genau wie bei Vikunja.
+
+Alles, was über das Lesen hinausgeht — Termine anlegen, ändern, löschen — steht im Skill `mailbox-assistent` und hat im Tagebuch nichts zu suchen.
+
 ## Schnellmodus: Update ohne Interview
 
-Wenn Jans Nachricht mit `Update:` beginnt (großes U, mit Doppelpunkt), überspring das komplette Interview **und auch den Vikunja-Task-Check (Schritt 3)**. Jan hat den Text schon selbst formuliert und will ihn nur als Nachtrag zu einem bestehenden Eintrag eingetragen haben — ein neuer Tagesplan steht nicht an.
+Wenn Jans Nachricht mit `Update:` beginnt (großes U, mit Doppelpunkt), überspring das komplette Interview **und auch den Vikunja- und Kalender-Check (Schritt 3)**. Jan hat den Text schon selbst formuliert und will ihn nur als Nachtrag zu einem bestehenden Eintrag eingetragen haben — ein neuer Tagesplan steht nicht an.
 
 Vorgehen:
 
@@ -129,7 +151,7 @@ Ehrlich, nicht verurteilend. Wenn du Muster siehst (z. B. dasselbe Ärgernis tau
 
 ### 4. Ziele für heute
 
-**Überspringen wenn:** der Starttext bereits konkrete Tagesziele nennt (z. B. „Heute fahre ich zu...", „Am Abend will ich..."). Vikunja-Tasks trotzdem einbauen — die kommen immer dazu, unabhängig davon, ob die Frage gestellt wird.
+**Überspringen wenn:** der Starttext bereits konkrete Tagesziele nennt (z. B. „Heute fahre ich zu...", „Am Abend will ich..."). Vikunja-Tasks und Kalendertermine trotzdem einbauen — die kommen immer dazu, unabhängig davon, ob die Frage gestellt wird.
 
 **Vor der Frage:** Hol das Ergebnis des Hintergrund-Agents aus Schritt 3 ab.
 
@@ -147,7 +169,15 @@ Dann die Frage: **"Was nimmst du dir darüber hinaus für heute vor?"**
 
 Wenn die Liste leer ist (`keine`) oder nicht verfügbar, einfach die Standardvariante: **"Was nimmst du dir für heute vor?"**
 
-Jans Antworten **plus** die Vikunja-Tasks landen später als Obsidian-Tasks (`- [ ]`) im Eintrag — Jans eigene Ziele zuerst, danach die Vikunja-Einträge mit reinem Titel (kein Projekt-Präfix, keine Markierung als „aus Vikunja"). Frage konkret nach, wenn Jans eigene Antwort zu schwammig ist ("heute produktiv sein" → was heißt das?).
+**Termine aus dem Kalender gehören genauso dazu.** Was in Schritt 3 zurückkam, nennst du Jan im selben Atemzug wie die Vikunja-Tasks, mit lokaler Uhrzeit und Titel, und übernimmst es in die Ziele. Beispiel:
+
+> Im Kalender steht heute außerdem ein Termin: *14:30 Uhr, Gespräch mit der Headhunterin*. Den nehm ich mit in deine Ziele auf.
+
+Termine sind Verabredungen mit anderen, keine Vorhaben, die Jan sich selbst setzt — deshalb stehen sie **ganz oben** im Ziele-Block, vor allem anderen. Format: `- [ ] {HH:MM} Uhr {Titel}`, bei ganztägigen Terminen ohne Zeitangabe nur der Titel. Beschreibungsfelder (Links, Notizen) gehören nicht ins Ziel; wenn dort etwas Wichtiges steht, erwähn es im Chat oder im Fließtext.
+
+Gibt es keine Termine, sag nichts dazu. Ein „heute nichts im Kalender" ist Rauschen.
+
+Jans Antworten **plus** die Vikunja-Tasks landen später als Obsidian-Tasks (`- [ ]`) im Eintrag — Termine zuerst, dann Jans eigene Ziele, danach die Vikunja-Einträge mit reinem Titel (kein Projekt-Präfix, keine Markierung als „aus Vikunja"). Frage konkret nach, wenn Jans eigene Antwort zu schwammig ist ("heute produktiv sein" → was heißt das?).
 
 **Ausnahme: fixe Tagesroutine gehört nicht in die Ziele.** Laufen gehen und ins Fitnessstudio fahren sind fester Teil von Jans Tagesablauf, kein Ziel, das er sich für den Tag vornimmt — vergleichbar mit Zähneputzen. Auch wenn Jan sie im Starttext erwähnt, werden sie **nicht** als `- [ ]`-Ziel aufgenommen und im Fließtext höchstens beiläufig erwähnt, nicht als Vorhaben. Erwähnt Jan sie explizit als abgeschlossen (z. B. "war laufen"), reicht das im Fließtext, ohne separaten Abhak-Eintrag.
 
