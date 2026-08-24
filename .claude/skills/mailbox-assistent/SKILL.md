@@ -177,15 +177,18 @@ Termine der Serie, auch wenn Jan nur von einem gesprochen hat. Einen einzelnen
 Termin herauszunehmen können die Werkzeuge nicht. Sag ihm das und verweise auf
 die Weboberfläche, statt die Serie zu löschen.
 
-Ganztägige
-Termine, etwa Geburtstage, stehen auf der lokalen Mitternacht ihres Tages, ein
-Geburtstag am 5. Juli kommt also als `2026-07-04T22:00:00.000Z`. Das ist
-richtig, nicht um einen Tag verschoben.
+Die Umrechnung oben gilt für zeitgebundene Termine. Ganztägige laufen anders:
+**sie tragen `wholeDay: true`, und ihr `start` und `end` sind reine
+Kalenderdaten wie `2026-08-25`, ohne Uhrzeit und ohne Offset.** `end`
+ist der letzte Tag, nicht der Tag danach. Genauso gibst du sie beim Anlegen an,
+zusammen mit `wholeDay: true`: für den 25. bis 29. August `start` auf
+`2026-08-25T00:00:00+02:00` und `end` auf `2026-08-29T00:00:00+02:00`. Für
+einen einzelnen Tag stehen beide auf demselben Datum.
 
-Ganztägige Termine bekommen beim Anlegen `wholeDay: true`. Bei einem
-mehrtägigen Zeitraum gibst du den letzten Tag als `end` an, der Server rechnet
-selbst auf die ausschliessende Grenze um: aus dem 18. bis 22. wird intern ein
-Ende am 23., angezeigt werden 18. bis 22.
+Bei einem mehrtägigen Termin nach dem Anlegen einmal mit `list-events`
+nachsehen und die Tage gegen das prüfen, was Jan gesagt hat. Ein falscher
+Urlaub fällt sonst erst am Abreisetag auf. Stimmt es nicht, löschen und neu
+anlegen, denn `update-event` läuft nur einmal (siehe unten).
 
 **Frei, gebucht oder abwesend lässt sich nicht setzen.** Weder `create-event`
 noch die darunterliegende Bibliothek kennen das Feld `TRANSP`. Wenn Jan das
@@ -204,9 +207,8 @@ zeitgebundene Termine gleichermassen und ist ungeklärt. Sammle Änderungen
 also in einem Aufruf. Muss doch ein zweites Mal geändert werden, lösche den
 Termin und lege ihn neu an.
 
-Die frühere Verschiebung ganztägiger Termine um einen Tag ist im Fork
-behoben, Start und Ende bleiben beim Ändern jetzt stehen. Zum Ändern oder Löschen brauchst du die `uid`. Zeig Jan vorher,
-welchen Termin du meinst, besonders wenn mehrere ähnlich heißen.
+Zum Ändern oder Löschen brauchst du die `uid`. Zeig Jan vorher, welchen Termin
+du meinst, besonders wenn mehrere ähnlich heißen.
 
 ## Posteingang
 
