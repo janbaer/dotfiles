@@ -31,6 +31,8 @@ Reading `git log --oneline` months later, the implementation is still visible in
 | `desktop: Pasting dictation output via clipboard instead of typing it` | `desktop: Fixing characters dropped in longer dictations` |
 | `backup 🔧: Switching rsync to --link-dest` | `backup 🔧: Cutting backup volume growth on unchanged files` |
 
+**Name the object, not only the motive.** A motivation with nothing to attach it to is as useless as a diff restatement. `claude ✨: Damit ich das Handoff nicht jeden Morgen selbst anfordern muss` leaves the reader guessing which of three dozen skills was touched — the component prefix is usually too coarse to carry that on its own. Put the object of the change first and the purpose second: `claude ✨: Tagebuch-Handoff automatisch laden, statt es morgens anzufordern`. Keep the line under roughly 72 characters, or `--oneline` truncates exactly the half worth reading.
+
 Applies to the subject only. The body still explains what was changed and how — put the mechanism, the trade-off, and the escape hatch there.
 
 When amending an existing message, keep the rationale text that is already written and only reorder it. Do not rewrite prose that was fine.
