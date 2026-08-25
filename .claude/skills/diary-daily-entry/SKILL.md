@@ -13,7 +13,7 @@ Du führst ein kurzes Reflexionsgespräch mit Jan und schreibst das Ergebnis als
 Jan schreibt seine Tageseinträge meistens morgens, kurz nach dem Aufstehen, und reflektiert dabei über den Vortag. Es gibt **keine** separaten Tagesdateien — alle Einträge einer Woche landen als Abschnitte im gleichen Wochenbericht:
 
 - **Vault:** `Notes`
-- **Dateipfad auf der Platte:** `{VAULT_PATH}/Weekly/Wochenbericht KW NN.md` — `VAULT_PATH` wird in Schritt 1 per `obsidian vaults` ermittelt
+- **Dateipfad auf der Platte:** `{VAULT_PATH}/Weekly/Wochenbericht KW NN.md` — `VAULT_PATH` wird in Schritt 1 aus `~/.config/obsidian/obsidian.json` ermittelt
 - **Abschnitt:** `## {deutscher Wochentag}` — **immer der heutige Wochentag**, auch wenn der Inhalt sich auf gestern bezieht
 
 Der Wochenbericht ist eine reine Markdown-Datei mit YAML-Frontmatter. Das heißt: alle Operationen (lesen, schreiben, anhängen, Todos abhaken) gehen direkt über `Read`, `Write` und `Edit` — kein Bedarf für die `obsidian`-CLI. Obsidian selbst pickt die Änderungen automatisch auf, sobald die Datei modifiziert wird.
@@ -34,7 +34,17 @@ Falls das Locale nicht verfügbar ist, verwende diese Zuordnung manuell (Mon=Mon
 
 Falls `gojq` keinen Pfad liefert (Vault nicht bekannt oder falsch konfiguriert), brich ab und informiere Jan.
 
-### 2. Wochenbericht lesen
+### 2. Tagebuch-Handoff lesen
+
+Lies `{VAULT_PATH}/Handoffs/handoff-tagebuch-kontext.md`. Das ist ein lebendes Dokument, das Jans laufenden Lebenskontext festhält: den Arbeitskonflikt, die Jobsuche, gesundheitliche Themen, Urlaube, wiederkehrende Muster und den Stand der aktuellen Woche. Ohne diesen Kontext ordnest du einen Satz wie „ich habe eine Antwort bekommen" falsch ein und stellst generische Fragen zu Dingen, die längst geklärt sind.
+
+**Überspringen, wenn der Inhalt in dieser Session schon vorliegt** — Jan startet den Eintrag oft in einer frischen Session, gelegentlich aber auch mitten in einem Gespräch, in dem das Handoff schon gelesen wurde. Dann kein zweites Mal lesen.
+
+Das Handoff dient dem **Verstehen, nicht dem Nacherzählen**. Nichts daraus gehört ungefragt in den Eintrag oder ins Interview — es macht nur die Fragen konkreter und den geschriebenen Text anschlussfähig an das, was vorher war. Jan will morgens einen Tagebucheintrag, keinen Statusbericht über seine Baustellen.
+
+Gepflegt wird das Dokument im Wochenrückblick (`diary-weekly-review`, Schritt 8), nicht hier. Fällt beim täglichen Eintrag etwas Größeres auf, das im Handoff fehlt oder falsch steht, sag es Jan in einem Satz und überlass ihm die Entscheidung.
+
+### 3. Wochenbericht lesen
 
 Lies die Datei (Pfad siehe Kontext) mit dem `Read` tool. Drei Fälle:
 
@@ -44,7 +54,7 @@ Lies die Datei (Pfad siehe Kontext) mit dem `Read` tool. Drei Fälle:
 
 Im selben `Read`-Aufruf hast du auch den Vortagsabschnitt (falls vorhanden) — nutze ihn, um im Gespräch konkret Bezug zu nehmen statt generische Fragen zu stellen, und merk dir die offenen Todos vom Vortag (`- [ ]`) — die werden später abgehakt.
 
-### 3. Vikunja-Check im Hintergrund starten und Kalender abfragen
+### 4. Vikunja-Check im Hintergrund starten und Kalender abfragen
 
 Starte den Vikunja-Check **im Hintergrund**, damit das Interview sofort losgehen kann. Sinn der Sache: Jan trägt Termine und Wartungs-Todos in Vikunja ein und vergisst sie zwischen Tagebuch-Sessions — wenn sie morgens automatisch in den Tages-Ziele-Block wandern, kann er sie über das Tagebuch abhaken. Den Check parallel zum Interview laufen zu lassen spart spürbar Wartezeit am Morgen.
 
@@ -87,7 +97,7 @@ Alles, was über das Lesen hinausgeht — Termine anlegen, ändern, löschen —
 
 ## Schnellmodus: Update ohne Interview
 
-Wenn Jans Nachricht mit `Update:` beginnt (großes U, mit Doppelpunkt), überspring das komplette Interview **und auch den Vikunja- und Kalender-Check (Schritt 3)**. Jan hat den Text schon selbst formuliert und will ihn nur als Nachtrag zu einem bestehenden Eintrag eingetragen haben — ein neuer Tagesplan steht nicht an.
+Wenn Jans Nachricht mit `Update:` beginnt (großes U, mit Doppelpunkt), überspring das komplette Interview **und auch den Vikunja- und Kalender-Check (Schritt 4)**. Jan hat den Text schon selbst formuliert und will ihn nur als Nachtrag zu einem bestehenden Eintrag eingetragen haben — ein neuer Tagesplan steht nicht an.
 
 Vorgehen:
 
@@ -153,11 +163,11 @@ Ehrlich, nicht verurteilend. Wenn du Muster siehst (z. B. dasselbe Ärgernis tau
 
 **Überspringen wenn:** der Starttext bereits konkrete Tagesziele nennt (z. B. „Heute fahre ich zu...", „Am Abend will ich..."). Vikunja-Tasks und Kalendertermine trotzdem einbauen — die kommen immer dazu, unabhängig davon, ob die Frage gestellt wird.
 
-**Vor der Frage:** Hol das Ergebnis des Hintergrund-Agents aus Schritt 3 ab.
+**Vor der Frage:** Hol das Ergebnis des Hintergrund-Agents aus Schritt 4 ab.
 
 - **Notification kam schon an** (Regelfall) → du kennst die Liste.
 - **Agent läuft noch** → kurz warten, bis die Notification eintrifft. Sollte selten vorkommen; falls doch und der Agent merklich hängt, ohne Liste weitermachen und das im Chat erwähnen.
-- **Agent hat eine `⚠️`-Meldung geliefert** → kein zweiter Hinweis, der wurde in Schritt 3 schon abgegeben. Einfach ohne Liste weiter.
+- **Agent hat eine `⚠️`-Meldung geliefert** → kein zweiter Hinweis, der wurde in Schritt 4 schon abgegeben. Einfach ohne Liste weiter.
 
 **Wochenend-Filter (Arbeits-Tasks):** Ist der heutige Wochentag (aus Schritt 1) ein **Samstag oder Sonntag**, entferne alle Tasks aus dem Arbeitsprojekt **CHECK24-BU** aus der Vikunja-Liste, bevor du sie erwähnst oder in die Ziele übernimmst — erkennbar am Projekt-Label `*CHECK24-BU*` in der Agent-Ausgabe. Der Grund: Jan arbeitet am Wochenende nicht, und ein Arbeits-Task im Wochenend-Tagebuch ist nur Ballast, den er ohnehin erst am Montag anfassen kann. Fällige oder überfällige CHECK24-Tasks tauchen dadurch nicht am Wochenende auf, sondern erst wieder im nächsten Montags-Eintrag. Alle anderen Projekte (privat, Haushalt, Finanzen etc.) bleiben auch am Wochenende drin — der Filter gilt nur für die Arbeit. Bleibt nach dem Filtern nichts übrig, behandle die Liste wie `keine`.
 
@@ -169,7 +179,7 @@ Dann die Frage: **"Was nimmst du dir darüber hinaus für heute vor?"**
 
 Wenn die Liste leer ist (`keine`) oder nicht verfügbar, einfach die Standardvariante: **"Was nimmst du dir für heute vor?"**
 
-**Termine aus dem Kalender gehören genauso dazu.** Was in Schritt 3 zurückkam, nennst du Jan im selben Atemzug wie die Vikunja-Tasks, mit lokaler Uhrzeit und Titel, und übernimmst es in die Ziele. Beispiel:
+**Termine aus dem Kalender gehören genauso dazu.** Was in Schritt 4 zurückkam, nennst du Jan im selben Atemzug wie die Vikunja-Tasks, mit lokaler Uhrzeit und Titel, und übernimmst es in die Ziele. Beispiel:
 
 > Im Kalender steht heute außerdem ein Termin: *14:30 Uhr, Gespräch mit der Headhunterin*. Den nehm ich mit in deine Ziele auf.
 
@@ -263,7 +273,7 @@ Gib den Eintrag erst im Chat aus — vollständig, als Markdown-Codeblock — un
    ```
 
 2. **Datei existiert** (Regelfall — Eintrag für einen weiteren Wochentag oder Update):
-   - Du hast die Datei in Schritt 2 schon eingelesen.
+   - Du hast die Datei in Schritt 3 schon eingelesen.
    - Nutze `Edit`, um den neuen Block am Dateiende anzufügen. Als Anker-String die letzte Zeile (oder die letzten 2–3 Zeilen) der Datei nehmen.
 
 **Wichtig zu `Edit`:** Der `old_string` muss in der Datei eindeutig sein. Häufige Anker (`**Ziele für heute:**`) tauchen mehrfach auf — pack daher genug Kontext drumherum, dass die Stelle eindeutig matcht.

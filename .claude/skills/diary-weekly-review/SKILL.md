@@ -96,12 +96,16 @@ Wenn diese Woche nichts Neues promotet werden muss und keine bestehende Note bet
 
 Es gibt ein lebendes Handoff-Dokument `Handoffs/handoff-tagebuch-kontext.md` (im Notes-Vault), das den kompletten Tagebuch-Kontext für frische Sessions festhält: Speicherorte, Konventionen, laufender Lebenskontext (Arbeitskonflikt, Jobwechsel, wiederkehrende Muster). Der Wochenrückblick ist der richtige, niederfrequente Moment, es zu pflegen — nicht der tägliche Eintrag.
 
-Frag Jan einmal kurz: **"Hat sich am Lebenskontext oder am Workflow etwas geändert, das ins Tagebuch-Handoff soll?"**
+Der Schritt hat zwei Teile, die nichts miteinander zu tun haben.
 
-- **Ja** → den betroffenen Abschnitt im Handoff fortschreiben (anhängen/aktualisieren, nicht das ganze Dokument neu generieren — Jan editiert es auch von Hand). Den „Stand"-Teil (aktuelle KW) nicht pflegen, der ist für eine frische Session ohnehin trivial neu ableitbar.
-- **Nein** → nichts tun, weiter.
+**a) Lebenskontext.** Frag Jan einmal kurz: **"Hat sich am Lebenskontext oder am Workflow etwas geändert, das ins Tagebuch-Handoff soll?"**
 
-Nicht jede Woche fällt hier etwas an — das ist normal. Der Schritt ist ein Sicherheitsnetz gegen ein veraltetes Handoff, kein Pflicht-Update.
+- **Ja** → den betroffenen Abschnitt fortschreiben (anhängen/aktualisieren, nicht das ganze Dokument neu generieren — Jan editiert es auch von Hand).
+- **Nein** → nichts tun, weiter. In den meisten Wochen ist das der Normalfall.
+
+**b) Stand-Abschnitt.** Den schreibst du ohne Rückfrage fort: aktuelle KW, welche Tage geschrieben sind, offene Todos, die Vorsätze der kommenden Woche und die bekannten Termine. Das ist keine Frage an Jan, sondern Buchführung aus dem Wochenbericht, den du in diesem Rückblick sowieso gelesen hast. Seit der tägliche Eintrag das Handoff zu Beginn liest (`diary-daily-entry`, Schritt 2), ist genau dieser Abschnitt die Stelle, aus der die Einordnung kommt — ein veralteter Stand ist dann schlechter als gar keiner.
+
+Sagt Jan, das Handoff soll diese Woche in Ruhe gelassen werden, gilt das für beide Teile.
 
 ### 9. Energie-Check (2 Minuten)
 
