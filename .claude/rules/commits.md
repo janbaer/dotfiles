@@ -37,6 +37,21 @@ Applies to the subject only. The body still explains what was changed and how �
 
 When amending an existing message, keep the rationale text that is already written and only reorder it. Do not rewrite prose that was fine.
 
+## Language
+
+English, subject and body. Holds for every repo unless the project itself says otherwise: a repo whose CLAUDE.md sets a different language wins, and so does an existing history clearly written in another one. Where German is allowed, it is German throughout — never a German body under an English subject.
+
+German prose drifted into the dotfiles bodies from 2026-07-30 on, starting with commits about German-language skills, and was never actually decided. The result was a history split down the middle, which is worse than either language on its own.
+
+Quoted material keeps its original language — a diary line, a vocabulary entry, an error message. The prose around it stays English.
+
+The English subject still has to state the motive. Watch for `Adding`, `Creating`, `Improving`, `Optimizing` at the start of the line: those describe what happened in the editor, which the diff already shows. The gerund makes this trap easier to fall into in English than in German.
+
+| Activity (what the editor did) | Motive (what it is for) |
+| --- | --- |
+| `claude ✨: Adding a rule to make sure Claude uses the current datetime` | `claude ✨: Taking the date from date(1) so it survives midnight` |
+| `claude 🐛: Optimizing daily-diary-entry for full-day calendar entries` | `claude 🐛: Keeping full-day events on the day they belong to` |
+
 ## Formatting rules
 
 - Preserve prior draft details when amending messages.
