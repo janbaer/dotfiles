@@ -36,6 +36,14 @@ Im Basis-Skill nicht vorhanden und vermutlich das stärkste deutsche KI-Signal �
 
 Das ist nicht dasselbe wie Passiv und muss getrennt geprüft werden.
 
+## Semikolons
+
+Ebenfalls nicht im Basis-Skill. Der behandelt Gedankenstriche ausführlich und hört dann auf, dabei spielt das Semikolon dieselbe Rolle: ein seltenes Zeichen, zu dem ein Modell greift, weil es gebildeter wirkt als ein Punkt. Im deutschen Gebrauchstext kommt es kaum vor, in KI-Prosa alle paar Sätze.
+
+Faustregel: mehr als eines pro Seite ist ein Befund. Sechs Stück in einem 380-Wörter-Anschreiben waren der auffälligste Fund dieses Textes. Jan selbst setzt praktisch nie eines, von ihm bestätigt, insofern gilt hier dieselbe Kalibrierung wie beim Gedankenstrich. Bei fremden Texten erst prüfen, dort ist das Semikolon reguläre Zeichensetzung. Ersatz ist fast immer ein Punkt, seltener ein Komma zwischen zwei Hauptsätzen, das im Deutschen auch ohne Konjunktion zulässig ist.
+
+Nicht anstreichen: Semikolons in Aufzählungen, deren Glieder selbst Kommas enthalten, und in Code.
+
 ## Schwellen
 
 - **Passiv.** Deutsch benutzt das Passiv legitimer als Englisch, besonders in Fachtexten. Nur anstreichen, wo der Handelnde wirklich fehlt und der Satz aktiv klarer wäre.
@@ -48,7 +56,7 @@ Sprachunabhängig, greifen auf Deutsch genauso:
 - **Gebaute Pointen.** Jeder Absatz endet auf einem Satz, der zitierfähig klingen will. Ein einzelner kurzer Satz zur Betonung ist in Ordnung, eine Reihe davon wirkt konstruiert.
 - **Aphorismus-Formeln.** „X ist das Y von Z", „X wird zur Falle", „die Sprache der …", „die Architektur des …". Die Formel durch die konkrete Aussage ersetzen, auf die sie zeigt.
 - **Fragmentierte Überschriften.** Überschrift, dann ein Einzeiler, der die Überschrift bloß wiederholt, dann erst der Inhalt. Der Einzeiler kann weg.
-- **Rhetorische Gesprächseinstiege.** „Ehrlich?", „Mal ehrlich", „Die Sache ist die", als vorgetäuschte Pause vor einer gewöhnlichen Aussage.
+- **Rhetorische Gesprächseinstiege.** „Ehrlich?", „Mal ehrlich", „Die Sache ist die", als vorgetäuschte Pause vor einer gewöhnlichen Aussage. Dazu gehört die Selbstzuschreibung einer Tugend, statt sie vorzuführen: „Das spreche ich offen an", „um ehrlich zu sein", „ganz direkt gesagt". Was danach kommt, zeigt die Offenheit ohnehin, oder sie ist nicht da. Häuft sich in Texten über die eigene Person, also Bewerbung, Profil, Vorstellung.
 - **Diff-Erzählung.** Text, der eine Änderung erzählt, statt die Sache zu beschreiben („Diese Funktion ersetzt den früheren Ansatz …"). Gilt nicht für Changelogs, Release Notes und Migrationsnotizen, die sind von Natur aus versionsbezogen.
 
 ## Jans Kalibrierung
