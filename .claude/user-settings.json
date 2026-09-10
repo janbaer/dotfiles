@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(~/Projects/dotfiles/bin/english-mistake.sh:*)",
+      "Bash(/home/jan/Projects/dotfiles/bin/english-mistake.sh:*)"
+    ],
+    "defaultMode": "auto"
+  },
+  "model": "sonnet",
+  "statusLine": {
+    "type": "command",
+    "command": "~/Projects/dotfiles/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "typescript-lsp@claude-plugins-official": true
+  },
+  "editorMode": "vim",
+  "agentPushNotifEnabled": true,
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/no-ai-attribution.sh",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/no-gitlab-commit.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
