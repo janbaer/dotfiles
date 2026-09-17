@@ -35,8 +35,9 @@ to `Obsidian/CLAUDE.md` and a line in the log.
 
 ## Phase 1 — Inventory and duplicate check
 
-Ask for the source directory if the user did not name one. Then list it and compare
-checksums against everything already filed:
+The source directory defaults to `/mnt/zb-02-data/hermes-agent/data/images/cheat-sheets`.
+Use another one only when the user names it. List it and compare checksums against
+everything already filed:
 
 ```bash
 md5sum "$SRC"/* | sort
@@ -56,7 +57,7 @@ guessed from the filename:
 ```bash
 # both must be exported: the nested `bash -c` is a separate process and the
 # single-quoted script is expanded there, not in this shell
-export SRC=/path/to/the/import/folder
+export SRC=/mnt/zb-02-data/hermes-agent/data/images/cheat-sheets
 export OUT=$(mktemp -d)
 
 nix shell nixpkgs#poppler-utils --command bash -c '
