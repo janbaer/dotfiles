@@ -128,6 +128,34 @@ closes #N   ← only if an issue is linked
 
 Output the URL of the newly created PR so the user can open it directly.
 
+### 9. Wait for the automated review, then read it
+
+Every new PR triggers a workflow that posts an AI review (user `ai`), usually
+within about two minutes. Do not make the user ask for it.
+
+Start a background wait right after showing the link:
+
+```bash
+sleep 120   # Bash tool, run_in_background: true
+```
+
+The wait finishing produces a task notification. Then check for a review:
+
+```
+list_pull_reviews(owner, repo, index=<PR number>)
+```
+
+- **A review is there** → invoke the **forgejo-pr-feedback** skill for this PR.
+  It stops after the assessment and the prioritised action list; code changes
+  and replies to the reviewer need the user's go-ahead.
+- **Nothing yet** → wait again in the background, first 180 then 300 seconds,
+  and check after each. After the third check say in one line that no review
+  arrived and that `/forgejo-pr-feedback` reads it later, then stop. Do not
+  keep waiting beyond that.
+
+Skip the wait entirely when the user said they don't want it, or when the PR
+was not created in this session.
+
 ## MCP Tools Reference
 
 | Tool | Use case |
@@ -135,3 +163,4 @@ Output the URL of the newly created PR so the user can open it directly.
 | `create_pull_request` | Open a new PR |
 | `get_issue_by_index` | Read issue details for title, link, and deviation check |
 | `update_issue` | Update issue body if implementation deviated from spec |
+| `list_pull_reviews` | Check whether the automated review has arrived |
