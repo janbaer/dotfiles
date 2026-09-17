@@ -11,7 +11,11 @@ disable-model-invocation: true
 
 # Forgejo PR Merge
 
-Merges a Pull Request using a squash commit, then cleans up the branch locally.
+Merges a Pull Request using a squash commit, then cleans up the branch locally. In a
+repository with the release machinery it also writes the version bump and the changelog
+entry first, so that the merge is the release.
+
+Optional argument: `patch` (default), `minor` or `major` for the bump.
 
 ## Steps
 
@@ -64,7 +68,51 @@ PR #N: <title>
 
 **Ask for confirmation only if the PR was inferred from context** (matched automatically from the current branch) — not if the user explicitly passed a PR number or selected one from the list. If asking: "Merge this PR?" and wait for confirmation.
 
-### 4. Merge with squash commit
+### 4. Add the release commit
+
+Only for repositories that carry the release machinery — both `scripts/bump-version.ts`
+and `CHANGELOG.md` exist, and the base branch is `main` or `master`. Everywhere else
+skip straight to the merge.
+
+The version bump and the changelog entry are deliberately **not** part of the review:
+they are mechanical, they are written from the PR that was just approved, and keeping
+them out of the diff means the reviewer never reads version noise. They ride along in
+the squash commit, and on `main` the changed `package.json` is what starts the image
+build.
+
+**Guard first.** `bump-version.ts` reads the version from the branch's own
+`package.json`. If the branch is behind `main`, it computes a number that was already
+released, the registry check skips the build, and the merge produces no image and no
+error. So refuse in that case:
+
+```bash
+git fetch origin <base-branch>
+git merge-base --is-ancestor origin/<base-branch> HEAD
+# non-zero → stop: "The branch is behind <base>. Rebase it, then merge again."
+```
+
+Then, on the head branch:
+
+```bash
+bun run scripts/bump-version.ts [patch|minor|major]   # patch unless the user said otherwise
+```
+
+Invoke the **update-changelog** skill with the new version number. It detects the
+existing format and writes the motivation, which comes from the PR title and body and
+from the commits between base and head — the same material the review was based on.
+
+Commit and push:
+
+```bash
+git add package.json CHANGELOG.md
+git commit -m "release 🔧: Releasing <version> with <the reason in a few words>"
+git push
+```
+
+The push runs whatever `pre-push` hook the repo has, so build and tests run once more
+before anything lands on `main`.
+
+### 5. Merge with squash commit
 
 ```
 merge_pull_request(
@@ -78,7 +126,7 @@ merge_pull_request(
 
 Passing `delete_branch_after_merge=true` lets Forgejo delete the remote branch server-side. Forgejo also closes the PR and — if the PR body contains `closes #N` — automatically closes the linked issue.
 
-### 5. Clean up local branch
+### 6. Clean up local branch
 
 Switch to the base branch and delete the feature branch locally:
 
@@ -90,7 +138,7 @@ git branch -D <head-branch>
 
 Force-delete (`-D`) is used because the squash commit rewrites history and git won't consider the local branch "fully merged".
 
-### 6. Notify
+### 7. Notify
 
 Invoke the `ntfy-me` skill with a message summarising what was merged:
 
@@ -103,3 +151,9 @@ Invoke the `ntfy-me` skill with a message summarising what was merged:
 | `list_repo_pull_requests` | List open PRs when none is specified |
 | `get_pull_request_by_index` | Read PR details (title, head, base, body) |
 | `merge_pull_request` | Squash-merge the PR |
+
+## Related skills
+
+| Skill | Use case |
+|-------|----------|
+| `update-changelog` | Write the changelog entry for the new version |
