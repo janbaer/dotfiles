@@ -18,7 +18,7 @@ When creating or editing one of these file types, always use the dotfiles path:
 
 `~/.claude/commands/`, `~/.claude/skills/`, `~/.claude/rules/`, `~/.claude/agents/`, `~/.claude/output-styles/` are home-manager symlinks back to the dotfiles directories — anything written to dotfiles is live in `~/.claude/` immediately.
 
-`~/.claude/settings.json` belongs there too, but under the name `user-settings.json`. The symlink makes it writable, so `/config` and Claude Code itself keep working and every change lands as a diff instead of drifting on one machine. The name matters: a file called `settings.json` inside `dotfiles/.claude/` would ALSO be read as project settings whenever Claude Code runs in the dotfiles repo, and the same file would be loaded twice under two scopes — array keys such as `hooks` merge, so every hook would fire twice there.
+`~/.claude/settings.json` belongs there too, but under the name `user-settings.json`. A `home.activation` step in `nixos-config` links it directly to the dotfiles file, so `/config` and Claude Code itself keep writing to it and every change lands as a diff instead of drifting on one machine. It must not go through `home.file` with `mkOutOfStoreSymlink`: that link chain runs through the read-only Nix store, and Claude Code's atomic write fails there with `EROFS`. The name matters: a file called `settings.json` inside `dotfiles/.claude/` would ALSO be read as project settings whenever Claude Code runs in the dotfiles repo, and the same file would be loaded twice under two scopes — array keys such as `hooks` merge, so every hook would fire twice there.
 
 A hook script only runs when it is registered under an event in that file; putting the script in `hooks/` does nothing on its own.
 

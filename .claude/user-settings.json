@@ -1,4 +1,9 @@
 {
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
+  },
   "permissions": {
     "allow": [
       "Bash(~/Projects/dotfiles/bin/english-mistake.sh:*)",
@@ -6,21 +11,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "sonnet",
-  "statusLine": {
-    "type": "command",
-    "command": "~/Projects/dotfiles/.claude/statusline-command.sh"
-  },
-  "enabledPlugins": {
-    "typescript-lsp@claude-plugins-official": true
-  },
-  "editorMode": "vim",
-  "agentPushNotifEnabled": true,
-  "attribution": {
-    "commit": "",
-    "pr": "",
-    "sessionUrl": false
-  },
+  "model": "opus",
   "hooks": {
     "PreToolUse": [
       {
@@ -39,5 +30,14 @@
         ]
       }
     ]
-  }
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "~/Projects/dotfiles/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "typescript-lsp@claude-plugins-official": true
+  },
+  "editorMode": "vim",
+  "agentPushNotifEnabled": true
 }
