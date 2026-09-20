@@ -36,7 +36,8 @@ tags
 /.claude/hooks/herdr-agent-state.sh
 /.claude/skills/humanizer
 /.claude/skills/vermenschlichen
-/.claude/skills/security-best-practices
-/.claude/skills/security-threat-model
 /.claude/skills/archify
 /.claude/skills/synced
+/.claude/skills/security-best-practices
+/.claude/skills/security-threat-model
+/.claude/skills/security-audit
