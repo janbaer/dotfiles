@@ -1,7 +1,9 @@
 ---
 name: security-check
 description: Use to check for new critical Linux security advisories from public sources (Ubuntu USN, Debian Tracker, GitHub Advisories, OpenCVE) and print a concise summary to the terminal when relevant items are found. Use this skill whenever the user wants a daily security check, mentions "scan for CVEs", "check for security updates", "any new advisories", or schedules a recurring security review — even if they don't explicitly say "security-check".
-model: sonnet
+model: sonn
+disable-model-invocation: true
+
 ---
 
 # security-check

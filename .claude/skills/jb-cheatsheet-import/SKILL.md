@@ -9,6 +9,7 @@ description: >
   cheat sheets into Obsidian — triggered by phrases like "import these cheatsheets",
   "sortiere die Cheat-Sheets ein", "add these cheat sheets to the wiki", or when a
   folder of cheat sheet images is handed over for filing.
+disable-model-invocation: true
 ---
 
 # Cheat Sheet Import

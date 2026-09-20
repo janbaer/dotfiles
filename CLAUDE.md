@@ -17,6 +17,6 @@ Consequences when editing:
 
 ## Structure
 
-Many skills under `.claude/skills/` are external and git-ignored — only Jan's own are tracked here. `.claude/rules/` is auto-loaded into every session and overrides default behavior; `.claude/knowledge-base/` holds Jan's coding preferences and is read on demand.
+Skills under `.claude/skills/` split by origin: Jan's own carry a `jb-` prefix on the folder and are tracked here, the external ones are git-ignored. `.claude/skills/install-skills.sh` reinstalls the external set on a new machine — it skips what is already installed, `--update` re-fetches. The prefix sits on the folder only, the `name` in the frontmatter stays unprefixed, so the slash commands keep their names. `.claude/rules/` is auto-loaded into every session and overrides default behavior; `.claude/knowledge-base/` holds Jan's coding preferences and is read on demand.
 
 The shell config lives in `.config/zsh/` (`ZDOTDIR=$HOME/.config/zsh`), not in a `~/.zshrc`. The repo has no build, lint, or test pipeline of its own — `.editorconfig`, `.prettierrc.yaml` and `rustfmt.toml` are only provided to `$HOME` for other projects.

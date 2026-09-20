@@ -36,10 +36,10 @@ Run the bundled script with `--dry-run` (and `--tags` if applicable):
 
 ```bash
 # default direction
-/home/jan/.claude/skills/mp3-rename/scripts/rename_mp3.py --dry-run
+/home/jan/.claude/skills/jb-mp3-rename/scripts/rename_mp3.py --dry-run
 
 # --tags direction
-/home/jan/.claude/skills/mp3-rename/scripts/rename_mp3.py --dry-run --tags
+/home/jan/.claude/skills/jb-mp3-rename/scripts/rename_mp3.py --dry-run --tags
 ```
 
 This outputs a JSON array. Each entry has:
@@ -97,10 +97,10 @@ On confirmation, run the script again *without* `--dry-run` (keep `--tags` if ap
 
 ```bash
 # default direction
-/home/jan/.claude/skills/mp3-rename/scripts/rename_mp3.py
+/home/jan/.claude/skills/jb-mp3-rename/scripts/rename_mp3.py
 
 # --tags direction
-/home/jan/.claude/skills/mp3-rename/scripts/rename_mp3.py --tags
+/home/jan/.claude/skills/jb-mp3-rename/scripts/rename_mp3.py --tags
 ```
 
 The script re-scans the directory and applies the same logic that produced the

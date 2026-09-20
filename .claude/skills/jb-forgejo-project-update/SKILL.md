@@ -9,7 +9,7 @@ disable-model-invocation: true
 
 This skill audits an existing project against the standard defined in `forgejo-project-new` and applies whatever is missing.
 
-**Before starting:** Read `../forgejo-project-new/SKILL.md` (relative to this skill file) to understand the full standard — the checklist of files, tools, and config a complete project should have. That skill is the single source of truth; don't rely on memory.
+**Before starting:** Read `../jb-forgejo-project-new/SKILL.md` (relative to this skill file) to understand the full standard — the checklist of files, tools, and config a complete project should have. That skill is the single source of truth; don't rely on memory.
 
 ## Step 1: Detect tech stack
 
@@ -61,7 +61,7 @@ For OpenSpec specifically, ask separately since it requires an interview — don
 
 ## Step 5: Apply selected items
 
-For each selected item, copy the appropriate template from `../forgejo-project-new/assets/` — never retype content that already exists there.
+For each selected item, copy the appropriate template from `../jb-forgejo-project-new/assets/` — never retype content that already exists there.
 
 - `.editorconfig` → copy from `assets/.editorconfig`
 - `.code-review.md` → copy from `assets/.code-review.md`

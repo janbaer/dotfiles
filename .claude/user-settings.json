@@ -39,5 +39,25 @@
     "typescript-lsp@claude-plugins-official": true
   },
   "editorMode": "vim",
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "skillOverrides": {
+    "code-review-excellence": "name-only",
+    "jb-cheatsheet-import": "user-invocable-only",
+    "clarity": "name-only",
+    "jb-configure-claude": "user-invocable-only",
+    "jb-fitness-coach": "user-invocable-only",
+    "ponytail": "name-only",
+    "ponytail-review": "name-only",
+    "read-knowledgebase": "name-only",
+    "anthropic-skills:ai-image-prompt-generator": "off",
+    "anthropic-skills:grill-me": "off",
+    "anthropic-skills:handoff": "off",
+    "anthropic-skills:humanizer": "off",
+    "anthropic-skills:obsidian": "off",
+    "anthropic-skills:ponytail": "off",
+    "anthropic-skills:vermenschlichen": "off",
+    "anthropic-skills:vermenschlichen-jan": "off",
+    "anthropic-skills:wait-what": "off",
+    "anthropic-skills:writing-clearly-and-concisely": "off"
+  }
 }
