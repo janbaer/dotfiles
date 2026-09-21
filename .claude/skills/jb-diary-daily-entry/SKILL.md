@@ -54,6 +54,8 @@ Lies die Datei (Pfad siehe Kontext) mit dem `Read` tool. Drei Fälle:
 
 Im selben `Read`-Aufruf hast du auch den Vortagsabschnitt (falls vorhanden) — nutze ihn, um im Gespräch konkret Bezug zu nehmen statt generische Fragen zu stellen, und merk dir die offenen Todos vom Vortag (`- [ ]`) — die werden später abgehakt.
 
+Lies zusätzlich den Wochenbericht der **Vorwoche** (`KW NN-1`), falls er existiert. Den brauchst du für den Vikunja-Abgleich in Schritt 4 des Gesprächs: montags stehen die abgehakten Todos der letzten Tage noch in der alten Datei. Fehlt sie, ist das kein Fehler.
+
 ### 4. Vikunja-Check im Hintergrund starten und Kalender abfragen
 
 Starte den Vikunja-Check **im Hintergrund**, damit das Interview sofort losgehen kann. Sinn der Sache: Jan trägt Termine und Wartungs-Todos in Vikunja ein und vergisst sie zwischen Tagebuch-Sessions — wenn sie morgens automatisch in den Tages-Ziele-Block wandern, kann er sie über das Tagebuch abhaken. Den Check parallel zum Interview laufen zu lassen spart spürbar Wartezeit am Morgen.
@@ -168,6 +170,16 @@ Ehrlich, nicht verurteilend. Wenn du Muster siehst (z. B. dasselbe Ärgernis tau
 - **Notification kam schon an** (Regelfall) → du kennst die Liste.
 - **Agent läuft noch** → kurz warten, bis die Notification eintrifft. Sollte selten vorkommen; falls doch und der Agent merklich hängt, ohne Liste weitermachen und das im Chat erwähnen.
 - **Agent hat eine `⚠️`-Meldung geliefert** → kein zweiter Hinweis, der wurde in Schritt 4 schon abgegeben. Einfach ohne Liste weiter.
+
+**Vikunja-Abgleich (Drift-Check):** Bevor du die Liste filterst oder erwähnst, prüf für jeden Task, ob er im Tagebuch längst abgehakt ist. Vergleiche jeden Task-Titel mit den `- [x]`-Zeilen aus dem aktuellen und dem Vorwochen-Wochenbericht (Schritt 3), jeweils ohne das `✅ {Datum}`-Suffix. Titel werden beim Übernehmen unverändert kopiert, ein exakter Textvergleich reicht.
+
+Ein Treffer heißt: im Tagebuch erledigt, in Vikunja noch offen. Frag dann nach — eine einzige Rückfrage für alle Treffer:
+
+> In Vikunja steht *„Heizungsrechnung bezahlen"* noch offen, im Tagebuch hast du ihn am Freitag abgehakt. Soll ich ihn in Vikunja schließen?
+
+Auf Bestätigung schließt der `vikunja-agent` die bestätigten Tasks in einem Aufruf. Die fallen damit aus der Liste raus und kommen **nicht** in die heutigen Ziele. Lehnt Jan ab, bleibt der Task in der Liste und wird ganz normal behandelt.
+
+Der Abgleich läuft **vor** dem Wochenend-Filter, also auch am Samstag und Sonntag. Ein längst erledigter Arbeits-Task ist kein Wochenend-Ballast, sondern eine Rückfrage von fünf Sekunden. Genau diese Reihenfolge fehlte, als ein am 18.09.2026 erledigter CHECK24-Task das ganze Wochenende unbemerkt offen blieb.
 
 **Wochenend-Filter (Arbeits-Tasks):** Ist der heutige Wochentag (aus Schritt 1) ein **Samstag oder Sonntag**, entferne alle Tasks aus dem Arbeitsprojekt **CHECK24-BU** aus der Vikunja-Liste, bevor du sie erwähnst oder in die Ziele übernimmst — erkennbar am Projekt-Label `*CHECK24-BU*` in der Agent-Ausgabe. Der Grund: Jan arbeitet am Wochenende nicht, und ein Arbeits-Task im Wochenend-Tagebuch ist nur Ballast, den er ohnehin erst am Montag anfassen kann. Fällige oder überfällige CHECK24-Tasks tauchen dadurch nicht am Wochenende auf, sondern erst wieder im nächsten Montags-Eintrag. Alle anderen Projekte (privat, Haushalt, Finanzen etc.) bleiben auch am Wochenende drin — der Filter gilt nur für die Arbeit. Bleibt nach dem Filtern nichts übrig, behandle die Liste wie `keine`.
 
