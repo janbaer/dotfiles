@@ -95,7 +95,7 @@ list_repo_pull_requests(owner, repo, state="open")
 Filter by `head` branch matching the current feature branch.
 
 - **PR found** → show the user the link, skip creation
-- **No PR found** → invoke the **forgejo-pr-create** skill to create the PR; always include `closes #N` in the PR body
+- **No PR found** → invoke the **forgejo-pr-create** skill to create the PR; always include `closes #N` in the PR body. Never call `create_pull_request` directly from here: that skips the `/simplify` + `/review-diff` pass and the review loop that `forgejo-pr-create` runs.
 
 ### 6. Send notification
 

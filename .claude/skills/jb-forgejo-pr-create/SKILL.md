@@ -130,13 +130,14 @@ Output the URL of the newly created PR so the user can open it directly.
 
 ### 9. Wait for the automated review, then read it
 
-Every new PR triggers a workflow that posts an AI review (user `ai`), usually
-within about two minutes. Do not make the user ask for it.
+Every new PR triggers a workflow that posts an AI review (user `ai`). It waits
+60 s before starting, so the review usually lands after 1–3 minutes. Do not
+make the user ask for it.
 
 Start a background wait right after showing the link:
 
 ```bash
-sleep 120   # Bash tool, run_in_background: true
+sleep 90   # Bash tool, run_in_background: true
 ```
 
 The wait finishing produces a task notification. Then check for a review:
@@ -145,10 +146,12 @@ The wait finishing produces a task notification. Then check for a review:
 list_pull_reviews(owner, repo, index=<PR number>)
 ```
 
-- **A review is there** → invoke the **forgejo-pr-feedback** skill for this PR.
-  It stops after the assessment and the prioritised action list; code changes
-  and replies to the reviewer need the user's go-ahead.
-- **Nothing yet** → wait again in the background, first 180 then 300 seconds,
+- **A review is there** → invoke the **forgejo-pr-feedback** skill for this PR
+  in **loop mode**. It fixes what is clearly right, records deliberate
+  declines in the PR description, pushes, and waits for the next review until
+  the PR is approved. It asks Jan only about questionable points, bundled
+  once per round.
+- **Nothing yet** → wait again in the background, first 120 then 180 seconds,
   and check after each. After the third check say in one line that no review
   arrived and that `/forgejo-pr-feedback` reads it later, then stop. Do not
   keep waiting beyond that.

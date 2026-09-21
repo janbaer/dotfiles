@@ -1,7 +1,7 @@
 ---
 name: forgejo-pr-feedback
 model: sonnet
-description: Use when reading review comments on a Forgejo pull request to understand received feedback, assess whether each comment is correct, estimate the effort to address it, and post a follow-up comment summarising what was fixed and what was not. Trigger on phrases like "read PR comments", "check PR feedback", "what feedback did I get", "review comments on my PR", "what do the reviewers say", "assess PR review", "post review response", or "reply to review comments".
+description: Use when reading review comments on a Forgejo pull request to understand received feedback, assess whether each comment is correct, estimate the effort to address it, and post a follow-up comment summarising what was fixed and what was not. Also runs the fix-push-rereview loop with the automated `ai` reviewer until the PR is approved. Trigger on phrases like "read PR comments", "check PR feedback", "what feedback did I get", "review comments on my PR", "what do the reviewers say", "assess PR review", "post review response", "reply to review comments", "work through the review", or "iterate until approved".
 disable-model-invocation: false
 ---
 
@@ -12,6 +12,11 @@ disable-model-invocation: false
 # Forgejo PR Feedback Reader
 
 Reads all review comments on a Forgejo PR and helps the PR author understand, evaluate, and prioritize the feedback they received.
+
+Two modes:
+
+- **Assessment** (default) — steps 1–5 once, then step 6 when the user has worked on the feedback.
+- **Loop** — used when `forgejo-pr-create` hands over a PR it just opened, or when the user asks to work through the review until it is approved. Steps 1–4 for the latest review, then the **Loop mode** section below, round after round.
 
 ## Workflow
 
@@ -93,6 +98,62 @@ Sort by: blocking issues first, then by effort (small first within each validity
 
 End with a **prioritised action list** — a numbered list of the valid comments the user should address, ordered by impact vs effort.
 
+In loop mode, skip this presentation and continue with **Loop mode**.
+
+## Loop mode
+
+The n8n review workflow posts a review as user `ai` when a PR opens and again after every push, 60 s after the push settles. It reads the PR description and its own latest review with the inline comments, not PR comments. It counts its rounds since its last `APPROVED` and sends Jan an ntfy instead of reviewing once that reaches 5.
+
+Run the rounds below until a stop condition is hit. One round ends in at most one push, because every push costs a review.
+
+### L1. Take the latest `ai` review
+
+The `ai` review with the highest `id` is this round's review; remember its `id`. Assess it and its inline comments as in step 4, together with any human comments added since the previous round. Earlier `ai` reviews are settled: the latest one already reports on them in its "Previous Findings" section.
+
+Also count the `ai` reviews with an `id` above the latest `ai` `APPROVED` (all of them if there is none). At 5, stop and tell Jan the round limit is reached: the workflow will not review again, so another push would only wait for nothing.
+
+### L2. Stop on approval
+
+If its state is `APPROVED`, send an ntfy (`--title "PR approved"`, body `#N: <PR title>`), say in one line that the PR is ready to merge, and stop. Remaining nits in an approving review are not worth another round.
+
+### L3. Sort every finding
+
+| Bucket | What goes in | Action |
+|---|---|---|
+| **Fix** | (`✅ Valid` or `⚠️ Partially valid` with an obvious better fix) with effort XS or S | Fix it without asking |
+| **Decline** | Contradicts a decision already recorded in the issue or in the PR description's "Deliberate decisions", and the record already says why | Add or sharpen the entry in "Deliberate decisions" without asking |
+| **Ask** | `❌ Questionable` where declining is not already backed by a recorded decision; effort M or L; anything that would overturn a decision from the issue; any point where you are unsure which bucket applies | Ask Jan |
+
+Jan wants to be asked only about the **Ask** bucket. Do not ask about fixes that are clearly right or about declines an existing decision already covers.
+
+### L4. Ask once, bundled
+
+If the **Ask** bucket is not empty, collect every item from this round into one question: finding, your assessment, what you would do. Use AskUserQuestion when the options are clear, one question per item, up to four; list any further items in the text. Send an ntfy (`--title "PR input needed"`, body `#N: <count> points to decide`) and wait for the answers before pushing anything. Items Jan decides to leave go into "Deliberate decisions" with his reason.
+
+### L5. Fix, record, push once
+
+1. Make the fixes. Run the project's own tests and linters. Do not rerun `/simplify` and `/review-diff`; they ran before the PR was created.
+2. Update the PR description with `update_pull_request`: keep the existing text, and add or update a `## Deliberate decisions` section with one bullet per declined point — the decision in bold, then the reason in a sentence or two. Do this **before** the push, since the reviewer reads the description when it runs. The description is the only place where the reviewer will see a decline; a reply comment does not reach it.
+3. Commit following the commit rules, then push once.
+
+If nothing was fixed and only the description changed, do not push an empty commit. Editing the description does not trigger a review, so the loop would stall. Stop and tell Jan the remaining points are all recorded as deliberate.
+
+### L6. Wait for the next review
+
+Wait in the background (`sleep 90`, Bash with `run_in_background: true`), then look for an `ai` review with an `id` above the one from L1. If there is none, wait 120 s, then 180 s, and check again after each wait. After the third miss, say in one line that no review arrived and stop. A likely cause is that the round limit has been reached and the ntfy went to Jan instead.
+
+When a new review is there, go back to L1.
+
+### Stop conditions
+
+- The review is `APPROVED` (L2).
+- The round ended with nothing to push (L5).
+- No new review arrived after three waits (L6).
+- Five `ai` reviews since the last approval (L1).
+- Jan says stop.
+
+Loop mode posts no reply comments. Step 6 is for human reviewers and assessment mode.
+
 ### 6. Post a follow-up comment (after the user has worked on the feedback)
 
 Once the user has addressed the items from the action list, offer to post responses that close the loop with the reviewers.
@@ -156,3 +217,4 @@ The goal of this comment is to respect the reviewer's time: it lets them see at 
 | `list_pull_review_comments` | Read inline comments for a specific review |
 | `get_pull_request_diff` | Get the diff to evaluate inline comment accuracy |
 | `create_issue_comment` | Post the follow-up review response comment |
+| `update_pull_request` | Record declined points under "Deliberate decisions" (loop mode) |

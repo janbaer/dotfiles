@@ -1,8 +1,9 @@
 # Before opening a pull request
 
 Run `/simplify` and then `/review-diff` on the branch, and act on what they
-report. This holds for every pull request, on Forgejo as much as on GitHub, and
-again before pushing a follow-up commit to a PR that is already open.
+report. This holds for every pull request, on Forgejo as much as on GitHub or GitLab,
+and again before pushing a follow-up commit to a PR that is already open. The
+one exception is Forgejo, covered under "After the PR is open" below.
 
 **That order matters.** `/simplify` rewrites code, so it must not run last: the
 version `/review-diff` blessed would not be the version being submitted. The
@@ -41,3 +42,22 @@ with his name on it.
   unstaged has failed CI here twice.
 - The same care applies to the PR text: it is read by someone with no context,
   so the reason for the change belongs in it, not just the change.
+
+## After the PR is open: Forgejo only
+
+This section applies only to PRs on Jan's Forgejo. GitHub and GitLab PRs have
+no automated reviewer loop, and humans read every follow-up push there, so the
+pair runs again before each follow-up push as stated at the top.
+
+On Forgejo, the n8n workflow reviews every PR as user `ai` and reviews again
+after each push. From here the loop is: read the review, fix, push, wait for
+the next review — `jb-forgejo-pr-feedback` runs it. Follow-up pushes only need
+the project's own tests and linters, not the `/simplify` + `/review-diff` pair:
+the pair is there to catch problems before the first reviewer sees the branch,
+and after that the reviewer itself is the check. Running the pair again on a
+two-line fix costs minutes and finds nothing the next review round would not.
+
+The `ai` reviewer reads the PR description and its own previous review, not PR
+comments. A point that is deliberately left as it is goes into a
+"Deliberate decisions" section of the PR description; a reply comment would
+not reach it, and it would raise the same point again every round.
