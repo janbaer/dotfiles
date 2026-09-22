@@ -142,7 +142,7 @@ If nothing was fixed and only the description changed, do not push an empty comm
 
 ### L6. Wait for the next review
 
-Wait in the background (`sleep 90`, Bash with `run_in_background: true`), then look for an `ai` review with an `id` above the one from L1. If there is none, wait 120 s, then 180 s, and check again after each wait. After the third miss, say in one line that no review arrived and stop.
+Wait in the background (`sleep 90`, Bash with `run_in_background: true`), then look for an `ai` review with an `id` above the one from L1. If there is none, wait 120 s, then 180 s, then 210 s, and check again after each wait. After the fourth miss (about 10 minutes after the push), say in one line that no review arrived and stop.
 
 When a new review is there, go back to L1.
 
@@ -150,7 +150,7 @@ When a new review is there, go back to L1.
 
 - The review is `APPROVED` (L2).
 - The round ended with nothing to push (L5).
-- No new review arrived after three waits (L6).
+- No new review arrived after four waits (L6).
 - A `**Review limit reached**` comment by `ai` newer than the latest review (L1, L5).
 - Jan says stop.
 
