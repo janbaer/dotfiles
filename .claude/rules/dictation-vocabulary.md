@@ -3,7 +3,7 @@
 A proper noun that keeps coming back wrong goes into
 `~/.config/dictate/vocabulary.txt`, which `dictate.sh` reads at runtime, so the
 entry works on the next dictation. The permanent list is `cleanupPrompt` in
-`modules/home/desktop/dictate.nix` — only names worth keeping for years belong
+`modules/home/desktop/dictate/dictate.nix` — only names worth keeping for years belong
 there.
 
 ## When to add a term
