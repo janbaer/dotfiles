@@ -61,6 +61,17 @@ Use the `AskUserQuestion` tool to collect each field **one at a time**, in the o
 
 **The Claude field (#7) is mandatory.** Never skip it. It controls whether future agents can auto-implement or must pause for input.
 
+8. **Hermes** *(single select)* — `Assign to hermes-agent` (Hermes implements it and opens the PR without asking) / `Leave for Claude`
+
+Offer `Assign to hermes-agent` only when every check below passes. Otherwise skip #8, leave the issue for Claude, and say in one line which check failed.
+
+- **Files:** you can name the files that will change, and there are at most 3 (tests included).
+- **Scope:** no new dependency, no schema migration, no change to a public API or a config format.
+- **Decisions:** no open design question from the interview; the issue says exactly what to build.
+- **Tests:** every acceptance criterion has a check that runs unattended — a command, a test, an exit code, an HTTP status — and "How to Test" is a list of such commands. A browser step, a visual check, or a human review fails this.
+
+When the tests check fails on a criterion Jan wants to keep for Hermes, name it and let him rewrite it, then check again.
+
 If the `ntfy-me` skill is available, use it (topic: `claude`) to notify the user that input is needed before starting the questions.
 
 ### 5. Map Answers to Label IDs
@@ -77,6 +88,7 @@ Before calling `create_issue`, show the user a preview of the issue:
 ```
 **Title:** {derived title}
 **Labels:** {IssueType}, {Severity}
+**Assignee:** {hermes-agent | none}
 **Body:**
 {full rendered body}
 ```
@@ -117,10 +129,18 @@ Then create:
 create_issue(
   owner, repo,
   title="{concise title derived from Description}",
-  body="<body from template above>",
-  labels=[<numeric IDs from step 4>]
+  body="<body from template above>"
 )
 ```
+
+`create_issue` takes neither labels nor an assignee, so set both afterwards on the new issue number:
+
+```
+add_issue_labels(owner, repo, index=N, labels="<comma-separated IDs from step 5>")
+update_issue(owner, repo, index=N, assignee="hermes-agent")   # only if assigned to Hermes
+```
+
+The assignment is what triggers Hermes. If `update_issue` fails, tell Jan: the issue exists but Hermes will not pick it up.
 
 ### 8. Notify When Done
 
@@ -130,7 +150,9 @@ Use the **ntfy-me** skill (if available) to notify with topic `claude`:
 
 ### 9. Ask Whether to Implement
 
-After notifying, always ask the user:
+If the issue is assigned to `hermes-agent`, stop here: Hermes picks it up.
+
+Otherwise, always ask the user:
 
 > "Issue #{N} created. Would you like to implement it now?"
 
@@ -146,4 +168,5 @@ Do NOT start implementing unless the user explicitly selects Yes.
 |------|----------|
 | `create_issue` | Create the new issue |
 | `list_repo_issues` | Inspect existing issues to discover label names and IDs |
-| `add_issue_labels` | Apply labels after creation if needed |
+| `add_issue_labels` | Apply labels after creation |
+| `update_issue` | Assign `hermes-agent` after creation |

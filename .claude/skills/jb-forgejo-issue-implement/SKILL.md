@@ -91,7 +91,7 @@ git remote get-url origin
 get_issue_by_index(owner, repo, index=N)
 ```
 
-Check `state` in the response. If `state != "open"`, stop and inform the user the issue is already closed. If open, skip straight to step 2.
+Check `state` in the response. If `state != "open"`, stop and inform the user the issue is already closed. If `hermes-agent` is among its `assignees`, stop and say that Hermes owns it; continue only if Jan explicitly asks Claude to take it over. Otherwise skip straight to step 2.
 
 **If no issue number was given:**
 
@@ -99,7 +99,7 @@ Check `state` in the response. If `state != "open"`, stop and inform the user th
 list_repo_issues(owner, repo, state="open")
 ```
 
-Show a numbered summary. Ask the user which to work on. **This is the only point where user input is required.**
+Leave out issues whose `assignees` include `hermes-agent`; the MCP tools cannot filter by assignee, so check the field on each result. Show a numbered summary of the rest. Ask the user which to work on. **This is the only point where user input is required.**
 
 ### 2. Read the issue
 
