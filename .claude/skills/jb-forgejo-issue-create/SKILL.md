@@ -67,6 +67,7 @@ Offer `Assign to hermes-agent` only when every check below passes. Otherwise ski
 
 - **Files:** you can name the files that will change, and there are at most 3 (tests included).
 - **Scope:** no new dependency, no schema migration, no change to a public API or a config format.
+- **Agent files:** no acceptance criterion requires editing `CLAUDE.md`, `AGENTS.md` or anything under `.claude/`. Hermes is not allowed to touch them, and without this check it ships the PR with the criterion open. When the change needs such an edit, drop that point from the criteria and tell Jan it gets done at merge time.
 - **Decisions:** no open design question from the interview; the issue says exactly what to build.
 - **Tests:** every acceptance criterion has a check that runs unattended — a command, a test, an exit code, an HTTP status — and "How to Test" is a list of such commands. A browser step, a visual check, or a human review fails this.
 
