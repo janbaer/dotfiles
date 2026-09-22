@@ -102,7 +102,9 @@ In loop mode, skip this presentation and continue with **Loop mode**.
 
 ## Loop mode
 
-The n8n review workflow posts a review as user `ai` when a PR opens and again after every push, 60 s after the push settles. It reads the PR description and its own latest review with the inline comments, not PR comments. It counts its rounds since its last `APPROVED` and sends Jan an ntfy instead of reviewing once that reaches 5.
+The n8n review workflow posts a review as user `ai` when a PR opens and again after every push, 60 s after the push settles. It reads the PR description and its own latest review with the inline comments, not PR comments. Every review is binding: `APPROVED` or `REQUEST_CHANGES`, and every point under "Required changes" has to be fixed.
+
+The workflow also enforces the round limit, so this skill never counts rounds. When the last allowed round ends in `REQUEST_CHANGES`, the workflow posts a PR comment as `ai` starting with `**Review limit reached**` and notifies Jan itself. It posts the same comment again for any push after that. The `Review round N of 5` line in the review body is for humans; do not evaluate it.
 
 Run the rounds below until a stop condition is hit. One round ends in at most one push, because every push costs a review.
 
@@ -110,7 +112,7 @@ Run the rounds below until a stop condition is hit. One round ends in at most on
 
 The `ai` review with the highest `id` is this round's review; remember its `id`. Assess it and its inline comments as in step 4, together with any human comments added since the previous round. Earlier `ai` reviews are settled: the latest one already reports on them in its "Previous Findings" section.
 
-Also count the `ai` reviews with an `id` above the latest `ai` `APPROVED` (all of them if there is none). At 5, stop and tell Jan the round limit is reached: the workflow will not review again, so another push would only wait for nothing.
+Check first whether a comment by `ai` starting with `**Review limit reached**` was created after this review's `submitted_at` (`list_issue_comments`). If so, stop and tell Jan in one line that the round limit is reached and the PR is his now. Do not push and do not send an ntfy; the workflow already notified him.
 
 ### L2. Stop on approval
 
@@ -134,13 +136,13 @@ If the **Ask** bucket is not empty, collect every item from this round into one 
 
 1. Make the fixes. Run the project's own tests and linters. Do not rerun `/simplify` and `/review-diff`; they ran before the PR was created.
 2. Update the PR description with `update_pull_request`: keep the existing text, and add or update a `## Deliberate decisions` section with one bullet per declined point — the decision in bold, then the reason in a sentence or two. Do this **before** the push, since the reviewer reads the description when it runs. The description is the only place where the reviewer will see a decline; a reply comment does not reach it.
-3. Commit following the commit rules, then push once.
+3. Commit following the commit rules. Right before pushing, check again for a `**Review limit reached**` comment newer than the L1 review: the workflow posts it a few seconds after the review, so L1 may have looked too early. If it is there, stop as in L1 and leave the commit unpushed. Otherwise push once.
 
 If nothing was fixed and only the description changed, do not push an empty commit. Editing the description does not trigger a review, so the loop would stall. Stop and tell Jan the remaining points are all recorded as deliberate.
 
 ### L6. Wait for the next review
 
-Wait in the background (`sleep 90`, Bash with `run_in_background: true`), then look for an `ai` review with an `id` above the one from L1. If there is none, wait 120 s, then 180 s, and check again after each wait. After the third miss, say in one line that no review arrived and stop. A likely cause is that the round limit has been reached and the ntfy went to Jan instead.
+Wait in the background (`sleep 90`, Bash with `run_in_background: true`), then look for an `ai` review with an `id` above the one from L1. If there is none, wait 120 s, then 180 s, and check again after each wait. After the third miss, say in one line that no review arrived and stop.
 
 When a new review is there, go back to L1.
 
@@ -149,7 +151,7 @@ When a new review is there, go back to L1.
 - The review is `APPROVED` (L2).
 - The round ended with nothing to push (L5).
 - No new review arrived after three waits (L6).
-- Five `ai` reviews since the last approval (L1).
+- A `**Review limit reached**` comment by `ai` newer than the latest review (L1, L5).
 - Jan says stop.
 
 Loop mode posts no reply comments. Step 6 is for human reviewers and assessment mode.
