@@ -159,6 +159,10 @@ Nur falls in Schritt 7 etwas beschlossen wurde:
 - **Neue Note:** Lege sie unter `Reflexion/<Titel>.md` an — Frontmatter mit `created` und passenden `tags`, dann die Erkenntnis als Fließtext, und **immer** ein abschließender Konsequenzen-Block (`## Konsequenzen für mich`) mit konkreten Ableitungen. Ohne den ist es Nabelschau. Textpflege wie oben anwenden.
 - **Bestehende Note fortschreiben:** Ergänze den neuen Befund und hänge eine Zeile `> geprüft am YYYY-MM-DD: <bestätigt / widerlegt / ergänzt um …>` an. Vorhandenen Text nicht umschreiben, nur anhängen.
 
+## Sonderbeiträge
+
+Neben den Wochenberichten liegen in `Weekly/` Sonderbeiträge wie das Jahresreview, der Geburtstagsrückblick oder der Rückblick auf eine längere AU. Jeder bekommt eine eigene Datei mit dem Erstelldatum vorneweg: `Weekly/YYYYMMDD - Titel.md`, z. B. `20260923 - Rückblick AU September 2026.md`. So sortieren sie sich chronologisch. Das Datum kommt aus `date +%Y%m%d`, nicht aus dem Titel und nicht aus dem Anlass.
+
 ## Regeln
 
 1. **Alles auf Deutsch.** Das gesamte Gespräch und der Rückblick sind auf Deutsch.
