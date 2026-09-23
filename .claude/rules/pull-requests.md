@@ -50,14 +50,18 @@ no automated reviewer loop, and humans read every follow-up push there, so the
 pair runs again before each follow-up push as stated at the top.
 
 On Forgejo, the n8n workflow reviews every PR as user `ai` and reviews again
-after each push. From here the loop is: read the review, fix, push, wait for
-the next review — `jb-forgejo-pr-feedback` runs it. Follow-up pushes only need
+after each push or comment. From here the loop is: read the review, fix, push,
+wait for the next review — `jb-forgejo-pr-feedback` runs it. Follow-up pushes only need
 the project's own tests and linters, not the `/simplify` + `/review-diff` pair:
 the pair is there to catch problems before the first reviewer sees the branch,
 and after that the reviewer itself is the check. Running the pair again on a
 two-line fix costs minutes and finds nothing the next review round would not.
 
-The `ai` reviewer reads the PR description and its own previous review, not PR
-comments. A point that is deliberately left as it is goes into a
-"Deliberate decisions" section of the PR description; a reply comment would
-not reach it, and it would raise the same point again every round.
+The `ai` reviewer reads the PR description, its own previous review with the
+replies under its inline comments, and every comment or comment review posted
+since that review. It weighs a justification in any of them. A point that is
+deliberately left as it is goes into a "Deliberate decisions" section of the PR
+description, because a comment is only visible to the next round: one round
+later it is out of view and the point can come back. A comment on its own also
+starts a round, which is the way to answer a review when there is nothing to
+push.

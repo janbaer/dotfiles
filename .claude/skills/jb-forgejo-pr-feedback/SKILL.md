@@ -102,11 +102,11 @@ In loop mode, skip this presentation and continue with **Loop mode**.
 
 ## Loop mode
 
-The n8n review workflow posts a review as user `ai` when a PR opens and again after every push, 60 s after the push settles. It reads the PR description and its own latest review with the inline comments, not PR comments. Every review is binding: `APPROVED` or `REQUEST_CHANGES`, and every point under "Required changes" has to be fixed.
+The n8n review workflow posts a review as user `ai` when a PR opens and again after every push or comment, 60 s after things settle; a push and a comment within that window yield one review. It reads the PR description, its own latest review with the replies under its inline comments, and every comment or comment review posted since that review, and it weighs a justification in any of them. A comment on an already approved head starts nothing. Every review is binding: `APPROVED` or `REQUEST_CHANGES`, and every point under "Required changes" has to be fixed or convincingly declined.
 
 The workflow also enforces the round limit, so this skill never counts rounds. When the last allowed round ends in `REQUEST_CHANGES`, the workflow posts a PR comment as `ai` starting with `**Review limit reached**` and notifies Jan itself. It posts the same comment again for any push after that. The `Review round N of 5` line in the review body is for humans; do not evaluate it.
 
-Run the rounds below until a stop condition is hit. One round ends in at most one push, because every push costs a review.
+Run the rounds below until a stop condition is hit. One round ends in at most one push or one comment, because every push and every comment costs a review round.
 
 ### L1. Take the latest `ai` review
 
@@ -135,10 +135,9 @@ If the **Ask** bucket is not empty, collect every item from this round into one 
 ### L5. Fix, record, push once
 
 1. Make the fixes. Run the project's own tests and linters. Do not rerun `/simplify` and `/review-diff`; they ran before the PR was created.
-2. Update the PR description with `update_pull_request`: keep the existing text, and add or update a `## Deliberate decisions` section with one bullet per declined point — the decision in bold, then the reason in a sentence or two. Do this **before** the push, since the reviewer reads the description when it runs. The description is the only place where the reviewer will see a decline; a reply comment does not reach it.
-3. Commit following the commit rules. Right before pushing, check again for a `**Review limit reached**` comment newer than the L1 review: the workflow posts it a few seconds after the review, so L1 may have looked too early. If it is there, stop as in L1 and leave the commit unpushed. Otherwise push once.
-
-If nothing was fixed and only the description changed, do not push an empty commit. Editing the description does not trigger a review, so the loop would stall. Stop and tell Jan the remaining points are all recorded as deliberate.
+2. Update the PR description with `update_pull_request`: keep the existing text, and add or update a `## Deliberate decisions` section with one bullet per declined point — the decision in bold, then the reason in a sentence or two. Do this **before** the push or comment, since the reviewer reads the description when it runs. The description is the durable record: a comment is only shown to the next round, so a decline that lives only in a comment can come back one round later.
+3. Right before pushing or commenting, check again for a `**Review limit reached**` comment newer than the L1 review: the workflow posts it a few seconds after the review, so L1 may have looked too early. If it is there, stop as in L1 and leave everything unpushed.
+4. If something was fixed, commit following the commit rules and push once. If nothing was fixed and only the description changed, do not push an empty commit. Post one PR comment with `create_issue_comment` instead that names each declined point and its reason in a sentence; the comment starts the next round. Do not do both, and do not answer each inline comment separately, since every comment starts its own round.
 
 ### L6. Wait for the next review
 
@@ -149,12 +148,11 @@ When a new review is there, go back to L1.
 ### Stop conditions
 
 - The review is `APPROVED` (L2).
-- The round ended with nothing to push (L5).
 - No new review arrived after four waits (L6).
 - A `**Review limit reached**` comment by `ai` newer than the latest review (L1, L5).
 - Jan says stop.
 
-Loop mode posts no reply comments. Step 6 is for human reviewers and assessment mode.
+Loop mode posts no reply comments beyond the one decline comment in L5. Step 6 is for human reviewers and assessment mode.
 
 ### 6. Post a follow-up comment (after the user has worked on the feedback)
 
