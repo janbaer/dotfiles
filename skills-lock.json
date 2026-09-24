@@ -5,7 +5,7 @@
       "source": "tt-a1i/archify",
       "sourceType": "github",
       "skillPath": "archify/SKILL.md",
-      "computedHash": "81993c9ad0aa1a42f007ca149e4c076cb4a5b28bb6dbd198b9f2ebe6e42de5b4"
+      "computedHash": "2dafa540bb19ed1d2ea032b071b4f617036d5166b3575a24545bd626e3d8e499"
     },
     "clarity": {
       "source": "addyosmani/clarity",
