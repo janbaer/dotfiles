@@ -12,6 +12,26 @@
     "defaultMode": "auto"
   },
   "model": "opus",
+  "skillOverrides": {
+    "code-review-excellence": "name-only",
+    "jb-cheatsheet-import": "user-invocable-only",
+    "clarity": "name-only",
+    "jb-configure-claude": "user-invocable-only",
+    "jb-fitness-coach": "user-invocable-only",
+    "ponytail": "name-only",
+    "ponytail-review": "name-only",
+    "read-knowledgebase": "name-only",
+    "anthropic-skills:ai-image-prompt-generator": "off",
+    "anthropic-skills:grill-me": "off",
+    "anthropic-skills:handoff": "off",
+    "anthropic-skills:humanizer": "off",
+    "anthropic-skills:obsidian": "off",
+    "anthropic-skills:ponytail": "off",
+    "anthropic-skills:vermenschlichen": "off",
+    "anthropic-skills:vermenschlichen-jan": "off",
+    "anthropic-skills:wait-what": "off",
+    "anthropic-skills:writing-clearly-and-concisely": "off"
+  },
   "hooks": {
     "PreToolUse": [
       {
@@ -40,24 +60,47 @@
   },
   "editorMode": "vim",
   "agentPushNotifEnabled": true,
-  "skillOverrides": {
-    "code-review-excellence": "name-only",
-    "jb-cheatsheet-import": "user-invocable-only",
-    "clarity": "name-only",
-    "jb-configure-claude": "user-invocable-only",
-    "jb-fitness-coach": "user-invocable-only",
-    "ponytail": "name-only",
-    "ponytail-review": "name-only",
-    "read-knowledgebase": "name-only",
-    "anthropic-skills:ai-image-prompt-generator": "off",
-    "anthropic-skills:grill-me": "off",
-    "anthropic-skills:handoff": "off",
-    "anthropic-skills:humanizer": "off",
-    "anthropic-skills:obsidian": "off",
-    "anthropic-skills:ponytail": "off",
-    "anthropic-skills:vermenschlichen": "off",
-    "anthropic-skills:vermenschlichen-jan": "off",
-    "anthropic-skills:wait-what": "off",
-    "anthropic-skills:writing-clearly-and-concisely": "off"
+  "autoMode": {
+    "environment": [
+      "### Org-wide",
+      "**Organization**: None configured",
+      "**Cloud provider(s)**: None configured",
+      "**Repository visibility**: assume private (host `forgejo` resolves to a self-hosted/home-lab Forgejo instance; gh visibility check not queryable for this remote host)",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: Ansible Vault, password fetched from Gopass (`gopass show -o homelab/ansible/vault-password`) via `bin/vault-pass.sh`; never stored on disk in this repo",
+      "**Default / protected branches**: `main` (default branch per repo facts; protection status not queryable via gh for this remote)",
+      "**CI/CD deploy targets**: Forgejo Actions CI (`.forgejo/workflows/lint.yml`) running ansible-lint sweep on push to `main` and on pull requests; no external deploy target beyond the home-lab hosts themselves",
+      "**Network posture**: None configured",
+      "**Host containment**: None configured — assume Claude Code runs on an ordinary developer machine with open internet",
+      "**Source control**: This repo (`jan/ansible-homelab`) and its remote `ssh://forgejo/jan/ansible-homelab.git` only",
+      "**Trusted internal domains**: `*.home.janbaer.de` (six managed hosts, e.g. `jabasoft-zb.home.janbaer.de`, `jabasoft-zb-02.home.janbaer.de`, `jabasoft-pve-03.home.janbaer.de`, `jabasoft-ug.home.janbaer.de`, `jabasoft-nixos-lxc-01.home.janbaer.de`, `jabasoft-nixos-lxc-11.home.janbaer.de`); `forgejo.home.janbaer.de` (Forgejo + forgejo-mcp sidecar, private registry mirror target); `ntfy.home.janbaer.de`, `n8n.home.janbaer.de`, `paperless.home.janbaer.de`, `s3.home.janbaer.de` (contacted in recent usage)",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: Forgejo at `forgejo.home.janbaer.de` (git hosting + private container registry + forgejo-mcp sidecar at `/mcp`); Gopass (`homelab/ansible/vault-password`) for the Ansible Vault password",
+      "**Internal package registry**: `forgejo.home.janbaer.de` private container registry (mirror target for `forgejo-mcp` sidecar image, verified via cosign against `bin/forgejo-mcp-cosign.pub`)",
+      "**Sensitive data locations & audiences**: `services/*/vault.yml`, `group_vars/*/vault.yml`, `host_vars/*/vault.yml` (ansible-vault-encrypted secrets, keys prefixed `vault_`); `.envrc` (env file flagged by sensitive-path scan); rendered `.env` files under `<data_root>/<name>/` on hosts (mode 0600) — audience: Jan only",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment; note this homelab's Proxmox guest hosts (`jabasoft-zb-02`, `jabasoft-pve-03`) are patched-but-not-auto-rebooted, treat as operationally sensitive even without a `prod` label",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment",
+      "### User-specific",
+      "**Primary use of Claude Code**: software development (Ansible home-lab infrastructure control plane)",
+      "**Trusted repo**: `/home/jan/Projects/ansible-homelab` and its remote `ssh://forgejo/jan/ansible-homelab.git` (visibility assumed private — self-hosted Forgejo)",
+      "**Org-specific CLIs**: None configured",
+      "**routine under jan/ prefix**: SSH access as user `jan` to `jabasoft-*` hosts (port 22022, per `~/.ssh/config`); `bin/service-edit-vault.sh`, `bin/vault-pass.sh`, `bin/mirror-forgejo-mcp.sh` routine within this repo"
+    ],
+    "allow": [
+      "$defaults",
+      "Bash(./provision.sh:*)",
+      "Bash(./execute.sh:*)",
+      "Bash(ansible-lint:*)",
+      "Bash(ansible-inventory:*)",
+      "Bash(openspec:*)"
+    ],
+    "soft_deny": [
+      "$defaults",
+      "Bash(./provision.sh -t apt-upgrade:*)",
+      "Bash(./provision.sh -t reboot:*)",
+      "Bash(ansible-vault encrypt:*)"
+    ]
   }
 }
