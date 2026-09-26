@@ -11,3 +11,9 @@ A commit on a local integration branch carries baggage from that branch: it cann
 - Identify the upstream default branch (usually `main` or `master` on the upstream remote) before branching.
 - Branch from that, not from the local integration branch.
 - Keep the fix on its own branch until it is merged upstream.
+
+## Branch names
+
+Every branch starts with `feature/`: `feature/{N}-{slug}` when an issue exists, `feature/{slug}` otherwise. No `chore/`, `fix/` or other prefixes, whatever the kind of change.
+
+Check the current branch name before the first commit on it, also when the branch was created by someone or something else. A wrong name is cheap to fix with `git branch -m` while the branch is unpushed, and turns into a closed PR and a re-push once it is on the remote.
