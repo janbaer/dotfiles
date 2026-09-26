@@ -40,7 +40,7 @@ This list mirrors `docs/forgejo-pr-review.md` in `jan/n8n`. Update it when the w
 
 ### 1. Gather project knowledge
 
-Delegate the reading to an `Explore` subagent. It covers:
+Delegate the reading to an `Explore` subagent and ask for a summary, not file contents. It covers:
 
 - `CLAUDE.md`, `AGENTS.md`, `README.md`, `CONTRIBUTING.md`
 - `openspec/project.md` and the specs under `openspec/specs/`, if present
