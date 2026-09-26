@@ -29,7 +29,9 @@ The workflow prompt already covers these concepts and overrides the project cont
 - the language of the review
 - generic check categories (security, correctness, performance, code quality) without a project-specific rule behind them
 
-Anything already stated in `openspec/project.md` also stays out: the workflow loads that file next to `.code-review.md`.
+Anything already stated in `openspec/project.md` also stays out: the workflow loads that file next to `.code-review.md`. Those two files are all the reviewer sees of the repository besides the diff. It does not read `CLAUDE.md`, `AGENTS.md` or the README, so a rule stated only there belongs in `.code-review.md` if it passes the three tests.
+
+Deliberate exceptions to a rule in `openspec/project.md` do belong in the file. The reviewer enforces `project.md` against every PR, including code that breaks a rule on purpose. State the exception with its paths, and for existing violations that stay as they are, that they are grandfathered and no new ones may be added.
 
 This list mirrors `docs/forgejo-pr-review.md` in `jan/n8n`. Update it when the workflow changes.
 
@@ -45,7 +47,7 @@ Delegate the reading to an `Explore` subagent and ask for a summary, not file co
 - the directory layout, where tests live and how they are named
 - `git log --oneline -50` for recurring fix or revert patterns
 
-Ask it to report conventions that are enforced or stated as rules, fragile areas (migrations, generated files, public APIs, config formats), and what `openspec/project.md` already says.
+Ask it to report conventions that are enforced or stated as rules, fragile areas (migrations, generated files, public APIs, config formats), what `openspec/project.md` already says, and where the current code deviates from a `project.md` rule. When `.code-review.md` exists, it also checks every rule in it against each file the rule covers and reports every file that breaks it.
 
 ### 2. Ask what the repository does not show
 
@@ -53,7 +55,7 @@ Use `AskUserQuestion` for the gaps: which areas break easily, what a PR must nev
 
 ### 3. Draft
 
-Filter every candidate through the three tests and the exclusion list. Write the rules in English as short imperatives, grouped by area when there are more than a handful. Name paths, commands or file patterns wherever a rule applies to part of the repo only. Add a reason only when the rule would look arbitrary without it.
+Filter every candidate through the three tests and the exclusion list. Check each remaining rule against the files it covers. Where the code breaks it, narrow the rule, add an exception, or ask Jan whether the rule or the practice is wrong. Write the rules in English as short imperatives, grouped by area when there are more than a handful. Name paths, commands or file patterns wherever a rule applies to part of the repo only. Add a reason only when the rule would look arbitrary without it.
 
 ```markdown
 # Review rules for <project>
@@ -70,10 +72,10 @@ Filter every candidate through the three tests and the exclusion list. Write the
 **File exists:** compare it with the draft and propose a diff in three groups:
 
 - remove: generic content, anything from the exclusion list, rules duplicated in `openspec/project.md`
-- fix: rules that no longer match the code
+- fix: rules that the code breaks, handled as in step 3
 - add: missing project-specific rules
 
-Keep rules Jan wrote that still pass the tests, and keep their wording. Write the file only after Jan approves the diff. If nothing needs to change, say "nothing to change" and write nothing.
+Rules already in the file are settled: Jan approved them. Keep their wording. Propose a change only with a concrete finding behind it: a file that breaks a rule, a rule that is now in `openspec/project.md`, or a convention from a file, commit or spec the existing rules do not cover. A borderline candidate without such a finding is a question to Jan, not a proposal. Write the file only after Jan approves the diff. If nothing needs to change, say "nothing to change" and write nothing.
 
 ### 5. Finish
 
