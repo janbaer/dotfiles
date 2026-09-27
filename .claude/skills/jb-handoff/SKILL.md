@@ -8,7 +8,7 @@ argument-hint: "Next session focus, OR name of an existing handoff file to resum
 
 ## Layout
 
-- `Handoffs/` holds the **open** handoffs, `Handoffs/Done/` the closed ones. Jan browses the folder in Obsidian and cannot see the `status` property from the file list, so the folder is what tells him which handoffs are still live. Keep the two in sync: a handoff marked done moves to `Done/`, and nothing open sits in `Done/`.
+- `Handoffs/` holds the **open** handoffs, `Handoffs/Archive/` the closed ones. Jan browses the folder in Obsidian and cannot see the `status` property from the file list, so the folder is what tells him which handoffs are still live. Keep the two in sync: a handoff marked done moves to `Archive/`, and nothing open sits in `Archive/`.
 - Filenames start with the date, so the folder sorts chronologically: `handoff-{YYYYMMDD}-{HHMM}-{project}-{slug}.md`. Handoffs created before the time was added have no `-{HHMM}` part.
 - Project names can contain hyphens (`bu-code-migrations`), so the filename cannot be split reliably into project and slug. Take the project from the `project` frontmatter property, never from the filename.
 
@@ -42,7 +42,7 @@ obsidian vault="Obsidian" property:read name="status" path="Handoffs/{filename}"
 obsidian vault="Obsidian" property:set name="status" value="done" path="Handoffs/{filename}"
 ```
 
-A handoff with **no** `status` property predates this convention — treat it as `open`. The `status` property stays the source of truth for filtering; the `Done/` folder mirrors it for Jan.
+A handoff with **no** `status` property predates this convention — treat it as `open`. The `status` property stays the source of truth for filtering; the `Archive/` folder mirrors it for Jan.
 
 ## Detect the mode
 
@@ -54,7 +54,7 @@ A handoff with **no** `status` property predates this convention — treat it as
    Do NOT filter to the current directory — the point of `list`/`continue` is to choose from everything.
 2. Decide what to offer:
    - **Open handoffs exist** → offer those.
-   - **None open** → say "No open handoffs" plainly, then fall back to the newest **done** ones (`files folder="Handoffs/Done" ext=md`) so the command is never a dead end. Label them as done in the selection box.
+   - **None open** → say "No open handoffs" plainly, then fall back to the newest **done** ones (`files folder="Handoffs/Archive" ext=md`) so the command is never a dead end. Label them as done in the selection box.
    - **`list all`** → skip the filter entirely: list every handoff via `files folder="Handoffs" ext=md` and mark the done ones.
    - **No handoffs at all** → say so and offer to create one (Create mode).
 3. Sort by filename descending — that is newest first. Read each one's `project` property for the description; the slug is what follows the project name in the filename.
@@ -66,8 +66,8 @@ A handoff with **no** `status` property predates this convention — treat it as
 
 **Resume mode** — the argument looks like an existing handoff file (matches `handoff-*.md`, contains a path, or the user says "resume", "load", or "pick up"), OR no argument is given:
 1. Determine the current project name: `basename $(pwd)`.
-2. Find this project's handoffs with the project search from **Layout** (exact matches only). It covers `Done/` as well. (Do NOT scan the filesystem.)
-   - If an explicit filename was given, load that file directly — look in `Handoffs/` first, then `Handoffs/Done/`.
+2. Find this project's handoffs with the project search from **Layout** (exact matches only). It covers `Archive/` as well. (Do NOT scan the filesystem.)
+   - If an explicit filename was given, load that file directly — look in `Handoffs/` first, then `Handoffs/Archive/`.
    - If exactly one file matches the current directory, load it directly.
    - If multiple files match, sort by date (newest first) and present them with the `AskUserQuestion` tool (a selection box) instead of a numbered list — label each option with its slug and put the date in the description, appending `· done` for any that are closed. Use the 4 newest as options; if more than 4 match, note that older ones are reachable via the built-in "Other" choice.
    - If no files match, say so and offer to create a new handoff instead.
@@ -86,12 +86,12 @@ A handoff with **no** `status` property predates this convention — treat it as
    - Multiple open matches → present them with `AskUserQuestion` (newest first, slug as label, date as description).
    - None open but done ones exist → say it's already closed and name it. Do not re-mark it.
    - No matches for this project → say so. Don't mark another project's handoff.
-3. Mark it and move it to `Done/` — both, in this order:
+3. Mark it and move it to `Archive/` — both, in this order:
    ```
    obsidian vault="Obsidian" property:set name="status" value="done" path="Handoffs/{filename}"
-   obsidian vault="Obsidian" move path="Handoffs/{filename}" to="Handoffs/Done/{filename}"
+   obsidian vault="Obsidian" move path="Handoffs/{filename}" to="Handoffs/Archive/{filename}"
    ```
-   Moving through the CLI lets Obsidian update links that point to the note. `move` can fail silently (exit 0, no output, nothing moved), so check with `files folder="Handoffs/Done" ext=md` that the file arrived. If it did not, say so: the status is already `done`, only the move is missing.
+   Moving through the CLI lets Obsidian update links that point to the note. `move` can fail silently (exit 0, no output, nothing moved), so check with `files folder="Handoffs/Archive" ext=md` that the file arrived. If it did not, say so: the status is already `done`, only the move is missing.
 4. Confirm with the new path. If the handoff's own "Next session should" list still has obviously unfinished items, mention them once — closing is the user's call, not yours, but a silent close on live work is worth one line of friction.
 
 **Create mode** — the argument describes a future focus (not a file reference), or the user explicitly asks to create one:
