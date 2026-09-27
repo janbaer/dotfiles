@@ -49,8 +49,10 @@ This section applies only to PRs on Jan's Forgejo. GitHub and GitLab PRs have
 no automated reviewer loop, and humans read every follow-up push there, so the
 pair runs again before each follow-up push as stated at the top.
 
-On Forgejo, the n8n workflow reviews every PR as user `ai` and reviews again
-after each push or comment. From here the loop is: read the review, fix, push,
+On Forgejo, Claude opens the PR as user `claude`, never as `jan`: Forgejo does
+not count the poster's own approval, and a PR needs both `ai`'s and Jan's. The
+n8n workflow reviews every PR as user `ai` and reviews again after each push or
+comment. From here the loop is: read the review, fix, push,
 wait for the next review — `jb-forgejo-pr-feedback` runs it. Follow-up pushes only need
 the project's own tests and linters, not the `/simplify` + `/review-diff` pair:
 the pair is there to catch problems before the first reviewer sees the branch,
