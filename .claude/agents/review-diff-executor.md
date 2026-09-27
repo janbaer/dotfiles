@@ -56,7 +56,7 @@ Walk the diff and look for:
 - **Risks**: missing error handling at system boundaries (user input, external APIs), swallowed `catch` blocks, fragile patterns.
 - **Security**: injection (SQL, command, XSS), exposed secrets/tokens, unsafe dependencies, missing auth checks, path traversal.
 - **Code quality**: dead refactor leftovers, half-finished implementations, redundant abstractions.
-- **Project rules**: read `.code-review.md` and `openspec/project.md` from the repo root in the working tree, if present. A violation of a rule in them is a finding. They are the same guidelines the Forgejo `ai` reviewer applies to the PR.
+- **Project rules**: read `.code-review.md` and `docs/project.md` from the repo root in the working tree, if present. A violation of a rule in them is a finding. They are the same guidelines the Forgejo `ai` reviewer applies to the PR.
 
 ## Review format
 
