@@ -16,7 +16,7 @@ Reads all review comments on a Forgejo PR and helps the PR author understand, ev
 Two modes:
 
 - **Assessment** (default) — steps 1–5 once, then step 6 when the user has worked on the feedback.
-- **Loop** — used when `forgejo-pr-create` hands over a PR it just opened, or when the user asks to work through the review until it is approved. Steps 1–4 for the latest review, then the **Loop mode** section below, round after round.
+- **Loop** — used when `forgejo-pr-create` hands over a PR it just opened, or when the user asks to work through the review until it is approved. A PR without an `ai` review yet starts at L6. Otherwise steps 1–4 for the latest review, then the **Loop mode** section below, round after round.
 
 ## Workflow
 
@@ -141,7 +141,7 @@ If the **Ask** bucket is not empty, collect every item from this round into one 
 
 ### L6. Wait for the next review
 
-Wait in the background (`sleep 90`, Bash with `run_in_background: true`), then look for an `ai` review with an `id` above the one from L1. If there is none, wait 120 s, then 180 s, then 210 s, and check again after each wait. After the fourth miss (about 10 minutes after the push), say in one line that no review arrived and stop.
+The workflow waits 60 s before it starts and the review takes about as long again, so a review lands two to three minutes after the PR opens or the push. Wait in the background (`sleep 150`, Bash with `run_in_background: true`), then look for an `ai` review with an `id` above the one from L1; on a PR that had no `ai` review yet, any `ai` review counts. If there is none, wait 90 s, then 150 s, then 210 s, and check again after each wait. After the fourth miss (about 10 minutes after the PR opened or the push), say in one line that no review arrived and stop.
 
 When a new review is there, go back to L1.
 
