@@ -60,7 +60,6 @@
   },
   "editorMode": "vim",
   "agentPushNotifEnabled": true,
-  "autoUpdatesChannel": "stable",
   "autoMode": {
     "environment": [
       "### Org-wide",
