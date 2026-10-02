@@ -29,7 +29,7 @@ repo: {owner/repo, falls klar, sonst leer lassen}
 
 # {Titel}
 
-{Die Idee in Jans Worten, bereinigt nach german-text.md. Kein Umformulieren über das Bereinigen hinaus.}
+{Die Idee aus Jans Diktat, bereinigt nach german-text.md und sprachlich geglättet: Diktat-Rahmen ("Ich habe eine Idee, die wir festhalten müssen") streichen, holprige Sätze straffen. Aussagen und Unsicherheiten bleiben, wie er sie gemacht hat ("glaube ich" nicht zur Tatsache machen).}
 
 ## Anmerkungen
 
@@ -49,7 +49,7 @@ Das erste Wort des Arguments entscheidet: `add`, `list`, `grill` oder `drop`. Oh
    ```
    obsidian vault="Notes" create path="Ideas/{datei}.md" content="..."
    ```
-3. Antworte in einem Satz mit dem Titel, plus die Anmerkungen, falls welche in der Notiz stehen. Keine Rückfrage, ob das so passt: Jan korrigiert, wenn nötig.
+3. Antworte in einem Satz mit dem Titel. Die Anmerkungen bleiben in der Notiz und kommen erst beim `grill` zur Sprache: im Chat laden sie zum Diskutieren ein, und genau das soll `add` nicht (siehe `idea-capture.md`). Keine Rückfrage, ob das so passt: Jan korrigiert, wenn nötig.
 
 ### list
 
