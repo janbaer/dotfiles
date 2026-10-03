@@ -11,11 +11,13 @@ disable-model-invocation: true
 
 # Forgejo PR Merge
 
-Merges a Pull Request using a squash commit, then cleans up the branch locally. In a
-repository with the release machinery it also writes the version bump and the changelog
-entry first, so that the merge is the release.
+Merges a Pull Request using a squash commit, cleans up the branch locally and then
+releases it with the **forgejo-release** skill: version bump and changelog entry on
+`main`, pushed after the merge. The release is skipped with `no-release`, so several PRs
+can land before one deploy.
 
-Optional argument: `patch` (default), `minor` or `major` for the bump.
+Optional arguments: the PR number, `patch` (default), `minor` or `major` for the bump,
+and `no-release`.
 
 ## Steps
 
@@ -68,11 +70,12 @@ PR #N: <title>
 
 **Ask for confirmation only if the PR was inferred from context** (matched automatically from the current branch) — not if the user explicitly passed a PR number or selected one from the list. If asking: "Merge this PR?" and wait for confirmation.
 
-### 4. Rebase the head branch onto the base
+### 4. Test the PR on top of the base
 
-Other PRs may have landed on the base since this branch was created. Rebasing puts the
-branch on top of them, so the `pre-push` hook tests the code that will actually land, and
-the version bump starts from the latest released number.
+Other PRs may have landed on the base since this branch was created. A local rebase
+puts the branch on top of them, so the tests run on the code that will actually land.
+The rebased branch is **never pushed**: a push changes the PR head, the approval goes
+stale and Forgejo refuses the merge, and the review workflow starts another round.
 
 The working tree must be clean, since the head branch gets checked out here:
 
@@ -90,7 +93,7 @@ The head branch may not exist locally (a PR from another author), so check it ou
 ```bash
 git fetch origin <base-branch> <head-branch>
 git log --oneline origin/<head-branch>..<head-branch> 2>/dev/null
-# any output → stop: "The local <head-branch> has commits that are not on origin. Push or drop them, then merge again."
+# any output → stop: "The local <head-branch> has commits that are not on origin. Push them and wait for the review, or drop them, then merge again."
 git switch <head-branch>
 git reset --hard origin/<head-branch>
 git rebase origin/<base-branch>
@@ -103,70 +106,32 @@ not exist locally, `git switch` creates it from origin and the `git log` check p
 branch and stop: "PR #N conflicts with <base>. Rebase it on the branch, then merge again."
 The conflict goes back to whoever wrote the PR.
 
-**After a rebase that moved the branch, run the tests.** The merge happens before any
-review of the rebased code could arrive, so this is the only check on how the PR combines
-with what landed on the base in the meantime.
-
 ```bash
 git rev-parse HEAD origin/<head-branch>
 # same SHA → the rebase changed nothing, skip the tests
 ```
 
-Take the test command from the project: its `CLAUDE.md`, or the `test` script in
-`package.json` (for howcani: `bun test --isolate`). If they fail, switch back to the base
-branch and stop: "PR #N fails its tests after rebasing onto <base>." No release commit,
-no push, no merge.
+Otherwise take the test command from the project: its `CLAUDE.md`, or the `test` script
+in `package.json` (for howcani: `bun test --isolate`). If they fail, switch back to the
+base branch and stop: "PR #N fails its tests after rebasing onto <base>." No merge.
+
+Whenever this step stops, also run `git branch -D <head-branch>` after switching back.
+The local branch only holds the throwaway rebase, and the check above would otherwise
+trip over it on the next run.
 
 A project without tests is fine: skip this step and mention it in the final summary.
 
-### 5. Add the release commit
+### 5. Check the approval is still current
 
-Only for repositories that carry the release machinery — both `scripts/bump-version.ts`
-and `CHANGELOG.md` exist, and the base branch is `main` or `master`. Everywhere else
-skip to the push.
-
-The version bump and the changelog entry are deliberately **not** part of the review:
-they are mechanical, they are written from the PR that was just approved, and keeping
-them out of the diff means the reviewer never reads version noise. They ride along in
-the squash commit, and on `main` the changed `package.json` is what starts the image
-build.
-
-`bump-version.ts` reads the version from the branch's own `package.json`, which is why
-the rebase in step 4 has to come first: on a branch behind `main` it would compute a
-number that was already released, and the merge would produce no image and no error.
-
-```bash
-bun run scripts/bump-version.ts [patch|minor|major]   # patch unless the user said otherwise
+```
+list_pull_reviews(owner, repo, index=N)
 ```
 
-Invoke the **update-changelog** skill with the new version number. It detects the
-existing format and writes the motivation, which comes from the PR title and body and
-from the commits between base and head — the same material the review was based on.
+The latest review by `ai` must be `APPROVED` and not `stale`. Anything else means the
+branch moved after the approval: stop and say which review is in the way. Do not push,
+comment or retry the merge to get past it.
 
-```bash
-git add package.json CHANGELOG.md
-git commit -m "release 🔧: Releasing <version> with <the reason in a few words>"
-```
-
-### 6. Push
-
-One push carries the rebase and the release commit together:
-
-```bash
-git push --force-with-lease origin <head-branch>
-```
-
-`--force-with-lease` refuses if the author pushed to the branch after the fetch in
-step 4. In that case stop and report it; do not retry with `--force`.
-
-The push runs whatever `pre-push` hook the repo has, so build and tests run on the
-rebased code before anything lands on the base. If the hook fails, stop.
-
-**From here to the merge, no questions and no pauses.** The review workflow waits 60
-seconds after a push and skips the review if the PR is closed by then. Merging right
-away keeps the push from triggering a review of the rebased branch.
-
-### 7. Merge with squash commit
+### 6. Merge with squash commit
 
 ```
 merge_pull_request(
@@ -178,13 +143,11 @@ merge_pull_request(
 )
 ```
 
-The title is the subject of the release commit from step 5, e.g.
-`release 🐛: Releasing 3.0.104 so a slow cron run is not overlapped by the next tick (#128)`.
-Without a release commit, use the PR title.
+The title is the PR title.
 
 Passing `delete_branch_after_merge=true` lets Forgejo delete the remote branch server-side. Forgejo also closes the PR and — if the PR body contains `closes #N` — automatically closes the linked issue.
 
-### 8. Clean up local branch
+### 7. Clean up local branch
 
 Switch to the base branch and delete the feature branch locally:
 
@@ -196,11 +159,21 @@ git branch -D <head-branch>
 
 Force-delete (`-D`) is used because the squash commit rewrites history and git won't consider the local branch "fully merged".
 
-### 9. Notify
+### 8. Notify
 
 Invoke the `ntfy-me` skill with a message summarising what was merged:
 
 > Merged PR #N: _\<title\>_ into `<base-branch>` on `<repo>`
+
+### 9. Release
+
+Only when the base branch is `main` or `master` and both `scripts/bump-version.ts` and
+`CHANGELOG.md` exist. Invoke the **forgejo-release** skill with the bump type
+(`patch` unless the user said otherwise). It releases everything merged since the last
+release, so a PR merged earlier with `no-release` goes out with this one.
+
+With `no-release`, skip this and end with one line that the change is merged but not
+released, and that `/forgejo-release` deploys it.
 
 ## MCP Tools Reference
 
@@ -208,10 +181,11 @@ Invoke the `ntfy-me` skill with a message summarising what was merged:
 |------|----------|
 | `list_repo_pull_requests` | List open PRs when none is specified |
 | `get_pull_request_by_index` | Read PR details (title, head, base, body) |
+| `list_pull_reviews` | Check the approval is not stale |
 | `merge_pull_request` | Squash-merge the PR |
 
 ## Related skills
 
 | Skill | Use case |
 |-------|----------|
-| `update-changelog` | Write the changelog entry for the new version |
+| `forgejo-release` | Bump the version, write the changelog and push the release to `main` |
