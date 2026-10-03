@@ -8,7 +8,8 @@ disable-model-invocation: true
 # Forgejo Release
 
 Releases everything merged to `main` since the last release: one version bump, one
-changelog entry, one push. **forgejo-pr-merge** calls it after every merge unless it
+changelog entry, one push. Only changes to the product release; tooling and process
+changes wait for the next release. **forgejo-pr-merge** calls it after every merge unless it
 was told `no-release`; called on its own, it ships whatever was merged that way.
 
 Optional argument: `patch` (default), `minor` or `major` for the bump.
@@ -49,6 +50,20 @@ git log --oneline "$last"..HEAD
 ```
 
 No output → stop: "Nothing merged since <version>, nothing to release."
+
+Only changes to the product earn a new version. Sort every commit by its diff
+(`git show --stat <sha>`), not by its subject:
+
+| Releases | Does not release |
+|---|---|
+| Behaviour changes and bug fixes: application code (`src/`), runtime dependencies in `package.json` and `bun.lock`, `Dockerfile` | Tooling and process: CI workflows, `renovate.json`, linter and hook config, review rules, `docs/`, `openspec/`, devDependencies only |
+
+A Renovate PR that bumps a runtime dependency releases; one that only touches
+devDependencies does not.
+
+No commit in the left column → stop without bumping: "Nothing since <version> changes
+the product, no release." The commits stay unreleased and go out with the next release
+that has one, so the changelog mentions them only if they are worth it there.
 
 ### 4. Bump the version
 
