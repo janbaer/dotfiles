@@ -127,9 +127,12 @@ A project without tests is fine: skip this step and mention it in the final summ
 list_pull_reviews(owner, repo, index=N)
 ```
 
-The latest review by `ai` must be `APPROVED` and not `stale`. Anything else means the
-branch moved after the approval: stop and say which review is in the way. Do not push,
-comment or retry the merge to get past it.
+At least one review must be `APPROVED`, neither `stale` nor `dismissed`, no matter who
+gave it: `ai` reviews most PRs, but skips Renovate's, which Jan approves himself. No
+reviewer's latest review may be `REQUEST_CHANGES`.
+
+Otherwise stop and say what is missing: no approval yet, or the branch moved after it.
+Do not push, comment or retry the merge to get past it.
 
 ### 6. Merge with squash commit
 
