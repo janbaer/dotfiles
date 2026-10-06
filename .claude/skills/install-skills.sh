@@ -25,6 +25,9 @@ install_skill() {
 }
 
 install_skill https://github.com/mattpocock/skills wait-what
+install_skill https://github.com/mattpocock/skills retro
+install_skill https://github.com/mattpocock/skills writing-for-agents
+
 install_skill https://github.com/login-tb/claude-skills vermenschlichen
 
 # https://clarity.addy.ie/
