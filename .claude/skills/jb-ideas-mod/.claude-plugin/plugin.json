@@ -1,0 +1,6 @@
+{
+  "name": "ideas-pane",
+  "version": "0.1.0",
+  "description": "Ideas backlog from the Notes vault in a side pane: click to grill, capture while working",
+  "types": "./types/index.d.ts"
+}

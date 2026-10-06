@@ -45,19 +45,20 @@ Das erste Wort des Arguments entscheidet: `add`, `list`, `grill` oder `drop`. Oh
 ### add
 
 1. Prüfe mit `list`-Aufruf (s. u.), ob es schon eine Notiz zum selben Thema gibt. Wenn ja, ergänze sie.
-2. Sonst lege die Notiz an:
+2. Sonst lege die Notiz mit dem Skript an. Titel und bereinigten Text übergibst du fertig, Dateiname, Datum und Frontmatter setzt das Skript:
    ```
-   obsidian vault="Notes" create path="Ideas/{datei}.md" content="..."
+   ~/Projects/dotfiles/.claude/skills/jb-ideas/scripts/ideas.sh add "{Titel}" "{Text}"
    ```
+   Anmerkungen und `repo` ergänzt du danach in der Notiz. Das Skript teilt sich der Mod `ideas-pane` mit diesem Skill.
 3. Antworte in einem Satz mit dem Titel. Die Anmerkungen bleiben in der Notiz und kommen erst beim `grill` zur Sprache: im Chat laden sie zum Diskutieren ein, und genau das soll `add` nicht (siehe `idea-capture.md`). Keine Rückfrage, ob das so passt: Jan korrigiert, wenn nötig.
 
 ### list
 
 ```
-obsidian vault="Notes" search:context query='/^titel: /' path="Ideas"
+~/Projects/dotfiles/.claude/skills/jb-ideas/scripts/ideas.sh list
 ```
 
-Liefert pro Notiz eine Zeile `Ideas/{datei}.md:4: titel: {Titel}`. Die Suche schließt Unterordner ein: Zeilen aus `Ideas/Archiv/` weglassen. Zeig die Ideen als nummerierte Liste, älteste zuerst, mit dem Titel aus der Property und dem Datum aus dem Dateinamen. Die Nummer gilt nur für diese Sitzung, `grill` darf sich darauf beziehen. Leerer Ordner: "Keine offenen Ideen."
+Liefert pro offener Idee eine Zeile `{datei ohne .md}<TAB>{Datum}<TAB>{Titel}`, bereits ohne `Ideas/Archiv/` und älteste zuerst. Zeig die Ideen als nummerierte Liste, älteste zuerst, mit dem Titel aus der Property und dem Datum aus dem Dateinamen. Die Nummer gilt nur für diese Sitzung, `grill` darf sich darauf beziehen. Leerer Ordner: "Keine offenen Ideen."
 
 ### grill
 
