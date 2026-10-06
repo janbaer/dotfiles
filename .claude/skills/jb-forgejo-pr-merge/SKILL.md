@@ -1,6 +1,6 @@
 ---
 name: forgejo-pr-merge
-model: haiku
+model: sonnet
 description: Use when merging (closing) a Pull Request on a Forgejo repository via squash commit. Trigger on phrases like "merge this PR", "merge a PR", "close this PR", "close the PR", "merge PR #N", "squash and merge", or "land this PR". Always use this skill when the user wants to merge or close a PR — even if they don't explicitly say "squash".
 disable-model-invocation: true
 ---
@@ -12,9 +12,9 @@ disable-model-invocation: true
 # Forgejo PR Merge
 
 Merges a Pull Request using a squash commit, cleans up the branch locally and then
-releases it with the **forgejo-release** skill: version bump and changelog entry on
-`main`, pushed after the merge. The release is skipped with `no-release`, so several PRs
-can land before one deploy.
+releases it with the **forgejo-release** skill, which alone owns the version bump and the
+changelog. This skill never touches `CHANGELOG.md`. The release is skipped with
+`no-release`, so several PRs can land before one deploy.
 
 Optional arguments: the PR number, `patch` (default), `minor` or `major` for the bump,
 and `no-release`.
@@ -170,10 +170,10 @@ Invoke the `ntfy-me` skill with a message summarising what was merged:
 
 ### 9. Release
 
-Only when the base branch is `main` or `master` and both `scripts/bump-version.ts` and
-`CHANGELOG.md` exist. Invoke the **forgejo-release** skill with the bump type
-(`patch` unless the user said otherwise). It releases everything merged since the last
-release, so a PR merged earlier with `no-release` goes out with this one.
+Only when the base branch is `main` or `master` and `CHANGELOG.md` exists. Invoke the
+**forgejo-release** skill with the bump type (`patch` unless the user said otherwise).
+It decides by itself whether the repository is versioned, and releases everything merged
+since the last release, so a PR merged earlier with `no-release` goes out with this one.
 
 With `no-release`, skip this and end with one line that the change is merged but not
 released, and that `/forgejo-release` deploys it.
@@ -191,4 +191,4 @@ released, and that `/forgejo-release` deploys it.
 
 | Skill | Use case |
 |-------|----------|
-| `forgejo-release` | Bump the version, write the changelog and push the release to `main` |
+| `forgejo-release` | Bump the version (if versioned), write the changelog and push to `main` |
