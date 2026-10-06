@@ -212,14 +212,6 @@ Use the howcani `openspec/project.md` as a structural reference. Include these s
 
 **6d. Replace `CLAUDE.md`** with the "with OpenSpec" variant from above.
 
-**6e. Commit the OpenSpec files separately** after the initial commit:
-```bash
-cd ~/Projects/<name>
-git add openspec/ CLAUDE.md
-git commit -m "docs ✨: Adding OpenSpec project context"
-git push
-```
-
 ## Step 7: Initial commit and push
 
 ```bash
@@ -230,6 +222,8 @@ git push -u origin main
 ```
 
 Note: `.mcp.json` is gitignored and will not be included.
+
+If OpenSpec was set up in Step 6, its files (`openspec/`, `CLAUDE.md`) are part of this commit.
 
 ## Step 8: Open in editor
 

@@ -98,7 +98,7 @@ A handoff with **no** `status` property predates this convention — treat it as
 1. Write a handoff document summarising the current conversation so a fresh agent can continue the work.
 2. Determine the filename:
    - `dirname`: `basename $(pwd)`
-   - `datetime`: `date +%Y%m%d-%H%M` — run it, never guess the time
+   - `datetime`: !`date +%Y%m%d-%H%M` — if this shows a placeholder, run `date +%Y%m%d-%H%M` yourself, never guess the time
    - `slug`: slugify the argument if one was passed (lowercase, spaces→hyphens, 3–5 words); otherwise infer a short topic slug from the conversation context
    - Full name: `handoff-{datetime}-{dirname}-{slug}.md`
 3. Create it in the Obsidian `Handoffs/` folder (capital H): `obsidian vault="Obsidian" create path="Handoffs/{filename}" content="..."` (use `\n` for newlines, `\t` for tabs). The note MUST start with YAML frontmatter carrying a `handoff` tag, `project`, and `status: open` — the project is what Resume and Done modes search on, the status is what List mode filters on:

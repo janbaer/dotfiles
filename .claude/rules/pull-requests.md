@@ -5,6 +5,22 @@ report. This holds for every pull request, on Forgejo as much as on GitHub or Gi
 and again before pushing a follow-up commit to a PR that is already open. The
 one exception is Forgejo, covered under "After the PR is open" below.
 
+## Scale the check to the change
+
+Judge by what the change does, not only by its size. `git diff --shortstat
+origin/<base>...HEAD` gives the size as a hint.
+
+| Change | Runs |
+| --- | --- |
+| Trivial: docs, comments, typos, pure config, up to about 15 lines, no behavior change | Neither. Only the project's tests and linters. |
+| Small: behavior changes, up to about 50 lines in at most 3 files | `/review-diff` only |
+| Anything larger | `/simplify`, then `/review-diff` |
+
+A few lines in auth, migrations, deletion logic or anything touching secrets
+are never trivial. On a repository Jan does not own, always run the full pair.
+"full" or "skip" from Jan overrides the choice. The rest of this file describes
+the full pair.
+
 **That order matters.** `/simplify` rewrites code, so it must not run last: the
 version `/review-diff` blessed would not be the version being submitted. The
 correctness check has to be the final one, because only then does it run on

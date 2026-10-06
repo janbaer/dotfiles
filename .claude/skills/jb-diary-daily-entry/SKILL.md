@@ -2,6 +2,7 @@
 name: diary-daily-entry
 model: haiku
 description: "Für den täglichen Tagebucheintrag in Obsidian: 'Tagebuch', 'Tageseintrag', 'Eintrag für heute', 'daily note', 'Wie war gestern', 'Morgenreflexion'. Führt ein kurzes Interview auf Deutsch und hängt den Eintrag an den aktuellen Wochenbericht in der Vault Notes an. Auch bei 'ich möchte kurz reflektieren'."
+disable-model-invocation: true
 ---
 
 # Täglicher Tagebucheintrag
@@ -18,15 +19,26 @@ Jan schreibt seine Tageseinträge meistens morgens, kurz nach dem Aufstehen, und
 
 Der Wochenbericht ist eine reine Markdown-Datei mit YAML-Frontmatter. Das heißt: alle Operationen (lesen, schreiben, anhängen, Todos abhaken) gehen direkt über `Read`, `Write` und `Edit` — kein Bedarf für die `obsidian`-CLI. Obsidian selbst pickt die Änderungen automatisch auf, sobald die Datei modifiziert wird.
 
+## Regeln
+
+1. **Alles auf Deutsch** — außer dem `**Update:**`-Präfix, der bewusst Englisch bleibt.
+2. **Fließtext, keine Bullets** — außer bei den Tages-Zielen (die sind Tasks).
+3. **Heutiger Wochentag ist heutiger Wochentag** — auch wenn der Inhalt sich auf gestern bezieht. Nicht verwechseln.
+4. **Eine Frage nach der anderen** — nicht alle gleichzeitig stellen.
+5. **Konkret statt generisch** — beziehe dich auf den Vortags-Abschnitt, wenn Jan Bezüge verpasst.
+6. **Ziele sind Tasks** — `- [ ]` damit Jan sie abhaken kann.
+7. **Kein Umschreiben vorhandener Einträge** — nur anhängen, nie überschreiben.
+8. **Stilnähe über Vollständigkeit** — lieber einen kurzen, stimmigen Eintrag als eine durchformulierte Gliederung, die nicht nach Jan klingt.
+
 ## Vor dem Gespräch
 
 ### 1. Datum und Woche bestimmen
 
-Ermittle per Bash:
+Datum, Wochentag, Uhrzeit und Kalenderwoche beim Aufruf: !`LC_TIME=de_DE.UTF-8 date '+%F, %A, %H:%M, KW %V'`. Steht dort ein Platzhalter statt eines Datums, führe den Befehl selbst per Bash aus. Dieses Datum gilt, nicht das vom Sitzungsstart.
+
+Den Vault-Pfad ermittelst du per Bash:
 
 ```bash
-date +%V           # ISO-Kalenderwoche, z. B. 16
-LC_TIME=de_DE.UTF-8 date +%A   # Deutscher Wochentag, z. B. Sonntag
 gojq -r '[.vaults[] | .path] | map(select(endswith("/Notes"))) | first' ~/.config/obsidian/obsidian.json  # Vault-Pfad
 ```
 
@@ -54,7 +66,7 @@ Lies die Datei (Pfad siehe Kontext) mit dem `Read` tool. Drei Fälle:
 
 Im selben `Read`-Aufruf hast du auch den Vortagsabschnitt (falls vorhanden) — nutze ihn, um im Gespräch konkret Bezug zu nehmen statt generische Fragen zu stellen, und merk dir die offenen Todos vom Vortag (`- [ ]`) — die werden später abgehakt.
 
-Lies zusätzlich den Wochenbericht der **Vorwoche** (`KW NN-1`), falls er existiert. Den brauchst du für den Vikunja-Abgleich in Schritt 4 des Gesprächs: montags stehen die abgehakten Todos der letzten Tage noch in der alten Datei. Fehlt sie, ist das kein Fehler.
+Lies zusätzlich den Wochenbericht der **Vorwoche** (`KW NN-1`), falls er existiert. Den brauchst du für den Vikunja-Abgleich in Frage 4 des Gesprächs: montags stehen die abgehakten Todos der letzten Tage noch in der alten Datei. Fehlt sie, ist das kein Fehler.
 
 ### 4. Vikunja-Check im Hintergrund starten und Kalender abfragen
 
@@ -165,13 +177,13 @@ Ehrlich, nicht verurteilend. Wenn du Muster siehst (z. B. dasselbe Ärgernis tau
 
 **Überspringen wenn:** der Starttext bereits konkrete Tagesziele nennt (z. B. „Heute fahre ich zu...", „Am Abend will ich..."). Vikunja-Tasks und Kalendertermine trotzdem einbauen — die kommen immer dazu, unabhängig davon, ob die Frage gestellt wird.
 
-**Vor der Frage:** Hol das Ergebnis des Hintergrund-Agents aus Schritt 4 ab.
+**4a. Vor der Frage:** Hol das Ergebnis des Hintergrund-Agents aus Vorbereitung 4 ab.
 
 - **Notification kam schon an** (Regelfall) → du kennst die Liste.
 - **Agent läuft noch** → kurz warten, bis die Notification eintrifft. Sollte selten vorkommen; falls doch und der Agent merklich hängt, ohne Liste weitermachen und das im Chat erwähnen.
-- **Agent hat eine `⚠️`-Meldung geliefert** → kein zweiter Hinweis, der wurde in Schritt 4 schon abgegeben. Einfach ohne Liste weiter.
+- **Agent hat eine `⚠️`-Meldung geliefert** → kein zweiter Hinweis, der wurde in Vorbereitung 4 schon abgegeben. Einfach ohne Liste weiter.
 
-**Vikunja-Abgleich (Drift-Check):** Bevor du die Liste filterst oder erwähnst, prüf für jeden Task, ob er im Tagebuch längst abgehakt ist. Vergleiche jeden Task-Titel mit den `- [x]`-Zeilen aus dem aktuellen und dem Vorwochen-Wochenbericht (Schritt 3), jeweils ohne das `✅ {Datum}`-Suffix. Titel werden beim Übernehmen unverändert kopiert, ein exakter Textvergleich reicht.
+**4b. Vikunja-Abgleich (Drift-Check):** Bevor du die Liste filterst oder erwähnst, prüf für jeden Task, ob er im Tagebuch längst abgehakt ist. Vergleiche jeden Task-Titel mit den `- [x]`-Zeilen aus dem aktuellen und dem Vorwochen-Wochenbericht (Schritt 3), jeweils ohne das `✅ {Datum}`-Suffix. Titel werden beim Übernehmen unverändert kopiert, ein exakter Textvergleich reicht.
 
 Ein Treffer heißt: im Tagebuch erledigt, in Vikunja noch offen. Frag dann nach — eine einzige Rückfrage für alle Treffer:
 
@@ -181,7 +193,7 @@ Auf Bestätigung schließt der `vikunja-agent` die bestätigten Tasks in einem A
 
 Der Abgleich läuft **vor** dem Wochenend-Filter, also auch am Samstag und Sonntag. Ein längst erledigter Arbeits-Task ist kein Wochenend-Ballast, sondern eine Rückfrage von fünf Sekunden. Genau diese Reihenfolge fehlte, als ein am 18.09.2026 erledigter CHECK24-Task das ganze Wochenende unbemerkt offen blieb.
 
-**Wochenend-Filter (Arbeits-Tasks):** Ist der heutige Wochentag (aus Schritt 1) ein **Samstag oder Sonntag**, entferne alle Tasks aus dem Arbeitsprojekt **CHECK24-BU** aus der Vikunja-Liste, bevor du sie erwähnst oder in die Ziele übernimmst — erkennbar am Projekt-Label `*CHECK24-BU*` in der Agent-Ausgabe. Der Grund: Jan arbeitet am Wochenende nicht, und ein Arbeits-Task im Wochenend-Tagebuch ist nur Ballast, den er ohnehin erst am Montag anfassen kann. Fällige oder überfällige CHECK24-Tasks tauchen dadurch nicht am Wochenende auf, sondern erst wieder im nächsten Montags-Eintrag. Alle anderen Projekte (privat, Haushalt, Finanzen etc.) bleiben auch am Wochenende drin — der Filter gilt nur für die Arbeit. Bleibt nach dem Filtern nichts übrig, behandle die Liste wie `keine`.
+**4c. Wochenend-Filter (Arbeits-Tasks):** Ist der heutige Wochentag (aus Schritt 1) ein **Samstag oder Sonntag**, entferne alle Tasks aus dem Arbeitsprojekt **CHECK24-BU** aus der Vikunja-Liste, bevor du sie erwähnst oder in die Ziele übernimmst — erkennbar am Projekt-Label `*CHECK24-BU*` in der Agent-Ausgabe. Der Grund: Jan arbeitet am Wochenende nicht, und ein Arbeits-Task im Wochenend-Tagebuch ist nur Ballast, den er ohnehin erst am Montag anfassen kann. Fällige oder überfällige CHECK24-Tasks tauchen dadurch nicht am Wochenende auf, sondern erst wieder im nächsten Montags-Eintrag. Alle anderen Projekte (privat, Haushalt, Finanzen etc.) bleiben auch am Wochenende drin — der Filter gilt nur für die Arbeit. Bleibt nach dem Filtern nichts übrig, behandle die Liste wie `keine`.
 
 Wenn die Liste **Treffer enthält** (also nicht `keine`), erwähne sie kurz vor der Frage, damit Jan sieht, was sowieso schon ansteht. Beispiel:
 
@@ -191,7 +203,7 @@ Dann die Frage: **"Was nimmst du dir darüber hinaus für heute vor?"**
 
 Wenn die Liste leer ist (`keine`) oder nicht verfügbar, einfach die Standardvariante: **"Was nimmst du dir für heute vor?"**
 
-**Termine aus dem Kalender gehören genauso dazu.** Was in Schritt 4 zurückkam, nennst du Jan im selben Atemzug wie die Vikunja-Tasks, mit lokaler Uhrzeit und Titel, und übernimmst es in die Ziele. Beispiel:
+**4d. Termine aus dem Kalender gehören genauso dazu.** Was in Vorbereitung 4 zurückkam, nennst du Jan im selben Atemzug wie die Vikunja-Tasks, mit lokaler Uhrzeit und Titel, und übernimmst es in die Ziele. Beispiel:
 
 > Im Kalender steht heute außerdem ein Termin: *14:30 Uhr, Gespräch mit der Headhunterin*. Den nehm ich mit in deine Ziele auf.
 
@@ -201,9 +213,9 @@ Gibt es keine Termine, sag nichts dazu. Ein „heute nichts im Kalender" ist Rau
 
 Jans Antworten **plus** die Vikunja-Tasks landen später als Obsidian-Tasks (`- [ ]`) im Eintrag — Termine zuerst, dann Jans eigene Ziele, danach die Vikunja-Einträge mit reinem Titel (kein Projekt-Präfix, keine Markierung als „aus Vikunja"). Frage konkret nach, wenn Jans eigene Antwort zu schwammig ist ("heute produktiv sein" → was heißt das?).
 
-**Ausnahme: fixe Tagesroutine gehört nicht in die Ziele.** Laufen gehen und ins Fitnessstudio fahren sind fester Teil von Jans Tagesablauf, kein Ziel, das er sich für den Tag vornimmt — vergleichbar mit Zähneputzen. Auch wenn Jan sie im Starttext erwähnt, werden sie **nicht** als `- [ ]`-Ziel aufgenommen und im Fließtext höchstens beiläufig erwähnt, nicht als Vorhaben. Erwähnt Jan sie explizit als abgeschlossen (z. B. "war laufen"), reicht das im Fließtext, ohne separaten Abhak-Eintrag.
+**4e. Ausnahme: fixe Tagesroutine gehört nicht in die Ziele.** Laufen gehen und ins Fitnessstudio fahren sind fester Teil von Jans Tagesablauf, kein Ziel, das er sich für den Tag vornimmt — vergleichbar mit Zähneputzen. Auch wenn Jan sie im Starttext erwähnt, werden sie **nicht** als `- [ ]`-Ziel aufgenommen und im Fließtext höchstens beiläufig erwähnt, nicht als Vorhaben. Erwähnt Jan sie explizit als abgeschlossen (z. B. "war laufen"), reicht das im Fließtext, ohne separaten Abhak-Eintrag.
 
-**Fester Punkt an Werktagen: 30 Minuten offline.** Ist der heutige Wochentag Montag bis Freitag, nimm ohne Nachfrage folgendes Ziel mit auf, ganz am Ende des Ziele-Blocks:
+**4f. Fester Punkt an Werktagen: 30 Minuten offline.** Ist der heutige Wochentag Montag bis Freitag, nimm ohne Nachfrage folgendes Ziel mit auf, ganz am Ende des Ziele-Blocks:
 
 ```
 - [ ] 30 Minuten nach Feierabend offline, kein Computer
@@ -297,14 +309,3 @@ Nach dem Schreiben des neuen Eintrags die Todos aus dem Vortagsabschnitt abhaken
 - Ersetze `- [ ] {text}` durch `- [x] {text} ✅ {YYYY-MM-DD}` per `Edit` tool
 - Datum = das Datum des **Vortags**, nicht heute
 - Nicht erledigte Todos unangetastet lassen
-
-## Regeln
-
-1. **Alles auf Deutsch** — außer dem `**Update:**`-Präfix, der bewusst Englisch bleibt.
-2. **Fließtext, keine Bullets** — außer bei den Tages-Zielen (die sind Tasks).
-3. **Heutiger Wochentag ist heutiger Wochentag** — auch wenn der Inhalt sich auf gestern bezieht. Nicht verwechseln.
-4. **Eine Frage nach der anderen** — nicht alle gleichzeitig stellen.
-5. **Konkret statt generisch** — beziehe dich auf den Vortags-Abschnitt, wenn Jan Bezüge verpasst.
-6. **Ziele sind Tasks** — `- [ ]` damit Jan sie abhaken kann.
-7. **Kein Umschreiben vorhandener Einträge** — nur anhängen, nie überschreiben.
-8. **Stilnähe über Vollständigkeit** — lieber einen kurzen, stimmigen Eintrag als eine durchformulierte Gliederung, die nicht nach Jan klingt.

@@ -3,7 +3,7 @@ name: cheatsheet-import
 model: sonnet
 description: >
   Imports cheat sheet files (JPG, PNG, GIF, PDF) into the Obsidian wiki as one page
-  per sheet under Cheatsheets/<topic>/, with a description, search keywords, the
+  per sheet under Cheatsheets/{topic}/, with a description, search keywords, the
   embedded artifact and links from the matching hub page. Handles renaming, duplicate
   detection and source cleanup. Use whenever the user wants to import, file or sort
   cheat sheets into Obsidian — triggered by phrases like "import these cheatsheets",
@@ -119,7 +119,7 @@ cp "$SRC/<original>" ~/Documents/Obsidian/Cheatsheets/<topic>/files/<slug>.<ext>
 
 ## Phase 5 — Write the pages
 
-Get the date from `date +%F`, never from context. One page per sheet:
+Today's date: !`date +%F` (if this shows a placeholder, run `date +%F`; never take it from context). One page per sheet:
 
 ```markdown
 ---

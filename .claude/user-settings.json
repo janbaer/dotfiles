@@ -7,11 +7,49 @@
   "permissions": {
     "allow": [
       "Bash(~/Projects/dotfiles/bin/english-mistake.sh:*)",
-      "Bash(/home/jan/Projects/dotfiles/bin/english-mistake.sh:*)"
+      "Bash(/home/jan/Projects/dotfiles/bin/english-mistake.sh:*)",
+      "mcp__forgejo-mcp__list_repo_issues",
+      "mcp__forgejo-mcp__get_issue_by_index",
+      "mcp__forgejo-mcp__list_issue_comments",
+      "mcp__forgejo-mcp__list_repo_pull_requests",
+      "mcp__forgejo-mcp__get_pull_request_by_index",
+      "mcp__forgejo-mcp__get_pull_request_diff",
+      "mcp__forgejo-mcp__list_pull_reviews",
+      "mcp__forgejo-mcp__list_pull_review_comments",
+      "mcp__forgejo-mcp__create_issue",
+      "mcp__forgejo-mcp__add_issue_labels",
+      "mcp__forgejo-mcp__update_issue",
+      "mcp__forgejo-mcp__create_issue_comment",
+      "mcp__forgejo-mcp__create_pull_request",
+      "mcp__forgejo-mcp__update_pull_request",
+      "mcp__forgejo-mcp__create_pull_review",
+      "mcp__forgejo-mcp__merge_pull_request",
+      "mcp__forgejo-mcp__create_repo",
+      "Bash(git remote get-url origin)",
+      "Bash(git remote show origin:*)",
+      "Bash(git branch --show-current)",
+      "Bash(git status:*)",
+      "Bash(git fetch:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git show:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(git switch:*)",
+      "Bash(git checkout:*)",
+      "Bash(git pull:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git rebase:*)",
+      "Bash(git reset --hard origin/*)",
+      "Bash(git branch -D:*)",
+      "Bash(sleep:*)",
+      "Bash(bun run scripts/bump-version.ts:*)",
+      "Bash(openspec:*)"
     ],
     "defaultMode": "auto"
   },
-  "model": "opus",
+  "model": "sonnet",
   "skillOverrides": {
     "code-review-excellence": "name-only",
     "jb-cheatsheet-import": "user-invocable-only",
@@ -61,6 +99,20 @@
   "editorMode": "vim",
   "agentPushNotifEnabled": true,
   "autoMode": {
+    "allow": [
+      "$defaults",
+      "Bash(./provision.sh:*)",
+      "Bash(./execute.sh:*)",
+      "Bash(ansible-lint:*)",
+      "Bash(ansible-inventory:*)",
+      "Bash(openspec:*)"
+    ],
+    "soft_deny": [
+      "$defaults",
+      "Bash(./provision.sh -t apt-upgrade:*)",
+      "Bash(./provision.sh -t reboot:*)",
+      "Bash(ansible-vault encrypt:*)"
+    ],
     "environment": [
       "### Org-wide",
       "**Organization**: None configured",
@@ -87,20 +139,7 @@
       "**Trusted repo**: `/home/jan/Projects/ansible-homelab` and its remote `ssh://forgejo/jan/ansible-homelab.git` (visibility assumed private — self-hosted Forgejo)",
       "**Org-specific CLIs**: None configured",
       "**routine under jan/ prefix**: SSH access as user `jan` to `jabasoft-*` hosts (port 22022, per `~/.ssh/config`); `bin/service-edit-vault.sh`, `bin/vault-pass.sh`, `bin/mirror-forgejo-mcp.sh` routine within this repo"
-    ],
-    "allow": [
-      "$defaults",
-      "Bash(./provision.sh:*)",
-      "Bash(./execute.sh:*)",
-      "Bash(ansible-lint:*)",
-      "Bash(ansible-inventory:*)",
-      "Bash(openspec:*)"
-    ],
-    "soft_deny": [
-      "$defaults",
-      "Bash(./provision.sh -t apt-upgrade:*)",
-      "Bash(./provision.sh -t reboot:*)",
-      "Bash(ansible-vault encrypt:*)"
     ]
-  }
+  },
+  "skipDangerousModePermissionPrompt": true
 }

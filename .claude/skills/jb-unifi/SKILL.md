@@ -1,6 +1,7 @@
 ---
 name: unifi
 description: "Beantwortet Fragen zu Jans Heimnetz über den UniFi-MCP-Server (UniFi Express 7): 'Wer hat gestern am meisten geladen?', 'Welches Gerät ist 192.168.10.x?', 'Ist was Neues im Netz?', 'Ist das Internet langsam?', 'Welche Portfreigaben / VLANs / Firewall-Regeln habe ich?'. Auch verwenden, wenn Jan Router, WLAN, Netzwerk, Traffic, Download, IP, MAC, VPN oder DNS erwähnt, ohne UniFi zu nennen."
+disable-model-invocation: true
 ---
 
 # UniFi-Netz abfragen
@@ -32,7 +33,7 @@ Die vollständige Doku des Netzes (Netze, WLANs, Firewall, DNS, Reservierungen, 
 - Alle lokalen DNS-Einträge `*.home.janbaer.de` sind CNAMEs auf `jabasoft-nixos-lxc-01`.
 - Doppeltes NAT: Der WAN-Port hängt hinter der FritzBox (`192.168.178.99`), angebunden über eine WLAN-Brücke (FRITZ!Repeater im Arbeitszimmer, FritzBox im Wohnzimmer). Latenz- und Paketverlust-Ereignisse zuerst dort vermuten. Glasfaser direkt ins Arbeitszimmer ist für etwa Ende November 2026 geplant.
 - IoT-Trennung: JABASOFT-IOT hat „Isolate Network“ an, UniFi erzeugt dafür die vordefinierte Regel „Isolated Networks“ (BLOCK `192.168.10.0/24` → Internal, Index 30000). Die eigene Regel „Allow IOT return traffic“ (ALLOW, nur Antwortverkehr, Index 10000) lässt davor die Antworten durch. IoT kann also nur antworten, nie selbst ins HOME-Netz. Firewall-Fragen nie ohne `include_predefined=true` beurteilen, sonst fehlt die Isolation.
-- `jabasoft-debian-vm-01` (192.168.20.14, K3s-Sandbox aus `proxmox-k3s-sandbox`) hat seit 2026-09-26 die feste MAC `BC:24:11:14:00:01`. Ältere Einträge `jabasoft-talos-vm-01` auf derselben IP sind Reste früherer Neuaufbauten.
+- `jabasoft-debian-vm-01` (192.168.20.14, K3s-Sandbox aus `proxmox-k3s-sandbox`) hat die feste MAC `BC:24:11:14:00:01`. Ältere Einträge `jabasoft-talos-vm-01` auf derselben IP sind Reste früherer Neuaufbauten.
 
 ## 1. Traffic: „Wer hat am meisten geladen?“
 
@@ -88,6 +89,7 @@ Leer und nicht hilfreich: `get_speedtest_results` (es laufen keine Speedtests), 
 | Netze / VLANs | `list_networks` | liefert die `_id`, mit der andere Tools auf Netze verweisen |
 | WLANs | `list_wlans` | nennt nur `network_id`, Namen über `list_networks` auflösen |
 | VPN | `list_vpn_servers`, `list_vpn_clients` | Server-Antwort enthält den Public Key, nicht ungefragt ausgeben |
+| Wer ist per VPN verbunden? | keins | WireGuard-Peers fehlen in `list_clients` (auch mit `include_offline`), `get_network_health` liefert für `vpn` keine Zahlen. Nicht „niemand verbunden“ antworten, sondern sagen, dass der MCP-Server das nicht hergibt, und auf die Oberfläche verweisen (Clients, Filter „VPN“). |
 | Lokale DNS-Namen | `list_dns_records` | kein Filter, selbst filtern |
 | UniFi-Geräte, Firmware, Uptime | `list_devices` | `upgradable` zeigt verfügbare Updates |
 | Switch-Ports | `get_switch_ports` (`device_mac`) | nur Port-Konfiguration, kein Link-Status |

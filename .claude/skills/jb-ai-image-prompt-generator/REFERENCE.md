@@ -2,6 +2,14 @@
 
 Supplemental information for the AI Image Prompt Generator Skill.
 
+## Contents
+
+- Conditional Questions by Image Type
+- Format Specifications
+- Style Presets
+- Reference Image Guidelines
+- Common Edit Commands
+
 ## Conditional Questions by Image Type
 
 ### YouTube Thumbnail

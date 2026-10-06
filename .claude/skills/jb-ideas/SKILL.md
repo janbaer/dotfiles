@@ -16,7 +16,7 @@ Jede Notiz trägt die Property `status`: `offen`, `erledigt` (Issue angelegt) od
 
 ## Notizformat
 
-Dateiname: `Ideas/{YYYY-MM-DD}-{slug}.md`. Datum aus `date +%F`, Slug aus dem Titel (klein, Bindestriche, 3 bis 5 Wörter).
+Dateiname: `Ideas/{YYYY-MM-DD}-{slug}.md`. Datum heute: !`date +%F` (steht dort ein Platzhalter, `date +%F` selbst ausführen), Slug aus dem Titel (klein, Bindestriche, 3 bis 5 Wörter).
 
 ```markdown
 ---

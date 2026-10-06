@@ -2,6 +2,7 @@
 name: diary-weekly-review
 model: sonnet
 description: "Wenn der Nutzer einen Wochenrückblick in seinem Tagebuch machen will, über seine Woche reflektieren möchte, oder Dinge sagt wie 'Wochenrückblick', 'weekly review', 'wie war meine Woche', 'was lief diese Woche', 'Sonntagsreview', 'Woche Revue passieren lassen'. Liest das persönliche Tagebuch aus der Obsidian-Vault und führt ein strukturiertes Reflexionsgespräch auf Deutsch."
+disable-model-invocation: true
 ---
 
 # Wochenrückblick

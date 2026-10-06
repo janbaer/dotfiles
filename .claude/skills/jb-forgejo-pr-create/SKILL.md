@@ -86,15 +86,17 @@ Keep the original structure — only update the sections that differ. Add a shor
 
 ### 6. Review the branch before it becomes public
 
-Run `/simplify` first, then `/review-diff`. Act on what they report, and say
-plainly which findings you are leaving alone and why. The reasoning and the
-reason for that order live in `.claude/rules/pull-requests.md`.
+Pick the check by the size and risk of the change, as set out in
+`.claude/rules/pull-requests.md`: nothing for a trivial change, `/review-diff`
+for a small one, `/simplify` then `/review-diff` for the rest. Act on what they
+report, and say plainly which findings you are leaving alone and why.
 
 Run whatever the project itself demands as well, its test suite, linters and
 pre-commit hooks. If a hook regenerates a file, stage it before committing.
 
-Only proceed once both have run. If a finding leads to further commits, push
-them before creating the PR, so what the reviewer opens is the reviewed state.
+Only proceed once the chosen checks have run. If a finding leads to further
+commits, push them before creating the PR, so what the reviewer opens is the
+reviewed state.
 
 ### 7. Create the PR
 

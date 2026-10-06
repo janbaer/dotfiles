@@ -1,6 +1,7 @@
 ---
 name: forgejo-pr-feedback
 model: sonnet
+effort: high
 description: Use when reading review comments on a Forgejo pull request to understand received feedback, assess whether each comment is correct, estimate the effort to address it, and post a follow-up comment summarising what was fixed and what was not. Also runs the fix-push-rereview loop with the automated `ai` reviewer until the PR is approved. Trigger on phrases like "read PR comments", "check PR feedback", "what feedback did I get", "review comments on my PR", "what do the reviewers say", "assess PR review", "post review response", "reply to review comments", "work through the review", or "iterate until approved".
 disable-model-invocation: false
 ---
@@ -134,7 +135,7 @@ If the **Ask** bucket is not empty, collect every item from this round into one 
 
 ### L5. Fix, record, push once
 
-1. Make the fixes. Run the project's own tests and linters. Do not rerun `/simplify` and `/review-diff`; they ran before the PR was created.
+1. Make the fixes. Fix only what the findings ask for; mention extras in the final line instead of adding them. Run the project's own tests and linters. Do not rerun `/simplify` and `/review-diff`; they ran before the PR was created.
 2. Update the PR description with `update_pull_request`: keep the existing text, and add or update a `## Deliberate decisions` section with one bullet per declined point — the decision in bold, then the reason in a sentence or two. Do this **before** the push or comment, since the reviewer reads the description when it runs. The description is the durable record: a comment is only shown to the next round, so a decline that lives only in a comment can come back one round later.
 3. Right before pushing or commenting, check again for a `**Review limit reached**` comment newer than the L1 review: the workflow posts it a few seconds after the review, so L1 may have looked too early. If it is there, stop as in L1 and leave everything unpushed.
 4. If something was fixed, commit following the commit rules and push once. If nothing was fixed and only the description changed, do not push an empty commit. Post one PR comment with `create_issue_comment` instead that names each declined point and its reason in a sentence; the comment starts the next round. Do not do both, and do not answer each inline comment separately, since every comment starts its own round.

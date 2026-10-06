@@ -1,6 +1,7 @@
 ---
 name: vermenschlichen-jan
 description: "Jans Ergänzung zum vermenschlichen-Skill. Verwenden, sobald ein deutscher Text auf KI-Spuren geprüft oder entschärft werden soll: 'klingt das nach KI', 'lies den Text gegen', 'entschärfe die KI-Spuren', oder wenn ein deutscher Blogartikel, eine Notiz oder ein Dokument vermenschlicht werden soll. Immer zusammen mit vermenschlichen anwenden, nie allein. Für englische Texte stattdessen humanizer."
+disable-model-invocation: true
 ---
 
 # vermenschlichen: Jans Regeln obendrauf

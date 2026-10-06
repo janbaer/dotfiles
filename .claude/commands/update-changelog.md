@@ -15,6 +15,12 @@ Bad: "Updated auth.ts to use new library API, changed 3 function calls"
 
 If the reason behind a change is not evident from the commit message or diff context, **ask** before writing anything for that commit.
 
+## Dependency updates
+
+An entry for several updated packages is a short sentence with the reason, followed by a sub-list with one line per package: name, target version and the reason in a few words. Take the reasons from the release notes in the Renovate PR body, not from a guess; a package without a stated reason goes into the closing line. Packages that only moved along without a reason of their own go into one closing line. A single package stays a plain sentence.
+
+Without the list the reader has to hunt for package names inside the sentence.
+
 ## What to skip
 
 Not every commit warrants a changelog entry. Ask whether to include a change when it's:

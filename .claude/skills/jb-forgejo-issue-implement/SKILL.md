@@ -1,6 +1,7 @@
 ---
 name: forgejo-issue-implement
 model: opus
+effort: medium
 description: Use when working with Forgejo issues in the current project - listing open issues, selecting one to implement, or following the full implementation workflow through OpenSpec to PR. Trigger on phrases like "implement issue", "work on issue", "pick up an issue", "start working on a ticket", or "fix issue".
 ---
 
@@ -66,6 +67,8 @@ digraph issue_workflow {
 **Minimize user interaction.** Only stop to ask if genuinely blocked. Never pause to confirm next steps when the path forward is clear. Keep moving.
 
 The only required user input in the entire workflow is choosing which issue to work on (step 1, when no issue number is given). Everything else runs automatically.
+
+**Done when:** all tasks in `tasks.md` are checked off, tests and lint pass, all test scenarios pass, the branch is pushed and the ntfy is sent.
 If any user input is required or the whole workflow is done, notify by delegating to the **`ntfy-me`** skill with:
 
 | Parameter | Value |
@@ -148,7 +151,7 @@ After `opsx-ff` completes, re-read the **`## Implementation`** section from the 
 
 ### 6. Implement
 
-Follow the tasks from `openspec instructions apply`. Work through each task in order without stopping for confirmation between tasks.
+Follow the tasks from `openspec instructions apply`. Work through each task in order without stopping for confirmation between tasks. Implement only the tasks in `tasks.md`; mention anything extra at the end instead of building it.
 
 > **Important:** After completing each task, immediately mark it as done in `tasks.md` before moving to the next one:
 > `- [ ] Task description` → `- [x] Task description`
