@@ -30,14 +30,12 @@ async function refresh($: EngineInterface) {
 async function add($: EngineInterface, text: string) {
   const body = text.trim()
   if (!body) return
-  const title = body.length > 60 ? `${body.slice(0, 57)}...` : body
-  const { exitCode, stderr } = await $.process.run(['bash', SCRIPT, 'add', title, body])
-  if (exitCode !== 0) {
-    await $.ui.toast(`Idea not saved: ${stderr.trim()}`)
-    return
-  }
-  await $.ui.toast(`Idea saved: ${title}`)
-  await refresh($)
+  $.clock.after(0, () => {
+    void $.prompt.submit({
+      text: `Use the jb-ideas skill, mode add, with this idea:\n\n${body}`,
+      asUser: true,
+    })
+  })
 }
 
 export const register: Register = on => {
@@ -52,25 +50,25 @@ export const register: Register = on => {
   })
 
   on('command.run', { command: 'idea' }, async ($, e) => {
-    if (e.args.trim()) await add($, e.args)
-    else await refresh($)
+    await refresh($)
     await $.ui.open({ id: PANE, title: 'Ideas' })
-    return { text: e.args.trim() ? 'Idea captured.' : 'Ideas pane opened.' }
+    if (e.args.trim()) await add($, e.args)
+    return { text: e.args.trim() ? 'Idea sent to the jb-ideas skill.' : 'Ideas pane opened.' }
+  })
+
+  on('turn.complete', async ($, e, next) => {
+    const done = await next(e)
+    if (!e.agentId) await refresh($)
+    return done
   })
 
   on('ui.render', { component: 'Pane', requestId: PANE }, async ($, e) => {
-    const { Box, Text, Button, Input } = $.ui.resolve(e)
+    const { Box, Text, Button } = $.ui.resolve(e)
     const list = await read($, ideas)
     const err = await read($, error)
 
     return (
       <Box flexDirection="column">
-        <Input
-          key="new-idea"
-          placeholder="New idea, Enter to save"
-          submitLabel="save"
-          onSubmit={value => void add($, value)}
-        />
         {err && <Text color="red">{err}</Text>}
         {!err && list.length === 0 && <Text dimColor>No open ideas.</Text>}
         {list.map(idea => (
