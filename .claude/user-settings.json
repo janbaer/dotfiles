@@ -49,7 +49,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "sonnet",
+  "model": "opus",
   "skillOverrides": {
     "code-review-excellence": "name-only",
     "jb-cheatsheet-import": "user-invocable-only",
@@ -96,6 +96,7 @@
   "enabledPlugins": {
     "typescript-lsp@claude-plugins-official": true
   },
+  "skipDangerousModePermissionPrompt": true,
   "editorMode": "vim",
   "agentPushNotifEnabled": true,
   "autoMode": {
@@ -140,6 +141,5 @@
       "**Org-specific CLIs**: None configured",
       "**routine under jan/ prefix**: SSH access as user `jan` to `jabasoft-*` hosts (port 22022, per `~/.ssh/config`); `bin/service-edit-vault.sh`, `bin/vault-pass.sh`, `bin/mirror-forgejo-mcp.sh` routine within this repo"
     ]
-  },
-  "skipDangerousModePermissionPrompt": true
+  }
 }
