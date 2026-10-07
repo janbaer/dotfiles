@@ -12,6 +12,10 @@ A commit on a local integration branch carries baggage from that branch: it cann
 - Branch from that, not from the local integration branch.
 - Keep the fix on its own branch until it is merged upstream.
 
+## Small changes in own repos
+
+Not a fixed rule: the process scales with the change. A trivial change in a repo Jan owns (one value, an address, a typo) is committed directly on the default branch, with no feature branch and no review pair. Larger changes get the full workflow. When unsure which side a change falls on, ask.
+
 ## Branch names
 
 Every branch starts with `feature/`: `feature/{N}-{slug}` when an issue exists, `feature/{slug}` otherwise. No `chore/`, `fix/` or other prefixes, whatever the kind of change.
