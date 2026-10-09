@@ -1,0 +1,16 @@
+{
+  "name": "jan-mods",
+  "owner": { "name": "Jan Baer" },
+  "plugins": [
+    {
+      "name": "redact-secrets",
+      "source": "./redact-secrets",
+      "description": "Replaces the values of TOKEN, PASSWORD and PWD environment variables in every conversation row."
+    },
+    {
+      "name": "ideas-pane",
+      "source": "./ideas-pane",
+      "description": "Ideas backlog from the Notes vault in a side pane: click to grill, capture while working."
+    }
+  ]
+}

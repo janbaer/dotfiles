@@ -1,0 +1,5 @@
+{
+  "name": "redact-secrets",
+  "version": "0.1.0",
+  "description": "Replaces the values of TOKEN, PASSWORD and PWD environment variables in every conversation row before it is stored or sent."
+}

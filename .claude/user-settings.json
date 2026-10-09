@@ -94,7 +94,18 @@
     "command": "~/Projects/dotfiles/.claude/statusline-command.sh"
   },
   "enabledPlugins": {
-    "typescript-lsp@claude-plugins-official": true
+    "typescript-lsp@claude-plugins-official": true,
+    "redact-secrets@jan-mods": true,
+    "ideas-pane@jan-mods": true
+  },
+  "extraKnownMarketplaces": {
+    "jan-mods": {
+      "source": {
+        "source": "directory",
+        "path": "~/Projects/dotfiles/.claude/mods"
+      },
+      "autoUpdate": true
+    }
   },
   "skipDangerousModePermissionPrompt": true,
   "editorMode": "vim",
