@@ -11,6 +11,11 @@
       "name": "ideas-pane",
       "source": "./ideas-pane",
       "description": "Ideas backlog from the Notes vault in a side pane: click to grill, capture while working."
+    },
+    {
+      "name": "cache-meter",
+      "source": "./cache-meter",
+      "description": "Band above the prompt: cache time left, hit rate, context weather and a Compact button."
     }
   ]
 }

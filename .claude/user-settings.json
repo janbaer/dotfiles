@@ -104,7 +104,8 @@
     "ideas-pane@jan-mods": true,
     "savvy-progress@claude-kit": true,
     "next-steps@claude-code-mods": true,
-    "filetree@claude-code-filetree": true
+    "filetree@claude-code-filetree": true,
+    "cache-meter@jan-mods": true
   },
   "extraKnownMarketplaces": {
     "jan-mods": {
