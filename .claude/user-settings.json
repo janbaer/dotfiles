@@ -101,7 +101,10 @@
   "enabledPlugins": {
     "typescript-lsp@claude-plugins-official": true,
     "redact-secrets@jan-mods": true,
-    "ideas-pane@jan-mods": true
+    "ideas-pane@jan-mods": true,
+    "savvy-progress@claude-kit": true,
+    "next-steps@claude-code-mods": true,
+    "filetree@claude-code-filetree": true
   },
   "extraKnownMarketplaces": {
     "jan-mods": {
@@ -110,6 +113,24 @@
         "path": "~/Projects/dotfiles/.claude/mods"
       },
       "autoUpdate": true
+    },
+    "claude-kit": {
+      "source": {
+        "source": "github",
+        "repo": "JohnnyVizz/claude-kit"
+      }
+    },
+    "claude-code-mods": {
+      "source": {
+        "source": "github",
+        "repo": "hamzafer/claude-code-mods"
+      }
+    },
+    "claude-code-filetree": {
+      "source": {
+        "source": "github",
+        "repo": "data-goblin/claude-code-filetree"
+      }
     }
   },
   "skipDangerousModePermissionPrompt": true,
