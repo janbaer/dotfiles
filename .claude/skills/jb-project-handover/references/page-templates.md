@@ -11,7 +11,9 @@ Replace the angle brackets below with the project's facts.
 
 ## index.md
 
-```
+The snapshot line is the anchor for later updates: `update` diffs the repo from that commit. Keep the full hash and the branch, and move both forward with every update.
+
+````
 ---
 title: <Project>: handover
 nav: Start
@@ -45,11 +47,21 @@ status: Draft — <date>
 |---|---|---|
 
 ## Read these first
-(cards block: Runbooks, Known issues, Recurring duties)
+
+```cards
+Runbooks | runbooks.md | <The first tasks in one line> | 1
+Known issues | issues.md | <The top two in one line> | 2
+Recurring duties | duties.md | <What expires or runs by itself> | 3
+```
 
 ## The rest
-(cards block: Architecture, Access, Decisions)
+
+```cards
+Architecture | architecture.md | <Parts and paths in one line> |
+Access | access.md | <Systems and where the credentials live> |
+Decisions | decisions.md | <What changed recently and what is planned> |
 ```
+````
 
 ## runbooks.md
 

@@ -24,6 +24,10 @@ From the first run (an Ansible and Terraform repository, October 2026). Read bef
 - **Inherited jobs nobody knows** (a weekly cleanup script copied from a blog post) are worth a line in the duties page and a question to the owner.
 - **Repo documentation rots first:** README script names, removed directories, a stale `CLAUDE.md`. List them as issues; it costs nothing.
 
+## Second run: a JavaScript service (October 2026)
+
+A Bun/TypeScript service with an MCP endpoint, run without the owner. Structure, chips and build held up. The issues page did not: four of its five high findings were absences the owner later explained in one line each (reads without a token are intended, no rate limit because one person uses it, user registration is the only way to get an account, the data directory is backed up on the host). The agent had written them as `{high}` and `{verified}`, as if the code could show intent. Keep such points as questions until the interview, see the rule in SKILL.md.
+
 ## Process notes
 
 - Time estimates: the converter and a three-page pilot took well under an hour, writing the pages is faster than the interview and the review. The real cost is the owner's review time, so make that easy: short pages, statuses visible, open questions listed.

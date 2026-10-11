@@ -17,7 +17,8 @@ Give each subagent one area, ask for a summary (under about 800 words) with file
 
 ## Stack hints
 
-- **Ansible or infrastructure repos:** playbook order and tags (especially `never`), roles local versus external, group variables, vault layout, inventories, provisioning scripts, Terraform state handling.
+- **Ansible and other infrastructure repos:** playbook order and tags (especially `never`), roles local versus external, group variables, vault layout, inventories, provisioning scripts.
+- **Terraform repos:** root modules and workspaces, state backend and locking, providers and pinned versions, variables per environment (`tfvars`, where they live), what runs `plan` and `apply` (pipeline or laptop), resources with `prevent_destroy` or `ignore_changes`, drift between state and the real infrastructure, what was imported by hand.
 - **Node.js or JavaScript services:** `package.json` scripts, engines and lockfile, build output, environment loading, runtime process model, queues and workers, dependency age and security advisories, test and lint setup.
 - **Kubernetes deployment code:** manifests or charts, how images are built and tagged, namespaces and contexts, config maps and secrets, ingress and certificates, resource limits, probes, rollout and rollback commands, the cluster API versions the manifests use.
 - **Libraries and CLIs:** public API, release process, versioning policy, who consumes it.

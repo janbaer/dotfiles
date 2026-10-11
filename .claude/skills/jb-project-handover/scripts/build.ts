@@ -2,7 +2,7 @@
 // Markdown to static HTML for handover docs. Bun built-ins only, no packages, no network.
 // Usage: bun build.ts <docs-dir> [out-dir] [--allow-missing]
 //        bun build.ts --selftest
-// Tested with Bun 1.3.14. Bun.markdown is marked unstable upstream: run --selftest after a Bun update.
+// Tested with Bun 1.3.14, self-test passes on 1.4.2. Bun.markdown is marked unstable upstream: run --selftest after a Bun update.
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 

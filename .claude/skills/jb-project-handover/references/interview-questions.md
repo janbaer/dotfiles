@@ -2,6 +2,30 @@
 
 Seed list for `grill-me`. Answer from the code wherever you can and ask Jan only the part that only he knows. Drop questions he calls known. "Unknown" and "never" are valid answers; record them as such. Ask the first group early: the reasons and unwritten rules are the part git does not hold.
 
+## The interview file
+
+`docs/_workspace/interview-<date>.md` is the single record of the interview. A handoff points to it and never repeats its content. It must let a fresh session see where the interview stands without reading the transcript, so every question carries a status:
+
+```
+# Interview: <project>
+
+Snapshot: branch `<branch>`, commit `<hash>`. Rounds held: 2. Next: round 3, questions 7, 15, 17.
+
+## 1. Who uses it and for what?
+Status: answered (round 1)
+Code: multi-user app, registration at `POST /api/auth/register`.
+Owner: three colleagues from the data team, announce in #data-ops.
+
+## 7. Unwritten rules before a risky task?
+Status: open
+Code: README backup procedure (stop, checkpoint, copy).
+
+## 9. Inherited jobs nobody looks at?
+Status: dropped (owner calls it known)
+```
+
+Status values: `open`, `answered (round N)`, `unknown` (the owner does not know; a valid final state), `dropped`. Keep the question numbers from this list, so a handoff can name them. Follow-up questions that a round opened get the parent's number with a letter (`7a`).
+
 ## Core (every project)
 
 **People and use**
@@ -43,6 +67,14 @@ Seed list for `grill-me`. Answer from the code wherever you can and ask Jan only
 - Which roles are external, who owns them, and how are they updated?
 - Where is the source of truth for network rules and VM definitions today?
 - How are packages and OS releases upgraded, and is a reboot expected?
+
+## Tail: Terraform repos
+
+- Where does the state live, who can unlock it, and has a lock ever had to be broken by hand?
+- Who runs `apply`, from where, and is a `plan` reviewed by a second person first?
+- Which resources must never be replaced (data, DNS, load balancers), and are they protected in code or only by habit?
+- What was created or changed outside Terraform and never imported? Where does drift show up today?
+- Which provider or module upgrades are overdue, and which one is held back on purpose?
 
 ## Tail: Node.js or JavaScript services
 
