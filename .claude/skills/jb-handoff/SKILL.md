@@ -1,7 +1,7 @@
 ---
 name: handoff
 description: Create a handoff document to pass context to a fresh session, resume from an existing one, or close one out. Use when the user says "handoff", "create a handoff", "resume from handoff", "load handoff", "pick up where we left off", references a handoff file by name, runs "handoff list" / "handoff continue" to browse all existing handoffs, or runs "handoff done" to mark the current one finished.
-argument-hint: "Next session focus, OR name of an existing handoff file to resume from (e.g. handoff-20260513-1430-dotfiles-security-check.md), OR 'list' / 'continue' to pick from all existing handoffs, OR 'done' to close out the current one"
+argument-hint: "Next session focus, OR name of an existing handoff file to resume from (e.g. handoff-20260513-1430-dotfiles-security-check.md), OR 'list' / 'continue' to pick from all existing handoffs, OR 'done' to close out the current one. Append 'in <dir>' to keep the handoff in a repository folder instead of the vault, or a bare 'in' for the current directory"
 ---
 
 > **Vault access:** the Obsidian vault is reached only through the `obsidian` CLI, which talks to the running Obsidian app — it is NOT a plain folder on disk. Never `find`/`grep` the filesystem for notes. Default vault name: `Obsidian`. Handoffs live in the `Handoffs/` folder (capital H — do not create a lowercase variant).
@@ -43,6 +43,16 @@ obsidian vault="Obsidian" property:set name="status" value="done" path="Handoffs
 ```
 
 A handoff with **no** `status` property predates this convention — treat it as `open`. The `status` property stays the source of truth for filtering; the `Archive/` folder mirrors it for Jan.
+
+## Local handoffs: `in <dir>`
+
+Some handoffs belong inside the repository they describe, because the work they track is part of it (a handover interview under `docs/_workspace/`). The argument `in <dir>` (also "im Verzeichnis <dir>") switches every mode from the vault to that folder. A bare `in` without a path means the current directory, as does "im aktuellen Verzeichnis"; a skill that calls this one passes it on every call, Create, Resume and Done alike, so the three modes keep looking at the same place.
+
+- **Create** writes `<dir>/{filename}` with the Write tool, same filename rule and same frontmatter as in the vault. No `obsidian` call.
+- **Resume** and **List** look at `<dir>/handoff-*.md` instead of the vault: read `status` from the frontmatter, offer the open ones newest first, load the chosen one exactly as below.
+- **Done** sets `status: done` in the file's frontmatter. There is no `Archive/` move: the folder mirror exists so Jan can see open handoffs in Obsidian, and a repository folder is not browsed that way.
+
+Everything below describes the vault; with `in <dir>` replace the `obsidian` calls as stated here and keep the rest.
 
 ## Detect the mode
 
