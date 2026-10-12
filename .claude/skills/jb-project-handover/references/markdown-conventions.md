@@ -34,6 +34,7 @@ The status line text comes from `date`, never from memory.
 - **Diagrams**: a fenced block named `flow` with JSON (see below). GitLab shows the JSON as text; the built site plays it.
 - **Tables:** GitHub style. Escape a pipe inside a cell as `\|`, also inside code. No merged cells; repeat the text or move it under the table.
 - **Links:** between pages `other.md#heading-id`, rewritten to `.html`. Heading ids are made from the heading text in lower case with hyphens (`## Restore from a backup (draft)` is `#restore-from-a-backup-draft`). The build fails on a missing anchor.
+- **External URLs:** write `[https://host](https://host)`. A URL in backticks stays plain code text and is not clickable.
 - **Code blocks:** plain fenced blocks. Commands you want copied go in a block, not in a sentence.
 
 ## Flow diagrams

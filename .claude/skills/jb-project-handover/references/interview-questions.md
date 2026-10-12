@@ -53,6 +53,7 @@ Status values: `open`, `answered (round N)`, `unknown` (the owner does not know;
 14. Which systems and accounts does a new owner need, and do the colleagues already have them? Where do the secrets live (names only)? Is anything rotated, and on what schedule?
 15. What expires (certificates, licenses, tokens, runtime or framework end of life), who owns each, and when is the next date?
 16. Which other teams or vendors own something this depends on, and who do you ask there?
+20. Which URLs or UIs do colleagues open, and from where are they reachable (office, VPN, only on the host)? Which of them need a separate login? (The code shows the routing, not the network path.)
 
 **Fragility**
 17. What has gone wrong before? What fails under load or at certain times? What worries you?

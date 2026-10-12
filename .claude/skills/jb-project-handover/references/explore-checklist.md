@@ -5,6 +5,7 @@ Give each subagent one area, ask for a summary (under about 800 words) with file
 ## Every project
 
 - **Parts and entry points:** services, hosts, packages, binaries, what starts what, where a request or a job enters.
+- **Web entry points:** every URL or domain a colleague opens (proxy host rules, ingress hosts, admin UIs), what answers behind it, and from where it is reachable. Only public-facing ones go on the start page; internal-only ports stay in the architecture page. Reachability from the network is the owner's to confirm.
 - **Run, build, release, deploy:** exact commands and scripts, CI pipelines (jobs, triggers, environments), how a change reaches production, how it is rolled back.
 - **Configuration and secrets:** where config lives per environment, which variables exist, where secrets come from (names of vault entries, secret stores, env files, never values).
 - **Scheduled work:** cron, systemd timers, CI schedules, queue consumers, background jobs: when they run and what happens on failure.

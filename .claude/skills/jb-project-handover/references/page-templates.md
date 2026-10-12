@@ -46,6 +46,14 @@ status: Draft — <date>
 | Service | Who uses it | Maintenance window |
 |---|---|---|
 
+## Where to find it
+
+| URL | What | Access |
+|---|---|---|
+| [https://<host>](https://<host>) | <service or UI> | <network (office, VPN), login and group> |
+
+<One sentence on what the URLs share: the proxy or ingress that routes them, the host that answers.>
+
 ## Read these first
 
 ```cards
