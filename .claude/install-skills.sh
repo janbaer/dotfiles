@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -uo pipefail
 
-skills_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-cd "$skills_dir/../.." || exit 1
+script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+skills_dir="$script_dir/skills"
+cd "$script_dir/.." || exit 1
 
 update=0
 case ${1-} in
