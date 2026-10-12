@@ -186,9 +186,9 @@ if (import.meta.main) {
   const pos = args.filter((a) => !a.startsWith("--"));
   if (flags.includes("--selftest")) process.exit(selftest());
   // No folder given: use ./docs when it holds an index.md, else the current folder.
-  const src = pos[0] ?? (existsSync("docs/index.md") ? "docs" : existsSync("index.md") ? "." : "");
+  const src = pos[0] ?? (existsSync("docs/handover/index.md") ? "docs/handover" : existsSync("index.md") ? "." : "");
   if (!src) {
-    console.error("error: no index.md found. Pass the docs folder, or run from the repository root or from inside docs/.\nusage: bun build.ts [docs-dir] [out-dir] [--allow-missing] | --selftest");
+    console.error("error: no index.md found. Pass the docs folder, or run from the repository root or from inside docs/handover/.\nusage: bun build.ts [docs-dir] [out-dir] [--allow-missing] | --selftest");
     process.exit(2);
   }
   try {

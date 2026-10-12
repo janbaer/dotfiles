@@ -1,10 +1,10 @@
 # Markdown conventions
 
-The pages are plain Markdown in `docs/`, one file per page. `scripts/build.ts` turns them into `docs/_site/`. It reads only the top level of the folder, so `docs/_workspace/` stays out of the package. `index.md` is required.
+The pages are plain Markdown in `docs/handover/`, one file per page. `scripts/build.ts` turns them into `docs/handover/_site/`. It reads only the top level of the folder, so `docs/handover/_workspace/` stays out of the package. `index.md` is required.
 
 ```
-bun <skill dir>/scripts/build.ts docs            # build, check links, exit 1 on a broken link (the folder is optional: ./docs, else .)
-bun <skill dir>/scripts/build.ts docs --allow-missing   # unfinished sets: links to missing pages are ignored
+bun <skill dir>/scripts/build.ts docs/handover            # build, check links, exit 1 on a broken link (the folder is optional: ./docs/handover, else .)
+bun <skill dir>/scripts/build.ts docs/handover --allow-missing   # unfinished sets: links to missing pages are ignored
 bun <skill dir>/scripts/build.ts --selftest      # run after a Bun update
 ```
 

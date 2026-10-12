@@ -4,7 +4,7 @@ Seed list for `grill-me`. Answer from the code wherever you can and ask Jan only
 
 ## The interview file
 
-`docs/_workspace/interview-<date>.md` is the single record of the interview. A handoff points to it and never repeats its content. It must let a fresh session see where the interview stands without reading the transcript, so every question carries a status:
+`docs/handover/_workspace/interview-<date>.md` is the single record of the interview. A handoff points to it and never repeats its content. It must let a fresh session see where the interview stands without reading the transcript, so every question carries a status:
 
 ```
 # Interview: <project>
