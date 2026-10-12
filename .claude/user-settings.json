@@ -105,7 +105,8 @@
     "savvy-progress@claude-kit": true,
     "next-steps@claude-code-mods": true,
     "filetree@claude-code-filetree": true,
-    "cache-meter@jan-mods": true
+    "cache-meter@jan-mods": true,
+    "cc-plugin-you-should-know@builtin": true
   },
   "extraKnownMarketplaces": {
     "jan-mods": {
@@ -179,5 +180,15 @@
       "**Org-specific CLIs**: None configured",
       "**routine under jan/ prefix**: SSH access as user `jan` to `jabasoft-*` hosts (port 22022, per `~/.ssh/config`); `bin/service-edit-vault.sh`, `bin/vault-pass.sh`, `bin/mirror-forgejo-mcp.sh` routine within this repo"
     ]
+  },
+  "pluginConfigs": {
+    "filetree@claude-code-filetree": {
+      "options": {
+        "activity": "reads and writes",
+        "glyphs": "auto",
+        "follow": "on",
+        "column": "date"
+      }
+    }
   }
 }
