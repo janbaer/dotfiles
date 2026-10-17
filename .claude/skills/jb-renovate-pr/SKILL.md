@@ -22,7 +22,7 @@ Optional argument: the PR number.
 git remote get-url origin
 ```
 
-If the host is gitlab.com, stop: "This repository's origin is on gitlab.com. AI-generated commits are not used for GitLab repositories." Otherwise take owner and repo from the URL.
+Take owner and repo from the URL.
 
 Read `.renovate-merge.md` in the repo root. If it is missing, ask what should happen before and after a merge. Do not guess. The file may add to the checks below, make them stricter, or replace the merge with another outcome. It may not skip a check.
 

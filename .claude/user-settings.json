@@ -81,11 +81,6 @@
           },
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/no-gitlab-commit.sh",
-            "timeout": 10
-          },
-          {
-            "type": "command",
             "command": "$HOME/.claude/hooks/ask-before-secret-dump.sh",
             "timeout": 10
           }

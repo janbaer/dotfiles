@@ -31,7 +31,6 @@ The first word of the argument decides:
 - **Exploration runs in subagents** that return summaries with file paths, never dumps (`subagent-delegation.md`). Do not print secrets: write names of entries and variables only.
 - **Read as if Jan wrote it** (`no-ai-tells.md`): no emojis, no "here is", no process narration, no hedging boilerplate. Names only as Jan gives them, no pronouns, no inferred surnames.
 - **Language:** English unless Jan says otherwise. For German apply `german-text.md`.
-- **Work repos on gitlab.com: never create the commit.** Draft messages in chat; the project's `CLAUDE.md` may require a ticket number, then ask for it (`commits.md`).
 
 ## Steps
 
