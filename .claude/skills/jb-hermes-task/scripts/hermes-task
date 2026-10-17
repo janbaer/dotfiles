@@ -9,7 +9,7 @@ MAX_WAIT=1800
 usage() {
   cat >&2 <<USAGE
 Usage:
-  hermes-task start <prompt-file|->   start a run, print the run_id
+  hermes-task start <prompt-file|-> [session]   start a run, print the run_id
   hermes-task status <run_id>         print the run state as JSON
   hermes-task wait <run_id> [max_s]   poll until the run ends, print its output
   hermes-task stop <run_id>           cancel a run
@@ -44,7 +44,8 @@ case "$cmd" in
   start)
     [[ "$arg" == "-" ]] && arg=/dev/stdin
     prompt=$(<"$arg")
-    call_ok POST /v1/runs -d "$(jq -n --arg input "$prompt" '{input: $input}')"
+    call_ok POST /v1/runs -d "$(jq -n --arg input "$prompt" --arg session "${3:-}" \
+      '{input: $input} + (if $session == "" then {} else {session_id: $session} end)')"
     jq -er '.run_id' <<<"$BODY"
     ;;
   status)

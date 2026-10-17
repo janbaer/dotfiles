@@ -12,7 +12,7 @@ Needs `HERMES_AGENT_API_KEY` in the environment. Never print it.
 ## Commands
 
 ```bash
-./scripts/hermes-task start <prompt-file|->   # prints the run_id, returns at once
+./scripts/hermes-task start <prompt-file|-> [session]   # prints the run_id, returns at once
 ./scripts/hermes-task wait <run_id> [max_s]   # polls every 30 s, prints the output (default max 1800 s)
 ./scripts/hermes-task status <run_id>         # current state as JSON
 ./scripts/hermes-task stop <run_id>           # cancel
@@ -30,7 +30,9 @@ Exit codes: 0 success, 1 failure, 2 wrong usage, 3 `wait` ran out of `max_s`. Ex
 ## Writing the prompt
 
 - Hermes does not see this session. Put every needed fact into the prompt.
-- Every request starts a new Hermes session. Asking the default bot about an earlier run fails: it cannot see that session. Use `status` for progress.
+- Without a session name, every request starts a new Hermes session. Asking the default bot about an earlier run fails: it cannot see that session. Use `status` for progress.
+- For a follow-up, pass the same session name to `start`. Hermes then loads that session's transcript, so the prompt needs only the new question. Use one name per topic, for example `unifi-vlan-research`. Checked on the server: a second run with the same `session_id` recalled a fact from the first. A session started by another surface (CLI, Telegram) cannot be bound; the API answers 409.
+- A named session stays in the Hermes session list until someone deletes it.
 - To use a specialist, say so: "Delegate this to the researcher and return its result." The default bot then starts that profile.
 - Name the sources to use, ask for a URL per claim, and ask it to mark what it could not verify.
 - No secrets, no repository contents Jan has not agreed to send. The prompt reaches the server and the model provider behind it.
