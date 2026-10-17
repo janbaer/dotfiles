@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+URL="${HERMES_AGENT_URL:-https://agent.home.janbaer.de}"
+INTERVAL=30
+MAX_WAIT=1800
+
+usage() {
+  cat >&2 <<USAGE
+Usage:
+  hermes-task start <prompt-file|->   start a run, print the run_id
+  hermes-task status <run_id>         print the run state as JSON
+  hermes-task wait <run_id> [max_s]   poll until the run ends, print its output
+  hermes-task stop <run_id>           cancel a run
+Needs HERMES_AGENT_API_KEY. HERMES_AGENT_URL overrides the server.
+USAGE
+  exit 2
+}
+
+[[ -n "${HERMES_AGENT_API_KEY:-}" ]] || { echo "HERMES_AGENT_API_KEY is not set" >&2; exit 1; }
+
+# Sets CODE and BODY. A non-zero return means a transport error, not an HTTP error.
+call() {
+  local method="$1" path="$2" out
+  shift 2
+  out=$(curl -sS -m 60 -w '\n%{http_code}' -X "$method" "$URL$path" \
+    -H "Authorization: Bearer $HERMES_AGENT_API_KEY" \
+    -H 'Content-Type: application/json' "$@") || return 1
+  CODE="${out##*$'\n'}"
+  BODY="${out%$'\n'*}"
+}
+
+call_ok() {
+  call "$@" || { echo "No answer from the server; it may still have acted on the request." >&2; exit 1; }
+  [[ "$CODE" == 2* ]] || { echo "HTTP $CODE: $BODY" >&2; exit 1; }
+}
+
+cmd="${1:-}"
+[[ -n "$cmd" && -n "${2:-}" ]] || usage
+arg="$2"
+
+case "$cmd" in
+  start)
+    [[ "$arg" == "-" ]] && arg=/dev/stdin
+    prompt=$(<"$arg")
+    call_ok POST /v1/runs -d "$(jq -n --arg input "$prompt" '{input: $input}')"
+    jq -er '.run_id' <<<"$BODY"
+    ;;
+  status)
+    call_ok GET "/v1/runs/$arg"
+    jq . <<<"$BODY"
+    ;;
+  stop)
+    call_ok POST "/v1/runs/$arg/stop"
+    jq . <<<"$BODY"
+    ;;
+  wait)
+    max="${3:-$MAX_WAIT}"
+    end=$(( $(date +%s) + max ))
+    while (( $(date +%s) < end )); do
+      if call GET "/v1/runs/$arg"; then
+        case "$CODE" in
+          200)
+            status=$(jq -r '.status // empty' <<<"$BODY" || true)
+            case "$status" in
+              completed)
+                jq -r '.output' <<<"$BODY"
+                exit 0
+                ;;
+              running|started|queued) ;;
+              *)
+                echo "Run ended with status: ${status:-none}" >&2
+                echo "$BODY" >&2
+                exit 1
+                ;;
+            esac
+            ;;
+          429|5??) ;;
+          *)
+            echo "HTTP $CODE: $BODY" >&2
+            exit 1
+            ;;
+        esac
+      fi
+      sleep "$INTERVAL"
+    done
+    echo "Still running after ${max}s: $arg" >&2
+    exit 3
+    ;;
+  *)
+    usage
+    ;;
+esac
