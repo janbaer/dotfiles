@@ -5,7 +5,7 @@
       "source": "tt-a1i/archify",
       "sourceType": "github",
       "skillPath": "archify/SKILL.md",
-      "computedHash": "803659043160c5b030b5aeffb2f2614195fad5863c715bf64246c2c3af2b0d9d"
+      "computedHash": "0ab1326212791f367efe2729c3eac48bca1e21f1bdcb02fba88edf8c12f21b61"
     },
     "clarity": {
       "source": "addyosmani/clarity",
@@ -17,19 +17,31 @@
       "source": "wshobson/agents",
       "sourceType": "github",
       "skillPath": "plugins/developer-essentials/skills/code-review-excellence/SKILL.md",
-      "computedHash": "0f585a4ad2f6d8353069ca9051c6f0e8865abb9d3a6a268d423784c3c3852962"
+      "computedHash": "35f32edb3935e4fd90c13e75954de46d281fd3b5c1a4733c9abbd9eb94f73206"
     },
     "humanizer": {
       "source": "blader/humanizer",
       "sourceType": "github",
       "skillPath": "SKILL.md",
-      "computedHash": "fa4ffac562a8e7349282f606391ede22d23118e998dc8b5ac931662fa734c1b7"
+      "computedHash": "d85c4727f62296887c3206e32a99caeed7611af7c4701c1b9931897260e31a73"
     },
     "ponytail": {
       "source": "DietrichGebert/ponytail",
       "sourceType": "github",
       "skillPath": "skills/ponytail/SKILL.md",
-      "computedHash": "99f0589e5646b46da07b9419a5daa178004b3dd8930fec528918a51ab07f5efc"
+      "computedHash": "061f887d9e3e735f85db3be3655a8936a00f24d5fb65ac4ab74a968a770fe342"
+    },
+    "ponytail-audit": {
+      "source": "DietrichGebert/ponytail",
+      "sourceType": "github",
+      "skillPath": "skills/ponytail-audit/SKILL.md",
+      "computedHash": "1d718f893dabc01caad0dacef86444b5b4b3e1e59409527d66e8b5dd0cd85ae0"
+    },
+    "ponytail-debt": {
+      "source": "DietrichGebert/ponytail",
+      "sourceType": "github",
+      "skillPath": "skills/ponytail-debt/SKILL.md",
+      "computedHash": "f5d1d2ab891ff0a650a90b67235e487828e7d2a189de08a1ae073032de379407"
     },
     "ponytail-review": {
       "source": "DietrichGebert/ponytail",

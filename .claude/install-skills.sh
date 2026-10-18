@@ -43,6 +43,8 @@ install_skill tt-a1i/archify archify
 install_skill wshobson/agents code-review-excellence
 install_skill DietrichGebert/ponytail ponytail
 install_skill DietrichGebert/ponytail ponytail-review
+install_skill DietrichGebert/ponytail ponytail-audit
+install_skill DietrichGebert/ponytail ponytail-debt
 
 # Same install name as the softaworks one above — pick one source, not both:
 #   install_skill https://github.com/obra/the-elements-of-style writing-clearly-and-concisely
