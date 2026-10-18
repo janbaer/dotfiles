@@ -16,6 +16,17 @@ usage=$(echo "$input" | jq '.context_window.current_usage')
 home_dir="$HOME"
 cwd_display="${cwd/#$home_dir/~}"
 
+# Append current git branch (short SHA when HEAD is detached)
+if [ -n "$cwd" ]; then
+  branch=$(git -C "$cwd" branch --show-current 2>/dev/null)
+  [ -z "$branch" ] && branch=$(git -C "$cwd" rev-parse --short HEAD 2>/dev/null)
+  if [ -n "$branch" ]; then
+    branch_color=$'\033[1;35m'
+    case "$branch" in main | master) branch_color=$'\033[1;31m' ;; esac
+    cwd_display="$cwd_display"$'\033[0m '"$branch_color($branch)"
+  fi
+fi
+
 # Calculate total tokens used in session (cumulative)
 total_tokens=$((total_input + total_output))
 
