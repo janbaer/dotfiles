@@ -104,9 +104,7 @@ This file is in `.gitignore` — it contains local MCP server config and must no
 
 Copy from `assets/.code-review.md`.
 
-### `CLAUDE.md` (without OpenSpec)
-
-Used when the user opts out of OpenSpec. Contains all project context directly.
+### `CLAUDE.md`
 
 ```markdown
 # CLAUDE.md
@@ -117,19 +115,25 @@ Used when the user opts out of OpenSpec. Contains all project context directly.
 **Stack:** <technology>
 <**Description:** description — omit if none>
 
+Requirements: [`docs/requirements.md`](docs/requirements.md). Design decisions: [`docs/design.md`](docs/design.md).
+
 ## Development
 ```
 
-### `CLAUDE.md` (with OpenSpec)
-
-Used when OpenSpec is enabled. Thin operational file — all project context lives in `openspec/project.md`.
+### `docs/requirements.md`
 
 ```markdown
-# CLAUDE.md
+# Requirements
 
-For project purpose, tech stack, architecture, conventions, and domain context see [`openspec/project.md`](openspec/project.md).
+This document lists what the project must do, one requirement per line with a stable ID (R1, R2, ...) that `docs/design.md` refers to.
+```
 
-## Development
+### `docs/design.md`
+
+```markdown
+# Design decisions
+
+Decisions that are not obvious from the code. Each entry names the requirements it satisfies (`Satisfies: R1`) and the issue it came from.
 ```
 
 ## Step 5: Git hooks (optional)
@@ -181,36 +185,12 @@ chmod +x ~/Projects/<name>/.githooks/pre-commit ~/Projects/<name>/.githooks/pre-
 git -C ~/Projects/<name> config core.hooksPath .githooks
 ```
 
-## Step 6: OpenSpec setup (optional)
+## Step 6: Requirements and design interview (optional)
 
-Ask: **"Should this project use OpenSpec for spec-driven development?"**
+Ask: **"Run the project interview now to fill requirements.md and design.md?"**
 
-### If no → skip to Step 7.
-
-### If yes:
-
-**6a. Initialize OpenSpec:**
-```bash
-cd ~/Projects/<name> && openspec init --tools claude --force
-```
-
-**6b. Interview the user about the project:**
-
-Use the `/grill-me` skill with this prompt:
-> "I'm setting up a new project called `<name>` using `<technology>`. Please interview me about the project so we can document it in `openspec/project.md`. Cover: purpose and goals, tech stack details (frameworks, libraries, database), architecture patterns, code conventions, testing strategy, domain concepts and entities, and any important constraints. The result should be written to `./openspec/project.md`."
-
-**6c. Write the interview result to `openspec/project.md`:**
-
-Use the howcani `openspec/project.md` as a structural reference. Include these sections as applicable:
-- `## Purpose`
-- `## Tech Stack`
-- `## Project Conventions` (code style, naming, error handling)
-- `## Architecture Patterns`
-- `## Testing Strategy`
-- `## Domain Context` (core entities, key concepts)
-- `## Important Constraints`
-
-**6d. Replace `CLAUDE.md`** with the "with OpenSpec" variant from above.
+- No → skip to Step 7. The two documents stay as created above and can be filled later with `forgejo-project-interview`.
+- Yes → invoke the **forgejo-project-interview** skill in `init` mode. It interviews Jan with `grill-me` and writes both files.
 
 ## Step 7: Initial commit and push
 
@@ -223,7 +203,7 @@ git push -u origin main
 
 Note: `.mcp.json` is gitignored and will not be included.
 
-If OpenSpec was set up in Step 6, its files (`openspec/`, `CLAUDE.md`) are part of this commit.
+The documents from Step 6 (`docs/requirements.md`, `docs/design.md`) are part of this commit.
 
 ## Step 8: Open in editor
 
@@ -236,5 +216,5 @@ cd ~/Projects/<name> && nvim .
 After completion, tell the user:
 - Local path: `~/Projects/<name>`
 - Forgejo repo: `https://forgejo.home.janbaer.de/jan/<name>`
-- Tech stack and whether OpenSpec was initialized
+- Tech stack and whether the project interview ran
 - Files created

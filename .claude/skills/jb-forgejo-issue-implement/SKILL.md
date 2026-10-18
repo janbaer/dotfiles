@@ -148,6 +148,10 @@ openspec new change "<change-name>"
 
 Then invoke the **opsx-ff** skill to fast-forward through artifact creation (proposal → specs → design → tasks) in one pass. **Do not wait for user confirmation after `opsx-ff` completes — proceed immediately to step 5.**
 
+### 4a. Requirements and design
+
+If the repo has `docs/requirements.md`, run the **forgejo-project-interview** skill in `update` mode with this issue number, after the plan exists and before implementing. It decides whether the `## Requirement` section of the issue adds, changes or drops a requirement and whether a design decision was made. The document changes belong in the same commit series as the code and end up in the same PR. Under `Auto-implement` it asks only before changing or dropping an existing requirement.
+
 ### 5. Evaluate clarity and check implementation mode
 
 After the plan exists (`opsx-ff` finished, or the short plan from step 4), re-read the **`## Implementation`** section from the issue body (fetched in step 2) to determine the Claude field value.
@@ -184,6 +188,8 @@ Re-read the **"How to Test"** section from the original issue (fetched in step 2
 - If any scenario fails → fix the issue, re-run tests and lint, then re-verify all scenarios
 
 Do not skip this step even if automated tests pass. Automated tests verify correctness; the "How to Test" scenarios verify that the feature works as the user intended.
+
+Before committing, check once more whether the implementation forced a decision that `docs/design.md` does not list yet. Add it via the `update` mode of **forgejo-project-interview**.
 
 ### 9. Commit and push
 

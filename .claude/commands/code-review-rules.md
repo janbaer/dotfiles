@@ -8,6 +8,8 @@ Create or revise two files in the current repository. The n8n "Forgejo PR Review
 - `docs/project.md` tells the reviewer what the project is.
 - `.code-review.md` adds the rules that are special about this project. Every rule in it can block a merge, so keep it short.
 
+The reviewer also loads `docs/requirements.md` and `docs/design.md` when they exist. Both are optional and out of scope for this command, but a rule or fact they already state does not belong in the two files above.
+
 ## docs/project.md
 
 Describe the project: purpose, tech stack, architecture and layer rules, domain context, important constraints, external dependencies. Conventions may stay in it.
@@ -30,13 +32,13 @@ Leave out:
 
 - anything about how to review: format, verdicts, severity, nits, follow-up rounds
 - generic good practice any reviewer applies anyway
-- an obligation `docs/project.md` already states
+- an obligation `docs/project.md`, `docs/requirements.md` or `docs/design.md` already states
 
 The reviewer does not read `CLAUDE.md` or the README, so a convention stated only there may go in.
 
 ## New file
 
-1. Delegate the reading to an `Explore` subagent and ask for a summary, not file contents: `CLAUDE.md`, `README.md`, `docs/project.md`, manifests, lint config, CI, test layout, directory structure. It reports what the project is, its conventions, and what the existing project file already covers.
+1. Delegate the reading to an `Explore` subagent and ask for a summary, not file contents: `CLAUDE.md`, `README.md`, `docs/project.md`, `docs/requirements.md`, `docs/design.md`, manifests, lint config, CI, test layout, directory structure. It reports what the project is, its conventions, and what the existing project file already covers.
 2. Ask Jan with `AskUserQuestion` what the repository does not show: the purpose if unclear, what a PR must never do here, which past mistakes should not come back.
 3. Show the draft.
 

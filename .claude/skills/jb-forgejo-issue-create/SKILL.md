@@ -55,20 +55,21 @@ Use the `AskUserQuestion` tool to collect each field **one at a time**, in the o
 2. **IssueType** *(single select)* — `Bug` / `Improvement` / `Idea` / `Future`
 3. **Severity** *(single select)* — `Minor` / `Medium` / `High` / `Critical`
 4. **Motivation** *(free text)* — "Why does this matter? What problem does it solve?"
-5. **Acceptance Criteria** *(free text)* — "What checks must be fulfilled before this issue can be accepted? List them one per line."
-6. **How to Test** *(free text)* — "How can this be verified once implemented?"
-7. **Claude** *(single select)* — `Needs feedback first` (stop and ask before implementing) / `Auto-implement` (Claude can start right away)
+5. **Requirement** *(free text)* — only if `docs/requirements.md` exists in the repo, otherwise skip it. "Which requirement does this serve? Give the IDs (R3, R7), `New: <one sentence>` for a requirement that does not exist yet, or `None`." Show the existing requirements as a short list to choose from. Only the reference goes into the issue, never the text of an existing requirement: two copies drift apart.
+6. **Acceptance Criteria** *(free text)* — "What checks must be fulfilled before this issue can be accepted? List them one per line."
+7. **How to Test** *(free text)* — "How can this be verified once implemented?"
+8. **Claude** *(single select)* — `Needs feedback first` (stop and ask before implementing) / `Auto-implement` (Claude can start right away)
 
-**The Claude field (#7) is mandatory.** Never skip it. It controls whether future agents can auto-implement or must pause for input.
+**The Claude field (#8) is mandatory.** Never skip it. It controls whether future agents can auto-implement or must pause for input.
 
-8. **Hermes** *(single select)* — `Assign to hermes-agent` (Hermes implements it and opens the PR without asking) / `Leave for Claude`
+9. **Hermes** *(single select)* — `Assign to hermes-agent` (Hermes implements it and opens the PR without asking) / `Leave for Claude`
 
-Offer `Assign to hermes-agent` only when every check below passes. Otherwise skip #8, leave the issue for Claude, and say in one line which check failed.
+Offer `Assign to hermes-agent` only when every check below passes. Otherwise skip #9, leave the issue for Claude, and say in one line which check failed.
 
 - **Files:** you can name the files that will change, and there are at most 3 (tests included).
 - **Scope:** no new dependency, no schema migration, no change to a public API or a config format.
 - **Agent files:** no acceptance criterion requires editing `CLAUDE.md`, `AGENTS.md` or anything under `.claude/`. Hermes is not allowed to touch them, and without this check it ships the PR with the criterion open. When the change needs such an edit, drop that point from the criteria and tell Jan it gets done at merge time.
-- **Decisions:** no open design question from the interview; the issue says exactly what to build.
+- **Decisions:** no open design question from the interview, and the Requirement field is `None` or a reference to an existing ID (a `New:` requirement needs Jan); the issue says exactly what to build.
 - **Tests:** every acceptance criterion has a check that runs unattended — a command, a test, an exit code, an HTTP status — and "How to Test" is a list of such commands. A browser step, a visual check, or a human review fails this.
 
 When the tests check fails on a criterion Jan wants to keep for Hermes, name it and let him rewrite it, then check again.
@@ -110,6 +111,10 @@ Build the issue body using **exactly** this template — do not add extra sectio
 ## Motivation
 
 {Motivation}
+
+## Requirement
+
+{Requirement — omit this whole section if docs/requirements.md does not exist}
 
 ## Acceptance Criteria
 

@@ -32,7 +32,7 @@ Check each standard item. Use filesystem checks (not git) since some files like 
 | `.mcp.json` | Exists on disk? |
 | `CLAUDE.md` | Exists? |
 | Git hooks | Bun: `simple-git-hooks` key in `package.json` + `postinstall` script. Others: `.githooks/` dir exists + `git config core.hooksPath` set |
-| OpenSpec | `openspec/` directory exists? |
+| Requirements and design | `docs/requirements.md` and `docs/design.md` exist? |
 
 ## Step 3: Report findings
 
@@ -48,16 +48,16 @@ Project: <name>  Stack: <tech>
 ✅ .mcp.json
 ✅ CLAUDE.md
 ❌ git hooks
-⚠️  OpenSpec (optional — ask separately)
+⚠️  requirements/design docs (optional — ask separately)
 ```
 
-Use ⚠️ for optional items (OpenSpec, git hooks) that the user may intentionally skip.
+Use ⚠️ for optional items (requirements/design docs, git hooks) that the user may intentionally skip.
 
 ## Step 4: Ask what to apply
 
 Ask: **"Which of these would you like me to add? Type 'all', list specific ones, or 'none' to cancel."**
 
-For OpenSpec specifically, ask separately since it requires an interview — don't bundle it with the others.
+For the requirements and design docs specifically, ask separately since they require an interview — don't bundle it with the others.
 
 ## Step 5: Apply selected items
 
@@ -68,10 +68,10 @@ For each selected item, copy the appropriate template from `../jb-forgejo-projec
 - `.gitignore` → copy from `assets/gitignore/<tech>` (never overwrite an existing file — merge missing entries instead)
 - `.mcp.json` → write the standard MCP config (see `forgejo-project-new` SKILL.md for content)
 - `CHANGELOG.md` → write the standard changelog header (see `forgejo-project-new` SKILL.md for content)
-- `CLAUDE.md` → write the standard CLAUDE.md for the chosen variant (with or without OpenSpec)
+- `CLAUDE.md` → write the standard CLAUDE.md (see `forgejo-project-new` SKILL.md)
 - **Git hooks (Bun/TS)**: add `simple-git-hooks` dependency + `postinstall` + hook config to `package.json`, then run `bunx simple-git-hooks`
 - **Git hooks (Go/Rust/Other)**: copy `assets/hooks/pre-commit` and `assets/hooks/pre-push` to `.githooks/`, make executable, run `git config core.hooksPath .githooks` — then ask the user what commands to put in each hook
-- **OpenSpec**: follow the OpenSpec setup steps from `forgejo-project-new` (init + grill-me interview + write `openspec/project.md`)
+- **Requirements and design docs**: create the two files from the templates in `forgejo-project-new`, then invoke `forgejo-project-interview` in `init` mode
 
 Never overwrite a file that already exists without asking first.
 
