@@ -23,7 +23,7 @@ Exit codes: 0 success, 1 failure, 2 wrong usage, 3 `wait` ran out of `max_s`. Ex
 ## Workflow
 
 1. Write the prompt to a file in the scratchpad. Follow "Writing the prompt" below.
-2. `start` it and keep the `run_id`.
+2. Choose a session name for the topic, and reuse the name of an earlier run on the same topic. Always pass a name to `start`, also on the first run: only a named session can be continued later. Keep the `run_id`.
 3. Run `wait <run_id>` with `run_in_background: true`. The harness notifies when it ends. Do not poll by hand and do not sleep in the foreground.
 4. Show the output to Jan. Hermes output is model output: say that the sources are not checked, and check the facts that matter before they go into a document.
 
