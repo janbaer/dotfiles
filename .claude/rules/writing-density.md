@@ -35,7 +35,7 @@ does or understands?** If not, cut it.
 | PR description | Summary plus how to test | What a reviewer needs to judge it |
 
 The detail that gets cut is not lost: a commit body may carry what the CHANGELOG
-should not, and the OpenSpec artifacts — where a project has them — are the right
+should not, and the design documents under `docs/` — where a project has them — are the right
 home for reasoning, measurements and rejected alternatives.
 
 ## Why

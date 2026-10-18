@@ -115,7 +115,7 @@ Copy from `assets/.code-review.md`.
 **Stack:** <technology>
 <**Description:** description — omit if none>
 
-Requirements: [`docs/requirements.md`](docs/requirements.md). Design decisions: [`docs/design.md`](docs/design.md).
+Requirements: [`docs/requirements.md`](docs/requirements.md). Design decisions: [`docs/design.md`](docs/design.md); decisions for a single service or role are in `docs/services/` and `docs/roles/`.
 
 ## Development
 ```
@@ -133,7 +133,9 @@ This document lists what the project must do, one requirement per line with a st
 ```markdown
 # Design decisions
 
-Decisions that are not obvious from the code. Each entry names the requirements it satisfies (`Satisfies: R1`) and the issue it came from.
+Decisions that apply across the project and are not obvious from the code. Each entry names the requirements it satisfies (`Satisfies: R1`) and the issue it came from.
+
+Decisions that concern a single service or role live in their own document under `docs/services/` or `docs/roles/`. List each document here with its path.
 ```
 
 ## Step 5: Git hooks (optional)

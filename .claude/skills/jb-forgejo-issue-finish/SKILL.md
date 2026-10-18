@@ -1,7 +1,7 @@
 ---
 name: forgejo-issue-finish
 model: sonnet
-description: Use after manually verifying a forgejo-issue-implement implementation to archive the OpenSpec change (if there is one) and open a Pull Request. Trigger on phrases like "finish the issue", "complete the issue", "archive and create PR", "create PR for the issue", or "open a PR for issue #N".
+description: Use after manually verifying a forgejo-issue-implement implementation to open a Pull Request. Trigger on phrases like "finish the issue", "complete the issue", "finish and create PR", "create PR for the issue", or "open a PR for issue #N".
 ---
 
 ## Pre-requisites
@@ -10,7 +10,7 @@ description: Use after manually verifying a forgejo-issue-implement implementati
 
 # Forgejo Finish Issue
 
-Archives the OpenSpec change, if the issue used one, and creates a Pull Request once the user has verified the implementation. This is the second half of the `forgejo-issue-implement` workflow — triggered explicitly by the user after manual testing.
+Creates a Pull Request once the user has verified the implementation. This is the second half of the `forgejo-issue-implement` workflow — triggered explicitly by the user after manual testing.
 
 ## Workflow
 
@@ -22,8 +22,6 @@ digraph finish_workflow {
     "Read issue number from branch" [shape=box];
     "Issue still open?" [shape=diamond];
     "Stop: issue already closed" [shape=box];
-    "OpenSpec change exists?" [shape=diamond];
-    "Archive OpenSpec + commit + push" [shape=box];
     "PR already exists?" [shape=diamond];
     "Show existing PR link" [shape=box];
     "Create PR via forgejo-pr-create skill" [shape=box];
@@ -33,11 +31,8 @@ digraph finish_workflow {
     "On feature/* branch?" -> "Read issue number from branch" [label="yes"];
     "On feature/* branch?" -> "Stop: not on feature branch" [label="no"];
     "Read issue number from branch" -> "Issue still open?";
-    "Issue still open?" -> "OpenSpec change exists?" [label="yes"];
+    "Issue still open?" -> "PR already exists?" [label="yes"];
     "Issue still open?" -> "Stop: issue already closed" [label="no"];
-    "OpenSpec change exists?" -> "Archive OpenSpec + commit + push" [label="yes"];
-    "OpenSpec change exists?" -> "PR already exists?" [label="no"];
-    "Archive OpenSpec + commit + push" -> "PR already exists?";
     "PR already exists?" -> "Show existing PR link" [label="yes"];
     "PR already exists?" -> "Create PR via forgejo-pr-create skill" [label="no"];
     "Show existing PR link" -> "Send ntfy notification";
@@ -78,18 +73,7 @@ Check `state`. If `state != "open"`, stop and inform the user the issue is alrea
 
 Read the issue title — you'll need it for the PR and notification.
 
-### 4. Archive the OpenSpec change and push
-
-Derive the change name from the branch slug (the part after `{N}-`). Archive only if `openspec/changes/<change-name>/` exists. If it does not, the issue was implemented without OpenSpec: skip this step.
-
-```bash
-openspec archive "<change-name>"
-git add openspec/
-git commit -m "openspec ♻️: Archiving OpenSpec change <change-name>"
-git push
-```
-
-### 5. Check for existing PR
+### 4. Check for existing PR
 
 ```
 list_repo_pull_requests(owner, repo, state="open")
@@ -100,7 +84,7 @@ Filter by `head` branch matching the current feature branch.
 - **PR found** → show the user the link, skip creation
 - **No PR found** → invoke the **forgejo-pr-create** skill to create the PR; always include `closes #N` in the PR body. Never call `create_pull_request` directly from here: that skips the `/simplify` + `/review-diff` pass and the review loop that `forgejo-pr-create` runs.
 
-### 6. Send notification
+### 5. Send notification
 
 Delegate to the **`ntfy-me`** skill with:
 

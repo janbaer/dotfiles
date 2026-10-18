@@ -44,8 +44,7 @@
       "Bash(git reset --hard origin/*)",
       "Bash(git branch -D:*)",
       "Bash(sleep:*)",
-      "Bash(bun run scripts/bump-version.ts:*)",
-      "Bash(openspec:*)"
+      "Bash(bun run scripts/bump-version.ts:*)"
     ],
     "defaultMode": "auto"
   },
@@ -138,8 +137,7 @@
       "Bash(./provision.sh:*)",
       "Bash(./execute.sh:*)",
       "Bash(ansible-lint:*)",
-      "Bash(ansible-inventory:*)",
-      "Bash(openspec:*)"
+      "Bash(ansible-inventory:*)"
     ],
     "soft_deny": [
       "$defaults",

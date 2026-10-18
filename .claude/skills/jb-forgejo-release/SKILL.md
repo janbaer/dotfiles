@@ -69,7 +69,7 @@ Only changes to the product earn an entry. Sort every commit by its diff
 
 | Releases | Does not release |
 |---|---|
-| Behaviour changes and bug fixes: application code (`src/`), content and assets (`content/`, `public/`), runtime dependencies in `package.json` and `bun.lock`, `Dockerfile` | Tooling and process: CI workflows, `renovate.json`, linter and hook config, review rules, `docs/`, `openspec/`, devDependencies only |
+| Behaviour changes and bug fixes: application code (`src/`), content and assets (`content/`, `public/`), runtime dependencies in `package.json` and `bun.lock`, `Dockerfile` | Tooling and process: CI workflows, `renovate.json`, linter and hook config, review rules, `docs/`, devDependencies only |
 
 A Renovate PR that bumps a runtime dependency releases; one that only touches
 devDependencies does not.

@@ -2,7 +2,7 @@
 name: forgejo-issue-implement
 model: opus
 effort: medium
-description: Use when working with Forgejo issues in the current project - listing open issues, selecting one to implement, or following the full implementation workflow to PR (through OpenSpec where the project uses it and the change warrants it). Trigger on phrases like "implement issue", "work on issue", "pick up an issue", "start working on a ticket", or "fix issue".
+description: Use when working with Forgejo issues in the current project - listing open issues, selecting one to implement, or following the full implementation workflow to PR. Trigger on phrases like "implement issue", "work on issue", "pick up an issue", "start working on a ticket", or "fix issue".
 ---
 
 ## Pre-requisites
@@ -25,11 +25,8 @@ digraph issue_workflow {
     "User selects issue" [shape=diamond];
     "Read issue details" [shape=box];
     "Create branch: feature/{N}-{slug}" [shape=box];
-    "Use OpenSpec?" [shape=diamond];
-    "opsx-ff skill" [shape=box];
     "Plan from issue" [shape=box];
-    "Design and tasks clear?" [shape=diamond];
-    "openspec instructions apply" [shape=box];
+    "Plan clear?" [shape=diamond];
     "Implement" [shape=box];
     "Run tests + lint" [shape=box];
     "All pass?" [shape=diamond];
@@ -48,15 +45,10 @@ digraph issue_workflow {
     "List open issues" -> "User selects issue";
     "User selects issue" -> "Read issue details";
     "Read issue details" -> "Create branch: feature/{N}-{slug}";
-    "Create branch: feature/{N}-{slug}" -> "Use OpenSpec?";
-    "Use OpenSpec?" -> "opsx-ff skill" [label="yes"];
-    "Use OpenSpec?" -> "Plan from issue" [label="no"];
-    "opsx-ff skill" -> "Design and tasks clear?";
-    "Plan from issue" -> "Design and tasks clear?";
-    "Design and tasks clear?" -> "openspec instructions apply" [label="yes, OpenSpec"];
-    "Design and tasks clear?" -> "Implement" [label="yes, no OpenSpec"];
-    "Design and tasks clear?" -> "Commit + push (partial)" [label="no - stop here"];
-    "openspec instructions apply" -> "Implement";
+    "Create branch: feature/{N}-{slug}" -> "Plan from issue";
+    "Plan from issue" -> "Plan clear?";
+    "Plan clear?" -> "Implement" [label="yes"];
+    "Plan clear?" -> "Commit + push (partial)" [label="no - stop here"];
     "Implement" -> "Run tests + lint";
     "Run tests + lint" -> "All pass?";
     "All pass?" -> "Execute 'How to Test' scenarios" [label="yes"];
@@ -74,7 +66,7 @@ digraph issue_workflow {
 
 The only required user input in the entire workflow is choosing which issue to work on (step 1, when no issue number is given). Everything else runs automatically.
 
-**Done when:** the issue is implemented (with OpenSpec: all tasks in `tasks.md` are checked off), tests and lint pass, all test scenarios pass, the branch is pushed and the ntfy is sent.
+**Done when:** the issue is implemented, tests and lint pass, all test scenarios pass, the branch is pushed and the ntfy is sent.
 If any user input is required or the whole workflow is done, notify by delegating to the **`ntfy-me`** skill with:
 
 | Parameter | Value |
@@ -131,22 +123,9 @@ git checkout -b feature/42-fix-login-redirect
 
 Branch name: `feature/{issue-number}-{short-slug}`
 
-### 4. Decide on OpenSpec, then plan
+### 4. Plan
 
-OpenSpec is optional. Use it only if **both** hold:
-
-1. The project has an `openspec/` directory in its root. If not, never create one here.
-2. The change is not trivial. A change with no design decision (a value, a typo, a one-line fix, a small config change) does not get an OpenSpec change: the artifacts would be larger than the diff. When in doubt, skip it. If Jan says "with OpenSpec" or "without OpenSpec", that wins.
-
-**Without OpenSpec:** there is no `tasks.md`. Write a short plan from the issue (approach, files to touch) and continue with step 5. Wherever the later steps mention OpenSpec, `tasks.md` or `openspec instructions apply`, skip that part.
-
-**With OpenSpec:**
-
-```bash
-openspec new change "<change-name>"
-```
-
-Then invoke the **opsx-ff** skill to fast-forward through artifact creation (proposal → specs → design → tasks) in one pass. **Do not wait for user confirmation after `opsx-ff` completes — proceed immediately to step 5.**
+Write a short plan from the issue: approach and files to touch. Keep it as long as the change needs; a one-line fix gets one line.
 
 ### 4a. Requirements and design
 
@@ -154,27 +133,23 @@ If the repo has `docs/requirements.md`, run the **forgejo-project-interview** sk
 
 ### 5. Evaluate clarity and check implementation mode
 
-After the plan exists (`opsx-ff` finished, or the short plan from step 4), re-read the **`## Implementation`** section from the issue body (fetched in step 2) to determine the Claude field value.
+After the plan exists (step 4), re-read the **`## Implementation`** section from the issue body (fetched in step 2) to determine the Claude field value.
 
 **If `Claude: Needs feedback first`:**
-- Present the plan (proposed approach, design decisions, task list) to the user in a clear summary
+- Present the plan (proposed approach, design decisions, steps) to the user in a clear summary
 - Explain your understanding of the problem and how you intend to solve it
 - Wait for the user's confirmation or corrections before proceeding
 - Only continue to step 6 once the user has approved the approach
 
 **If `Claude: Auto-implement`:**
-- Assess whether design and tasks are clear enough to implement without asking the user
-- **Clear** → with OpenSpec, run `openspec instructions apply --change "<name>"`; in both cases proceed to implementation without pausing
+- Assess whether the plan is clear enough to implement without asking the user
+- **Clear** → proceed to implementation without pausing
 - **Not clear** → commit what exists, push the branch, then explain to the user what is ambiguous and what decision is needed
 - When in doubt, lean toward continuing. Only stop if implementation truly cannot proceed without a decision that only the user can make.
 
 ### 6. Implement
 
-Follow the tasks from `openspec instructions apply` (without OpenSpec: the plan from step 4). Work through each task in order without stopping for confirmation between tasks. Implement only the planned tasks; mention anything extra at the end instead of building it.
-
-> **Important (OpenSpec only):** After completing each task, immediately mark it as done in `tasks.md` before moving to the next one:
-> `- [ ] Task description` → `- [x] Task description`
-> Do **not** leave this until after archiving.
+Follow the plan from step 4. Work through it in order without stopping for confirmation between steps. Implement only what is planned; mention anything extra at the end instead of building it.
 
 ### 7. Run tests and lint
 
@@ -189,7 +164,7 @@ Re-read the **"How to Test"** section from the original issue (fetched in step 2
 
 Do not skip this step even if automated tests pass. Automated tests verify correctness; the "How to Test" scenarios verify that the feature works as the user intended.
 
-Before committing, check once more whether the implementation forced a decision that `docs/design.md` does not list yet. Add it via the `update` mode of **forgejo-project-interview**.
+Before committing, check once more whether the implementation forced a decision that the design documents (`docs/design.md`, `docs/services/`, `docs/roles/`) do not list yet. Add it via the `update` mode of **forgejo-project-interview**.
 
 ### 9. Commit and push
 

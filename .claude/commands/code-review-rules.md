@@ -8,7 +8,7 @@ Create or revise two files in the current repository. The n8n "Forgejo PR Review
 - `docs/project.md` tells the reviewer what the project is.
 - `.code-review.md` adds the rules that are special about this project. Every rule in it can block a merge, so keep it short.
 
-The reviewer also loads `docs/requirements.md` and `docs/design.md` when they exist. Both are optional and out of scope for this command, but a rule or fact they already state does not belong in the two files above.
+The reviewer also loads `docs/requirements.md` and `docs/design.md` when they exist. `docs/design.md` lists the documents for single services and roles under `docs/services/` and `docs/roles/`. All of these are optional and out of scope for this command, but a rule or fact they already state does not belong in the two files above.
 
 ## docs/project.md
 
@@ -28,6 +28,8 @@ Write each rule as one short imperative, general enough to cover the whole conve
 
 Always include: "A PR that changes the tech stack, architecture, domain entities or constraints updates `docs/project.md`."
 
+When `docs/requirements.md` exists, also include: "A PR that adds, changes or drops a requirement or a design decision updates the matching document in the same PR: `docs/requirements.md`, `docs/design.md`, or for a decision that concerns one service or role, `docs/services/<name>.md` or `docs/roles/<name>.md`. IDs are never reused." Leave out the `docs/services/` and `docs/roles/` part when the project has no such documents.
+
 Leave out:
 
 - anything about how to review: format, verdicts, severity, nits, follow-up rounds
@@ -38,7 +40,7 @@ The reviewer does not read `CLAUDE.md` or the README, so a convention stated onl
 
 ## New file
 
-1. Delegate the reading to an `Explore` subagent and ask for a summary, not file contents: `CLAUDE.md`, `README.md`, `docs/project.md`, `docs/requirements.md`, `docs/design.md`, manifests, lint config, CI, test layout, directory structure. It reports what the project is, its conventions, and what the existing project file already covers.
+1. Delegate the reading to an `Explore` subagent and ask for a summary, not file contents: `CLAUDE.md`, `README.md`, `docs/project.md`, `docs/requirements.md`, `docs/design.md`, `docs/services/`, `docs/roles/`, manifests, lint config, CI, test layout, directory structure. It reports what the project is, its conventions, and what the existing project file already covers.
 2. Ask Jan with `AskUserQuestion` what the repository does not show: the purpose if unclear, what a PR must never do here, which past mistakes should not come back.
 3. Show the draft.
 

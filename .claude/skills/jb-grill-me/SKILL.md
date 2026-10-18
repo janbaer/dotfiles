@@ -26,6 +26,6 @@ The session is done when the frontier is empty: every branch of the design tree 
 
 Once the interview is done, and **only if not already being called from within the `forgejo-issue-create` skill**, ask the user if a new Forgejo issue should be created. If yes, use the `forgejo-issue-create` skill and follow the instructions from that skill.
 
-If the user denies that a new Forgejo issue should be created, ask them what they want to do with the output of this interview. If the user wants to start working, ask him, if a OpenSpec should be created with that information.
+If the user denies that a new Forgejo issue should be created, ask them what they want to do with the output of this interview. If the user wants to start working, use the output of the interview as the plan.
 
 If both options are not used, create a spec file in `./docs` folder.
