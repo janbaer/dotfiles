@@ -2,7 +2,7 @@
 name: forgejo-issue-implement
 model: opus
 effort: medium
-description: Use when working with Forgejo issues in the current project - listing open issues, selecting one to implement, or following the full implementation workflow through OpenSpec to PR. Trigger on phrases like "implement issue", "work on issue", "pick up an issue", "start working on a ticket", or "fix issue".
+description: Use when working with Forgejo issues in the current project - listing open issues, selecting one to implement, or following the full implementation workflow to PR (through OpenSpec where the project uses it and the change warrants it). Trigger on phrases like "implement issue", "work on issue", "pick up an issue", "start working on a ticket", or "fix issue".
 ---
 
 ## Pre-requisites
@@ -25,7 +25,9 @@ digraph issue_workflow {
     "User selects issue" [shape=diamond];
     "Read issue details" [shape=box];
     "Create branch: feature/{N}-{slug}" [shape=box];
+    "Use OpenSpec?" [shape=diamond];
     "opsx-ff skill" [shape=box];
+    "Plan from issue" [shape=box];
     "Design and tasks clear?" [shape=diamond];
     "openspec instructions apply" [shape=box];
     "Implement" [shape=box];
@@ -46,9 +48,13 @@ digraph issue_workflow {
     "List open issues" -> "User selects issue";
     "User selects issue" -> "Read issue details";
     "Read issue details" -> "Create branch: feature/{N}-{slug}";
-    "Create branch: feature/{N}-{slug}" -> "opsx-ff skill";
+    "Create branch: feature/{N}-{slug}" -> "Use OpenSpec?";
+    "Use OpenSpec?" -> "opsx-ff skill" [label="yes"];
+    "Use OpenSpec?" -> "Plan from issue" [label="no"];
     "opsx-ff skill" -> "Design and tasks clear?";
-    "Design and tasks clear?" -> "openspec instructions apply" [label="yes"];
+    "Plan from issue" -> "Design and tasks clear?";
+    "Design and tasks clear?" -> "openspec instructions apply" [label="yes, OpenSpec"];
+    "Design and tasks clear?" -> "Implement" [label="yes, no OpenSpec"];
     "Design and tasks clear?" -> "Commit + push (partial)" [label="no - stop here"];
     "openspec instructions apply" -> "Implement";
     "Implement" -> "Run tests + lint";
@@ -68,7 +74,7 @@ digraph issue_workflow {
 
 The only required user input in the entire workflow is choosing which issue to work on (step 1, when no issue number is given). Everything else runs automatically.
 
-**Done when:** all tasks in `tasks.md` are checked off, tests and lint pass, all test scenarios pass, the branch is pushed and the ntfy is sent.
+**Done when:** the issue is implemented (with OpenSpec: all tasks in `tasks.md` are checked off), tests and lint pass, all test scenarios pass, the branch is pushed and the ntfy is sent.
 If any user input is required or the whole workflow is done, notify by delegating to the **`ntfy-me`** skill with:
 
 | Parameter | Value |
@@ -125,7 +131,16 @@ git checkout -b feature/42-fix-login-redirect
 
 Branch name: `feature/{issue-number}-{short-slug}`
 
-### 4. Create OpenSpec change and fast-forward
+### 4. Decide on OpenSpec, then plan
+
+OpenSpec is optional. Use it only if **both** hold:
+
+1. The project has an `openspec/` directory in its root. If not, never create one here.
+2. The change is not trivial. A change with no design decision (a value, a typo, a one-line fix, a small config change) does not get an OpenSpec change: the artifacts would be larger than the diff. When in doubt, skip it. If Jan says "with OpenSpec" or "without OpenSpec", that wins.
+
+**Without OpenSpec:** there is no `tasks.md`. Write a short plan from the issue (approach, files to touch) and continue with step 5. Wherever the later steps mention OpenSpec, `tasks.md` or `openspec instructions apply`, skip that part.
+
+**With OpenSpec:**
 
 ```bash
 openspec new change "<change-name>"
@@ -135,25 +150,25 @@ Then invoke the **opsx-ff** skill to fast-forward through artifact creation (pro
 
 ### 5. Evaluate clarity and check implementation mode
 
-After `opsx-ff` completes, re-read the **`## Implementation`** section from the issue body (fetched in step 2) to determine the Claude field value.
+After the plan exists (`opsx-ff` finished, or the short plan from step 4), re-read the **`## Implementation`** section from the issue body (fetched in step 2) to determine the Claude field value.
 
 **If `Claude: Needs feedback first`:**
-- Present the OpenSpec plan (proposed approach, design decisions, task list) to the user in a clear summary
+- Present the plan (proposed approach, design decisions, task list) to the user in a clear summary
 - Explain your understanding of the problem and how you intend to solve it
 - Wait for the user's confirmation or corrections before proceeding
 - Only continue to step 6 once the user has approved the approach
 
 **If `Claude: Auto-implement`:**
 - Assess whether design and tasks are clear enough to implement without asking the user
-- **Clear** → immediately run `openspec instructions apply --change "<name>"` and proceed to implementation without pausing
+- **Clear** → with OpenSpec, run `openspec instructions apply --change "<name>"`; in both cases proceed to implementation without pausing
 - **Not clear** → commit what exists, push the branch, then explain to the user what is ambiguous and what decision is needed
 - When in doubt, lean toward continuing. Only stop if implementation truly cannot proceed without a decision that only the user can make.
 
 ### 6. Implement
 
-Follow the tasks from `openspec instructions apply`. Work through each task in order without stopping for confirmation between tasks. Implement only the tasks in `tasks.md`; mention anything extra at the end instead of building it.
+Follow the tasks from `openspec instructions apply` (without OpenSpec: the plan from step 4). Work through each task in order without stopping for confirmation between tasks. Implement only the planned tasks; mention anything extra at the end instead of building it.
 
-> **Important:** After completing each task, immediately mark it as done in `tasks.md` before moving to the next one:
+> **Important (OpenSpec only):** After completing each task, immediately mark it as done in `tasks.md` before moving to the next one:
 > `- [ ] Task description` → `- [x] Task description`
 > Do **not** leave this until after archiving.
 
