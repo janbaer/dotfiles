@@ -58,13 +58,12 @@ Use the `AskUserQuestion` tool to collect each field **one at a time**, in the o
 5. **Requirement** *(free text)* — only if `docs/requirements.md` exists in the repo, otherwise skip it. "Which requirement does this serve? Give the IDs (R3, R7), `New: <one sentence>` for a requirement that does not exist yet, or `None`." Show the existing requirements as a short list to choose from. Only the reference goes into the issue, never the text of an existing requirement: two copies drift apart.
 6. **Acceptance Criteria** *(free text)* — "What checks must be fulfilled before this issue can be accepted? List them one per line."
 7. **How to Test** *(free text)* — "How can this be verified once implemented?"
-8. **Claude** *(single select)* — `Needs feedback first` (stop and ask before implementing) / `Auto-implement` (Claude can start right away)
+8. **Hermes** *(single select)* — `Assign to hermes-agent` (Hermes implements it and opens the PR without asking) / `Leave for Claude`
+9. **Claude** *(single select)* — only when the issue is left for Claude. `Needs feedback first` (stop and ask before implementing) / `Auto-implement` (Claude can start right away)
 
-**The Claude field (#8) is mandatory.** Never skip it. It controls whether future agents can auto-implement or must pause for input.
+**The Claude field (#9) is mandatory for every issue left for Claude.** It controls whether a future Claude session can auto-implement or must pause for input. An issue assigned to hermes-agent gets neither the field nor the `## Implementation` section: the assignment already means "start now", and an issue Hermes cannot start right away is not assigned to it.
 
-9. **Hermes** *(single select)* — `Assign to hermes-agent` (Hermes implements it and opens the PR without asking) / `Leave for Claude`
-
-Offer `Assign to hermes-agent` only when every check below passes. Otherwise skip #9, leave the issue for Claude, and say in one line which check failed.
+Offer `Assign to hermes-agent` only when every check below passes. Otherwise skip #8, leave the issue for Claude, and say in one line which check failed.
 
 - **Files:** you can name the files that will change, and there are at most 3 (tests included).
 - **Scope:** no new dependency, no schema migration, no change to a public API or a config format.
@@ -128,6 +127,8 @@ Build the issue body using **exactly** this template — do not add extra sectio
 
 Claude: {Needs feedback first | Auto-implement}
 ```
+
+Omit the `## Implementation` section when the issue is assigned to hermes-agent.
 
 Then create:
 
