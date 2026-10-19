@@ -255,16 +255,16 @@ Alle drei Server laufen aus lokalen Klonen unter `~/Projects`, keiner aus npm:
 
 | Server | Verzeichnis | Grund |
 | --- | --- | --- |
-| `imap-mini-mcp` | `~/Projects/imap-mini-mcp`, Branch `mailbox` | einziger IMAP-Server, der Entwürfe kann und nicht senden kann |
+| `imap-mini-mcp` | `~/Projects/imap-mini-mcp`, Branch `main` des Originals (`florianbuetow`) | einziger IMAP-Server, der Entwürfe kann und nicht senden kann |
 | `caldav-mcp` | `~/Projects/caldav-mcp`, Branch `mailbox` | Original löst Serientermine nicht auf |
 | `carddav-mcp` | `~/Projects/carddav-mcp`, Branch `mailbox` | Original liefert bei Open-Xchange eine leere Kontaktliste |
 
-Der Branch `mailbox` ist in allen drei Forks ein reiner Integrationszweig.
-Er enthält:
+Der Branch `mailbox` ist in den beiden Forks ein reiner Integrationszweig.
+`imap-mini-mcp` braucht keinen mehr, der HTML-Rückfall (PR #6) ist upstream
+gemergt. Der Branch enthält:
 
 | Fork | Inhalt von `mailbox` |
 | --- | --- |
-| `imap-mini-mcp` | Upstream `main` plus der HTML-Rückfall (PR #6) |
 | `caldav-mcp` | Upstream `main`, die Serienauflösung (PR #94) und der Ganztags-Fix des Maintainers (dessen PR #91, dort noch offen) |
 | `carddav-mcp` | Upstream-Standardbranch plus PR #3 und #4 |
 
@@ -278,7 +278,7 @@ richtigen Branch und baut sie. Jan ruft es selbst auf, einmal pro Rechner,
 du brauchst es im Gespräch nicht.
 
 Das Skript ist Übergangswerk. Sobald die Pull Requests bei `dominik1001`
-angenommen sind und `imap-mini-mcp` auf npm liegt, laufen alle drei wieder
+angenommen sind und `imap-mini-mcp` auf npm liegt (bisher nicht veröffentlicht), laufen alle drei wieder
 per `npx`, und dann können das Skript und dieser Abschnitt weg.
 
 **Nach jedem `git pull` oder `git checkout` in einem dieser Verzeichnisse

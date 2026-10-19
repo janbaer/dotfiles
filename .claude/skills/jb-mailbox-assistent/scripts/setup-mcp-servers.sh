@@ -3,8 +3,9 @@ set -euo pipefail
 
 # The mailbox.org MCP servers run from local clones instead of npm. Two of them
 # are forks carrying fixes that upstream has not merged yet, and the IMAP one
-# was never published. Run this on a new machine, or after a fork gained a
-# commit, so ~/Projects/.mcp.json finds a current dist/ to point at.
+# is upstream's own repo, which was never published. Run this on a new machine,
+# or after a fork gained a commit, so ~/Projects/.mcp.json finds a current
+# dist/ to point at.
 #
 # Forgetting the build is the failure mode worth knowing about: a server that
 # is already running keeps the old code in memory, so a stale dist/ looks like
@@ -12,10 +13,10 @@ set -euo pipefail
 
 PROJECTS="$HOME/Projects"
 
-# All three are forks, and all three carry their fixes on a branch called
-# mailbox, so there is one branch name to remember rather than one per repo.
+# The two forks carry their fixes on a branch called mailbox. The IMAP server
+# needs no fork any more, all its fixes are merged upstream.
 SERVERS=(
-  "https://github.com/janbaer/imap-mini-mcp.git|mailbox"
+  "https://github.com/florianbuetow/imap-mini-mcp.git|main"
   "https://github.com/janbaer/caldav-mcp.git|mailbox"
   "https://github.com/janbaer/carddav-mcp.git|mailbox"
 )
