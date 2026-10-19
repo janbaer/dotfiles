@@ -35,11 +35,11 @@ status: Draft — <date>
 
 ## Walkthrough: 15 minutes
 
-1. [Architecture](architecture.md) (3 min): <what to show>.
-2. [Runbooks](runbooks.md) (5 min): <the first tasks>.
-3. [Known issues](issues.md) (3 min): <the top two>.
-4. [Recurring duties](duties.md) (2 min): <what to remember>.
-5. [Access](access.md) and [decisions](decisions.md) (2 min): <what to remember>.
+1. [Architecture](architecture.md) (4 min): <what the system does and how a change reaches it>.
+2. <Pages that explain a core part, for example [Proxy](proxy.md)> (3 min): <what to show>.
+3. [Access](access.md) (2 min): <which systems and where the credentials live>.
+4. [Runbooks](runbooks.md) (3 min): <the first tasks>.
+5. [Known issues](issues.md), [decisions](decisions.md) and [recurring duties](duties.md) (3 min): <the top two issues, why things are as they are, what runs by itself>.
 
 ## At a glance
 
@@ -56,20 +56,38 @@ status: Draft — <date>
 
 ## Read these first
 
+Understanding comes before tasks: what the system is, what each core part does, where the credentials live.
+
 ```cards
-Runbooks | runbooks.md | <The first tasks in one line> | 1
-Known issues | issues.md | <The top two in one line> | 2
-Recurring duties | duties.md | <What expires or runs by itself> | 3
+Architecture | architecture.md | <Parts and paths in one line> | 1
+<Core part page> | <page>.md | <What it does in one line> | 2
+Access | access.md | <Systems and where the credentials live> | 3
 ```
 
 ## The rest
 
 ```cards
-Architecture | architecture.md | <Parts and paths in one line> |
-Access | access.md | <Systems and where the credentials live> |
+Runbooks | runbooks.md | <The first tasks in one line> |
+Known issues | issues.md | <The top two in one line> |
 Decisions | decisions.md | <What changed recently and what is planned> |
+Recurring duties | duties.md | <What expires or runs by itself> |
 ```
+
+## Legend
+
+The chips behind a fact say where it comes from.
+
+| Chip | Meaning |
+|---|---|
+| {verified} | Checked in the code, in a command output or on the system |
+| {owner} | Stated by the owner in the interview, not checked against the code |
+| {inferred} | Derived from other facts, not seen directly |
+| {unverified} | Not checked. Treat it as a question |
+| {partial} | Partly checked, the label says which part |
+| {done} | Fixed or closed during the handover |
 ````
+
+Keep the legend at the bottom of the start page. Give the pages `order:` values in the same sequence (start, architecture, core part pages, access, runbooks, issues, decisions, duties).
 
 ## runbooks.md
 
@@ -107,7 +125,7 @@ Three tables: what runs by itself (Duty | When | Where | What happens | If it fa
 
 ## architecture.md
 
-A table of the parts (name, address or location, what runs, ports), a `flow` diagram of the main request or deploy paths, a table of what the system talks to (System | Used for | How | Status), a short section on how the configuration or deployment is layered, and a note on infrastructure as code if it is outdated.
+A table of the parts (name, address or location, what runs, ports), a `flow` diagram of the main request or deploy paths, a section for the system's main action step by step (for a deployment tool: what is created, what is always, conditionally or on request included, which resources appear in the target system, and any optional mode the users can pick, with who has to prepare it), a table of what the system talks to (System | Used for | How | Status), a short section on how the configuration or deployment is layered, and a note on infrastructure as code if it is outdated.
 
 ## access.md
 

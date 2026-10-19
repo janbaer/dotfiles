@@ -28,6 +28,18 @@ From the first run (an Ansible and Terraform repository, October 2026). Read bef
 
 A Bun/TypeScript service with an MCP endpoint, run without the owner. Structure, chips and build held up. The issues page did not: four of its five high findings were absences the owner later explained in one line each (reads without a token are intended, no rate limit because one person uses it, user registration is the only way to get an account, the data directory is backed up on the host). The agent had written them as `{high}` and `{verified}`, as if the code could show intent. Keep such points as questions until the interview, see the rule in SKILL.md.
 
+## Third run: a Node.js deployment service plus a Go proxy (October 2026)
+
+Two repositories, the second one described by function only. What changed in the skill:
+
+- **Reading order.** The owner moved architecture, the core part page and access in front of runbooks, issues, decisions and duties. Colleagues who do not know the system need to understand it before they use a task list. The start page template, the page set table and the walkthrough now follow that order, and the start page ends with a legend of the chips.
+- **The main action belongs in the architecture page.** The owner asked for what happens when the tool's main action runs (namespace, always, with changes, on request, created resources, the optional isolated database). A parts table alone did not cover it.
+- **Owner reasons correct inferred ones.** Two reasons marked `{inferred}` or "not recorded" were wrong or incomplete (why unselected projects are proxied, why the service upgrades itself). Show the reason column to the owner before the final build.
+- **Live evidence settles code-reading doubts.** A claim from code and Helm knowledge (upgrade without flags resets values) was contradicted by the journal, `helm history` and `helm get values` of the production server. Keep such a claim `{inferred}`, hand the owner three or four read-only commands, and write down the observation, not an explanation you do not have.
+- **The owner may close a point without a cause.** Move it to the Done table with what was observed and why it was closed, and say that the cause is unknown.
+- **Repo copies of server files drift unseen.** A script lived in the repo, in two Ansible configurations and on the servers; the repo copy was obsolete. Ask where each server-side file comes from.
+- **Outdated README and `CLAUDE.md`:** if the owner wants them fixed, fix them and move the issue to Done instead of leaving it listed.
+
 ## Process notes
 
 - Time estimates: the converter and a three-page pilot took well under an hour, writing the pages is faster than the interview and the review. The real cost is the owner's review time, so make that easy: short pages, statuses visible, open questions listed.

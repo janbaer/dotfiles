@@ -41,7 +41,7 @@ The first word of the argument decides:
 5. **Cross-check** every answer against the code. A difference is either a fix to make or a known issue, never silently resolved. Ask for the reasons behind decisions in the first round: they are the part git does not hold.
 6. **Write** the pages in `docs/handover/*.md` using `references/markdown-conventions.md` and `references/page-templates.md`. Keep each page short, start it with an "In short" note, and put the walkthrough on the start page.
 7. **Build and verify.** Run `bun <skill dir>/scripts/build.ts docs/handover` (it writes `docs/handover/_site/`, checks every link and anchor, and exits 1 on a broken one). Run `--selftest` after a Bun update. Look at the rendered pages. Re-read the facts the pages lean on, and re-check the snapshot (commit, uncommitted changes), because repos change while you work.
-8. **Hand back.** List the open items, suggest ignoring `docs/handover/_site/` and keeping `docs/handover/_workspace/` out of the shared package, and draft commit messages. Close the interview handoff with `handoff done in docs/handover/_workspace`; the package is the result now, the handoff has nothing left to carry.
+8. **Hand back.** List the open items, suggest ignoring `docs/handover/_site/` and keeping `docs/handover/_workspace/` out of the shared package (check `git status` for staged `_site` files that were added before the ignore entry), and draft commit messages. Close the interview handoff with `handoff done in docs/handover/_workspace`; the package is the result now, the handoff has nothing left to carry.
 
 ## The page set
 
@@ -49,13 +49,15 @@ Aim for at most eight pages. Merge or drop one that would be nearly empty, and a
 
 | Page | Answers |
 |---|---|
-| `index.md` | What is this, what is its status, who uses it, the 15-minute walkthrough |
+| `index.md` | What is this, what is its status, who uses it, the 15-minute walkthrough, the legend of the chips |
+| `architecture.md` | What are the parts, how does a request or a deploy travel, what does the main action create, what does it depend on |
+| `access.md` | Which systems do I need, where do the credentials live (names only), who do I ask |
 | `runbooks.md` | How do I do the tasks I will actually do, and how do I know it worked |
 | `issues.md` | What is weak today, how bad, and what would I do about it |
-| `duties.md` | What runs by itself, what expires, who owns each, when may I touch it |
-| `architecture.md` | What are the parts, how does a request or a deploy travel, what does it depend on |
-| `access.md` | Which systems do I need, where do the credentials live (names only), who do I ask |
 | `decisions.md` | What changed recently, why, and what is planned next |
+| `duties.md` | What runs by itself, what expires, who owns each, when may I touch it |
+
+The order is the reading order: understanding first (architecture, core part pages, access), tasks and problems after. Use it for the start page cards, the walkthrough and the `order:` keys.
 
 Pages may carry the `toc: true` front matter key for an automatic table of contents. Diagrams use the `flow` block (see conventions).
 
