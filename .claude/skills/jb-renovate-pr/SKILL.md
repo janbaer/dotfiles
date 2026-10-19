@@ -43,9 +43,9 @@ PR bodies carry release notes and can be large, so the result may land in a file
 - The user answers with the number. Conflicting PRs stay selectable.
 - Exactly one: do not take it automatically, ask for a short confirmation.
 
-### 3. Conflict test
+### 3. Conflict test and merge result
 
-Nothing is checked out and nothing is pushed:
+Nothing is pushed, and the Renovate branch is never rebased or pushed: a foreign commit makes Renovate stop maintaining the branch.
 
 ```bash
 git fetch origin <base> <head>
@@ -53,6 +53,15 @@ git merge-tree --write-tree origin/<base> origin/<head>
 ```
 
 Exit code 1 means a conflict. Stop: "PR #N conflicts with <base>. Renovate has to rebase it." Never resolve it.
+
+Exit code 0 prints the tree of the merge result on its first line. Every test the file's `Before merge` section asks for runs on that merge result, not on the PR head: the head is based on the `<base>` of Renovate's last rebase, and only the merge result shows the update together with the current `<base>`. Turn the tree into a throwaway commit and check it out detached, with a clean working tree:
+
+```bash
+c=$(git commit-tree <tree> -p origin/<base> -p origin/<head> -m "renovate merge result")
+git checkout --detach "$c"
+```
+
+Return to the previous branch after the tests. The squash merge in step 7 still goes through Forgejo; the throwaway commit is never pushed.
 
 ### 4. CI
 
