@@ -52,6 +52,21 @@ Hermes' smart approval passes some flagged commands on its own; those never reac
 - Name the sources to use, ask for a URL per claim, and ask it to mark what it could not verify.
 - No secrets, no repository contents Jan has not agreed to send. The prompt reaches the server and the model provider behind it.
 
+## Reading Hermes state locally
+
+Hermes' data directory (`/opt/data` in the container) is mounted on this machine at `/mnt/zb-02-data/hermes-agent/data`. Read-only lookups go there, not to a run: they cost no tokens, need no approval, and return the live state instead of Hermes' memory of it.
+
+| What | Where under the mount |
+|---|---|
+| Gateway, webhook and agent logs | `logs/` (`gateway.log`, `agent.log`) |
+| Deploy log of hermes-scripts | `tmp/hermes-scripts-deploy.log` |
+| Cron jobs and their output | `cron/jobs.json`, `cron/output/`; per profile `profiles/<name>/cron/` |
+| Results of detached processes | `logs/process-results/` |
+| Sessions | `state.db`, `profiles/<name>/state.db` (SQLite, open read-only) |
+| Instructions and config | `SOUL.md`, `profiles/<name>/SOUL.md`, `config.yaml` |
+
+Never read `.env`, `auth.json` or anything else holding credentials. Write only when Jan asks for that specific file. A run is still the way for anything that needs Hermes' tools: Forgejo calls, git in its worktrees, starting work.
+
 ## Issue runs started by the webhook
 
 An issue assigned to hermes-agent is handed to the coder by the Forgejo webhook, in a session this skill does not own. Nothing reports its progress here.
