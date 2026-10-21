@@ -309,44 +309,6 @@ a.card:hover {
 .score { margin: 0; font: 500 .82rem/1.4 var(--mono); color: var(--muted); }
 .score:empty { display: none; }
 
-/* ---------- request-flow diagram ---------- */
-.flow {
-  margin: 1.5rem 0;
-  padding: 1.1rem 1.2rem 1rem;
-  background: var(--tint);
-  border: 1px solid var(--rule);
-  border-radius: 12px;
-}
-.flow-buttons { display: flex; flex-wrap: wrap; gap: .45rem; margin-bottom: 1rem; }
-.flow-buttons button {
-  padding: .3rem .85rem;
-  background: var(--surface);
-  border: 1px solid var(--rule-strong);
-  border-radius: 999px;
-  color: var(--ink-2);
-  font: 500 .78rem/1.4 var(--sans);
-  cursor: pointer;
-  transition: border-color .15s, background .15s, color .15s;
-}
-.flow-buttons button:hover { border-color: var(--accent); color: var(--accent); }
-.flow-buttons button.sel { background: var(--accent); border-color: var(--accent); color: #fff; }
-.flow-svg svg { display: block; width: 100%; height: auto; color: var(--muted); font: 13px var(--mono); }
-.flow .node rect { fill: var(--surface); stroke: var(--rule-strong); stroke-width: 1.5; transition: stroke .3s, fill .3s; }
-.flow .node text { fill: var(--ink); }
-.flow .node text.sub { fill: var(--muted); font-size: 10.5px; }
-.flow .node.lb rect { stroke: var(--ink); stroke-width: 2.5; }
-.flow .node.on rect { stroke: var(--accent); fill: var(--accent-soft); }
-.flow .node.bad rect { stroke: var(--bad); fill: #fdeeee; }
-.flow .edge { stroke: var(--rule-strong); stroke-width: 1.5; stroke-dasharray: 4 4; transition: stroke .3s; }
-.flow .edge.on { stroke: var(--accent); stroke-width: 2.5; stroke-dasharray: none; color: var(--accent); }
-.flow .edge.bad { stroke: var(--bad); stroke-width: 2.5; stroke-dasharray: none; color: var(--bad); }
-.flow .arrow { fill: var(--rule-strong); }
-.flow .arrow.on { fill: var(--accent); }
-.flow .arrow.bad { fill: var(--bad); }
-.flow-steps { margin: 1rem 0 0; padding-left: 1.5rem; font-size: .92rem; line-height: 1.55; }
-.flow-steps li { margin: .35rem 0; transition: opacity .3s; }
-.flow-steps li.pending { opacity: .3; }
-
 /* ---------- small screens, motion, print ---------- */
 @media (max-width: 44rem) {
   body { font-size: 16px; background: var(--surface); }
@@ -362,9 +324,7 @@ a.card:hover {
   table { display: block; overflow-x: auto; font-size: .86rem; }
   .tablewrap table { display: table; }
   th, td { padding: .55rem .5rem; }
-  .flow-svg { overflow-x: auto; }
-  .flow-svg svg { min-width: 34rem; }
-  .quiz, .flow { padding: 1rem; }
+  .quiz { padding: 1rem; }
   .hero-links a { font-size: .75rem; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -410,3 +370,7 @@ td:first-child code { white-space: nowrap; }
 .draft { margin: -1.4rem 0 2rem; font: 500 .74rem/1.5 var(--mono); color: #75440a; }
 .draft::before { content: ""; display: inline-block; width: .5rem; height: .5rem; margin-right: .5rem; border-radius: 50%; background: #e39500; box-shadow: 0 0 0 3px rgba(227, 149, 0, .22); }
 .chip.owner { --led: #1f4fd1; background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent-ink); }
+pre.mermaid { background: var(--mermaid-bg, #1c1c1e); border-radius: 10px; padding: 24px; overflow-x: auto; cursor: zoom-in; }
+dialog.mermaid-zoom { width: 95vw; max-height: 92vh; overflow: auto; padding: 24px; border: 0; border-radius: 10px; background: var(--mermaid-bg, #1c1c1e); }
+dialog.mermaid-zoom svg { width: 100%; max-width: none; height: auto; }
+dialog.mermaid-zoom::backdrop { background: rgba(15, 27, 44, .55); }

@@ -1,0 +1,19 @@
+{
+  "version": "11",
+  "background": "#1c1c1e",
+  "mermaid": {
+    "theme": "base",
+    "flowchart": { "curve": "rounded", "htmlLabels": true },
+    "themeVariables": {
+      "fontFamily": "ui-monospace, Menlo, Consolas, monospace",
+      "fontSize": "15px",
+      "background": "#1c1c1e",
+      "primaryColor": "#0d0d14",
+      "primaryTextColor": "#e8e8e8",
+      "primaryBorderColor": "#ffffff",
+      "lineColor": "#d0d0d0",
+      "textColor": "#e8e8e8",
+      "edgeLabelBackground": "#4a4a4c"
+    }
+  }
+}

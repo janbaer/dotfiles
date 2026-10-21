@@ -125,7 +125,7 @@ Three tables: what runs by itself (Duty | When | Where | What happens | If it fa
 
 ## architecture.md
 
-A table of the parts (name, address or location, what runs, ports), a `flow` diagram of the main request or deploy paths, a section for the system's main action step by step (for a deployment tool: what is created, what is always, conditionally or on request included, which resources appear in the target system, and any optional mode the users can pick, with who has to prepare it), a table of what the system talks to (System | Used for | How | Status), a short section on how the configuration or deployment is layered, and a note on infrastructure as code if it is outdated.
+A table of the parts (name, address or location, what runs, ports), a `mermaid` diagram of the main request or deploy paths, a section for the system's main action step by step (for a deployment tool: what is created, what is always, conditionally or on request included, which resources appear in the target system, and any optional mode the users can pick, with who has to prepare it), a table of what the system talks to (System | Used for | How | Status), a short section on how the configuration or deployment is layered, and a note on infrastructure as code if it is outdated.
 
 ## access.md
 

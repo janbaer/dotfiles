@@ -1,13 +1,13 @@
 #!/usr/bin/env bun
 // Markdown to static HTML for handover docs. Bun built-ins only, no packages, no network.
-// Usage: bun build.ts <docs-dir> [out-dir] [--allow-missing]
+// Usage: bun build.ts <docs-dir> [out-dir] [--allow-missing] [--serve]
 //        bun build.ts --selftest
 // Tested with Bun 1.3.14, self-test passes on 1.4.2. Bun.markdown is marked unstable upstream: run --selftest after a Bun update.
-import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, watch, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 type Meta = Record<string, string>;
-type Page = { name: string; meta: Meta; html: string; flow: boolean };
+type Page = { name: string; meta: Meta; html: string };
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const inline = (s: string) => s.replace(/`([^`]+)`/g, (_, c) => `<code>${esc(c)}</code>`);
@@ -34,12 +34,6 @@ function cardsHtml(src: string): string {
   return `<div class="cards">${cards.join("")}</div>`;
 }
 
-// ```flow: JSON for assets/flow.js (nodes, scenarios). Invalid JSON stops the build.
-function flowHtml(src: string): string {
-  const json = JSON.stringify(JSON.parse(src)).replace(/</g, "\\u003c");
-  return `<div class="flow"><div class="flow-buttons"></div><div class="flow-svg"></div><ol class="flow-steps"></ol><script type="application/json">${json}</script></div>`;
-}
-
 // {verified} or {verified: custom label} becomes a status chip. Code spans and blocks are left alone.
 const CHIPS = "verified|inferred|unverified|partial|owner|high|medium|low|done";
 const CHIP_LABELS: Record<string, string> = { verified: "Verified", inferred: "Inferred", unverified: "Unverified", partial: "Partial", owner: "Per owner", high: "High", medium: "Medium", low: "Low", done: "Done" };
@@ -51,12 +45,10 @@ function chips(html: string): string {
     .join("");
 }
 
-export function renderBody(body: string): { html: string; flow: boolean } {
+export function renderBody(body: string): string {
   const blocks: string[] = [];
-  let flow = false;
-  const text = body.replace(/^```(flow|cards)\n([\s\S]*?)\n```$/gm, (_, kind: string, src: string) => {
-    if (kind === "flow") flow = true;
-    blocks.push(kind === "flow" ? flowHtml(src) : cardsHtml(src));
+  const text = body.replace(/^```cards\n([\s\S]*?)\n```$/gm, (_, src: string) => {
+    blocks.push(cardsHtml(src));
     return `@@BLOCK${blocks.length - 1}@@`;
   });
   let html: string = (Bun as any).markdown.html(text, { headings: { ids: true } });
@@ -72,16 +64,15 @@ export function renderBody(body: string): { html: string; flow: boolean } {
   html = chips(html);
   html = html.replace(/href="((?!https?:|mailto:|#)[^"]*?)\.md(#[^"]*)?"/g, 'href="$1.html$2"');
   html = html.replace(/<table>/g, '<div class="tablewrap"><table>').replace(/<\/table>/g, "</table></div>");
-  return { html, flow };
+  return html;
 }
 
 export function renderPage(name: string, text: string): Page {
   const { meta, body } = frontMatter(text);
-  const { html, flow } = renderBody(body);
-  return { name, meta, html, flow };
+  return { name, meta, html: renderBody(body) };
 }
 
-export function assemble(page: Page, pages: Page[], status: string): string {
+export function assemble(page: Page, pages: Page[], status: string, mermaidConfig: string): string {
   const nav = [...pages]
     .sort((a, b) => Number(a.meta.order ?? 99) - Number(b.meta.order ?? 99) || a.name.localeCompare(b.name))
     .map((p) => `<a href="${p.name}.html"${p.name === page.name ? ' aria-current="page"' : ""}>${esc(p.meta.nav ?? p.meta.title ?? p.name)}</a>`)
@@ -105,7 +96,7 @@ ${main}
 <nav class="pkg" aria-label="Handover pages">${nav}</nav>
 ${body}
 </main>
-${page.flow ? '<script src="assets/flow.js"></script>\n' : ""}</body>
+${page.html.includes('class="language-mermaid"') ? `<script type="application/json" id="mermaid-config">${mermaidConfig}</script>\n<script src="assets/mermaid.js"></script>\n` : ""}</body>
 </html>
 `;
 }
@@ -140,12 +131,58 @@ function build(src: string, out: string, allowMissing: boolean): number {
   if (!pages.some((p) => p.name === "index")) throw new Error(`${src}/index.md is missing`);
   const status = pages.find((p) => p.name === "index")!.meta.status ?? "Draft";
   mkdirSync(join(out, "assets"), { recursive: true });
-  for (const f of ["style.css", "flow.js"]) copyFileSync(join(here, "..", "assets", f), join(out, "assets", f));
-  for (const p of pages) writeFileSync(join(out, `${p.name}.html`), assemble(p, pages, status));
+  for (const f of ["style.css", "mermaid.js"]) copyFileSync(join(here, "..", "assets", f), join(out, "assets", f));
+  // Project override: <docs-dir>/mermaid.json replaces the skill's default look.
+  const cfgFile = existsSync(join(src, "mermaid.json")) ? join(src, "mermaid.json") : join(here, "..", "assets", "mermaid-config.json");
+  const mermaidConfig = JSON.stringify(JSON.parse(readFileSync(cfgFile, "utf8"))).replace(/</g, "\\u003c");
+  for (const p of pages) writeFileSync(join(out, `${p.name}.html`), assemble(p, pages, status, mermaidConfig));
   const problems = check(out, allowMissing);
   problems.forEach((p) => console.error("BROKEN", p));
   console.log(`${pages.length} pages -> ${out}${problems.length ? `, ${problems.length} broken links` : ", links ok"}`);
   return problems.length ? 1 : 0;
+}
+
+// --serve: rebuild on every change of a page or mermaid.json and reload the open tabs via server-sent events.
+// The reload script is injected while serving, so _site/ stays clean for handing out.
+function serve(src: string, out: string, allowMissing: boolean): void {
+  const clients = new Set<ReadableStreamDefaultController>();
+  const reload = '<script>new EventSource("/__reload").onmessage = () => location.reload();</script>';
+  build(src, out, allowMissing);
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  watch(src, (_, f) => {
+    if (!f || !/\.(md|json)$/.test(f)) return;
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      try {
+        build(src, out, allowMissing);
+      } catch (e) {
+        console.error(`error: ${(e as Error).message}`);
+      }
+      for (const c of clients) c.enqueue("data: reload\n\n");
+    }, 100);
+  });
+  const fetch = async (req: Request) => {
+    const path = new URL(req.url).pathname;
+    if (path === "/__reload") {
+      let ctl: ReadableStreamDefaultController;
+      const stream = new ReadableStream({ start: (c) => void clients.add((ctl = c)), cancel: () => void clients.delete(ctl) });
+      return new Response(stream, { headers: { "Content-Type": "text/event-stream", "Cache-Control": "no-cache" } });
+    }
+    const name = path === "/" ? "/index.html" : decodeURIComponent(path);
+    const file = Bun.file(join(out, name));
+    if (!(await file.exists())) return new Response("not found", { status: 404 });
+    if (!name.endsWith(".html")) return new Response(file);
+    return new Response((await file.text()).replace("</body>", `${reload}\n</body>`), { headers: { "Content-Type": "text/html; charset=utf-8" } });
+  };
+  for (let port = 8421; ; port++) {
+    try {
+      const server = Bun.serve({ port, hostname: "127.0.0.1", idleTimeout: 0, fetch });
+      console.log(`serving ${out} on http://localhost:${server.port}/ (Ctrl-C stops)`);
+      return;
+    } catch (e) {
+      if (port >= 8430) throw e;
+    }
+  }
 }
 
 function selftest(): number {
@@ -155,10 +192,10 @@ function selftest(): number {
     "> [!note]", "> A callout.", "", "> [!source]", "> Source: x.", "",
     "```bash", "echo hi | tee log", "```", "",
     "```cards", "Runbooks | runbooks.md | Do things", "```", "",
-    "```flow", '{"viewBox":"0 0 10 10","nodes":[],"scenarios":[]}', "```", "",
+    "```mermaid", "graph LR", "  A --> B", "```", "",
     "1. one", "   - nested", "2. two", "", "Status {verified} and {partial: Custom label}, but `{verified}` in code stays.", "", "## Second part",
   ].join("\n");
-  const { html, flow } = renderBody(sample);
+  const html = renderBody(sample);
   const expect: [string, boolean][] = [
     ["table wrapped", html.includes('<div class="tablewrap"><table>')],
     ["chip kept in table", html.includes('<td><span class="chip verified">Verified</span></td>')],
@@ -166,13 +203,13 @@ function selftest(): number {
     ["source line", html.includes('<p class="src">Source: x.</p>')],
     ["code language", html.includes('class="language-bash"')],
     ["cards", html.includes('<a class="card" href="runbooks.html">')],
-    ["flow block", flow && html.includes('<div class="flow">')],
+    ["mermaid block", html.includes('<code class="language-mermaid">')],
     ["link rewritten", html.includes('href="other.html#part"')],
     ["heading id", html.includes('<h2 id="second-part">')],
     ["nested list", html.includes("<li>nested</li>")],
     ["chip shortcode", html.includes('<span class="chip verified">Verified</span> and <span class="chip partial">Custom label</span>')],
     ["chip in code untouched", html.includes("<code>{verified}</code>")],
-    ["toc", assemble({ name: "t", meta: { toc: "true" }, html, flow }, [], "Draft").includes('<ol class="toc"><li><a href="#second-part">Second part</a></li></ol>')],
+    ["toc", assemble({ name: "t", meta: { toc: "true" }, html }, [], "Draft", "{}").includes('<ol class="toc"><li><a href="#second-part">Second part</a></li></ol>')],
   ];
   const failed = expect.filter(([, ok]) => !ok);
   failed.forEach(([name]) => console.error("SELFTEST FAIL", name));
@@ -188,11 +225,13 @@ if (import.meta.main) {
   // No folder given: use ./docs when it holds an index.md, else the current folder.
   const src = pos[0] ?? (existsSync("docs/handover/index.md") ? "docs/handover" : existsSync("index.md") ? "." : "");
   if (!src) {
-    console.error("error: no index.md found. Pass the docs folder, or run from the repository root or from inside docs/handover/.\nusage: bun build.ts [docs-dir] [out-dir] [--allow-missing] | --selftest");
+    console.error("error: no index.md found. Pass the docs folder, or run from the repository root or from inside docs/handover/.\nusage: bun build.ts [docs-dir] [out-dir] [--allow-missing] [--serve] | --selftest");
     process.exit(2);
   }
   try {
-    process.exit(build(src, pos[1] ?? join(src, "_site"), flags.includes("--allow-missing")));
+    const out = pos[1] ?? join(src, "_site");
+    if (flags.includes("--serve")) serve(src, out, flags.includes("--allow-missing"));
+    else process.exit(build(src, out, flags.includes("--allow-missing")));
   } catch (e) {
     console.error(`error: ${(e as Error).message}`);
     process.exit(2);
