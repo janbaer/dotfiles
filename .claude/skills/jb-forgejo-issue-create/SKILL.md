@@ -57,6 +57,7 @@ Use the `AskUserQuestion` tool to collect each field **one at a time**, in the o
 4. **Motivation** *(free text)* — "Why does this matter? What problem does it solve?"
 5. **Requirement** *(free text)* — only if `docs/requirements.md` exists in the repo, otherwise skip it. "Which requirement does this serve? Give the IDs (R3, R7), `New: <one sentence>` for a requirement that does not exist yet, or `None`." Show the existing requirements as a short list to choose from. Only the reference goes into the issue, never the text of an existing requirement: two copies drift apart.
 6. **Acceptance Criteria** *(free text)* — "What checks must be fulfilled before this issue can be accepted? List them one per line."
+   A step that lives on a host rather than in the repository (a cron job, an installed skill, a proxy route, an `.env` entry) is written as "created and verified by <who>", never as "documented". When the implementer cannot do it inside the change, the criterion names who does it after the merge. A documented-only cron job once left a whole automation idle on its first morning.
 7. **How to Test** *(free text)* — "How can this be verified once implemented?"
 8. **Hermes** *(single select)* — `Assign to hermes-agent` (Hermes implements it and opens the PR without asking) / `Leave for Claude`
 9. **Claude** *(single select)* — only when the issue is left for Claude. `Needs feedback first` (stop and ask before implementing) / `Auto-implement` (Claude can start right away)
