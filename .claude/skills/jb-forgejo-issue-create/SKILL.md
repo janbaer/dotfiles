@@ -25,17 +25,17 @@ git remote get-url origin
 
 ### 2. Fetch Available Labels
 
-Before asking any questions, fetch label IDs by inspecting a sample of open issues:
+Before asking any questions, list the repository's labels:
 
 ```
-list_repo_issues(owner, repo, type="issues", state="open")
+list_repo_labels(owner, repo)
 ```
 
-Collect label names and their numeric IDs from the results.
+Collect label names and their numeric IDs. Do not inspect issues for this: their bodies make the result huge.
 
 > **Important:** Labels are passed to Forgejo as **numeric IDs**, not strings. Always resolve label names to IDs before creating the issue.
 
-If no labels can be discovered, create the issue without labels.
+Every repository has Forgejo's default label set (`bug`, `enhancement`, `question`, …). Map IssueType `Bug` → `bug`, `Improvement` → `enhancement`, `Idea` → `idea`. `Idea`, `Future` and the Severity values get a label only where one with that name exists.
 
 ### 3. Explore the Issue with grill-me
 
