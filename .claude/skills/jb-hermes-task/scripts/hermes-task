@@ -3,20 +3,29 @@
 set -euo pipefail
 
 URL="${HERMES_AGENT_URL:-https://agent.home.janbaer.de}"
+PROFILE="${HERMES_PROFILE:-}"
 INTERVAL=30
 MAX_WAIT=1800
 
 usage() {
   cat >&2 <<USAGE
 Usage:
-  hermes-task start <prompt-file|-> [session]   start a run, print the run_id
-  hermes-task status <run_id>         print the run state as JSON
-  hermes-task wait <run_id> [max_s]   poll until the run ends, print its output
-  hermes-task stop <run_id>           cancel a run
+  hermes-task [-p profile] start <prompt-file|-> [session]   start a run, print the run_id
+  hermes-task [-p profile] status <run_id>         print the run state as JSON
+  hermes-task [-p profile] wait <run_id> [max_s]   poll until the run ends, print its output
+  hermes-task [-p profile] approve <run_id> once|deny   answer the pending approval
+  hermes-task [-p profile] stop <run_id>           cancel a run
+-p (or HERMES_PROFILE) runs against /p/<profile>/v1 instead of /v1.
 Needs HERMES_AGENT_API_KEY. HERMES_AGENT_URL overrides the server.
 USAGE
   exit 2
 }
+
+if [[ "${1:-}" == "-p" ]]; then
+  PROFILE="${2:-}"
+  shift 2 || usage
+fi
+BASE="${PROFILE:+/p/$PROFILE}/v1"
 
 [[ -n "${HERMES_AGENT_API_KEY:-}" ]] || { echo "HERMES_AGENT_API_KEY is not set" >&2; exit 1; }
 
@@ -44,23 +53,32 @@ case "$cmd" in
   start)
     [[ "$arg" == "-" ]] && arg=/dev/stdin
     prompt=$(<"$arg")
-    call_ok POST /v1/runs -d "$(jq -n --arg input "$prompt" --arg session "${3:-}" \
+    call_ok POST "$BASE/runs" -d "$(jq -n --arg input "$prompt" --arg session "${3:-}" \
       '{input: $input} + (if $session == "" then {} else {session_id: $session} end)')"
     jq -er '.run_id' <<<"$BODY"
     ;;
   status)
-    call_ok GET "/v1/runs/$arg"
+    call_ok GET "$BASE/runs/$arg"
+    jq . <<<"$BODY"
+    ;;
+  approve)
+    choice="${3:-}"
+    [[ "$choice" == once || "$choice" == deny ]] || usage
+    call_ok GET "$BASE/runs/$arg"
+    request=$(jq -r '.approval.request_id // empty' <<<"$BODY")
+    [[ -n "$request" ]] || { echo "No pending approval on $arg (status: $(jq -r .status <<<"$BODY"))" >&2; exit 1; }
+    call_ok POST "$BASE/runs/$arg/approval" -d "$(jq -n --arg c "$choice" --arg r "$request" '{choice: $c, request_id: $r}')"
     jq . <<<"$BODY"
     ;;
   stop)
-    call_ok POST "/v1/runs/$arg/stop"
+    call_ok POST "$BASE/runs/$arg/stop"
     jq . <<<"$BODY"
     ;;
   wait)
     max="${3:-$MAX_WAIT}"
     end=$(( $(date +%s) + max ))
     while (( $(date +%s) < end )); do
-      if call GET "/v1/runs/$arg"; then
+      if call GET "$BASE/runs/$arg"; then
         case "$CODE" in
           200)
             status=$(jq -r '.status // empty' <<<"$BODY" || true)
@@ -69,7 +87,11 @@ case "$cmd" in
                 jq -r '.output' <<<"$BODY"
                 exit 0
                 ;;
-              running|started|queued) ;;
+              waiting_for_approval)
+                jq '{run_id, status, approval: {request_id: .approval.request_id, command: .approval.command, description: .approval.description, choices: .approval.choices}}' <<<"$BODY"
+                exit 4
+                ;;
+              running|started|queued|stopping) ;;
               *)
                 echo "Run ended with status: ${status:-none}" >&2
                 echo "$BODY" >&2
