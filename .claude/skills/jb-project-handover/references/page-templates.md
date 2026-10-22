@@ -18,7 +18,6 @@ The snapshot line is the anchor for later updates: `update` diffs the repo from 
 title: <Project>: handover
 nav: Start
 order: 1
-layout: wide
 status: Draft — <date>
 ---
 

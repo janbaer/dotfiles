@@ -38,11 +38,16 @@ function cardsHtml(src: string): string {
 const CHIPS = "verified|inferred|unverified|partial|owner|high|medium|low|done";
 const CHIP_LABELS: Record<string, string> = { verified: "Verified", inferred: "Inferred", unverified: "Unverified", partial: "Partial", owner: "Per owner", high: "High", medium: "Medium", low: "Low", done: "Done" };
 function chips(html: string): string {
-  const re = new RegExp(`\\{(${CHIPS})(?::\\s*([^}]+))?\\}`, "g");
+  const re = new RegExp(`<code>[\\s\\S]*?<\\/code>|\\{(${CHIPS})(?::\\s*((?:<code>[\\s\\S]*?<\\/code>|[^}])+?))?\\}`, "g");
   return html
-    .split(/(<pre[\s\S]*?<\/pre>|<code>[\s\S]*?<\/code>)/)
-    .map((seg, i) => (i % 2 ? seg : seg.replace(re, (_, k: string, label?: string) => `<span class="chip ${k}">${label ?? CHIP_LABELS[k]}</span>`)))
+    .split(/(<pre[\s\S]*?<\/pre>)/)
+    .map((seg, i) => (i % 2 ? seg : seg.replace(re, (m, k?: string, label?: string) => (k ? `<span class="chip ${k}">${label ?? CHIP_LABELS[k]}</span>` : m))))
     .join("");
+}
+
+// A paragraph with more than 3 chips holds several claims and reads better as a list.
+export function denseParagraphs(html: string): number {
+  return [...html.matchAll(/<p>([\s\S]*?)<\/p>/g)].filter((m) => (m[1].match(/class="chip /g) ?? []).length > 3).length;
 }
 
 export function renderBody(body: string): string {
@@ -82,7 +87,7 @@ export function assemble(page: Page, pages: Page[], status: string, mermaidConfi
   const heads = [...page.html.matchAll(/<h2 id="([^"]+)">([\s\S]*?)<\/h2>/g)];
   const toc = page.meta.toc === "true" && heads.length ? `<ol class="toc">${heads.map((h) => `<li><a href="#${h[1]}">${h[2]}</a></li>`).join("")}</ol>` : "";
   const body = page.html.replace("</h1>", `</h1>\n${summary}\n${draft}\n${toc}`);
-  const main = page.meta.layout === "wide" ? '<main class="wide">' : "<main>";
+  const main = page.meta.layout === "narrow" ? "<main>" : '<main class="wide">';
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -128,6 +133,10 @@ export function check(out: string, allowMissing: boolean): string[] {
 function build(src: string, out: string, allowMissing: boolean): number {
   const here = import.meta.dir;
   const pages = readdirSync(src).filter((f) => f.endsWith(".md")).map((f) => renderPage(f.replace(/\.md$/, ""), readFileSync(join(src, f), "utf8")));
+  for (const p of pages) {
+    const n = denseParagraphs(p.html);
+    if (n) console.warn(`${p.name}.md: ${n} paragraph(s) with more than 3 status chips, make them a list`);
+  }
   if (!pages.some((p) => p.name === "index")) throw new Error(`${src}/index.md is missing`);
   const status = pages.find((p) => p.name === "index")!.meta.status ?? "Draft";
   mkdirSync(join(out, "assets"), { recursive: true });
@@ -209,6 +218,8 @@ function selftest(): number {
     ["nested list", html.includes("<li>nested</li>")],
     ["chip shortcode", html.includes('<span class="chip verified">Verified</span> and <span class="chip partial">Custom label</span>')],
     ["chip in code untouched", html.includes("<code>{verified}</code>")],
+    ["chip label with code", renderBody("A {verified: `a.tf`} b.").includes('<span class="chip verified"><code>a.tf</code></span>')],
+    ["dense paragraph", denseParagraphs(renderBody("a {verified} b {owner} c {verified} d {inferred}.")) === 1],
     ["toc", assemble({ name: "t", meta: { toc: "true" }, html }, [], "Draft", "{}").includes('<ol class="toc"><li><a href="#second-part">Second part</a></li></ol>')],
   ];
   const failed = expect.filter(([, ok]) => !ok);

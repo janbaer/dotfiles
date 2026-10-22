@@ -17,7 +17,7 @@ Tested with Bun 1.3.14, self-test passes on 1.4.2. `Bun.markdown` is marked unst
 title: Runbooks            # browser title
 nav: Runbooks              # label in the navigation (default: title)
 order: 3                   # position in the navigation
-layout: wide               # optional, wider page (start page, tables)
+layout: narrow             # optional, the default is the wide page
 summary: One line shown in small type under the heading.
 toc: true                  # optional, table of contents from the H2 headings
 status: Draft — 2026-10-09 # index.md only: shown as the status line on every page
@@ -36,6 +36,26 @@ The status line text comes from `date`, never from memory.
 - **Links:** between pages `other.md#heading-id`, rewritten to `.html`. Heading ids are made from the heading text in lower case with hyphens (`## Restore from a backup (draft)` is `#restore-from-a-backup-draft`). The build fails on a missing anchor.
 - **External URLs:** write `[https://host](https://host)`. A URL in backticks stays plain code text and is not clickable.
 - **Code blocks:** plain fenced blocks. Commands you want copied go in a block, not in a sentence.
+
+## Lists instead of dense paragraphs
+
+A paragraph that carries several claims is hard to scan and hides which chip belongs to which fact. Turn it into a list: one fact per item, one chip per item, the current state first, the history ("before, X") last. A source goes into the chip label: `{verified: \`terraform/nat-rules.tf\`}`.
+
+Before:
+
+```markdown
+SSH goes through HAProxy since 2026-10-15 {verified}. The public address is translated to the VIP; before, it went straight to the jump host {verified}. HAProxy forwards the raw stream, so the login still happens on the jump host {inferred}.
+```
+
+After:
+
+```markdown
+SSH to the jump host goes through HAProxy since 2026-10-15 {verified}:
+
+- Public address `46.30.5.58:44022` is translated to the VIP `10.2.201.101` {verified: `terraform/nat-rules.tf`}.
+- HAProxy forwards the raw TCP stream, so key and TOTP login still happen on `bu-dev-ssh-01` {inferred}.
+- Before, `46.30.5.57` was translated straight to `10.2.201.190` {verified}.
+```
 
 ## Mermaid look
 
