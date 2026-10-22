@@ -85,7 +85,7 @@ Use when an issue or a conversation touches a requirement or a decision. Input: 
 Who confirms what:
 - **A new requirement the issue states in its own words:** take it over, no question.
 - **Changing or dropping an existing requirement:** always ask. Requirements are Jan's, and a silent rewording hides a scope change.
-- **A design entry:** draft it from what the implementation actually did. When called from `forgejo-issue-implement` under `Auto-implement`, write it without asking and name it in the final notification, so Jan reviews it in the PR.
+- **A design entry:** draft it from what the implementation actually did. When called from `forgejo-issue-implement` for an issue that is not blocked, write it without asking and name it in the final notification, so Jan reviews it in the PR.
 
 Commit the document changes with the code of the issue, in the same PR.
 

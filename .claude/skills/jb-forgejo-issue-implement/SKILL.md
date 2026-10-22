@@ -100,7 +100,7 @@ Check `state` in the response. If `state != "open"`, stop and inform the user th
 list_repo_issues(owner, repo, state="open")
 ```
 
-Leave out issues whose `assignees` include `hermes-agent`; the MCP tools cannot filter by assignee, so check the field on each result. Show a numbered summary of the rest. Ask the user which to work on. **This is the only point where user input is required.**
+Leave out issues whose `assignees` include `hermes-agent`; the MCP tools cannot filter by assignee, so check the field on each result. Show a numbered summary of the rest, and mark the ones labelled `blocked`. Ask the user which to work on. **This is the only point where user input is required.**
 
 ### 2. Read the issue
 
@@ -129,19 +129,19 @@ Write a short plan from the issue: approach and files to touch. Keep it as long 
 
 ### 4a. Requirements and design
 
-If the repo has `docs/requirements.md`, run the **forgejo-project-interview** skill in `update` mode with this issue number, after the plan exists and before implementing. It decides whether the `## Requirement` section of the issue adds, changes or drops a requirement and whether a design decision was made. The document changes belong in the same commit series as the code and end up in the same PR. Under `Auto-implement` it asks only before changing or dropping an existing requirement.
+If the repo has `docs/requirements.md`, run the **forgejo-project-interview** skill in `update` mode with this issue number, after the plan exists and before implementing. It decides whether the `## Requirement` section of the issue adds, changes or drops a requirement and whether a design decision was made. The document changes belong in the same commit series as the code and end up in the same PR. For an issue that is not blocked it asks only before changing or dropping an existing requirement.
 
-### 5. Evaluate clarity and check implementation mode
+### 5. Evaluate clarity and check whether the issue is blocked
 
-After the plan exists (step 4), re-read the **`## Implementation`** section from the issue body (fetched in step 2) to determine the Claude field value.
+After the plan exists (step 4), check the issue's labels (fetched in step 2). An issue is blocked when it carries the `blocked` label, or, for issues created before the label existed, when its body has `Claude: Needs feedback first`.
 
-**If `Claude: Needs feedback first`:**
-- Present the plan (proposed approach, design decisions, steps) to the user in a clear summary
-- Explain your understanding of the problem and how you intend to solve it
-- Wait for the user's confirmation or corrections before proceeding
-- Only continue to step 6 once the user has approved the approach
+**If blocked:**
+- Show what blocks it: the latest comment that starts with `Blocked:`, or the open point in the body
+- Present the plan (proposed approach, design decisions, steps) and how it depends on that open point
+- Wait for the user's answer or corrections before proceeding
+- Once the user has resolved it, remove the `blocked` label (`remove_issue_labels`) and continue to step 6
 
-**If `Claude: Auto-implement`:**
+**If not blocked:**
 - Assess whether the plan is clear enough to implement without asking the user
 - **Clear** → proceed to implementation without pausing
 - **Not clear** → commit what exists, push the branch, then explain to the user what is ambiguous and what decision is needed
@@ -191,3 +191,4 @@ The skill ends here. Archive and PR creation are handled by `/forgejo-issue-fini
 | `list_repo_issues` | Browse open issues |
 | `get_issue_by_index` | Read issue details or validate state |
 | `list_issue_comments` | Read issue discussion |
+| `remove_issue_labels` | Drop `blocked` once the open point is resolved |
