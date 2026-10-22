@@ -62,7 +62,7 @@ Use the `AskUserQuestion` tool to collect each field **one at a time**, in the o
 8. **Hermes** *(single select)* — `Assign to hermes-agent` (Hermes implements it and opens the PR without asking) / `Leave for Claude`
 9. **Ready** *(single select)* — only when the issue is left for Claude. `Ready` (Claude can start right away) / `Blocked` (an answer, a decision or another issue is still open; ask what, in one or two sentences)
 
-**The Ready field (#9) is mandatory for every issue left for Claude.** `Blocked` sets the `blocked` label and posts what is open as a comment; `Ready` sets no label. Nothing goes into the body. An issue assigned to hermes-agent is never blocked: the assignment already means "start now", and an issue Hermes cannot start right away is not assigned to it.
+**The Ready field (#9) is mandatory for every issue left for Claude.** `Blocked` sets the `blocked` label and posts what is open as a comment; `Ready` sets no label. Nothing goes into the body. An issue assigned to hermes-agent is never blocked: the assignment already means "start now", and an issue Hermes cannot start right away is not assigned to it. To hand an existing blocked issue to Hermes later, remove `blocked` first, then assign it.
 
 Offer `Assign to hermes-agent` only when every check below passes. Otherwise skip #8, leave the issue for Claude, and say in one line which check failed.
 
