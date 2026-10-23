@@ -13,7 +13,7 @@ Work the tree in **rounds**. The **frontier** is every decision whose prerequisi
 
 **Ask with the `AskUserQuestion` tool, with prepared answers.** The user walks through the questions one by one in a selection box, so none is forgotten and most are one keypress. Rules:
 
-- Up to 5 interview questions per call, plus the pause question (see **Pausing and continuing**). A round with more questions goes out as several calls in a row, until every frontier question has been asked. Do not wait for the user to ask for the rest.
+- Up to 4 questions per call: that is the limit of the tool. Fill each call with interview questions. The pause question (see **Pausing and continuing**) takes one slot, so a call with it holds only 3 interview questions. A round with more questions goes out as several calls in a row, until every frontier question has been asked. Do not wait for the user to ask for the rest.
 - Number each question in its text (`Q1: ...`) so the answers can be recorded and referred to later. The `header` is a 1-2 word label.
 - Give 2 to 4 prepared answers per question. Your recommended answer comes first and ends with `(Recommended)`. The other options are the real alternatives, never filler. The description of each option says what follows from choosing it.
 - The built-in "Other" is the way to give a name, a number, a channel or a correction. A question that only needs a fact from the user ("what is the entry called?") still gets a recommended option where there is a sensible default; otherwise ask it in plain text after the selection boxes.
@@ -28,7 +28,7 @@ The session is done when the frontier is empty: every branch of the design tree 
 
 ## Pausing and continuing
 
-Long interviews get interrupted. Make the last question of every call a pause question, header `Pause`, with the options `Continue (Recommended)` and `Pause and write handoff`. It is answered together with the block, so pausing costs no extra round trip. Leave it out of the final call of the interview.
+Long interviews get interrupted. Add a pause question as the last question of a call when the interview questions asked since the start or since the last pause question, including the ones in this call, reach 5 or more. Header `Pause`, options `Continue (Recommended)` and `Pause and write handoff`. It is answered together with the block, so pausing costs no extra round trip. Calls without a pause question hold 4 interview questions. Leave the pause question out of the final call of the interview.
 
 On `Pause and write handoff`, record the answers of that call first, then create a handoff with the `handoff` skill, bare `in` so it lands in the current directory, and add the tag `grill-me` to the frontmatter. The handoff carries what the generic summary would lose:
 
