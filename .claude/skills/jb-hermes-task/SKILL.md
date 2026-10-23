@@ -65,7 +65,7 @@ Hermes' data directory (`/opt/data` in the container) is mounted on this machine
 | Sessions | `state.db`, `profiles/<name>/state.db` (SQLite, open read-only) |
 | Instructions and config | `SOUL.md`, `profiles/<name>/SOUL.md`, `config.yaml` |
 
-Never read `.env`, `auth.json` or anything else holding credentials. Write only when Jan asks for that specific file. A run is still the way for anything that needs Hermes' tools: Forgejo calls, git in its worktrees, starting work.
+Never read `.env`, `auth.json` or anything else holding credentials. Do not write to Hermes' scripts (see "Changing Hermes scripts"); write other files only when Jan asks for that specific file. A run is still the way for anything that needs Hermes' tools: Forgejo calls, git in its worktrees, starting work.
 
 ## Issue runs started by the webhook
 
@@ -74,6 +74,16 @@ An issue assigned to hermes-agent is handed to the coder by the Forgejo webhook,
 - **Status:** start a `-p coder` run in a new session and ask it, read-only, for the issue's run: process state and the end of its output, `BLOCKED`/`PARTIAL`, worktree, branch, commits, PR and reviews, and the real session id from `/opt/data/profiles/coder/state.db`. Do this when no branch or PR shows up after about 20 minutes, instead of waiting longer.
 - **Continue it:** pass that session id (for example `20261020_072927_ac9b1b`) to `start`. The run then has the full history. The conversation name (`hermes-scripts-issue-57`) does not work: it opens a new, empty session.
 - Write into such a session only after its process has ended. A second writer interleaves turns with the running coder, and neither sees the other's latest step.
+
+## Changing Hermes scripts
+
+A change to a script Hermes runs (for example `renovate_sweep.py`) goes through an issue in the `hermes-scripts` project, never through an edit in the data directory or a direct run. This is the official way, also for a one-line change.
+
+1. Create the issue (`jb-forgejo-issue-create`) and assign it to `hermes-agent`.
+2. The webhook hands it to the coder shortly after the assignment, who implements it and opens a PR. Nothing else has to be sent to the coder.
+3. The PR has to be tried out. Hermes merges it only once two people approved it; the second approval is currently Jan's.
+
+Editing the script in place conflicts with the coder's worktrees and the deployed copy. Do not offer a shortcut, and do not start a `-p coder` run to make the change directly.
 
 ## Rules
 
