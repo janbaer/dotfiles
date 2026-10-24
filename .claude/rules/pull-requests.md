@@ -5,6 +5,10 @@ report. This holds for every pull request, on Forgejo as much as on GitHub or Gi
 and again before pushing a follow-up commit to a PR that is already open. The
 one exception is Forgejo, covered under "After the PR is open" below.
 
+This applies once a PR exists. Whether one is opened at all is decided by
+`git-branching.md`: a trivial change in a repo Jan owns, such as a version or
+image-tag bump he starts himself, goes directly on the default branch.
+
 ## Scale the check to the change
 
 Judge by what the change does, not only by its size. `git diff --shortstat

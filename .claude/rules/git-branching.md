@@ -16,6 +16,8 @@ A commit on a local integration branch carries baggage from that branch: it cann
 
 Not a fixed rule: the process scales with the change. A trivial change in a repo Jan owns (one value, an address, a typo) is committed directly on the default branch, with no feature branch and no review pair. Larger changes get the full workflow. When unsure which side a change falls on, ask.
 
+A version or image-tag bump that Jan starts himself in a repo he owns counts as trivial: it goes directly on the default branch, with the CHANGELOG entry (if it earns one) in the same commit. No branch, no PR, no reviewer. This holds for all of Jan's own repos, which are all private projects, and it holds even when an issue exists. Renovate PRs are the exception. They already exist as PRs and have their own skill.
+
 ## Branch names
 
 Every branch starts with `feature/`: `feature/{N}-{slug}` when an issue exists, `feature/{slug}` otherwise. No `chore/`, `fix/` or other prefixes, whatever the kind of change.
