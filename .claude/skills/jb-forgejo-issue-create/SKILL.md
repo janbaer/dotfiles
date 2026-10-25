@@ -66,13 +66,13 @@ Use the `AskUserQuestion` tool to collect each field **one at a time**, in the o
 
 Offer `Assign to hermes-agent` only when every check below passes. Otherwise skip #8, leave the issue for Claude, and say in one line which check failed.
 
-- **Files:** you can name the files that will change, and there are at most 3 (tests included).
-- **Scope:** no new dependency, no schema migration, no change to a public API or a config format.
+- **Clear:** the issue has no open question, and the Requirement field is `None` or a reference to an existing ID (a `New:` requirement needs Jan). Hermes can ask for feedback, but an issue that depends on it is not ready.
+- **Testable by Hermes:** every acceptance criterion has a check Hermes can run unattended in its worktree, such as a command, a test, an exit code or an HTTP status, and "How to Test" is a list of such commands. A database or an external service is fine when it can be mocked. A browser, a visual check, a human review, or anything that only exists on a host (a cron job, a proxy route, an `.env` entry, a restart) fails this. Special infrastructure counts as host state.
 - **Agent files:** no acceptance criterion requires editing `CLAUDE.md`, `AGENTS.md` or anything under `.claude/`. Hermes is not allowed to touch them, and without this check it ships the PR with the criterion open. When the change needs such an edit, drop that point from the criteria and tell Jan it gets done at merge time.
-- **Decisions:** no open design question from the interview, and the Requirement field is `None` or a reference to an existing ID (a `New:` requirement needs Jan); the issue says exactly what to build.
-- **Tests:** every acceptance criterion has a check that runs unattended — a command, a test, an exit code, an HTTP status — and "How to Test" is a list of such commands. A browser step, a visual check, or a human review fails this.
 
-When the tests check fails on a criterion Jan wants to keep for Hermes, name it and let him rewrite it, then check again.
+The number of files, new dependencies and the like do not matter. A change to Hermes' own scripts or prompts is allowed too: it happens in a worktree and only takes effect after the merge, which needs two approvals.
+
+When a check fails on a criterion Jan wants to keep for Hermes, name it and let him rewrite it, then check again.
 
 If the `ntfy-me` skill is available, use it (topic: `claude`) to notify the user that input is needed before starting the questions.
 
@@ -83,7 +83,21 @@ Match the IssueType and Severity answers to numeric label IDs from step 2, and a
 - If a matching label exists → use its numeric ID
 - If no matching label exists → skip it (do not invent label names or IDs)
 
-### 6. Confirm Before Creating
+### 6. Review the Draft with Another Model
+
+Before the preview, hand the drafted issue to a subagent on a model other than the one running this session (the system prompt names it): `Agent` with `subagent_type: "general-purpose"` and an explicit `model`, because a fresh agent inherits yours by default.
+
+| This session runs on | Reviewer `model` |
+| --- | --- |
+| `sonnet`, `haiku` | `opus` |
+| `opus` | `fable` |
+| `fable` | `opus` |
+
+Write the draft body to a scratchpad file and give the subagent that path plus the repository and the files the issue names. Give it the draft, not your reasoning or your conclusion, so it forms its own view. Tell it to stay read-only, to check the issue's claims against the code, and to report what is wrong, unclear, unverifiable or too large, each with a concrete failure scenario and the file behind it, ranked by severity, with unverified claims marked.
+
+Weigh the findings yourself: fold the valid ones into the body, drop the rest, and say in the preview in one line which findings you took and which you did not. Several drafts created together go to one subagent. Jan can skip this step for a trivial issue.
+
+### 7. Confirm Before Creating
 
 Before calling `create_issue`, show the user a preview of the issue:
 
@@ -99,7 +113,7 @@ Ask: "Does this look right? Shall I create the issue?"
 
 Only proceed if the user confirms. If they want changes, update the relevant fields and re-show the preview.
 
-### 7. Create the Issue
+### 8. Create the Issue
 
 Build the issue body using **exactly** this template — do not add extra sections like "Steps to Reproduce" or "Expected Behavior":
 
@@ -145,13 +159,13 @@ update_issue(owner, repo, index=N, assignee="hermes-agent")   # only if assigned
 
 The assignment is what triggers Hermes. If `update_issue` fails, tell Jan: the issue exists but Hermes will not pick it up.
 
-### 8. Notify When Done
+### 9. Notify When Done
 
 Use the **ntfy-me** skill (if available) to notify with topic `claude`:
 - Title: `Issue Created – #{N}: {title}`
 - Body: link to the created issue
 
-### 9. Ask Whether to Implement
+### 10. Ask Whether to Implement
 
 If the issue is assigned to `hermes-agent`, stop here: Hermes picks it up. If it is `blocked`, stop here too: it is not ready.
 
