@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: speed-up-tests-no-design-issue
+expected_outcome: |
+  The ticket is a test-suite refactor with no content-in-code or duplicated-mechanism problem. The review reports "no findings" or at most one or two findings it can back with evidence from the repository, and does not invent a design problem.
+context:
+  scaffold_script: place-files.sh

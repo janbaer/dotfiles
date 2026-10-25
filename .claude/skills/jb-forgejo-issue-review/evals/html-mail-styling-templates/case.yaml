@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: html-mail-styling-templates
+expected_outcome: |
+  The review notices that the ticket would put the mail's HTML and CSS into Python string literals, that the look then cannot be changed without editing Python, and proposes a criterion stated as behaviour (look changes by editing a file, no Python touched). It reports at most three findings and does not edit the ticket.
+context:
+  scaffold_script: place-files.sh
