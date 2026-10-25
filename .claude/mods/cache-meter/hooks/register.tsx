@@ -3,6 +3,7 @@ import type { Register } from 'claude-code'
 const CELLS = 20
 const FALLBACK_THRESHOLD = 0.83
 const CHUNK = 1800
+const PING = 'Kurzer Ping, damit der Cache warm bleibt. Antworte nur mit „ok“.'
 
 type Snapshot = {
   window: number
@@ -45,6 +46,8 @@ export const register: Register = on => {
   let isWorking = false
   let isCollapsed = false
   let isQueued = false
+  let isKeepingWarm = false
+  let warmLoopId = 0
   let timer: { cancel: () => void } | null = null
 
   const measure = (context: any) => {
@@ -70,8 +73,41 @@ export const register: Register = on => {
 
     timer?.cancel()
     timer = $.clock.every(60000, () => $.ui.invalidate('ui.render'))
+    await $.command.register({
+      name: 'keep-warm',
+      description: 'Prompt-Cache warm halten, solange du weg bist (an/aus)',
+    })
 
     return next(e)
+  })
+
+  on('command.run', { command: 'keep-warm' }, async $ => {
+    isKeepingWarm = !isKeepingWarm
+    $.ui.status(isKeepingWarm ? '🔥 keep-warm an' : undefined)
+    if (isKeepingWarm) {
+      const id = ++warmLoopId
+      const totalMs = ttlMinutes * 60000
+      const marginMs = Math.min(60000, totalMs / 6)
+      const idleMs = async () =>
+        lastResponseAt === null ? 0 : (await $.clock.now()) - lastResponseAt
+
+      void (async () => {
+        while (isKeepingWarm && id === warmLoopId) {
+          await $.clock.sleep(Math.max(5000, totalMs - marginMs - (await idleMs())))
+          if (!isKeepingWarm || id !== warmLoopId) return
+          if (!isWorking && lastResponseAt !== null && (await idleMs()) >= totalMs - marginMs) {
+            $.ui.status('🔥 Cache wird warm gehalten')
+            await $.prompt.submit({ text: PING })
+          }
+        }
+      })()
+    }
+
+    return {
+      text: isKeepingWarm
+        ? 'keep-warm ist an: Kurz bevor der Cache kalt wird, schicke ich einen Mini-Ping.'
+        : 'keep-warm ist aus.',
+    }
   })
 
   on('turn.start', ($, e, next) => {
