@@ -96,9 +96,9 @@ Before the preview, hand the drafted issue to a subagent on a model other than t
 
 Write the draft body to a scratchpad file and give the subagent that path plus the repository and the files the issue names. Give it the draft, not your reasoning or your conclusion, so it forms its own view. Tell it to stay read-only, to check the issue's claims against the code, and to report what is wrong, unclear, unverifiable or too large, each with a concrete failure scenario and the file behind it, ranked by severity, with unverified claims marked.
 
-In the same turn, run the `jb-forgejo-issue-review` skill on the draft; skipping this step skips both reviews. It asks a different question: what a maintainer would complain about in the straightforward implementation, such as content hard-coded in source or an existing mechanism the ticket ignores. The two reviews overlap little. Show Jan its findings and let him pick which become acceptance criteria; you write those into the draft, the skill never edits it.
+In the same turn, run the `forgejo-issue-review` skill on the draft; skipping this step skips both reviews. It asks a different question: what a maintainer would complain about in the straightforward implementation, such as content hard-coded in source or an existing mechanism the ticket ignores. The two reviews overlap little. Show Jan its findings and let him pick which become acceptance criteria; you write those into the draft, the skill never edits it.
 
-Weigh the findings yourself: fold the valid ones into the body, drop the rest, and say in the preview in one line which findings you took and which you did not. Several drafts created together go to one subagent. Jan can skip this step for a trivial issue.
+Weigh the findings yourself: fold the valid ones into the body, drop the rest, and say in the preview in one line which findings you took and which you did not. Several drafts created together go to one subagent. The step runs for every issue, trivial ones included: a trivial issue makes the review quick, it is no reason to skip it. Only an explicit "skip" from Jan omits it.
 
 ### 7. Confirm Before Creating
 

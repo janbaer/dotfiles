@@ -1,5 +1,5 @@
 ---
-name: jb-forgejo-issue-review
+name: forgejo-issue-review
 description: Use when a Forgejo issue draft or an existing issue should be reviewed for maintainability and design before anyone implements it. A reviewer on another model asks what a maintainer would complain about in the straightforward implementation. Called by jb-forgejo-issue-create, or on its own. Trigger on "review the issue", "review the ticket", "is this ticket well shaped", "issue review".
 ---
 
