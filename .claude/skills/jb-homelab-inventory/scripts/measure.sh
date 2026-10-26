@@ -5,8 +5,10 @@
 set -uo pipefail
 
 repo="${1:-$HOME/Projects/ansible-homelab}"
-out="${2:-$(mktemp -d)/measurements.tsv}"
+json="${2:-$HOME/Documents/Obsidian/DevOPs/Docker/homelab-techstack.json}"
+here=$(cd "$(dirname "$0")" && pwd)
 work=$(mktemp -d)
+out="$work/measurements.tsv"
 trap 'rm -rf "$work"' EXIT
 
 cd "$repo" || exit 1
@@ -60,4 +62,4 @@ while read -r host; do
   done
 done < <(ansible all --list-hosts 2>/dev/null | sed -n 's/^ *//p' | grep '\.')
 
-echo "$out"
+python3 -I "$here/to_json.py" "$out" "$here/../data/manual.json" "$json"

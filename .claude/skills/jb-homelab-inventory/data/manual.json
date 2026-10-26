@@ -1,0 +1,14 @@
+[
+  {"service": "hawser", "host": "jabasoft-ug.home.janbaer.de", "runtime": "go", "version": "1.24.13", "as_of": "2026-10-26"},
+  {"service": "vaultwarden", "host": "jabasoft-nixos-lxc-01.home.janbaer.de", "runtime": "rust", "version": "offen", "as_of": "2026-10-26"},
+  {"service": "microbin", "host": "jabasoft-zb.home.janbaer.de", "runtime": "rust", "version": "offen", "as_of": "2026-10-26"},
+  {"service": "mariadb (seafile)", "host": "jabasoft-nixos-lxc-01.home.janbaer.de", "runtime": "other", "version": "10.11", "as_of": "2026-10-26"},
+  {"service": "memcached (seafile)", "host": "jabasoft-nixos-lxc-01.home.janbaer.de", "runtime": "other", "version": "1.6.45", "as_of": "2026-10-26"},
+  {"service": "valkey (paperless-ngx)", "host": "jabasoft-nixos-lxc-01.home.janbaer.de", "runtime": "other", "version": "9.1", "as_of": "2026-10-26"},
+  {"service": "redis (immich)", "host": "jabasoft-ug.home.janbaer.de", "runtime": "other", "version": "6.2", "as_of": "2026-10-26"},
+  {"service": "postgres (immich)", "host": "jabasoft-ug.home.janbaer.de", "runtime": "other", "version": "14", "as_of": "2026-10-26"},
+  {"service": "llama.cpp", "host": "jabasoft-nixos-lxc-11.home.janbaer.de", "runtime": "other", "version": "offen", "as_of": "2026-10-26"},
+  {"service": "it-tools (nginx)", "host": "jabasoft-zb.home.janbaer.de", "runtime": "other", "version": "offen", "as_of": "2026-10-26"},
+  {"service": "bento-pdf (nginx)", "host": "jabasoft-zb.home.janbaer.de", "runtime": "other", "version": "offen", "as_of": "2026-10-26"},
+  {"service": "webdav (nginx)", "host": "jabasoft-zb.home.janbaer.de", "runtime": "other", "version": "offen", "as_of": "2026-10-26"}
+]
