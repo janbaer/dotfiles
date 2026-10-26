@@ -37,14 +37,19 @@ install_plugin() {
     return
   fi
   if ! has_marketplace "${1#*@}"; then
-    claude plugin marketplace add "$2" || { failed+=("$1"); return; }
+    claude plugin marketplace add "$2" || {
+      failed+=("$1")
+      return
+    }
   fi
   claude plugin install "$1" || failed+=("$1")
 }
 
-install_plugin filetree@claude-code-filetree data-goblin/claude-code-filetree
+# install_plugin filetree@claude-code-filetree data-goblin/claude-code-filetree
 install_plugin next-steps@claude-code-mods hamzafer/claude-code-mods
 install_plugin savvy-progress@claude-kit JohnnyVizz/claude-kit
+install_plugin dateibaum boonpflug/claude-mods-deutsch
+install_plugin fortschritt boonpflug/claude-mods-deutsch
 
 # Not installed from here, on purpose:
 #   redact-secrets, ideas-pane    own mods, marketplace jan-mods points at .claude/mods (user-settings.json)
