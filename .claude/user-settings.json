@@ -46,6 +46,9 @@
       "Bash(sleep:*)",
       "Bash(bun run scripts/bump-version.ts:*)"
     ],
+    "deny": [
+      "Bash(gopass:*)"
+    ],
     "defaultMode": "auto"
   },
   "model": "opus",
