@@ -152,6 +152,7 @@
   "skipDangerousModePermissionPrompt": true,
   "editorMode": "vim",
   "agentPushNotifEnabled": true,
+  "outputStyle": "Concise",
   "autoMode": {
     "allow": [
       "$defaults",
