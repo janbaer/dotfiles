@@ -7,6 +7,8 @@ input=$(cat)
 # Extract data from JSON input
 cwd=$(echo "$input" | jq -r '.cwd // .workspace.current_dir // ""')
 model=$(echo "$input" | jq -r '.model.display_name')
+output_style=$(echo "$input" | jq -r '.output_style.name // empty')
+[ -n "$output_style" ] && model="$model | $output_style"
 budget=$(echo "$input" | jq -r 'if has("budget") then .budget else empty end')
 total_input=$(echo "$input" | jq -r '.context_window.total_input_tokens // 0')
 total_output=$(echo "$input" | jq -r '.context_window.total_output_tokens // 0')
