@@ -107,11 +107,13 @@ Stimmt die URL nicht mehr, hol sie über `mcp__caldav-mcp__list-calendars` neu. 
 
 Dann ohne Termine fortfahren, genau wie bei Vikunja.
 
+**Wochenplan lesen.** Jan pflegt in `{VAULT_PATH}/Auszeit-Plan.plan.md` einen Wochenplan, der im Frontmatter unter `weeks:` pro Tag Vorhaben hält: Montag bis Freitag `weiterbildung`, `homelab`, `haushalt`, `anlass`, `sonstiges`, am Wochenende nur `notiz`. Lies die Datei mit `Read` (das Frontmatter reicht) und such den Tag, dessen `date` dem heutigen Datum entspricht. Felder mit leerem String zählen nicht. Gibt es die Datei, die Woche oder den Tag nicht, oder sind alle Felder leer, geh ohne Hinweis weiter. Gepflegt wird der Plan über den Skill `wochenplan`, hier wird er nur gelesen.
+
 Alles, was über das Lesen hinausgeht — Termine anlegen, ändern, löschen — steht im Skill `mailbox-assistent` und hat im Tagebuch nichts zu suchen.
 
 ## Schnellmodus: Update ohne Interview
 
-Wenn Jans Nachricht mit `Update:` beginnt (großes U, mit Doppelpunkt), überspring das komplette Interview **und auch den Vikunja- und Kalender-Check (Schritt 4)**. Jan hat den Text schon selbst formuliert und will ihn nur als Nachtrag zu einem bestehenden Eintrag eingetragen haben — ein neuer Tagesplan steht nicht an.
+Wenn Jans Nachricht mit `Update:` beginnt (großes U, mit Doppelpunkt), überspring das komplette Interview **und auch den Vikunja-, Kalender- und Wochenplan-Check (Schritt 4)**. Jan hat den Text schon selbst formuliert und will ihn nur als Nachtrag zu einem bestehenden Eintrag eingetragen haben — ein neuer Tagesplan steht nicht an.
 
 Vorgehen:
 
@@ -209,9 +211,11 @@ Wenn die Liste leer ist (`keine`) oder nicht verfügbar, einfach die Standardvar
 
 Termine sind Verabredungen mit anderen, keine Vorhaben, die Jan sich selbst setzt — deshalb stehen sie **ganz oben** im Ziele-Block, vor allem anderen. Format: `- [ ] {HH:MM} Uhr {Titel}`, bei ganztägigen Terminen ohne Zeitangabe nur der Titel. Beschreibungsfelder (Links, Notizen) gehören nicht ins Ziel; wenn dort etwas Wichtiges steht, erwähn es im Chat oder im Fließtext.
 
+**Der Wochenplan gehört ebenfalls dazu.** Was aus Vorbereitung 4 für heute im Plan steht, nennst du Jan zusammen mit Terminen und Vikunja-Tasks, mit dem Blocknamen, z. B. *„Laut Wochenplan stehen heute an: Weiterbildung (k8s-internals und linux-advanced, je eine Stunde), Haushalt (Schrank aufräumen)."* Die Blöcke übernimmst du als Ziele im Format `- [ ] {Block}: {Text}`, direkt nach den Terminen. Eine `notiz` vom Wochenende erwähnst du nur, sie wird kein Ziel. Steht für heute nichts im Plan, sag nichts dazu.
+
 Gibt es keine Termine, sag nichts dazu. Ein „heute nichts im Kalender" ist Rauschen.
 
-Jans Antworten **plus** die Vikunja-Tasks landen später als Obsidian-Tasks (`- [ ]`) im Eintrag — Termine zuerst, dann Jans eigene Ziele, danach die Vikunja-Einträge mit reinem Titel (kein Projekt-Präfix, keine Markierung als „aus Vikunja"). Frage konkret nach, wenn Jans eigene Antwort zu schwammig ist ("heute produktiv sein" → was heißt das?).
+Jans Antworten **plus** die Vikunja-Tasks landen später als Obsidian-Tasks (`- [ ]`) im Eintrag — Termine zuerst, dann die Wochenplan-Blöcke, dann Jans eigene Ziele, danach die Vikunja-Einträge mit reinem Titel (kein Projekt-Präfix, keine Markierung als „aus Vikunja"). Frage konkret nach, wenn Jans eigene Antwort zu schwammig ist ("heute produktiv sein" → was heißt das?).
 
 **4e. Ausnahme: fixe Tagesroutine gehört nicht in die Ziele.** Laufen gehen und ins Fitnessstudio fahren sind fester Teil von Jans Tagesablauf, kein Ziel, das er sich für den Tag vornimmt — vergleichbar mit Zähneputzen. Auch wenn Jan sie im Starttext erwähnt, werden sie **nicht** als `- [ ]`-Ziel aufgenommen und im Fließtext höchstens beiläufig erwähnt, nicht als Vorhaben. Erwähnt Jan sie explizit als abgeschlossen (z. B. "war laufen"), reicht das im Fließtext, ohne separaten Abhak-Eintrag.
 
