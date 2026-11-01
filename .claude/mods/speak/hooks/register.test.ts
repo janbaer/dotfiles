@@ -195,6 +195,36 @@ test('the chosen style goes to the script as instructions, normal sends none', a
   await ui.unmount()
 })
 
+test('the target language goes to the script as a language code, auto sends none', async ($, on) => {
+  const argvs: (readonly string[])[] = []
+  const status: (string | undefined)[] = []
+  mock.store(on)
+  mock.env(on, { OPENROUTER_TTS_API_KEY: '[REDACTED:OPENROUTER_TTS_API_KEY]' })
+  on('ui.status', (_, e) => {
+    status.push(e.text)
+    return { value: undefined }
+  })
+  on('turn.complete', (_, e) => ({ text: e.answer }))
+  on('process.spawn', async function* (_, e) {
+    argvs.push(e.argv)
+    return { value: { code: 0, signal: null } }
+  })
+
+  await $.turn.complete({ ...TURN, answer: 'Hallo' })
+  const first = await $.command.run({ ...RUN, command: 'speak', args: 'language' })
+  expect(first.text).toBe('Sprache: Deutsch')
+  expect(status.at(-1)).toBe('Claude Sprachmodus: manuell · Weiblich (Kore) · Deutsch')
+  await $.command.run({ ...RUN, command: 'speak', args: '' })
+  await new Promise(done => setTimeout(done, 50))
+  await $.command.run({ ...RUN, command: 'speak', args: 'language' })
+  await $.command.run({ ...RUN, command: 'speak', args: 'language' })
+  expect(status.at(-1)).toBe('Claude Sprachmodus: manuell · Weiblich (Kore)')
+  await $.command.run({ ...RUN, command: 'speak', args: '' })
+  await new Promise(done => setTimeout(done, 50))
+
+  expect(argvs.map(argv => argv[3])).toEqual(['de-DE', ''])
+})
+
 test('/speak style cycles through the styles and shows it in the status', async ($, on) => {
   const status: (string | undefined)[] = []
   mock.store(on)

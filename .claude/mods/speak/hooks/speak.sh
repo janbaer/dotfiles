@@ -4,7 +4,8 @@ set -uo pipefail
 [[ "$(ps -o pgid= -p $$ | tr -d ' ')" == "$$" ]] || exec setsid bash "$0" "$@"
 
 voice="$1"
-instructions="${2:-}"
+language="${2:-}"
+instructions="${3:-}"
 model="google/gemini-3.8-flash-lite-tts"
 max_parallel=3
 
@@ -45,8 +46,8 @@ n=${#chunks[@]}
 
 fetch() {
   local i="$1" body
-  body="$(jq -n --arg m "$model" --arg i "${chunks[i]}" --arg v "$voice" --arg s "$instructions" \
-    '{model: $m, input: $i, voice: $v, response_format: "pcm"} + (if $s == "" then {} else {instructions: $s} end)')"
+  body="$(jq -n --arg m "$model" --arg i "${chunks[i]}" --arg v "$voice" --arg s "$instructions" --arg l "$language" \
+    '{model: $m, input: $i, voice: $v, response_format: "pcm"} + (if $s == "" then {} else {instructions: $s} end) + (if $l == "" then {} else {languageCode: $l} end)')"
   if printf 'Authorization: Bearer %s\n' "$OPENROUTER_TTS_API_KEY" |
     curl -sS --fail-with-body --max-time 120 -o "$dir/$i.tmp" https://openrouter.ai/api/v1/audio/speech \
       -H @- -H 'Content-Type: application/json' -d "$body" 2>"$dir/$i.log"; then

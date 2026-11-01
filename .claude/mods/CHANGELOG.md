@@ -5,6 +5,8 @@ This file describes all changes to the mods in this directory. Versions are the 
 ## 2026-11-01
 ---
 
+- speak 0.8.1: The output language is selectable (Auto, Deutsch, Englisch) in the panel below Stil, with `/speak language`, and shown in the status line when not Auto. Meant to stop the voice switching to English after an English term at the start of a sentence: the language goes to the TTS model as `languageCode` (`de-DE`, `en-US`). OpenRouter accepts the field but does not document it, so the effect is unproven.
+
 - speak 0.7.6: New mod. `/speak` reads the last answer aloud, `/speak auto` every new one, and `/speak panel` opens a side pane for mode, voice (30 German voices with a ♪ sample), output style and Vorlesen/Stop. The text goes to OpenRouter (Gemini TTS) in chunks fetched in parallel, so playback starts after about two seconds. The key comes from `OPENROUTER_TTS_API_KEY`, set in `claudeRun` in nixos-config.
 
 ## 2026-10-25

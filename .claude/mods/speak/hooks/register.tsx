@@ -1,11 +1,11 @@
 import { atom, read, update } from 'claude-code'
 import type { EngineInterface as Engine, HookStream, ProcessSpawnChunk, ProcessSpawnResult, Register } from 'claude-code'
-import type { Style, View, Voice } from '../types'
+import type { Language, Style, View, Voice } from '../types'
 import { toChunks, toSpeech } from './spoken'
 
 const PANE = 'speak'
-const view = atom({ plugin: 'speak', key: 'view' } as const, { isAuto: false, voice: 'Kore', isPlaying: false, isPanelAuto: false, style: 'normal', sampling: null } as View, {
-  shape: 'view-4',
+const view = atom({ plugin: 'speak', key: 'view' } as const, { isAuto: false, voice: 'Kore', isPlaying: false, isPanelAuto: false, style: 'normal', language: 'auto', sampling: null } as View, {
+  shape: 'view-5',
 })
 
 const FEMALE = ['Achernar', 'Aoede', 'Autonoe', 'Callirrhoe', 'Despina', 'Erinome', 'Gacrux', 'Kore', 'Laomedeia', 'Leda', 'Pulcherrima', 'Sulafat', 'Vindemiatrix', 'Zephyr']
@@ -33,28 +33,36 @@ const STYLES: Record<Style, { label: string; instructions: string }> = {
   },
 }
 
+const LANGUAGES: Record<Language, { label: string; code: string }> = {
+  auto: { label: 'Auto', code: '' },
+  de: { label: 'Deutsch', code: 'de-DE' },
+  en: { label: 'Englisch', code: 'en-US' },
+}
+
 type Playback = { child: HookStream<ProcessSpawnChunk, ProcessSpawnResult> | null; generation: number }
 
 async function settings($: Engine) {
-  const [auto, voice, panel, style] = await Promise.all(['auto', 'voice', 'panel', 'style'].map(key => $.store.get(key)))
+  const [auto, voice, panel, style, language] = await Promise.all(['auto', 'voice', 'panel', 'style', 'language'].map(key => $.store.get(key)))
   return {
     isAuto: auto === true,
     voice: typeof voice === 'string' && [...FEMALE, ...MALE].includes(voice) ? voice : 'Kore',
     isPanelAuto: panel === true,
     style: (typeof style === 'string' && style in STYLES ? style : 'normal') as Style,
+    language: (typeof language === 'string' && language in LANGUAGES ? language : 'auto') as Language,
   }
 }
 
-async function showStatus($: Engine, { isAuto, voice, style }: Awaited<ReturnType<typeof settings>>) {
+async function showStatus($: Engine, { isAuto, voice, style, language }: Awaited<ReturnType<typeof settings>>) {
   const mood = style === 'normal' ? '' : ` · ${STYLES[style].label}`
-  $.ui.status(`Claude Sprachmodus: ${isAuto ? 'auto' : 'manuell'} · ${voiceLabel(voice)}${mood}`)
+  const lang = language === 'auto' ? '' : ` · ${LANGUAGES[language].label}`
+  $.ui.status(`Claude Sprachmodus: ${isAuto ? 'auto' : 'manuell'} · ${voiceLabel(voice)}${mood}${lang}`)
 }
 
 async function setView($: Engine, patch: Partial<View>) {
   await update($, view, current => ({ ...current, ...patch }))
 }
 
-const STORE_KEYS = { isAuto: 'auto', voice: 'voice', style: 'style', isPanelAuto: 'panel' } as const
+const STORE_KEYS = { isAuto: 'auto', voice: 'voice', style: 'style', language: 'language', isPanelAuto: 'panel' } as const
 
 async function save($: Engine, patch: Partial<Pick<View, keyof typeof STORE_KEYS>>) {
   for (const [field, value] of Object.entries(patch)) {
@@ -85,14 +93,14 @@ async function speak($: Engine, playback: Playback, answer: string, sample?: Voi
   if (wasPlaying) await setView($, { isPlaying: false, sampling: null })
   const input = toChunks(toSpeech(answer)).join('\n')
   if (!input) return
-  const [key, { voice: active, style }] = await Promise.all([$.env.get('OPENROUTER_TTS_API_KEY'), settings($)])
+  const [key, { voice: active, style, language }] = await Promise.all([$.env.get('OPENROUTER_TTS_API_KEY'), settings($)])
   if (mine !== playback.generation) return
   if (!key) {
     $.ui.toast('Vorlesen: OPENROUTER_TTS_API_KEY ist nicht gesetzt')
     return
   }
 
-  const argv = ['bash', `${$.plugin.root}/hooks/speak.sh`, sample ?? active, STYLES[style].instructions]
+  const argv = ['bash', `${$.plugin.root}/hooks/speak.sh`, sample ?? active, LANGUAGES[language].code, STYLES[style].instructions]
   const child = $.process.spawn({ argv, input })
   playback.child = child
   await setView($, { isPlaying: true, sampling: sample ?? null })
@@ -120,7 +128,7 @@ export const register: Register = on => {
     await $.command.register({
       name: 'speak',
       description: 'Letzte Antwort vorlesen',
-      argumentHint: '[auto|voice|style|stop|panel [auto]]',
+      argumentHint: '[auto|voice|style|language|stop|panel [auto]]',
     })
     const saved = await settings($)
     await setView($, saved)
@@ -165,6 +173,11 @@ export const register: Register = on => {
       await save($, { style })
       return { text: `Stil: ${STYLES[style].label}` }
     }
+    if (arg === 'language') {
+      const language = stepped(Object.keys(LANGUAGES) as Language[], (await settings($)).language, 1)
+      await save($, { language })
+      return { text: `Sprache: ${LANGUAGES[language].label}` }
+    }
     if (arg === 'panel auto') {
       const isPanelAuto = !(await settings($)).isPanelAuto
       await save($, { isPanelAuto })
@@ -174,7 +187,7 @@ export const register: Register = on => {
       const { isPlaced } = await $.ui.open({ id: PANE, title: 'Claude Sprachmodus' })
       return { text: isPlaced ? 'Panel geöffnet.' : 'Das Panel findet gerade keinen Platz.' }
     }
-    if (arg) return { text: `Unbekannt: ${arg}. Erlaubt: /speak [auto|voice|style|stop|panel [auto]]` }
+    if (arg) return { text: `Unbekannt: ${arg}. Erlaubt: /speak [auto|voice|style|language|stop|panel [auto]]` }
     if (!lastAnswer) return { text: 'Noch keine Antwort zum Vorlesen.' }
 
     void speak($, playback, lastAnswer)
@@ -245,6 +258,14 @@ export const register: Register = on => {
           <Box flexDirection="column">
             {(Object.keys(STYLES) as Style[]).map(name => (
               choice(`style-${name}`, current.style === name, STYLES[name].label, () => save($, { style: name }))
+            ))}
+          </Box>
+        </Box>
+        <Box flexDirection="column" borderStyle="round" borderDimColor paddingX={1}>
+          <Text dimColor>Sprache</Text>
+          <Box flexDirection="column">
+            {(Object.keys(LANGUAGES) as Language[]).map(name => (
+              choice(`language-${name}`, current.language === name, LANGUAGES[name].label, () => save($, { language: name }))
             ))}
           </Box>
         </Box>
