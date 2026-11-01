@@ -102,6 +102,7 @@
     "next-steps@claude-code-mods": true,
     "filetree@claude-code-filetree": false,
     "cache-meter@jan-mods": true,
+    "speak@jan-mods": true,
     "cc-plugin-you-should-know@builtin": true,
     "dateibaum@claude-mods-deutsch": true,
     "fortschritt@claude-mods-deutsch": true

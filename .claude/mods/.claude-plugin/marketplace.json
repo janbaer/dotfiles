@@ -16,6 +16,11 @@
       "name": "cache-meter",
       "source": "./cache-meter",
       "description": "Band above the prompt: cache time left, hit rate, context weather and a Compact button."
+    },
+    {
+      "name": "speak",
+      "source": "./speak",
+      "description": "Reads Claude's answers aloud via OpenRouter TTS (Gemini), on demand with /speak or automatically."
     }
   ]
 }
