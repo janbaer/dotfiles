@@ -1,6 +1,6 @@
 {
   "name": "speak",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "description": "Reads Claude's answers aloud via OpenRouter TTS (Gemini), on demand with /speak or automatically. The text of an answer is sent to OpenRouter.",
   "types": "./types/index.d.ts"
 }

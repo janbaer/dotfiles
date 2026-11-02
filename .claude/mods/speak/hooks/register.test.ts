@@ -139,6 +139,7 @@ test('the panel opens at session start only when the option is on', async ($, on
   const opened: string[] = []
   mock.store(on, { panel: true })
   mock.env(on, {})
+  on('fs.read', () => ({ value: '{"version":"1.2.3"}' }))
   on('command.register', () => ({ value: { command: 'speak' } }))
   on('session.start', (_, e) => ({ cwd: e.cwd }))
   on('ui.status', () => ({ value: undefined }))
@@ -392,5 +393,88 @@ test('of two overlapping starts only the latest one plays', async ($, on) => {
   gate.resolve()
   await new Promise(done => setTimeout(done, 50))
 
-  expect(inputs).toEqual(['Zweite Antwort.'])
+  expect(inputs).toHaveLength(1)
+  expect(inputs[0]).toContain('Zweite Antwort')
+})
+
+test('in auto mode a follow-up answer waits for the one being spoken', async ($, on) => {
+  const first = signal<void>()
+  const inputs: (string | undefined)[] = []
+  mock.store(on, { auto: true })
+  mock.env(on, { OPENROUTER_TTS_API_KEY: 'sk-test' })
+  on('ui.status', () => ({ value: undefined }))
+  on('turn.complete', (_, e) => ({ text: e.answer }))
+  on('process.spawn', async function* (_, e) {
+    inputs.push(e.input)
+    if (inputs.length === 1) await first.promise
+    return { value: { code: 0, signal: null } }
+  })
+
+  await $.turn.complete({ ...TURN, answer: 'Lange Antwort' })
+  await new Promise(done => setTimeout(done, 50))
+  await $.turn.complete({ ...TURN, answer: 'Kurz' })
+  await new Promise(done => setTimeout(done, 50))
+  expect(inputs).toEqual(['Lange Antwort.'])
+
+  first.resolve()
+  await new Promise(done => setTimeout(done, 50))
+  expect(inputs).toEqual(['Lange Antwort.', 'Kurz.'])
+})
+
+test('a prompt the person did not type does not cut the answer being spoken', async ($, on) => {
+  const first = signal<void>()
+  const inputs: (string | undefined)[] = []
+  let killed = false
+  mock.store(on, { auto: true })
+  mock.env(on, { OPENROUTER_TTS_API_KEY: 'sk-test' })
+  on('ui.status', () => ({ value: undefined }))
+  on('turn.complete', (_, e) => ({ text: e.answer }))
+  on('prompt.submit', (_, e) => ({ text: e.text }))
+  on('process.spawn', async function* (_, e) {
+    inputs.push(e.input)
+    if (inputs.length === 1) {
+      await first.promise
+      killed = true
+    }
+    return { value: { code: 0, signal: null } }
+  })
+
+  await $.turn.complete({ ...TURN, answer: 'Lange Antwort' })
+  await new Promise(done => setTimeout(done, 50))
+  await $.prompt.submit({ text: 'Nachricht vom Agenten', isMeta: true })
+  await $.turn.complete({ ...TURN, answer: 'Kurz' })
+  await new Promise(done => setTimeout(done, 50))
+  expect(inputs).toEqual(['Lange Antwort.'])
+  expect(killed).toBe(false)
+})
+
+test('an auto answer waits for a manual replay instead of cutting it', async ($, on) => {
+  const gates = [signal<void>(), signal<void>()]
+  const events: string[] = []
+  let spawned = 0
+  mock.store(on, { auto: true })
+  mock.env(on, { OPENROUTER_TTS_API_KEY: 'sk-test' })
+  on('ui.status', () => ({ value: undefined }))
+  on('turn.complete', (_, e) => ({ text: e.answer }))
+  on('process.spawn', async function* (_, e) {
+    const gate = gates[spawned++]
+    events.push(`start ${e.input}`)
+    await gate?.promise
+    events.push(`end ${e.input}`)
+    return { value: { code: 0, signal: null } }
+  })
+  const wait = () => new Promise(done => setTimeout(done, 50))
+
+  await $.turn.complete({ ...TURN, answer: 'Erste' })
+  await wait()
+  await $.command.run({ ...RUN, command: 'speak', args: '' })
+  await wait()
+  await $.turn.complete({ ...TURN, answer: 'Dritte' })
+  await wait()
+  expect(events).toEqual(['start Erste.', 'start Erste.'])
+
+  gates[0]?.resolve()
+  gates[1]?.resolve()
+  await wait()
+  expect(events).toEqual(['start Erste.', 'start Erste.', 'end Erste.', 'end Erste.', 'start Dritte.', 'end Dritte.'])
 })

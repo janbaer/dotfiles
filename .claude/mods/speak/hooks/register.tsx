@@ -39,7 +39,7 @@ const LANGUAGES: Record<Language, { label: string; code: string }> = {
   en: { label: 'Englisch', code: 'en-US' },
 }
 
-type Playback = { child: HookStream<ProcessSpawnChunk, ProcessSpawnResult> | null; generation: number }
+type Playback = { child: HookStream<ProcessSpawnChunk, ProcessSpawnResult> | null; generation: number; queue: string[]; active: number }
 
 async function settings($: Engine) {
   const [auto, voice, panel, style, language] = await Promise.all(['auto', 'voice', 'panel', 'style', 'language'].map(key => $.store.get(key)))
@@ -82,12 +82,34 @@ function cancel(playback: Playback) {
 }
 
 async function stop($: Engine, playback: Playback) {
+  playback.queue.length = 0
   const wasPlaying = playback.child !== null
   cancel(playback)
   if (wasPlaying) await setView($, { isPlaying: false, sampling: null })
 }
 
 async function speak($: Engine, playback: Playback, answer: string, sample?: Voice) {
+  playback.queue.length = 0
+  await playAnswer($, playback, answer, sample)
+}
+
+function enqueue($: Engine, playback: Playback, answer: string) {
+  playback.queue.push(answer)
+  if (playback.active === 0) void playAnswer($, playback, playback.queue.shift() as string)
+}
+
+async function playAnswer($: Engine, playback: Playback, answer: string, sample?: Voice) {
+  playback.active++
+  try {
+    await playOnce($, playback, answer, sample)
+  } finally {
+    playback.active--
+    const next = playback.active === 0 ? playback.queue.shift() : undefined
+    if (next !== undefined) void playAnswer($, playback, next)
+  }
+}
+
+async function playOnce($: Engine, playback: Playback, answer: string, sample?: Voice) {
   const wasPlaying = playback.child !== null
   const mine = cancel(playback)
   if (wasPlaying) await setView($, { isPlaying: false, sampling: null })
@@ -120,8 +142,11 @@ async function speak($: Engine, playback: Playback, answer: string, sample?: Voi
 }
 
 export const register: Register = on => {
-  let lastAnswer = ''
-  const playback: Playback = { child: null, generation: 0 }
+  let answers: string[] = []
+  let isFresh = true
+  let version = ''
+  const playback: Playback = { child: null, generation: 0, queue: [], active: 0 }
+  const lastAnswer = () => answers.join('\n\n')
 
   on('session.start', async ($, e, next) => {
     const started = await next(e)
@@ -130,6 +155,7 @@ export const register: Register = on => {
       description: 'Letzte Antwort vorlesen',
       argumentHint: '[auto|voice|style|language|stop|panel [auto]]',
     })
+    version = JSON.parse(await $.fs.read(`${$.plugin.root}/.claude-plugin/plugin.json`)).version
     const saved = await settings($)
     await setView($, saved)
     await showStatus($, saved)
@@ -140,14 +166,19 @@ export const register: Register = on => {
   on('turn.complete', async ($, e, next) => {
     const result = await next(e)
     if (!e.agentId && e.reason === 'answer' && e.answer) {
-      lastAnswer = e.answer
-      if ((await settings($)).isAuto) void speak($, playback, e.answer)
+      if (isFresh) answers = []
+      isFresh = false
+      answers.push(e.answer)
+      if ((await settings($)).isAuto) void enqueue($, playback, e.answer)
     }
     return result
   })
 
   on('prompt.submit', async ($, e, next) => {
-    await stop($, playback)
+    if (!e.isMeta) {
+      isFresh = true
+      await stop($, playback)
+    }
     return next(e)
   })
 
@@ -188,9 +219,10 @@ export const register: Register = on => {
       return { text: isPlaced ? 'Panel geöffnet.' : 'Das Panel findet gerade keinen Platz.' }
     }
     if (arg) return { text: `Unbekannt: ${arg}. Erlaubt: /speak [auto|voice|style|language|stop|panel [auto]]` }
-    if (!lastAnswer) return { text: 'Noch keine Antwort zum Vorlesen.' }
+    const text = lastAnswer()
+    if (!text) return { text: 'Noch keine Antwort zum Vorlesen.' }
 
-    void speak($, playback, lastAnswer)
+    void speak($, playback, text)
     return { text: 'Lese die letzte Antwort vor.' }
   })
 
@@ -200,11 +232,12 @@ export const register: Register = on => {
 
     const play = () => {
       if (current.isPlaying) return stop($, playback)
-      if (!lastAnswer) {
+      const text = lastAnswer()
+      if (!text) {
         $.ui.toast('Noch keine Antwort zum Vorlesen')
         return
       }
-      void speak($, playback, lastAnswer)
+      void speak($, playback, text)
     }
 
     const pick = async (voice: Voice) => {
@@ -220,7 +253,10 @@ export const register: Register = on => {
 
     return (
       <Box flexDirection="column" gap={1} paddingX={1}>
-        <Text bold>Claude Sprachmodus</Text>
+        <Box justifyContent="space-between">
+          <Text bold>Claude Sprachmodus</Text>
+          <Text dimColor>v{version}</Text>
+        </Box>
         {current.isPlaying ? (
           <Text bold color="green">▶ Spricht gerade</Text>
         ) : (
