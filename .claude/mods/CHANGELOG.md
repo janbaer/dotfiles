@@ -2,6 +2,11 @@
 
 This file describes all changes to the mods in this directory. Versions are the `version` in each mod's `plugin.json`; an entry without a version left it unchanged.
 
+## 2026-11-02
+---
+
+- speak 0.9.0: In auto mode a follow-up answer (for example an agent's short hand-back) no longer cuts the answer being read: answers queue and play one after the other. `/speak` and the play button read every answer since the last typed prompt, and prompts delivered by an agent no longer stop playback. The panel shows the loaded version next to the title.
+
 ## 2026-11-01
 ---
 
