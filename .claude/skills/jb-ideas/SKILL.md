@@ -44,7 +44,7 @@ Das erste Wort des Arguments entscheidet: `add`, `list`, `grill` oder `drop`. Oh
 
 ### add
 
-1. Prüfe mit `list`-Aufruf (s. u.), ob es schon eine Notiz zum selben Thema gibt. Wenn ja, ergänze sie.
+1. Prüfe mit `list`-Aufruf (s. u.), ob es schon eine Notiz zum selben Thema gibt. Wenn ja, lies sie und frag per `AskUserQuestion` (mit Titel und Datum): ergänzen, neu anlegen, oder die alte per `drop` ersetzen. Die alte Notiz kann überholt sein.
 2. Sonst lege die Notiz mit dem Skript an. Titel und bereinigten Text übergibst du fertig, Dateiname, Datum und Frontmatter setzt das Skript:
    ```
    ~/Projects/dotfiles/.claude/skills/jb-ideas/scripts/ideas.sh add "{Titel}" "{Text}"
