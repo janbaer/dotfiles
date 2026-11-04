@@ -304,20 +304,28 @@ Use when the user asks for a wiki health-check, maintenance pass, or says things
 
 6. **Check for stale content** — find pages where `updated` is significantly older than related pages, suggesting they may have been superseded.
 
-7. **Report findings** — present a prioritized list of issues to the user, grouped by severity:
+7. **Check placement** — compare where notes live with what the schema's directory structure says:
+   ```bash
+   find ~/Documents/Obsidian -maxdepth 1 -type f -name '*.md'
+   find ~/Documents/Obsidian -maxdepth 1 -type d -not -name '.*'
+   ```
+   Flag: root-level notes that are not listed under "Files that stay at vault root"; top-level directories missing from the schema's Directory Structure (the user may have created them on purpose, so ask whether to add them); notes in a directory that does not fit their `type` or topic. Then compare `index.md` with reality: entries whose directory label (`— Dir/`, `— root`) no longer matches where the file is, notes missing from the index, entries for notes that no longer exist.
+
+8. **Report findings** — present a prioritized list of issues to the user, grouped by severity:
    - **Critical**: broken links, contradictions, incorrect information
-   - **Important**: orphan pages, missing frontmatter, tag inconsistencies
+   - **Important**: orphan pages, missing frontmatter, tag inconsistencies, notes outside the schema's structure, stale index entries
    - **Nice to have**: missing pages for frequently-mentioned concepts, stale content
 
-8. **Fix with permission** — for each category of issues, ask the user whether to fix them now. Apply fixes following the schema conventions. Do not bulk-fix without confirmation.
+9. **Fix with permission** — for each category of issues, ask the user whether to fix them now. Apply fixes following the schema conventions. Do not bulk-fix without confirmation.
 
-9. **Append to log**:
+10. **Append to log**:
    ```bash
-   obsidian vault="Obsidian" append file="log" content="\n## [YYYY-MM-DD] lint | Maintenance pass\n\nFindings: X orphans, Y missing frontmatter, Z tag issues. Fixed: [list of fixes applied].\n"
+   obsidian vault="Obsidian" append file="log" content="\n## [YYYY-MM-DD] lint | Maintenance pass\n\nFindings: X orphans, Y missing frontmatter, Z tag issues, W placement issues. Fixed: [list of fixes applied].\n"
    ```
 
 **Guidelines:**
 - Lint is non-destructive by default — report first, fix only with user permission.
+- Moving a note changes more than its path: update its directory label in `index.md`, the schema's Directory Structure and "Files that stay at vault root" in `CLAUDE.md` when the move creates or empties a place, and any hard-coded path in other tooling (for example the `jb-homelab-inventory` skill). Wikilinks resolve by name and need no change. `obsidian move` can fail without any output, so check the result with `ls` and fall back to `mv`.
 - For large vaults, sample rather than exhaustively scanning every page. Focus on the most-linked and most recently modified pages first.
 - Suggest new questions to investigate or new sources to look for based on gaps you discover.
 
