@@ -13,7 +13,7 @@ Welche Laufzeit steckt hinter welchem Dienst, und in welcher Version? Gedacht f√
 Die Tabellen werden aus `homelab-techstack.json` gerendert (Dataview, JavaScript-Abfragen m√ºssen aktiv sein). Die Datei schreibt der Skill `homelab-inventory`, die Version steht in der Zeile "Gemessen". Go- und Rust-Versionen sind die Compiler-Version des Binaries, keine Laufzeit im Container. Zeilen mit "Stand" stammen aus `data/manual.json` des Skills und sind nicht gemessen.
 
 ```dataviewjs
-const d = JSON.parse(await dv.io.load("DevOPs/Docker/homelab-techstack.json"));
+const d = JSON.parse(await dv.io.load("Homelab/homelab-techstack.json"));
 const sections = [
   ["node", "Node.js"], ["bun", "Bun (eigene Software)"], ["python", "Python"],
   ["go", "Go"], ["rust", "Rust"], ["php", "PHP"], ["other", "C, C++ und Sonstiges"],

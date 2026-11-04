@@ -5,7 +5,7 @@
 set -uo pipefail
 
 repo="${1:-$HOME/Projects/ansible-homelab}"
-json="${2:-$HOME/Documents/Obsidian/DevOPs/Docker/homelab-techstack.json}"
+json="${2:-$HOME/Documents/Obsidian/Homelab/homelab-techstack.json}"
 here=$(cd "$(dirname "$0")" && pwd)
 work=$(mktemp -d)
 out="$work/measurements.tsv"

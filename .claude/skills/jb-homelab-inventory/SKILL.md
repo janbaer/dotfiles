@@ -27,11 +27,11 @@ Das Skript misst, die Notiz rendert. Der Skill schreibt keine Tabellen: `scripts
    scripts/measure.sh [repo] [ausgabe.json]
    ```
 
-   Pfad relativ zu dieser `SKILL.md`. Die Ausgabe landet standardmäßig in `~/Documents/Obsidian/DevOPs/Docker/homelab-techstack.json` (den Vault-Pfad nur aus `~/.config/obsidian/obsidian.json` nehmen, nie aus `/mnt/zb-data/webdav/data/Obsidian`). Dauert rund zwei Minuten. Gemessen werden nur laufende Container. Go/Rust wird nur bei Containern ohne Node, Bun, Python oder PHP gesucht. Das Skript gibt die Änderungen gegenüber der vorigen Datei aus (`+` neu, `-` weg, `~` Version geändert).
+   Pfad relativ zu dieser `SKILL.md`. Die Ausgabe landet standardmäßig in `~/Documents/Obsidian/Homelab/homelab-techstack.json` (den Vault-Pfad nur aus `~/.config/obsidian/obsidian.json` nehmen, nie aus `/mnt/zb-data/webdav/data/Obsidian`). Dauert rund zwei Minuten. Gemessen werden nur laufende Container. Go/Rust wird nur bei Containern ohne Node, Bun, Python oder PHP gesucht. Das Skript gibt die Änderungen gegenüber der vorigen Datei aus (`+` neu, `-` weg, `~` Version geändert).
 
 2. **Berichten.** Die Änderungen nennen. Ein `-` ist verdächtig (Container gestoppt oder umbenannt?) und gehört in den Bericht, nicht still übernommen. Auf Warnungen der Form "Probe auf <host> fehlgeschlagen" hinweisen: dieser Host fehlt dann in der Messung.
 
-3. **Notiz einrichten, nur wenn sie fehlt.** `DevOPs/Docker/homelab-techstack.md` aus `templates/techstack-note.md` anlegen (Datumsplatzhalter mit `date +%F` füllen, `status: draft`), außerdem:
+3. **Notiz einrichten, nur wenn sie fehlt.** `Homelab/homelab-techstack.md` aus `templates/techstack-note.md` anlegen (Datumsplatzhalter mit `date +%F` füllen, `status: draft`), außerdem:
    - Zeile unter `## Homelab` in `My Current Techstack`,
    - Zeile unter `## Reference` in `Wiki-Maintenance/index.md`,
    - Eintrag `## [YYYY-MM-DD] create | homelab-techstack` in `Wiki-Maintenance/log.md`.
