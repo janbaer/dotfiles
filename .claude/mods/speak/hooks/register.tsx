@@ -4,6 +4,7 @@ import type { Language, Style, View, Voice } from '../types'
 import { toChunks, toSpeech } from './spoken'
 
 const PANE = 'speak'
+export const REFRESH_INTERVAL_MILLISECONDS = 5000
 const view = atom({ plugin: 'speak', key: 'view' } as const, { isAuto: false, voice: 'Kore', isPlaying: false, isPanelAuto: false, style: 'normal', language: 'auto', sampling: null } as View, {
   shape: 'view-5',
 })
@@ -70,6 +71,13 @@ async function save($: Engine, patch: Partial<Pick<View, keyof typeof STORE_KEYS
   }
   await setView($, patch)
   await showStatus($, await settings($))
+}
+
+async function sync($: Engine) {
+  const [saved, current] = await Promise.all([settings($), read($, view)])
+  if ((Object.keys(STORE_KEYS) as (keyof typeof STORE_KEYS)[]).every(field => saved[field] === current[field])) return
+  await setView($, saved)
+  await showStatus($, saved)
 }
 
 const stepped = <T extends string>(list: readonly T[], from: T, delta: number) =>
@@ -146,6 +154,7 @@ export const register: Register = on => {
   let isFresh = true
   let version = ''
   const playback: Playback = { child: null, generation: 0, queue: [], active: 0 }
+  let refresh: { cancel: () => void } | null = null
   const lastAnswer = () => answers.join('\n\n')
 
   on('session.start', async ($, e, next) => {
@@ -159,7 +168,9 @@ export const register: Register = on => {
     const saved = await settings($)
     await setView($, saved)
     await showStatus($, saved)
-    if (saved.isPanelAuto) void $.ui.open({ id: PANE, title: 'Claude Sprachmodus' })
+    if (saved.isPanelAuto) void $.ui.open({ id: PANE, title: 'Sprachmodus' })
+    refresh?.cancel()
+    refresh = $.clock.every(REFRESH_INTERVAL_MILLISECONDS, () => void sync($).catch(() => {}))
     return started
   })
 
@@ -215,7 +226,7 @@ export const register: Register = on => {
       return { text: isPanelAuto ? 'Das Panel öffnet sich beim Start.' : 'Das Panel öffnet sich nicht mehr beim Start.' }
     }
     if (arg === 'panel') {
-      const { isPlaced } = await $.ui.open({ id: PANE, title: 'Claude Sprachmodus' })
+      const { isPlaced } = await $.ui.open({ id: PANE, title: 'Sprachmodus' })
       return { text: isPlaced ? 'Panel geöffnet.' : 'Das Panel findet gerade keinen Platz.' }
     }
     if (arg) return { text: `Unbekannt: ${arg}. Erlaubt: /speak [auto|voice|style|language|stop|panel [auto]]` }

@@ -2,6 +2,11 @@
 
 This file describes all changes to the mods in this directory. Versions are the `version` in each mod's `plugin.json`; an entry without a version left it unchanged.
 
+## 2026-11-04
+---
+
+- speak 0.9.1: An open panel and the status line follow settings changed in another session. The settings were already shared through the store, but each session only showed what it read at start; it now checks the store every five seconds. The pane tab reads "Sprachmodus" instead of the truncated "Claude Sprachmodus".
+
 ## 2026-11-02
 ---
 

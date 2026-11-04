@@ -1,4 +1,5 @@
 import { expect, mock, test } from 'claude-code/testing'
+import { REFRESH_INTERVAL_MILLISECONDS } from './register'
 
 declare const setTimeout: (callback: (value?: unknown) => void, ms: number) => unknown
 
@@ -74,7 +75,7 @@ const PANE = {
   plugin: 'speak',
   component: 'Pane',
   requestId: 'speak',
-  props: { title: 'Claude Sprachmodus', isFocused: false, bodyColumns: 40, placement: 'dock', scroll: { offset: 0, bodyRows: 20 }, view: {} },
+  props: { title: 'Sprachmodus', isFocused: false, bodyColumns: 40, placement: 'dock', scroll: { offset: 0, bodyRows: 20 }, view: {} },
 } as const
 
 test('the pane switches mode and voice, and the choice survives in the store', async ($, on) => {
@@ -477,4 +478,35 @@ test('an auto answer waits for a manual replay instead of cutting it', async ($,
   gates[1]?.resolve()
   await wait()
   expect(events).toEqual(['start Erste.', 'start Erste.', 'end Erste.', 'end Erste.', 'start Dritte.', 'end Dritte.'])
+})
+
+test('a setting changed in another session reaches the pane and the status line', async ($, on) => {
+  const status: (string | undefined)[] = []
+  const clock = mock.clock(on)
+  const store: Record<string, unknown> = {}
+  on('store.get', (_, e) => ({ value: store[e.key] }))
+  on('store.set', (_, e) => {
+    store[e.key] = e.value
+    return { value: undefined }
+  })
+  mock.env(on, {})
+  on('fs.read', () => ({ value: '{"version":"1.2.3"}' }))
+  on('command.register', () => ({ value: { command: 'speak' } }))
+  on('session.start', (_, e) => ({ cwd: e.cwd }))
+  on('ui.status', (_, e) => {
+    status.push(e.text)
+    return { value: undefined }
+  })
+
+  await $.session.start({ cwd: '/', surface: 'terminal', isInteractive: true })
+  const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
+  const shown = status.length
+  await clock.advance(REFRESH_INTERVAL_MILLISECONDS)
+  expect(status.length).toBe(shown)
+
+  store.auto = true
+  await clock.advance(REFRESH_INTERVAL_MILLISECONDS)
+  expect(status.at(-1)).toBe('Claude Sprachmodus: auto · Weiblich (Kore)')
+  expect((await ui.find({ key: 'auto' }))?.text).toMatch(/^●/)
+  await ui.unmount()
 })
