@@ -1,6 +1,7 @@
 ---
 name: dictates
 description: "Arbeitet die Diktate aus Dictates/ in der Obsidian-Vault Notes ab (Tagebuch, Idee, Vikunja-Task, Mail, Termin) und archiviert sie. Trigger: 'Diktate abarbeiten', 'neue Diktate', 'was hab ich diktiert', '/dictates'."
+model: sonnet
 ---
 
 # Diktate abarbeiten
@@ -22,7 +23,7 @@ Ohne den Ordner abbrechen: mit leerem `V` zeigt das `mv` in Schritt 5 auf `/Dict
 
 2. **Lesen und einordnen.** Datum und Uhrzeit der Aufnahme stehen im Dateinamen; sie gelten, nicht `date`. Aktionen: Tagebuch, Idee, Aufgabe, Mail, Termin. Ein Schlüsselwort am Anfang ("Tagebucheintrag", "Idee", "Aufgabe", "Mail an", "Termin") nennt die Aktion; sonst aus dem Inhalt: Erzählung über den Tag = Tagebuch, Vorhaben für später = Idee, zu Erledigendes = Aufgabe, Nachricht an eine Person = Mail. Ein Diktat kann mehrere Aktionen tragen. Mehrere Diktate zum selben Thema am selben Tag werden eine Aktion, alle Dateien wandern ins Archiv.
 
-3. **Plan zeigen, einmal bestätigen.** Pro Diktat eine Zeile: Uhrzeit, Aktion, ein Halbsatz Inhalt. Eine `AskUserQuestion`: je unklarem Diktat eine Frage (Tagebuch, Idee, Aufgabe, liegen lassen) plus die Freigabe des Plans.
+3. **Entscheiden, nicht fragen.** Der Skill soll auch unbeaufsichtigt laufen, es gibt niemanden, der eine Frage beantwortet. Keine `AskUserQuestion`, kein Plan zur Bestätigung. Ist die Aktion eindeutig, wird sie ausgeführt. Lässt sie sich nicht sicher bestimmen, oder ist es ein Termin (`jb-mailbox-assistent` verlangt dafür ein OK, das hier nicht kommen kann), bleibt das Diktat liegen und die Rückmeldung in Schritt 6 sagt, welches und warum.
 
 4. **Ausführen.** Relative Zeitangaben im Diktat ("morgen", "nächste Woche", "um 10") vorher gegen das Aufnahmedatum in absolute Angaben auflösen und so übergeben; das Diktat kann Tage alt sein. Idee, Aufgabe, Mail und Termin laufen parallel, Tagebuch-Aktionen nacheinander, eine Datei nach der anderen.
    - **Tagebuch:** selbst schreiben, siehe unten. `diary-daily-entry` schreibt immer in den heutigen Tag, ein Diktat gehört aber zum Aufnahmetag.
