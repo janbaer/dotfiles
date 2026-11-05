@@ -21,6 +21,53 @@ ask() {
     exit 0
 }
 
+strip_data_heredocs() {
+    local out
+    out=$(printf '%s\n' "$1" | python3 -I -c '
+import re, sys
+DATA = {"cat", "jq", "psql", "mysql", "sqlite3", "git", "python", "python3", "node", "bun"}
+INTERPRETERS = {"python", "python3", "node", "bun"}
+RUNS = re.compile(r"os\.system|subprocess|popen|child_process|\bexec|\bspawn")
+OPEN = re.compile(r"(?<!<)<<-?\s*([\"\x27]?)(\w+)\1")
+QUOTED = re.compile(r"(<<-?\s*)?(\"[^\"]*\"|\x27[^\x27]*\x27)|\$\(\([^)]*\)\)")
+
+def mask(line):
+    return QUOTED.sub(lambda m: m.group(0) if m.group(1) else "Q", line)
+
+def data_opener(line, m):
+    head = re.split(r"[|;&(]", line[:m.start()])[-1].split()
+    while head and re.fullmatch(r"\w+=\S*", head[0]):
+        head.pop(0)
+    if not head or head[0].rsplit("/", 1)[-1] not in DATA:
+        return None
+    if line[m.end():].strip():
+        return None
+    return head[0].rsplit("/", 1)[-1]
+
+out, body, delim, cmd = [], [], None, None
+for line in sys.stdin.read().splitlines():
+    if delim is None:
+        out.append(line)
+        m = OPEN.search(mask(line))
+        if m:
+            masked = mask(line)
+            cmd = data_opener(masked, m)
+            if cmd == "cat" and ">" in masked:
+                cmd = None
+            delim, body = m.group(2), []
+    elif line.strip() == delim:
+        text = "\n".join(body)
+        if cmd is None or (cmd in INTERPRETERS and RUNS.search(text)):
+            out.extend(body)
+        delim, body = None, []
+    else:
+        body.append(line)
+out.extend(body)
+print("\n".join(out))
+') || out=$1
+    printf '%s\n' "$out"
+}
+
 while IFS= read -r stmt; do
     echo "$stmt" | grep -qE "$NAMES_ONLY" && continue
 
@@ -41,6 +88,6 @@ while IFS= read -r stmt; do
     if echo "$stmt" | grep -qE "$VAULT"; then
         ask "Der Befehl entschlüsselt ein Vault oder gibt dessen Inhalt aus."
     fi
-done < <(echo "$CMD" | sed -E 's/&&|\|\||;/\n/g')
+done < <(strip_data_heredocs "$CMD" | sed -E 's/&&|\|\||;/\n/g')
 
 exit 0
