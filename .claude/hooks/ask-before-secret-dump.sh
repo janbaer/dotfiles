@@ -29,8 +29,9 @@ DATA = {"cat", "jq", "psql", "mysql", "sqlite3", "git", "python", "python3"}
 PYTHON = {"python", "python3"}
 SAFE_MODULES = {"re", "json", "sys", "collections", "itertools", "datetime", "math", "csv", "textwrap", "string"}
 IMPORT = re.compile(r"^\s*(?:import\s+(.+)|from\s+(\w+)[\w.]*\s+import\b)", re.M)
-DANGER = re.compile(r"__import__|importlib|\beval\b|\bexec\b|\bcompile\b|getattr|globals|builtins")
-OPEN = re.compile(r"(?<!<)<<(-?)\s*([\"\x27])(\w+)\2")
+DANGER = re.compile(r"__\w+__|importlib|\beval\b|\bexec\b|\bcompile\b|getattr|globals|builtins")
+CONTEXT = re.compile(r"<\(|\$\((?!\()|`")
+OPEN = re.compile(r"(?<!<)<<(-?)\s*([\"\x27]?)(\w+)\2")
 QUOTED = re.compile(r"(<<-?\s*)?(\"[^\"]*\"|\x27[^\x27]*\x27)|\$\(\([^)]*\)\)")
 
 def mask(line):
@@ -50,7 +51,10 @@ def data_opener(line, m):
 def safe_python(text):
     if DANGER.search(text):
         return False
-    for imp in IMPORT.finditer(text):
+    found = list(IMPORT.finditer(text))
+    if len(found) != len(re.findall(r"\bimport\b", text)):
+        return False
+    for imp in found:
         names = imp.group(1) or imp.group(2)
         for name in re.split(r"\s*,\s*", names.strip()):
             if name.split()[0].split(".")[0] not in SAFE_MODULES:
@@ -64,7 +68,7 @@ for line in sys.stdin.read().splitlines():
         masked = mask(line)
         m = OPEN.search(masked)
         if m:
-            cmd = data_opener(masked, m)
+            cmd = data_opener(masked, m) if m.group(2) else None
             if cmd == "cat" and ">" in masked:
                 cmd = None
             dash, delim, body = bool(m.group(1)), m.group(3), []
@@ -72,12 +76,17 @@ for line in sys.stdin.read().splitlines():
         text = "\n".join(body)
         if cmd is None or (cmd in PYTHON and not safe_python(text)):
             out.extend(body)
+        else:
+            out.append(body)
         out.append(line)
         delim, body = None, []
     else:
         body.append(line)
 out.extend(body)
-print("\n".join(out))
+lines = [l for l in out if isinstance(l, str)]
+if CONTEXT.search(mask("\n".join(lines))):
+    out = [x for item in out for x in (item if isinstance(item, list) else [item])]
+print("\n".join(l for l in out if isinstance(l, str)))
 ') || out=$1
     printf '%s\n' "$out"
 }
