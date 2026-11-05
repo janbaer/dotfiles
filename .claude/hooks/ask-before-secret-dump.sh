@@ -25,40 +25,54 @@ strip_data_heredocs() {
     local out
     out=$(printf '%s\n' "$1" | python3 -I -c '
 import re, sys
-DATA = {"cat", "jq", "psql", "mysql", "sqlite3", "git", "python", "python3", "node", "bun"}
-INTERPRETERS = {"python", "python3", "node", "bun"}
-RUNS = re.compile(r"os\.system|subprocess|popen|child_process|\bexec|\bspawn")
-OPEN = re.compile(r"(?<!<)<<-?\s*([\"\x27]?)(\w+)\1")
+DATA = {"cat", "jq", "psql", "mysql", "sqlite3", "git", "python", "python3"}
+PYTHON = {"python", "python3"}
+SAFE_MODULES = {"re", "json", "sys", "collections", "itertools", "datetime", "math", "csv", "textwrap", "string"}
+IMPORT = re.compile(r"^\s*(?:import\s+(.+)|from\s+(\w+)[\w.]*\s+import\b)", re.M)
+DANGER = re.compile(r"__import__|importlib|\beval\b|\bexec\b|\bcompile\b|getattr|globals|builtins")
+OPEN = re.compile(r"(?<!<)<<(-?)\s*([\"\x27])(\w+)\2")
 QUOTED = re.compile(r"(<<-?\s*)?(\"[^\"]*\"|\x27[^\x27]*\x27)|\$\(\([^)]*\)\)")
 
 def mask(line):
     return QUOTED.sub(lambda m: m.group(0) if m.group(1) else "Q", line)
 
 def data_opener(line, m):
-    head = re.split(r"[|;&(]", line[:m.start()])[-1].split()
+    head = line[:m.start()].split()
     while head and re.fullmatch(r"\w+=\S*", head[0]):
         head.pop(0)
-    if not head or head[0].rsplit("/", 1)[-1] not in DATA:
+    if len(head) > 4 or not head or any(re.search(r"[|;&()`$<>]", w) for w in head):
         return None
-    if line[m.end():].strip():
+    cmd = head[0].rsplit("/", 1)[-1]
+    if cmd not in DATA or line[m.end():].strip():
         return None
-    return head[0].rsplit("/", 1)[-1]
+    return cmd
 
-out, body, delim, cmd = [], [], None, None
+def safe_python(text):
+    if DANGER.search(text):
+        return False
+    for imp in IMPORT.finditer(text):
+        names = imp.group(1) or imp.group(2)
+        for name in re.split(r"\s*,\s*", names.strip()):
+            if name.split()[0].split(".")[0] not in SAFE_MODULES:
+                return False
+    return True
+
+out, body, delim, dash, cmd = [], [], None, False, None
 for line in sys.stdin.read().splitlines():
     if delim is None:
         out.append(line)
-        m = OPEN.search(mask(line))
+        masked = mask(line)
+        m = OPEN.search(masked)
         if m:
-            masked = mask(line)
             cmd = data_opener(masked, m)
             if cmd == "cat" and ">" in masked:
                 cmd = None
-            delim, body = m.group(2), []
-    elif line.strip() == delim:
+            dash, delim, body = bool(m.group(1)), m.group(3), []
+    elif (line.lstrip("\t") if dash else line) == delim:
         text = "\n".join(body)
-        if cmd is None or (cmd in INTERPRETERS and RUNS.search(text)):
+        if cmd is None or (cmd in PYTHON and not safe_python(text)):
             out.extend(body)
+        out.append(line)
         delim, body = None, []
     else:
         body.append(line)
