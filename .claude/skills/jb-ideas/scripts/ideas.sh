@@ -32,11 +32,12 @@ add_idea() {
   slug=$(slugify "$title")
   name="${date}-${slug}"
   obsidian vault="$VAULT" create path="Ideas/${name}.md" content="---
-tags: [idee]
-datum: ${date}
 titel: ${title}
-status: offen
 repo:
+date: ${date}
+status: open
+tags:
+  - idea
 ---
 
 # ${title}

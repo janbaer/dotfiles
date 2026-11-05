@@ -241,7 +241,7 @@ Freitext-Raum für alles, was nicht in die Schubladen oben passt — Träume, Be
 
 Formuliere aus den Antworten einen **zusammenhängenden Fließtext** in Jans Stil. Beobachtungen zu seinem Stil:
 
-- Beginnt oft mit einer Begrüßung wie *"Guten Morgen"* oder *"Es ist leider zu spät, um noch guten Morgen zu sagen"*.
+- Eine Begrüßung ("Guten Morgen", "liebes Tagebuch") steht im Eintrag **nur, wenn Jan sie in seinem Text selbst geschrieben oder gesagt hat**. Fehlt sie im Starttext, beginnt der Eintrag direkt mit dem Inhalt. Nie von dir aus ergänzen, auch wenn frühere Einträge so beginnen.
 - Wechselt locker zwischen Vortag-Rückblick und Tagesplanung.
 - Persönlich, ich-erzählend, kein Business-Deutsch.
 - Emojis sparsam (😜 kommt vor, aber selten).
@@ -253,7 +253,7 @@ Formuliere aus den Antworten einen **zusammenhängenden Fließtext** in Jans Sti
 
 ## {Wochentag}
 
-{Begrüßung + fließender Text, der was gut lief und was nicht integriert —
+{Fließender Text (Begrüßung nur, wenn Jan sie selbst geschrieben hat), der was gut lief und was nicht integriert —
 je nach Antwort auf Frage 1 im Tempus passend: "Gestern habe ich…" vs. "Heute früh…"}
 
 {Falls „Sonst noch was" Inhalt hat: nahtlos einweben, nicht als separater Abschnitt.}
@@ -288,11 +288,14 @@ Gib den Eintrag erst im Chat aus — vollständig, als Markdown-Codeblock — un
 ### In die Datei schreiben
 
 1. **Datei existiert nicht** (z. B. erster Tagebucheintrag der Woche):
-   Verwende `Write` mit folgendem Grundgerüst:
+   Verwende `Write` mit folgendem Grundgerüst (`NN` zweistellig wie im Dateinamen, `date` ist das heutige Datum; die Vorlage liegt in `_templates/Wochenbericht.md`):
    ```markdown
    ---
-   created: YYYY-MM-DD
-   tags: []
+   titel: Wochenbericht KW NN
+   date: YYYY-MM-DD
+   status: open
+   tags:
+     - diary
    ---
 
    ## {Wochentag}

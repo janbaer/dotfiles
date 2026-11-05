@@ -41,6 +41,6 @@ Ziel ist `$V/Weekly/Wochenbericht KW {NN}.md`, Abschnitt `## {Wochentag}`, beide
 
 - Abschnitt vorhanden: ans Ende des Abschnitts anhängen, eingeleitet mit `**Update:** `.
 - Abschnitt fehlt: `## {Wochentag}` ans Dateiende, Text direkt darunter, ohne Präfix.
-- Datei fehlt: anlegen mit Frontmatter `created: {Montag der KW}` und `tags: []`, dann wie oben.
+- Datei fehlt: anlegen mit Frontmatter `titel: Wochenbericht KW {NN}`, `date: {Montag der KW}`, `status: open` und `tags: [diary]` (als Liste, siehe `_templates/Wochenbericht.md`), dann wie oben.
 
 Der Text: Diktat-Rahmen ("Tagebucheintrag.") streichen, nach `german-text.md` bereinigen, Fließtext in Jans Stimme, Inhalt unverändert.

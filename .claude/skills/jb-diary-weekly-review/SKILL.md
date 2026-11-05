@@ -153,6 +153,8 @@ Nach dem Gespräch, erstelle einen Rückblick im folgenden Format und hänge ihn
 
 Hänge diesen Abschnitt an die bestehende Wochenbericht-Datei an. Verwende den `obsidian`-Skill zum Lesen und Schreiben.
 
+Setze danach im Frontmatter des Wochenberichts `status: open` auf `status: done`. Der Status bleibt `open`, solange die Woche läuft; nur dieser Rückblick schließt sie ab. Fehlt `status` in einer älteren Datei, ergänze ihn.
+
 ### Reflexions-Note schreiben oder fortschreiben
 
 Nur falls in Schritt 7 etwas beschlossen wurde:

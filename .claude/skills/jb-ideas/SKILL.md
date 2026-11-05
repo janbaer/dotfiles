@@ -12,7 +12,7 @@ Jan diktiert Ideen, oft unterwegs, und will sie nicht jedes Mal von Hand irgendw
 
 ## Status
 
-Jede Notiz trägt die Property `status`: `offen`, `erledigt` (Issue angelegt) oder `verworfen`. Neue Notizen sind `offen`. `Ideas/` enthält nur offene Ideen, `Ideas/Archiv/` die erledigten und verworfenen. Jan sieht die Property in der Dateiliste nicht, deshalb zeigt ihm der Ordner, was noch offen ist: Status und Ordner immer gemeinsam ändern. Eine Notiz ohne `status` stammt von vor dieser Regel und gilt als `offen`.
+Jede Notiz trägt die Property `status`: `open`, `done` (Issue angelegt) oder `dropped`. Neue Notizen sind `open`. `Ideas/` enthält nur offene Ideen, `Ideas/Archiv/` die erledigten und verworfenen. Jan sieht die Property in der Dateiliste nicht, deshalb zeigt ihm der Ordner, was noch offen ist: Status und Ordner immer gemeinsam ändern. Eine Notiz ohne `status` stammt von vor dieser Regel und gilt als `open`.
 
 ## Notizformat
 
@@ -20,11 +20,12 @@ Dateiname: `Ideas/{YYYY-MM-DD}-{slug}.md`. Datum heute: !`date +%F` (steht dort 
 
 ```markdown
 ---
-tags: [idee]
-datum: {YYYY-MM-DD}
 titel: {kurzer Titel}
-status: offen
 repo: {owner/repo, falls klar, sonst leer lassen}
+date: {YYYY-MM-DD}
+status: open
+tags:
+  - idea
 ---
 
 # {Titel}
@@ -72,10 +73,10 @@ Liefert pro offener Idee eine Zeile `{datei ohne .md}<TAB>{Datum}<TAB>{Titel}`, 
 5. Erst wenn `create_issue` eine Issue-Nummer zurückgegeben hat, die Notiz archivieren, in dieser Reihenfolge:
    ```
    obsidian vault="Notes" property:set name="issue" value="{Issue-URL}" path="Ideas/{datei}.md"
-   obsidian vault="Notes" property:set name="status" value="erledigt" path="Ideas/{datei}.md"
+   obsidian vault="Notes" property:set name="status" value="done" path="Ideas/{datei}.md"
    obsidian vault="Notes" move path="Ideas/{datei}.md" to="Ideas/Archiv/{datei}.md"
    ```
-   `move` legt fehlende Ordner nicht an (ENOENT); `Ideas/Archiv/` muss existieren. `move` kann außerdem still scheitern (Exit 0, keine Ausgabe, nichts verschoben). Prüfe mit `obsidian vault="Notes" files folder="Ideas/Archiv" ext=md`, dass die Datei angekommen ist. Wenn nicht, sag es: Status ist schon `erledigt`, nur das Verschieben fehlt.
+   `move` legt fehlende Ordner nicht an (ENOENT); `Ideas/Archiv/` muss existieren. `move` kann außerdem still scheitern (Exit 0, keine Ausgabe, nichts verschoben). Prüfe mit `obsidian vault="Notes" files folder="Ideas/Archiv" ext=md`, dass die Datei angekommen ist. Wenn nicht, sag es: Status ist schon `done`, nur das Verschieben fehlt.
    Nenne danach Issue-Nummer und URL.
 6. Bricht Jan vor dem Issue ab, bleibt die Notiz. Hänge die Ergebnisse des Interviews unter `## Aus dem Interview` an, damit nichts verloren geht.
 
@@ -85,7 +86,7 @@ Liefert pro offener Idee eine Zeile `{datei ohne .md}<TAB>{Datum}<TAB>{Titel}`, 
 2. Hat Jan einen Grund genannt, hänge ihn unter `## Verworfen` an die Notiz an, in seinen Worten. Ohne Grund nicht nachfragen.
 3. Status setzen und archivieren:
    ```
-   obsidian vault="Notes" property:set name="status" value="verworfen" path="Ideas/{datei}.md"
+   obsidian vault="Notes" property:set name="status" value="dropped" path="Ideas/{datei}.md"
    obsidian vault="Notes" move path="Ideas/{datei}.md" to="Ideas/Archiv/{datei}.md"
    ```
    Ankunft prüfen wie bei `grill`, Schritt 5.
