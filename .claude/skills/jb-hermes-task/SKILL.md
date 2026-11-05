@@ -5,7 +5,7 @@ description: Use when a task should be handed to the Hermes Agent on the homelab
 
 # Hermes task
 
-Hand a task to the Hermes Agent at `https://agent.home.janbaer.de` and fetch the result later. The bundled `scripts/hermes-task` (relative to this `SKILL.md`) wraps the asynchronous Runs API of the Hermes API server.
+Hand a task to the Hermes Agent at `https://agent-api.home.janbaer.de` and fetch the result later. The bundled `scripts/hermes-task` (relative to this `SKILL.md`) wraps the asynchronous Runs API of the Hermes API server.
 
 Needs `HERMES_AGENT_API_KEY` in the environment. Never print it.
 
@@ -22,7 +22,7 @@ Needs `HERMES_AGENT_API_KEY` in the environment. Never print it.
 
 Exit codes: 0 success, 1 failure, 2 wrong usage, 3 `wait` ran out of `max_s`, 4 the run waits for an approval. Exit 1 covers a run that ended without `completed` and also HTTP errors such as 401 (wrong key) or 404 (unknown run_id); read stderr to tell them apart. `wait` retries only on connection errors, 429 and 5xx. A run that outlives `max_s` keeps running on the server; call `wait` again.
 
-`-p <profile>` (or `HERMES_PROFILE`) sends every call to `/p/<profile>/v1`, so the run executes in that profile: its `HERMES_HOME`, skills, memory and `.env`. A run started with `-p coder` is only visible with `-p coder`. The reverse proxy forwards `/v1` and `/p/coder/v1`; another profile needs its own location in NPM and an `API_SERVER_KEY` in its `.env`.
+`-p <profile>` (or `HERMES_PROFILE`) sends every call to `/p/<profile>/v1`, so the run executes in that profile: its `HERMES_HOME`, skills, memory and `.env`. A run started with `-p coder` is only visible with `-p coder`. `agent-api.home.janbaer.de` forwards every path to the API server, so no proxy location is needed per profile; another profile needs an `API_SERVER_KEY` in its `.env`.
 
 ## Approvals
 
@@ -88,5 +88,5 @@ Editing the script in place conflicts with the coder's worktrees and the deploye
 ## Rules
 
 - Start one run per task. Do not retry a failed `start` blindly: check with Jan first, because the server may have started the run anyway.
-- Do not send the same task through `/v1/chat/completions` as a second attempt. Both sessions run and both cost tokens. A single request there can run up to 15 minutes (`proxy_read_timeout 900s` on `/v1`); `/v1/runs` has no such limit.
+- Do not send the same task through `/v1/chat/completions` as a second attempt. Both sessions run and both cost tokens. A single request there can run for many minutes and the client has to hold the connection open; `/v1/runs` returns at once.
 - A run costs real tokens. A research run used about 310,000. Tell Jan before starting several at once.

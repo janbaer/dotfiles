@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-URL="${HERMES_AGENT_URL:-https://agent.home.janbaer.de}"
+URL="${HERMES_AGENT_URL:-https://agent-api.home.janbaer.de}"
 PROFILE="${HERMES_PROFILE:-}"
 INTERVAL=30
 MAX_WAIT=1800
