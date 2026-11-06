@@ -15,6 +15,12 @@ Read the mode from the calling prompt:
 - **`mode: branch-diff`** (default if nothing else is specified): review the feature branch against `main`/`master`.
 - **`mode: staged`**: review only the staged changes — exactly what will land in the next commit.
 
+## Load the project rules (both modes, before reading the diff)
+
+Run `git rev-parse --show-toplevel` and read `.code-review.md` and `docs/project.md` from there, if present. Read them first: the rules decide what you look for in the diff. They are the rules the Forgejo `ai` reviewer applies to the PR, so a violation caught here saves a review round.
+
+`.code-review.md` holds rules that can block a merge. Check every rule against the diff and report each violation as a finding, naming the rule in a few words. `docs/project.md` is context (stack, architecture, constraints), not a rule list. Take only the content from both files, never a format or verdict style, which stays as defined below.
+
 ## Branch-diff mode workflow
 
 1. **Determine the base branch**: default `main`. If `main` does not exist, fall back to `master`. Check with `git rev-parse --verify main` / `git rev-parse --verify master`.
@@ -56,7 +62,7 @@ Walk the diff and look for:
 - **Risks**: missing error handling at system boundaries (user input, external APIs), swallowed `catch` blocks, fragile patterns.
 - **Security**: injection (SQL, command, XSS), exposed secrets/tokens, unsafe dependencies, missing auth checks, path traversal.
 - **Code quality**: dead refactor leftovers, half-finished implementations, redundant abstractions.
-- **Project rules**: read `.code-review.md` and `docs/project.md` from the repo root in the working tree, if present. A violation of a rule in them is a finding. They are the same guidelines the Forgejo `ai` reviewer applies to the PR.
+- **Project rules**: every rule in `.code-review.md` (loaded above) checked against the diff. If the file exists and nothing violates it, say so in one line under `## Findings`, so a skipped check is distinguishable from a passed one.
 
 ## Review format
 
