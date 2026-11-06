@@ -68,7 +68,7 @@ PR #N: <title>
 <PR URL>
 ```
 
-**Ask for confirmation only if the PR was inferred from context** (matched automatically from the current branch) — not if the user explicitly passed a PR number or selected one from the list. If asking: "Merge this PR?" and wait for confirmation.
+**Ask for confirmation only if the PR is ambiguous.** Do not ask if the user passed a PR number, selected one from the list, or if the current branch matches exactly one open PR. Ask if several open PRs could be meant, for example when the branch matches none and the user named none. If asking: "Merge this PR?" and wait for confirmation. The merge method is fixed (squash), so never ask about it.
 
 ### 4. Test the PR on top of the base
 
