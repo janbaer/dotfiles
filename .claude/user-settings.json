@@ -80,11 +80,6 @@
             "type": "command",
             "command": "$HOME/.claude/hooks/no-ai-attribution.sh",
             "timeout": 10
-          },
-          {
-            "type": "command",
-            "command": "$HOME/.claude/hooks/ask-before-secret-dump.sh",
-            "timeout": 10
           }
         ]
       }
