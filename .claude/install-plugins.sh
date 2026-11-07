@@ -48,7 +48,6 @@ install_plugin() {
 # install_plugin filetree@claude-code-filetree data-goblin/claude-code-filetree
 install_plugin next-steps@claude-code-mods hamzafer/claude-code-mods
 install_plugin savvy-progress@claude-kit JohnnyVizz/claude-kit
-install_plugin dateibaum boonpflug/claude-mods-deutsch
 install_plugin fortschritt boonpflug/claude-mods-deutsch
 
 # Not installed from here, on purpose:

@@ -45,6 +45,7 @@ install_skill DietrichGebert/ponytail ponytail
 install_skill DietrichGebert/ponytail ponytail-review
 install_skill DietrichGebert/ponytail ponytail-audit
 install_skill DietrichGebert/ponytail ponytail-debt
+install_skill herdrdev/herdr herdr
 
 # Same install name as the softaworks one above — pick one source, not both:
 #   install_skill https://github.com/obra/the-elements-of-style writing-clearly-and-concisely

@@ -5,7 +5,7 @@
       "source": "tt-a1i/archify",
       "sourceType": "github",
       "skillPath": "archify/SKILL.md",
-      "computedHash": "0ab1326212791f367efe2729c3eac48bca1e21f1bdcb02fba88edf8c12f21b61"
+      "computedHash": "e9ef0923cda908886e667eb48e36b29e81d0a7a7b9fe2bc05f3779be271e5119"
     },
     "clarity": {
       "source": "addyosmani/clarity",
@@ -19,11 +19,17 @@
       "skillPath": "plugins/developer-essentials/skills/code-review-excellence/SKILL.md",
       "computedHash": "35f32edb3935e4fd90c13e75954de46d281fd3b5c1a4733c9abbd9eb94f73206"
     },
+    "herdr": {
+      "source": "herdrdev/herdr",
+      "sourceType": "github",
+      "skillPath": "skills/herdr/SKILL.md",
+      "computedHash": "72177e911f55467de8737174072ec6bb08e30bbf62bceabcb69678e944398b18"
+    },
     "humanizer": {
       "source": "blader/humanizer",
       "sourceType": "github",
       "skillPath": "SKILL.md",
-      "computedHash": "d85c4727f62296887c3206e32a99caeed7611af7c4701c1b9931897260e31a73"
+      "computedHash": "1e67c3a4a675bd0c961b1fd8ebb718174f9a61a547d9bedad2ade5eb99cce831"
     },
     "ponytail": {
       "source": "DietrichGebert/ponytail",
@@ -77,7 +83,7 @@
       "source": "login-tb/claude-skills",
       "sourceType": "github",
       "skillPath": "skills/vermenschlichen/SKILL.md",
-      "computedHash": "018000c3f19e6bcb9c55d3ed77323b5c613a7afe7a4587c55a48c80036040875"
+      "computedHash": "8bd68f7c3a8f5fc4b6bb7c662cee163fb50ab74feb754546ba210959a2f50bf1"
     },
     "wait-what": {
       "source": "mattpocock/skills",
