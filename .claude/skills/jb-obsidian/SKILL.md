@@ -1,8 +1,8 @@
 ---
 name: obsidian
 model: sonnet
-description: "Use when searching, reading, creating, editing, renaming or moving notes in the user's Obsidian vault, a Markdown knowledge base: 'search Obsidian', 'add to Obsidian', 'save this to my notes', 'what do I have on...', or a reference to an existing note by name. Also covers the wiki workflows ingest, query with write-back, and lint. Trigger: '/jb-obsidian ingest|query|lint|rename'."
-argument-hint: "ingest <url|file|text> | query <question> | lint | rename <note> <new-name> | <free text>"
+description: "Use when searching, reading, creating, editing, renaming or moving notes in the user's Obsidian vault, a Markdown knowledge base: 'search Obsidian', 'add to Obsidian', 'save this to my notes', 'what do I have on...', or a reference to an existing note by name. Also covers the wiki workflows ingest, query with write-back, and lint. Trigger: '/jb-obsidian ingest|query|lint|rename|config'."
+argument-hint: "ingest <url|file|text> | query <question> | lint | rename <note> <new-name> | config | <free text>"
 ---
 
 # Obsidian Vault
@@ -19,6 +19,7 @@ The first word of the argument picks the mode:
 | `query <question>` | Answer from the wiki, offer write-back | [Query](#query) |
 | `lint` | Health check: report first, fix on approval | [Lint](#lint) |
 | `rename <note> <new-name>` | Rename or move a note, including its references | [Rename and move](#rename-and-move) |
+| `config` | Check the vault configuration note against `.obsidian/` | [Config](#config) |
 
 Any other argument is free text: match it to an operation below. With no argument and nothing in the conversation to act on, show this table and ask which mode is wanted.
 
@@ -37,10 +38,12 @@ If the command fails → inform the user that the Obsidian CLI is not available 
 At the start of every session that involves wiki operations (ingest, query, lint, or any structural changes), read the schema file:
 
 ```bash
-obsidian vault="Obsidian" read file="CLAUDE"
+obsidian vault="Obsidian" read file="AGENTS"
 ```
 
-If `CLAUDE.md` does not exist, inform the user that the wiki schema has not been defined yet and offer to create one. Do not perform wiki workflows without a schema — the schema defines page types, frontmatter standards, tag conventions, and linking rules that all operations depend on.
+If `AGENTS.md` does not exist, inform the user that the wiki schema has not been defined yet and offer to create one. Do not perform wiki workflows without a schema — the schema defines page types, frontmatter standards, tag conventions, and linking rules that all operations depend on.
+
+A vault whose `AGENTS.md` holds access rules instead of a wiki schema (page types, frontmatter standard, tags) is not a wiki, for example the diary vault `Notes`. There `ingest`, `query` and `lint` do not apply: say so and stop. Note search, read, create, rename and `config` still work, but follow that `AGENTS.md` (write permissions, forbidden folders, the target folder's naming) instead of the Create rules below.
 
 For simple note lookups or quick searches, reading the schema is not required.
 
@@ -199,15 +202,23 @@ Present the results as a list of linking notes with a brief description of each.
    ```
 2. **Check the result.** Both commands exit 0 even on failure, printing `Error: ...` or nothing at all, so read the output and confirm the new file with `ls`. If the CLI will not do it, use `mv` and rewrite the links yourself, because Obsidian only updates them for its own renames.
 3. **Find what Obsidian leaves alone.** It rewrites wikilinks, not plain mentions such as inline code. Grep for the old name in the vault (excluding `.obsidian/`) and in `~/Projects/dotfiles/.claude/skills`, where skills like `jb-homelab-inventory` hard-code note paths, then update every hit that refers to this note.
-4. **After a move, update the structure.** Correct the directory label in `index.md`, and when the move creates or empties a place, the schema's Directory Structure and "Files that stay at vault root" in `CLAUDE.md`.
+4. **After a move, update the structure.** Correct the directory label in `index.md`, and when the move creates or empties a place, the schema's Directory Structure and "Files that stay at vault root" in `AGENTS.md`.
 
 Done when the old name has no hits left outside historical log text and `.obsidian/`.
+
+### Config
+
+Checks the vault's configuration note (`Obsidian-Vault-Konfiguration`) against `.obsidian/`. Works in every vault, wiki or not. Find the note with `obsidian vault="..." search query="Obsidian-Vault-Konfiguration"`.
+
+1. **Read the facts** from the vault path in `~/.config/obsidian/obsidian.json`: `community-plugins.json` (enabled), `plugins/*/manifest.json` (installed, version), `core-plugins.json`, `appearance.json`, and the sync plugin's settings. Never read or print `data.json`: Remotely Save stores it obfuscated and with the access keys, so its sync values cannot be checked. Leave the sync section as it is, say in the report that it was not verified, and ask Jan if a value looks wrong. Access keys stay out of the note.
+2. **Compare with the note**: plugins missing from the table, listed but not installed, version differences, enabled/disabled state, counts stated in prose ("exactly these six"), core plugins, theme, sync values.
+3. **Report the differences**, then update the note only after approval. Keep its language, table layout and the "Stand" date; set the date with `date`.
 
 ---
 
 ## Wiki Workflows
 
-These workflows implement the LLM Wiki pattern — they turn the vault from a flat collection of notes into a persistent, compounding knowledge base. All wiki workflows require the schema (`CLAUDE.md`) to be loaded first.
+These workflows implement the LLM Wiki pattern — they turn the vault from a flat collection of notes into a persistent, compounding knowledge base. All wiki workflows require the schema (`AGENTS.md`) to be loaded first.
 
 ### Ingest
 
@@ -231,7 +242,7 @@ Copy this checklist into your reply and tick off each step:
 - [ ] 11 Report
 ```
 
-1. **Read the schema** — load `CLAUDE.md` to know page types, frontmatter standards, tag conventions, and linking rules.
+1. **Read the schema** — load `AGENTS.md` to know page types, frontmatter standards, tag conventions, and linking rules.
 
 2. **Read the source** — understand the content fully before doing anything.
 
@@ -276,7 +287,7 @@ Use when the user asks a question that should be answered from the wiki's accumu
 
 **Workflow:**
 
-1. **Read the schema** — load `CLAUDE.md`.
+1. **Read the schema** — load `AGENTS.md`.
 
 2. **Find relevant pages** — start with the index if available, then search:
    ```bash
@@ -308,19 +319,20 @@ Use when the user asks for a wiki health-check, maintenance pass, or says things
 
 **Workflow:**
 
-1. **Read the schema** — load `CLAUDE.md` to know what "healthy" looks like.
+1. **Read the schema** — load `AGENTS.md` to know what "healthy" looks like.
 
 2. **Run the deterministic checks** — they cover every note, not a sample:
    ```bash
    python3 -I ~/Projects/dotfiles/.claude/skills/jb-obsidian/scripts/lint.py
    ```
-   The script reads the rules from `CLAUDE.md` and reports broken links, stale index entries, orphans, frontmatter problems, non-canonical tags, placement and notes missing from the index. Sections are capped at 25 lines; add `--full` for everything, `--vault <name>` for another vault. It skips `_templates/`, `copilot/` and `Handoffs/`, and ignores broken links that only appear in `log.md`, because the log records history.
+   The script reads the rules from `AGENTS.md` and reports broken links, stale index entries, orphans, frontmatter problems, non-canonical tags, placement and notes missing from the index. Sections are capped at 25 lines; add `--full` for everything, `--vault <name>` for another vault. It skips `_templates/`, `copilot/` and `Handoffs/`, and ignores broken links that only appear in `log.md`, because the log records history.
 
 3. **Judge what the script cannot:**
    - Broken links with 3 or more sources are candidates for a new page; so are concepts mentioned in 3+ pages without being linked.
    - Notes whose directory does not fit their `type` or topic.
    - A directory missing from the schema may be deliberate, so ask whether to add it.
    - Contradictions between pages, and stale content: `updated` far older than on related pages. Sample these, starting with the most-linked and most recently modified pages.
+   - `Overview.md` at the vault root, if present: compare its folder table with the top-level directories (new, removed or renamed ones), check that every link resolves, and recompute the "Top pages" list from inbound link counts, leaving out `index`, `log`, `AGENTS`, `_Archiv/` and tooling folders. Report what drifted; on approval update the table and list in the page's existing layout and set `updated`.
 
 4. **Report findings** — present a prioritized list of issues to the user, grouped by severity:
    - **Critical**: broken links, contradictions, incorrect information
@@ -354,7 +366,7 @@ When writing note content with Obsidian-specific syntax (wikilinks, embeds, call
 - Keep notes concise and well-structured with clear headings
 - For internal links between notes, use `[[Note Name]]` wiki-link syntax
 - When the user says "add to Obsidian" with some knowledge or information, distill it into a well-organized note rather than dumping raw text
-- When performing wiki workflows (ingest, query, lint), always read `CLAUDE.md` first and follow its conventions
+- When performing wiki workflows (ingest, query, lint), always read `AGENTS.md` first and follow its conventions
 - Prefer updating existing pages over creating duplicates
 - Every page should have at least one inbound link — no orphans
 - Flag contradictions between pages rather than silently overwriting

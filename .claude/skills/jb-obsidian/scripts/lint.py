@@ -7,7 +7,7 @@ from collections import defaultdict
 from pathlib import Path
 
 SKIP_DIRS = {"_templates", "copilot", "Handoffs"}
-SKIP_NOTES = {"claude", "index", "log"}
+SKIP_NOTES = {"agents", "claude", "index", "log"}
 REQUIRED = ("created", "type", "tags", "status")
 DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 INDEX_ENTRY = re.compile(r"^- \[\[([^\]|#]+)[^\]]*\]\](?: — (.+?/|root)(?: — |$))?")
@@ -178,9 +178,9 @@ def main():
     args = parser.parse_args()
 
     root = Path(cli(args.vault, "vault", "info=path").strip())
-    if not (root / "CLAUDE.md").is_file():
-        sys.exit(f"No CLAUDE.md for vault '{args.vault}': {root}")
-    schema = parse_schema((root / "CLAUDE.md").read_text())
+    if not (root / "AGENTS.md").is_file():
+        sys.exit(f"No AGENTS.md for vault '{args.vault}': {root}")
+    schema = parse_schema((root / "AGENTS.md").read_text())
     notes = {
         rel: path.read_text(errors="replace")
         for path in sorted(root.rglob("*.md"))
