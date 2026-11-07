@@ -13,8 +13,22 @@ Prepend this to every qualifying document:
 
 ```markdown
 > **Status:** Draft — YYYY-MM-DD
+>
 > **Open:** <what I could not verify, or "—" if nothing>
 ```
+
+With more than one open point, put each on its own list item under `**Open:**`:
+
+```markdown
+> **Status:** Draft — YYYY-MM-DD
+>
+> **Open:**
+>
+> - <first thing I could not verify>
+> - <second thing>
+```
+
+The empty `>` line is required: without it Markdown joins the two lines into one paragraph, and a list under `**Open:**` needs the blank line before it to render as a list.
 
 The header is always English, regardless of the document's language — a German banner on an English hand-off reads as machine-generated before anyone judges a sentence.
 

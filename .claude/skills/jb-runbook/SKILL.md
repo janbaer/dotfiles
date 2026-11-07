@@ -29,7 +29,8 @@ reviewed: YYYY-MM-DD
 ---
 
 > **Status:** Draft — YYYY-MM-DD
-> **Open:** <what could not be verified, or "—">
+>
+> **Open:** <what could not be verified, or "—"; several points as a list, see `document-status.md`>
 
 # Creating a new certificate
 
