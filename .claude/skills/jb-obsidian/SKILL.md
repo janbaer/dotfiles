@@ -1,12 +1,26 @@
 ---
 name: obsidian
 model: sonnet
-description: "Use when searching, reading, creating or editing notes in the user's Obsidian vault, a Markdown knowledge base: 'search Obsidian', 'add to Obsidian', 'save this to my notes', 'what do I have on...', or a reference to an existing note by name. Also covers the wiki workflows ingest, query with write-back, and lint."
+description: "Use when searching, reading, creating, editing, renaming or moving notes in the user's Obsidian vault, a Markdown knowledge base: 'search Obsidian', 'add to Obsidian', 'save this to my notes', 'what do I have on...', or a reference to an existing note by name. Also covers the wiki workflows ingest, query with write-back, and lint. Trigger: '/jb-obsidian ingest|query|lint|rename'."
+argument-hint: "ingest <url|file|text> | query <question> | lint | rename <note> <new-name> | <free text>"
 ---
 
 # Obsidian Vault
 
 Manage the user's Obsidian vault via the Obsidian CLI, which communicates with a running Obsidian instance.
+
+## Subcommands
+
+The first word of the argument picks the mode:
+
+| Subcommand | Hint | Section |
+|------------|------|---------|
+| `ingest <url\|file\|text>` | Integrate a new source into the wiki | [Ingest](#ingest) |
+| `query <question>` | Answer from the wiki, offer write-back | [Query](#query) |
+| `lint` | Health check: report first, fix on approval | [Lint](#lint) |
+| `rename <note> <new-name>` | Rename or move a note, including its references | [Rename and move](#rename-and-move) |
+
+Any other argument is free text: match it to an operation below. With no argument and nothing in the conversation to act on, show this table and ask which mode is wanted.
 
 ## Pre-requisites
 
@@ -54,6 +68,8 @@ For direct file access (Edit tool, `find`, `grep`), resolve the path from `~/.co
 | Write note content | `obsidian vault="..." append file="..." content="..."` |
 | Set note properties | `obsidian vault="..." property:set name="..." value="..." file="..."` |
 | Find backlinks | `obsidian vault="..." backlinks file="Note Name"` |
+| Rename a note | `obsidian vault="..." rename file="Note Name" name="new-name"` |
+| Move a note | `obsidian vault="..." move file="Note Name" to="Dir/note-name.md"` |
 | Precise edits (e.g. References section) | Edit tool (CLI has no line-targeted editing) |
 
 Use Glob as a fallback for filename-pattern searches where CLI search isn't precise enough.
@@ -174,6 +190,19 @@ obsidian vault="Obsidian" backlinks file="Note Name"
 
 Present the results as a list of linking notes with a brief description of each.
 
+### Rename and move
+
+1. **Rename or move through the CLI**, so Obsidian rewrites the wikilinks in every note:
+   ```bash
+   obsidian vault="Obsidian" rename file="old-name" name="new-name"
+   obsidian vault="Obsidian" move file="old-name" to="Dir/new-name.md"
+   ```
+2. **Check the result.** Both commands exit 0 even on failure, printing `Error: ...` or nothing at all, so read the output and confirm the new file with `ls`. If the CLI will not do it, use `mv` and rewrite the links yourself, because Obsidian only updates them for its own renames.
+3. **Find what Obsidian leaves alone.** It rewrites wikilinks, not plain mentions such as inline code. Grep for the old name in the vault (excluding `.obsidian/`) and in `~/Projects/dotfiles/.claude/skills`, where skills like `jb-homelab-inventory` hard-code note paths, then update every hit that refers to this note.
+4. **After a move, update the structure.** Correct the directory label in `index.md`, and when the move creates or empties a place, the schema's Directory Structure and "Files that stay at vault root" in `CLAUDE.md`.
+
+Done when the old name has no hits left outside historical log text and `.obsidian/`.
+
 ---
 
 ## Wiki Workflows
@@ -281,52 +310,33 @@ Use when the user asks for a wiki health-check, maintenance pass, or says things
 
 1. **Read the schema** — load `CLAUDE.md` to know what "healthy" looks like.
 
-2. **Check orphan pages** — find notes with no inbound links:
-   For each note in the vault, check backlinks:
+2. **Run the deterministic checks** — they cover every note, not a sample:
    ```bash
-   obsidian vault="Obsidian" backlinks file="Note Name"
+   python3 -I ~/Projects/dotfiles/.claude/skills/jb-obsidian/scripts/lint.py
    ```
-   Notes with zero backlinks (except index.md, log.md, and CLAUDE.md) are orphans.
+   The script reads the rules from `CLAUDE.md` and reports broken links, stale index entries, orphans, frontmatter problems, non-canonical tags, placement and notes missing from the index. Sections are capped at 25 lines; add `--full` for everything, `--vault <name>` for another vault. It skips `_templates/`, `copilot/` and `Handoffs/`, and ignores broken links that only appear in `log.md`, because the log records history.
 
-3. **Check frontmatter completeness** — scan for notes missing required fields defined in the schema (type, tags, created, etc.):
-   ```bash
-   obsidian vault="Obsidian" search query="keyword" limit=20
-   ```
-   Read a sample of pages and check their frontmatter against the schema's requirements.
+3. **Judge what the script cannot:**
+   - Broken links with 3 or more sources are candidates for a new page; so are concepts mentioned in 3+ pages without being linked.
+   - Notes whose directory does not fit their `type` or topic.
+   - A directory missing from the schema may be deliberate, so ask whether to add it.
+   - Contradictions between pages, and stale content: `updated` far older than on related pages. Sample these, starting with the most-linked and most recently modified pages.
 
-4. **Check tag consistency** — list all tags and look for violations of the schema's tag conventions:
-   ```bash
-   obsidian vault="Obsidian" tags sort=count counts
-   ```
-   Flag: wrong casing, typos, tags not in the canonical list, duplicate/overlapping tags.
-
-5. **Find missing pages** — search for wiki-links that point to non-existent pages (broken links). Also identify concepts mentioned in 3+ pages that don't have their own page yet.
-
-6. **Check for stale content** — find pages where `updated` is significantly older than related pages, suggesting they may have been superseded.
-
-7. **Check placement** — compare where notes live with what the schema's directory structure says:
-   ```bash
-   find ~/Documents/Obsidian -maxdepth 1 -type f -name '*.md'
-   find ~/Documents/Obsidian -maxdepth 1 -type d -not -name '.*'
-   ```
-   Flag: root-level notes that are not listed under "Files that stay at vault root"; top-level directories missing from the schema's Directory Structure (the user may have created them on purpose, so ask whether to add them); notes in a directory that does not fit their `type` or topic. Then compare `index.md` with reality: entries whose directory label (`— Dir/`, `— root`) no longer matches where the file is, notes missing from the index, entries for notes that no longer exist.
-
-8. **Report findings** — present a prioritized list of issues to the user, grouped by severity:
+4. **Report findings** — present a prioritized list of issues to the user, grouped by severity:
    - **Critical**: broken links, contradictions, incorrect information
    - **Important**: orphan pages, missing frontmatter, tag inconsistencies, notes outside the schema's structure, stale index entries
    - **Nice to have**: missing pages for frequently-mentioned concepts, stale content
 
-9. **Fix with permission** — for each category of issues, ask the user whether to fix them now. Apply fixes following the schema conventions. Do not bulk-fix without confirmation.
+5. **Fix with permission** — for each category of issues, ask the user whether to fix them now. Apply fixes following the schema conventions. Do not bulk-fix without confirmation.
 
-10. **Append to log**:
+6. **Append to log**:
    ```bash
    obsidian vault="Obsidian" append file="log" content="\n## [YYYY-MM-DD] lint | Maintenance pass\n\nFindings: X orphans, Y missing frontmatter, Z tag issues, W placement issues. Fixed: [list of fixes applied].\n"
    ```
 
 **Guidelines:**
 - Lint is non-destructive by default — report first, fix only with user permission.
-- Moving a note changes more than its path: update its directory label in `index.md`, the schema's Directory Structure and "Files that stay at vault root" in `CLAUDE.md` when the move creates or empties a place, and any hard-coded path in other tooling (for example the `jb-homelab-inventory` skill). Wikilinks resolve by name and need no change. `obsidian move` can fail without any output, so check the result with `ls` and fall back to `mv`.
-- For large vaults, sample rather than exhaustively scanning every page. Focus on the most-linked and most recently modified pages first.
+- Move or rename notes as described in [Rename and move](#rename-and-move).
 - Suggest new questions to investigate or new sources to look for based on gaps you discover.
 
 ---
