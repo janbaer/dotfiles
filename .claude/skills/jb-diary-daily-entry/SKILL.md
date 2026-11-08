@@ -1,8 +1,8 @@
 ---
 name: diary-daily-entry
-model: haiku
+model: sonnet
 description: "Für den täglichen Tagebucheintrag in Obsidian: 'Tagebuch', 'Tageseintrag', 'Eintrag für heute', 'daily note', 'Wie war gestern', 'Morgenreflexion'. Führt ein kurzes Interview auf Deutsch und hängt den Eintrag an den aktuellen Wochenbericht in der Vault Notes an. Auch bei 'ich möchte kurz reflektieren'."
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 # Täglicher Tagebucheintrag
@@ -126,6 +126,15 @@ Vorgehen:
 5. Kurze Rückmeldung: in welche Datei und unter welchen Abschnitt geschrieben wurde. Keine Fragen, keine Nachhaken.
 
 Das `Update:`-Signal ist bewusst — das Interview zum Vortag ist bereits gelaufen. Jan trägt jetzt nur noch eine zusätzliche Information nach, die später am Tag eingefallen ist.
+
+## Schnellmodus: Ergebnis einer gemeinsamen Arbeit festhalten
+
+Bittet Jan darum, das Ergebnis einer gemeinsamen Arbeit im Tagebuch festzuhalten (z. B. „halt das mal im Tagebuch fest" nach einem gelösten Problem oder einer fertigen Einrichtung), entfallen Interview und der Vikunja-, Kalender- und Wochenplan-Check.
+
+1. Fass Problem und Lösung kurz aus der Session zusammen, in Jans Stil, als `**Update:**` unter dem heutigen Abschnitt. Gibt es den Abschnitt noch nicht, schreib einen normalen Eintrag ohne Präfix.
+2. Nimm nur auf, was in der Session belegt ist (Namen, Zahlen, Ursachen). Was nur vermutet ist, markier als Vermutung oder lass es weg.
+3. Zeig den Entwurf im Chat und schreib erst nach Bestätigung. Du siehst nur die Session, nicht, was Jan sonst erlebt hat.
+4. Keine Todos abhaken, keine neuen Ziele anlegen.
 
 ## Text analysieren
 
