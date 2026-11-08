@@ -1,7 +1,7 @@
 ---
 name: ideas
-description: "Ideen-Backlog in der Obsidian-Vault Notes: eine Idee festhalten, die offenen Ideen auflisten, eine Idee mit grill-me ausarbeiten und daraus ein Forgejo-Issue machen, oder eine Idee verwerfen. Trigger: 'ich hab eine Idee', 'neue Idee', 'halt die Idee fest', 'welche Ideen hab ich', 'Ideenliste', 'lass uns Idee X ausarbeiten', 'verwirf die Idee', 'die Idee ist Blödsinn', '/jb-ideas add|list|grill|drop'."
-argument-hint: "add <Idee> | list | grill <Nummer oder Slug> | drop <Nummer oder Slug>"
+description: "Ideen-Backlog in der Obsidian-Vault Notes: eine Idee festhalten, die offenen Ideen auflisten, eine Idee mit grill-me ausarbeiten und daraus ein Forgejo-Issue machen, oder eine Idee verwerfen, oder das Backlog auf erledigte und veraltete Ideen durchsehen. Trigger: 'ich hab eine Idee', 'neue Idee', 'halt die Idee fest', 'welche Ideen hab ich', 'Ideenliste', 'lass uns Idee X ausarbeiten', 'verwirf die Idee', 'die Idee ist Blödsinn', 'Ideen aufräumen', '/jb-ideas add|list|grill|drop|maintenance'."
+argument-hint: "add <Idee> | list | grill <Nummer oder Slug> | drop <Nummer oder Slug> | maintenance"
 ---
 
 # Ideen-Backlog
@@ -41,7 +41,7 @@ Notizen sind Deutsch. Kommt später etwas zur selben Idee dazu, ergänze die bes
 
 ## Modus erkennen
 
-Das erste Wort des Arguments entscheidet: `add`, `list`, `grill` oder `drop`. Ohne Schlüsselwort: Will Jan eine Idee verwerfen ("verwirf die Idee", "ist doch Blödsinn"), ist es `drop`. Enthält das Argument oder die Nachricht eine Idee, ist es `add`, sonst `list`.
+Das erste Wort des Arguments entscheidet: `add`, `list`, `grill`, `drop` oder `maintenance`. Ohne Schlüsselwort: Will Jan eine Idee verwerfen ("verwirf die Idee", "ist doch Blödsinn"), ist es `drop`. Enthält das Argument oder die Nachricht eine Idee, ist es `add`, sonst `list`.
 
 ### add
 
@@ -91,3 +91,15 @@ Liefert pro offener Idee eine Zeile `{datei ohne .md}<TAB>{Datum}<TAB>{Titel}`, 
    ```
    Ankunft prüfen wie bei `grill`, Schritt 5.
 4. Bestätige in einem Satz mit dem Titel.
+
+### maintenance
+
+Nur das Argument `maintenance`, nie als Idee-Text zu verstehen. Der Modus ist **nur lesend**: Er schlägt Archiv-Kandidaten vor und ändert nichts.
+
+1. Hole die offenen Ideen mit `ideas.sh list`. Für jede: Notiz lesen, `repo` und `date` aus dem Frontmatter nehmen. Heute per `date +%F`, daraus das Alter in Tagen.
+2. Ordne jede Idee ein:
+   - **Erledigt:** Die Idee ist belegbar umgesetzt oder anderweitig abgedeckt. Prüfe nur lesend an der Live-Quelle: Es gibt schon ein Forgejo-Issue oder einen PR dazu (Suche im `repo`, sonst nach dem Titel), die Funktion steckt bereits im Repo, eine andere offene Idee oder ein Skill deckt dasselbe ab. Nenne den Beleg.
+   - **Wahrscheinlich veraltet:** Älter als 14 Tage und kein Hinweis in die eine oder andere Richtung.
+   - **Behalten:** Jünger als 14 Tage, oder ein Hinweis, dass die Idee noch gilt. Beleg schlägt Alter.
+3. Zeig nur Erledigte und Wahrscheinlich veraltete, Erledigte zuerst, als Tabelle mit fortlaufender Nummer in der ersten Spalte (`#`, 1, 2, 3 … über beide Kategorien), dann Datei, Titel, Alter in Tagen, Kategorie, Grund in einer Zeile. Darunter die Zahl der behaltenen Ideen. Keine Kandidaten: "Keine Kandidaten."
+4. Hier ist Schluss. Archiviert wird nur, wenn Jan Ideen nennt (Nummer oder Slug). Dann läuft pro Idee `drop`, Schritt 3. Wurde die Idee in der Praxis umgesetzt und Jan will das festhalten, setzt du stattdessen `status` auf `done`.

@@ -1,7 +1,7 @@
 ---
 name: handoff
-description: Create a handoff document to pass context to a fresh session, resume from an existing one, or close one out. Use when the user says "handoff", "create a handoff", "resume from handoff", "load handoff", "pick up where we left off", references a handoff file by name, runs "handoff list" / "handoff continue" to browse all existing handoffs, or runs "handoff done" to mark the current one finished.
-argument-hint: "Next session focus, OR name of an existing handoff file to resume from (e.g. handoff-20260513-1430-dotfiles-security-check.md), OR 'list' / 'continue' to pick from all existing handoffs, OR 'done' to close out the current one. Append 'in <dir>' to keep the handoff in a repository folder instead of the vault, or a bare 'in' for the current directory"
+description: Create a handoff document to pass context to a fresh session, resume from an existing one, or close one out. Use when the user says "handoff", "create a handoff", "resume from handoff", "load handoff", "pick up where we left off", references a handoff file by name, runs "handoff list" / "handoff continue" to browse all existing handoffs, runs "handoff done" to mark the current one finished, or runs "handoff maintenance" to find open handoffs that are obsolete or stale.
+argument-hint: "[list | continue | done | maintenance | <focus> | <handoff-file>] [in <dir>]"
 ---
 
 > **Vault access:** the Obsidian vault is reached only through the `obsidian` CLI, which talks to the running Obsidian app — it is NOT a plain folder on disk. Never `find`/`grep` the filesystem for notes. Default vault name: `Obsidian`. Handoffs live in the `Handoffs/` folder (capital H — do not create a lowercase variant).
@@ -103,6 +103,17 @@ Everything below describes the vault; with `in <dir>` replace the `obsidian` cal
    ```
    Moving through the CLI lets Obsidian update links that point to the note. `move` can fail silently (exit 0, no output, nothing moved), so check with `files folder="Handoffs/Archive" ext=md` that the file arrived. If it did not, say so: the status is already `done`, only the move is missing.
 4. Confirm with the new path. If the handoff's own "Next session should" list still has obviously unfinished items, mention them once — closing is the user's call, not yours, but a silent close on live work is worth one line of friction.
+
+**Maintenance mode** — the argument is exactly `maintenance` (case-insensitive). Like `list` and `done`, an explicit command, never a topic slug. Vault only; it ignores `in <dir>`. It is **read-only**: it proposes archive candidates and changes nothing.
+1. Collect every open handoff: `files folder="Handoffs" ext=md`, ignoring `Handoffs/Archive/` and `Handoffs/files/`. A missing `status` counts as open; skip files with `status: done`.
+2. Read each one. Take `project`, `branch` and `date` from the frontmatter, never from the filename. Get today from `date +%F` and compute the age in days from the `date` property.
+3. Classify each handoff:
+   - **Obsolete** — the work is provably finished. Check with read-only commands against the live source: the referenced Forgejo issue or PR is closed or merged, the branch is merged or deleted, the referenced files or the project directory no longer exist, the referenced Vikunja task is done, the commits the handoff plans are already in `git log`. Name the evidence.
+   - **Probably stale** — older than 14 days and no evidence either way.
+   - **Keep** — younger than 14 days, or evidence that the work is still live (open issue or PR, unmerged branch with recent commits), however old.
+   Evidence beats age: an old handoff with a live issue is Keep, a three-day-old one whose PR is merged is Obsolete.
+4. Report only the Obsolete and Probably stale ones, Obsolete first, as a table with a running number in the first column (`#`, 1, 2, 3, … across both categories), then filename, project, age in days, category, one-line reason. Jan names the handoffs to archive by those numbers. Add a line with the number of handoffs kept. If there are no candidates, say so.
+5. Stop there. Archiving happens only when Jan names the handoffs to archive (by number or filename), and then follows Done mode step 3 for each one.
 
 **Create mode** — the argument describes a future focus (not a file reference), or the user explicitly asks to create one:
 1. Write a handoff document summarising the current conversation so a fresh agent can continue the work.
