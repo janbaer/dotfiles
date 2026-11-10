@@ -1,0 +1,9 @@
+{
+  "instructions": "Which Claude model should handle this prompt to a coding assistant? Pick the cheapest model that will still do it well.",
+  "criteria": {
+    "haiku": "Trivial, mechanical or purely factual: a quick lookup, a one-line edit, a rename, formatting, a single shell command, a short question with a known answer.",
+    "sonnet": "Everyday engineering work: implementing or fixing something well scoped, writing a script, a config change, explaining code, a routine review.",
+    "opus": "Demanding work: debugging an unclear root cause, design or architecture decisions, refactoring across many files, security-sensitive changes, critically reviewing a plan, research that weighs trade-offs.",
+    "fable": "Exceptionally hard, long-horizon work: designing a whole system, a deep investigation across several repositories, a problem earlier attempts failed to solve."
+  }
+}

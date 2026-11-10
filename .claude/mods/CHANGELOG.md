@@ -2,6 +2,11 @@
 
 This file describes all changes to the mods in this directory. Versions are the `version` in each mod's `plugin.json`; an entry without a version left it unchanged.
 
+## 2026-11-10
+---
+
+- model-router 0.1.0: New mod. Sends the first typed prompt of a session to a decision model on OpenRouter (Jev 1.14) and runs the main session on the model it picks; subagents keep theirs. In the default mode `manual` it asks before switching, `/model-router auto` switches without asking. The status line shows the mode and the model that answered. A manual `/model` ends the routing for that session. Replaces the hook that blocked the first prompt until the model was switched by hand.
+
 ## 2026-11-04
 ---
 

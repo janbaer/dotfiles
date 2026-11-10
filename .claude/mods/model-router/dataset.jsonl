@@ -1,0 +1,18 @@
+{"prompt": "Wie viel ist 2 hoch 10?", "expected": "haiku"}
+{"prompt": "Benenne die Variable foo in src/util.ts in bar um", "expected": "haiku"}
+{"prompt": "Welcher Port ist der Standard für PostgreSQL?", "expected": "haiku"}
+{"prompt": "Formatier die README mit prettier", "expected": "haiku"}
+{"prompt": "Zeig mir den git log der letzten 5 Commits", "expected": "haiku"}
+{"prompt": "Schreib mir ein Bash-Skript, das alle .log-Dateien älter als 7 Tage löscht", "expected": "sonnet"}
+{"prompt": "Wie kann ich Proxmox Backup mit Docker auf meinem NAS-Server installieren?", "expected": "sonnet"}
+{"prompt": "Füg der Ansible-Rolle für Caddy einen Handler hinzu, der nach Config-Änderungen neu lädt", "expected": "sonnet"}
+{"prompt": "Erklär mir, was diese Terraform-Moduldatei macht", "expected": "sonnet"}
+{"prompt": "Review the staged changes before I commit", "expected": "sonnet"}
+{"prompt": "Unser VPN bricht seit drei Tagen sporadisch ab, finde die Ursache. Firewall und DNS haben wir schon geprüft.", "expected": "opus"}
+{"prompt": "Refactor the auth module across the whole repo to use the new token service, keep backwards compatibility", "expected": "opus"}
+{"prompt": "Entwirf die Architektur für ein Multi-Tenant-Backup-System über drei Rechenzentren mit Verschlüsselung und Wiederherstellungstests", "expected": "opus"}
+{"prompt": "Prüf meinen Plan, die beiden K3s-Cluster auf eine neue Rancher-Version zu migrieren, und sag mir, wo er bricht", "expected": "opus"}
+{"prompt": "Der Pod startet nach dem Node-Update sporadisch nicht mehr, in den Logs steht nichts Eindeutiges", "expected": "opus"}
+{"prompt": "Plane die komplette Migration unserer 60 Server von Ansible auf NixOS, inklusive Reihenfolge, Rollback und Schulung des Teams", "expected": "fable"}
+{"prompt": "Seit Wochen verlieren wir sporadisch Daten zwischen n8n, Forgejo und der Datenbank, drei Anläufe zur Ursachensuche sind gescheitert. Untersuche alle beteiligten Repositories.", "expected": "fable"}
+{"prompt": "Design a complete self-hosted platform replacing GitHub, Jira and Confluence for a team of 40, with SSO, backups and a migration path", "expected": "fable"}

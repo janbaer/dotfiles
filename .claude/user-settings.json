@@ -98,6 +98,7 @@
     "filetree@claude-code-filetree": false,
     "cache-meter@jan-mods": true,
     "speak@jan-mods": true,
+    "model-router@jan-mods": true,
     "cc-plugin-you-should-know@builtin": true,
     "fortschritt@claude-mods-deutsch": true
   },
@@ -134,6 +135,7 @@
       }
     }
   },
+  "outputStyle": "Concise",
   "pluginConfigs": {
     "filetree@claude-code-filetree": {
       "options": {
@@ -147,7 +149,6 @@
   "skipDangerousModePermissionPrompt": true,
   "editorMode": "vim",
   "agentPushNotifEnabled": true,
-  "outputStyle": "Concise",
   "autoMode": {
     "allow": [
       "$defaults",

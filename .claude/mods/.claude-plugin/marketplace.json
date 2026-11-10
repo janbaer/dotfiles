@@ -21,6 +21,11 @@
       "name": "speak",
       "source": "./speak",
       "description": "Reads Claude's answers aloud via OpenRouter TTS (Gemini), on demand with /speak or automatically."
+    },
+    {
+      "name": "model-router",
+      "source": "./model-router",
+      "description": "Picks the model for a session from its first prompt via a decision model on OpenRouter."
     }
   ]
 }

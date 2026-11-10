@@ -1,0 +1,11 @@
+typesafe/jev-1.14
+perplexity/pplx-decider-v1.2
+perplexity/pplx-decider-flash-v1.2
+liquid/d1-ultra
+liquid/d1.1
+baseten/joey-1
+baseten/mammoth-1
+microsoft/microsoft-decision-1
+parallel/decisions-fast:free
+nace-ai/drex-max
+morph/reflex
