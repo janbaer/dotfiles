@@ -14,6 +14,10 @@ Jan diktiert Ideen, oft unterwegs, und will sie nicht jedes Mal von Hand irgendw
 
 Jede Notiz trägt die Property `status`: `open`, `done` (Issue angelegt) oder `dropped`. Neue Notizen sind `open`. `Ideas/` enthält nur offene Ideen, `Ideas/Archiv/` die erledigten und verworfenen. Jan sieht die Property in der Dateiliste nicht, deshalb zeigt ihm der Ordner, was noch offen ist: Status und Ordner immer gemeinsam ändern. Eine Notiz ohne `status` stammt von vor dieser Regel und gilt als `open`.
 
+## Recherche durch Hermes
+
+Ein Cron-Job auf dem Hermes-Server lässt offene Ideen vom Researcher vorrecherchieren (hermes-scripts#118). Er setzt `research` (`pending`, `done`, `unclear`, `failed`) und `research_attempts` und hängt bei `done` oder `unclear` den Abschnitt `## Recherche` an. `status` fasst er nie an. Diese beiden Properties und den Abschnitt schreibt nur Hermes; der Skill liest sie und entfernt sie höchstens.
+
 ## Notizformat
 
 Dateiname: `Ideas/{YYYY-MM-DD}-{slug}.md`. Datum heute: !`date +%F` (steht dort ein Platzhalter, `date +%F` selbst ausführen), Slug aus dem Titel (klein, Bindestriche, 3 bis 5 Wörter).
@@ -37,7 +41,7 @@ tags:
 {Nur wenn es etwas zu sagen gibt: Einwände, Zielkonflikte, offene Punkte zum Prüfen. Ehrlich und knapp, als Kollege. Nicht Erfundenes als Tatsache hinschreiben, Ungeprüftes als "zu prüfen" markieren.}
 ```
 
-Notizen sind Deutsch. Kommt später etwas zur selben Idee dazu, ergänze die bestehende Notiz, statt eine neue anzulegen.
+Notizen sind Deutsch. Kommt später etwas zur selben Idee dazu, ergänze die bestehende Notiz, statt eine neue anzulegen. Steht dort `research: unclear` oder `failed`, entferne danach `research` und `research_attempts` (`obsidian vault="Notes" property:remove name="research" path="Ideas/{datei}.md"`, ebenso für `research_attempts`), damit die geschärfte Idee neu recherchiert wird. Bei `pending` und `done` bleiben beide stehen.
 
 ## Modus erkennen
 
@@ -66,9 +70,10 @@ Liefert pro offener Idee eine Zeile `{datei ohne .md}<TAB>{Datum}<TAB>{Titel}`, 
 1. Wähle die Idee per Nummer aus der letzten Liste oder per Slug. Fehlt beides, zeig die Liste und frag per `AskUserQuestion`.
 2. Lies die Notiz: `obsidian vault="Notes" read path="Ideas/{datei}.md"`.
 3. Kläre das Ziel-Repo, bevor das Interview anfängt: Steht `repo` in der Notiz, bestätigen lassen, sonst fragen. Ideen betreffen oft ein anderes Repo als das aktuelle Arbeitsverzeichnis.
+   Sag Jan dabei in einem Satz, wie es um die Recherche steht: `done` (liegt vor), `unclear` (Ziel unklar, mit dem, was fehlt), `pending` (läuft gerade, Ergebnis kommt evtl. später), `failed` oder keine Property (keine Recherche). Bei `pending` nicht warten.
 4. Starte `jb-forgejo-issue-create` mit folgenden Abweichungen:
    - `owner`/`repo` aus Schritt 3 übergeben. Schritt 1 dort (Repo aus `git remote`) entfällt.
-   - Den Notizinhalt als Ausgangskontext an `grill-me` geben, damit Jan nichts wiederholen muss.
+   - Den Notizinhalt als Ausgangskontext an `grill-me` geben, damit Jan nichts wiederholen muss. Gibt es `## Recherche`, ist sie Teil davon: Was sie schon beantwortet, fragt `grill-me` nicht neu ab, sondern lässt es bestätigen. Ihre Quellen sind ungeprüfte Modellausgabe und gehen nur nach einer Prüfung als Fakt ins Issue. Bei `unclear` beginnt das Interview mit den Punkten, die die Recherche als fehlend nennt.
    - Der Issue-Text ist **Englisch**, auch wenn Interview und Notiz Deutsch sind.
 5. Erst wenn `create_issue` eine Issue-Nummer zurückgegeben hat, die Notiz archivieren, in dieser Reihenfolge:
    ```
