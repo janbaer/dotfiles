@@ -55,7 +55,7 @@ Parse the agent's JSON response to extract:
 1. **verdict** — `approve`, `request_changes`, or `comment`
 2. **summary** — overall review text
 3. **comments** — array of inline comments with `path`, `position`, `body`, and `severity`
-   - `critical`/`warning` comments are always posted; `note` comments are shown in the terminal but omitted from the Forgejo review unless the user confirms
+   - `critical`/`warning` comments are posted; `note` comments are shown in the terminal only and never posted. A review comment is a required change or it is left out: an agent working on the PR cannot judge whether an optional hint should be done, and an approval lets the PR merge before anyone reads it. A point that can wait becomes a follow-up issue, if Jan wants one.
 
 ### 5. Show the review result
 
@@ -63,10 +63,11 @@ Parse the agent's JSON response to extract:
 
 ### 6. Post the review
 
-Map the agent's verdict to a Forgejo event:
-- `approve` → `APPROVED`
-- `request_changes` → `REQUEST_CHANGES`
-- `comment` → `COMMENT`
+The event follows the posted comments, not the agent's wording:
+- at least one posted comment → `REQUEST_CHANGES`
+- no posted comment → `APPROVED`
+
+`COMMENT` is not used: it is a review that asks for something without requiring it.
 
 Use `create_pull_review` to post the summary and all inline comments in a single review:
 
