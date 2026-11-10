@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """TSV der Messung + data/manual.json -> JSON für den Dataview-Block der Notiz.
 
-Aufruf: to_json.py <messung.tsv> <manual.json> <ausgabe.json>
+Aufruf: to_json.py <messung.tsv> <laufend.tsv> <manual.json> <ausgabe.json>
 Gibt Änderungen gegenüber der vorhandenen Ausgabedatei als +/-/~ Zeilen aus.
 """
 import csv, datetime, json, os, re, sys
 
-tsv, manual_path, out = sys.argv[1:4]
+tsv, running_path, manual_path, out = sys.argv[1:5]
 
 def short_host(h):
     h = h.removesuffix(".home.janbaer.de").removeprefix("jabasoft-")
@@ -33,7 +33,18 @@ with open(tsv) as f:
         }
         entries[(e["service"], e["host"], e["runtime"])] = e
 
+probed, running = set(), set()
+with open(running_path) as f:
+    for line in f:
+        host, _, c = line.rstrip("\n").partition("\t")
+        probed.add(host)
+        if c:
+            running.add((host, c))
+
 for m in json.load(open(manual_path)):
+    if m["host"] in probed and (m["host"], m["container"]) not in running:
+        print(f"? {m['service']} ({short_host(m['host'])}): Container {m['container']} läuft nicht, Eintrag in manual.json prüfen")
+        continue
     e = {
         "service": m["service"],
         "host": short_host(m["host"]),

@@ -40,7 +40,7 @@ Das Skript misst, die Notiz rendert. Der Skill schreibt keine Tabellen: `scripts
 
 ## Was das Skript nicht messen kann
 
-Steht in `data/manual.json` (`service, host, runtime, version, as_of`): Binaries auf `jabasoft-ug`, Rust ohne `rustc`-String (vaultwarden, microbin), Datenbanken und Caches (Version aus dem Image-Tag in `services/<name>/defaults.yml`), statische Images und `llama.cpp`. Ein Eintrag erscheint nur, wenn die Messung ihn nicht selbst liefert. Ändert sich ein Wert, die Zeile dort anpassen und `as_of` setzen. Eine unbekannte Version steht als `"offen"`, nie geraten.
+Steht in `data/manual.json` (`service, container, host, runtime, version, as_of`): Binaries auf `jabasoft-ug`, Rust ohne `rustc`-String (vaultwarden, microbin), Datenbanken und Caches (Version aus dem Image-Tag in `services/<name>/defaults.yml`), statische Images und `llama.cpp`. Ein Eintrag erscheint nur, wenn die Messung ihn nicht selbst liefert und sein `container` auf dem Host läuft. Läuft er nicht, verwirft das Skript den Eintrag und meldet ihn als `?`-Zeile. Das gehört in den Bericht, und die Zeile in `manual.json` wird entfernt. Auf einem Host, dessen Probe fehlschlug, bleiben die Einträge stehen. Ändert sich ein Wert, die Zeile dort anpassen und `as_of` setzen. Eine unbekannte Version steht als `"offen"`, nie geraten.
 
 ## Fragen, die der Skill beantwortet
 
