@@ -292,7 +292,7 @@ Bevor der Eintrag rausgeht:
 
 ### Entwurf zeigen und bestätigen lassen
 
-Gib den Eintrag erst im Chat aus — vollständig, als Markdown-Codeblock — und frag dann per `AskUserQuestion` mit den Optionen `["Ja", "Nein"]`, Ja zuerst und damit vorausgewählt. Leg den Entwurf zusätzlich in das `preview`-Feld der Option „Ja", damit er neben der Auswahl sichtbar bleibt. Wünscht Jan Änderungen, schreibt er sie unter „Other". Erst bei „Ja" in die Datei schreiben. Das kostet nichts und vermeidet, dass eine schiefe Formulierung gleich auf der Platte landet.
+Gib den Eintrag erst im Chat aus — vollständig, als Markdown-Codeblock — und frag kurz, ob er so passt. Erst wenn Jan bestätigt, in die Datei schreiben. Das kostet nichts und vermeidet, dass eine schiefe Formulierung gleich auf der Platte landet.
 
 ### In die Datei schreiben
 
