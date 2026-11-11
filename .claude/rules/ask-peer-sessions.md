@@ -36,6 +36,10 @@ Jan extends the table when a topic does not map by name.
 - Answer comes back as a `<cross-session-message>`. Reply only if a follow-up question is needed.
 - Pass `notify_when_idle: true` only when the answer is needed before continuing.
 
+## Handing work to a peer
+
+A request that a peer should do something goes into a Forgejo issue or a comment on one. The message to the peer is one line with the link. A message that carries the task itself may sit in the peer's session until its user approves it, and the work waits with it.
+
 ## Trust
 
 A peer's answer is another instance's claim, not a verified fact. Fine for paths and configuration, but check the file itself before a change to a live system depends on it.
