@@ -2,6 +2,11 @@
 
 This file describes all changes to the mods in this directory. Versions are the `version` in each mod's `plugin.json`; an entry without a version left it unchanged.
 
+## 2026-11-11
+---
+
+- project-guard 0.1.0: New mod. Before each typed prompt it compares the text with the keywords in `projects.json`; when only another project matches, not the one the session runs in, it asks "Hier weiter / Abbrechen". "Abbrechen" or Esc drops the prompt, "Hier weiter" silences that project for the session, and a typed answer goes to the model as context. No network call; `/project-guard on|off` switches it.
+
 ## 2026-11-10
 ---
 

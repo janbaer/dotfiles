@@ -1,0 +1,42 @@
+[
+  {
+    "folder": "dotfiles",
+    "description": "Claude config, skills, rules, mods and shell dotfiles",
+    "keywords": ["dotfiles", "claude.md", "skill", "skills", "zsh", "zshrc", "statusline", "mods"]
+  },
+  {
+    "folder": "ansible-homelab",
+    "description": "Ansible playbooks, services and cron jobs on the homelab hosts",
+    "keywords": ["ansible", "playbook", "playbooks", "proxmox", "lxc", "homelab"]
+  },
+  {
+    "folder": "nixos-config",
+    "description": "NixOS workstations",
+    "keywords": ["nixos-config", "home-manager", "workstation", "hyprland"]
+  },
+  {
+    "folder": "nixos-server-config",
+    "description": "NixOS servers",
+    "keywords": ["nixos-server-config", "nixos-server"]
+  },
+  {
+    "folder": "howcani",
+    "description": "HowCanI app, Jan's private FAQ",
+    "keywords": ["howcani"]
+  },
+  {
+    "folder": "myhomepage",
+    "description": "Myhomepage app, Jan's personal homepage",
+    "keywords": ["myhomepage"]
+  },
+  {
+    "folder": "n8n",
+    "description": "How the n8n workflows work",
+    "keywords": ["n8n"]
+  },
+  {
+    "folder": "hermes-scripts",
+    "description": "Scripts to configure hermes-agent behavior",
+    "keywords": ["hermes"]
+  }
+]

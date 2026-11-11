@@ -1,0 +1,6 @@
+{
+  "name": "project-guard",
+  "version": "0.1.0",
+  "description": "Asks before a prompt goes to the wrong project session: keywords of another project in the prompt, none of this one's. No network call. Known edge: on a session's first prompt model-router may already have spent its decision when the guard cancels; hook order between mods is unverified.",
+  "types": "./types/index.d.ts"
+}

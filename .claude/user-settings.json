@@ -100,7 +100,8 @@
     "speak@jan-mods": true,
     "model-router@jan-mods": true,
     "cc-plugin-you-should-know@builtin": true,
-    "fortschritt@claude-mods-deutsch": true
+    "fortschritt@claude-mods-deutsch": true,
+    "project-guard@jan-mods": true
   },
   "extraKnownMarketplaces": {
     "jan-mods": {

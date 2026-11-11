@@ -21,6 +21,7 @@ When a factual question about another project comes up, check whether a Claude s
 | Ansible playbooks, services and cron jobs on the homelab hosts | `ansible-homelab` |
 | NixOS workstations | `nixos-config` |
 | NixOS servers | `nixos-server-config` |
+| Claude config, skills, rules, mods and shell dotfiles | `dotfiles` |
 | HowCanI app - Jans private FAQ | `howcani` |
 | Myhomepage app - Jans personal homepage project | `myhomepage` |
 | How the n8n workflows work | `n8n` |
