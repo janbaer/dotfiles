@@ -99,8 +99,9 @@ export const register: Register = on => {
   })
 
   on('prompt.submit', async ($, e, next) => {
-    if (e.origin.kind !== 'composer' || e.command || (await read($, route)).isDecided) return next(e)
+    if (e.origin.kind !== 'composer' || (await read($, route)).isDecided) return next(e)
     await update($, route, r => ({ ...r, isDecided: true }))
+    if (e.command) return next(e)
 
     const decision = await decide($, e.text).catch(() => null)
     await logDecision($, decision, e.text).catch(() => {})
