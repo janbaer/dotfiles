@@ -201,7 +201,7 @@ Present the results as a list of linking notes with a brief description of each.
    obsidian vault="Obsidian" move file="old-name" to="Dir/new-name.md"
    ```
 2. **Check the result.** Both commands exit 0 even on failure, printing `Error: ...` or nothing at all, so read the output and confirm the new file with `ls`. If the CLI will not do it, use `mv` and rewrite the links yourself, because Obsidian only updates them for its own renames.
-3. **Find what Obsidian leaves alone.** It rewrites wikilinks, not plain mentions such as inline code. Grep for the old name in the vault (excluding `.obsidian/`) and in `~/Projects/dotfiles/.claude/skills`, where skills like `jb-homelab-inventory` hard-code note paths, then update every hit that refers to this note.
+3. **Find what Obsidian leaves alone.** It rewrites wikilinks, not plain mentions such as inline code. Grep for the old name in the vault (excluding `.obsidian/`) and in `~/Projects/dotfiles/.claude/skills`, where skills hard-code note paths (the unifi skill, for one), then update every hit that refers to this note.
 4. **After a move, update the structure.** Correct the directory label in `index.md`, and when the move creates or empties a place, the schema's Directory Structure and "Files that stay at vault root" in `AGENTS.md`.
 
 Done when the old name has no hits left outside historical log text and `.obsidian/`.

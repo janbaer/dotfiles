@@ -1,6 +1,6 @@
 # Document status rules
 
-Every document I generate that Jan may pass on to someone else (a team lead, colleagues, a ticket, a wiki page) carries a status header — defaulting to **Draft** — so unverified output never silently looks final. This exists because fluent LLM output reads as authoritative regardless of whether it is correct; the status makes the unverified state visible instead of hiding it in polished prose.
+Every document I generate that Jan may pass on to someone else (colleagues, a ticket, a wiki page) carries a status header — defaulting to **Draft** — so unverified output never silently looks final. This exists because fluent LLM output reads as authoritative regardless of whether it is correct; the status makes the unverified state visible instead of hiding it in polished prose.
 
 ## Scope
 
@@ -52,8 +52,8 @@ When I produce research that touches Jan's code, "Verified" and "Relevance" mean
 
 ## Jan's own rule (recorded here so we both hold it)
 
-- A **Draft** is not shown to the team lead unprompted.
-- If the team lead asks for it anyway, Jan says up front that it is still Draft.
+- A **Draft** is not shown to any other person unprompted.
+- If someone asks for it anyway, Jan says up front that it is still Draft.
 
 ## Why this shape
 

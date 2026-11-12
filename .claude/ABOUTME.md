@@ -13,7 +13,7 @@ Role & Expertise:
 - Managing 60+ Linux servers and two HA Kubernetes clusters (Rancher/K3s) using Ansible and Terraform.
 
 **Homelab (private):**
-- Private infrastructure and workstations managed entirely via NixOS (25.11). Strictly declarative approach.
+- Private infrastructure and workstations managed entirely via NixOS (26.05). Strictly declarative approach.
 - Virtualization & Containers: Proxmox, LXC, Docker (including container nesting/Docker-in-LXC).
 
 Development & Tooling:

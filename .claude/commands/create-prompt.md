@@ -14,8 +14,7 @@ The user wants you to create a prompt for: $ARGUMENTS
 
 ## Core Process
 
-<thinking>
-Analyze the user's request to determine:
+Before writing the prompt, work out:
 1. **Clarity check (Golden Rule)**: Would a colleague with minimal context understand what's being asked?
    - Are there ambiguous terms that could mean multiple things?
    - Would examples help clarify the desired outcome?
@@ -39,7 +38,7 @@ Analyze the user's request to determine:
 5. **Reasoning depth needed**:
 
    - Simple/straightforward → Standard prompt
-   - Complex reasoning, multiple constraints, or optimization → Include extended thinking triggers (phrases like "thoroughly analyze", "consider multiple approaches", "deeply consider")
+   - Complex reasoning, multiple constraints, or optimization → Spell out the constraints and what a good result looks like (thinking depth is set by effort, not by trigger phrases)
 
 6. **Project context needs**: Do I need to examine the codebase structure, dependencies, or existing patterns?
 
@@ -54,7 +53,6 @@ Analyze the user's request to determine:
 - Does this need explicit "go beyond basics" encouragement for ambitious/creative work?
 - Should generated prompts explain WHY constraints matter, not just what they are?
 - Do examples need to demonstrate desired behavior while avoiding undesired patterns?
-  </thinking>
 
 ## Interaction Flow
 
@@ -113,18 +111,11 @@ Create the prompt(s) and save to the prompts folder.
 
 ### Conditionally Include (based on analysis)
 
-- **Extended thinking triggers** for complex reasoning:
-  - Phrases like: "thoroughly analyze", "consider multiple approaches", "deeply consider", "explore multiple solutions"
-  - Don't use for simple, straightforward tasks
 - **"Go beyond basics" language** for creative/ambitious tasks:
   - Example: "Include as many relevant features as possible. Go beyond the basics to create a fully-featured implementation."
 - **WHY explanations** for constraints and requirements:
   - In generated prompts, explain WHY constraints matter, not just what they are
   - Example: Instead of "Never use ellipses", write "Your response will be read aloud, so never use ellipses since text-to-speech can't pronounce them"
-- **Parallel tool calling** for agentic/multi-step workflows:
-  - "For maximum efficiency, whenever you need to perform multiple independent operations, invoke all relevant tools simultaneously rather than sequentially."
-- **Reflection after tool use** for complex agentic tasks:
-  - "After receiving tool results, carefully reflect on their quality and determine optimal next steps before proceeding."
 - `<research>` tags when codebase exploration is needed
 - `<validation>` tags for tasks requiring verification
 - `<examples>` tags for complex or ambiguous requirements - ensure examples demonstrate desired behavior and avoid undesired patterns
@@ -198,7 +189,7 @@ Before declaring complete, verify your work:
 
 <analysis_requirements>
 [Specific metrics or patterns to identify]
-[Depth of analysis needed - use "thoroughly analyze" for complex tasks]
+[Depth of analysis needed]
 [Any comparisons or benchmarks]
 </analysis_requirements>
 
@@ -218,7 +209,6 @@ Save analysis to: `./analyses/[descriptive-name].md`
 <research_objective>
 [What information needs to be gathered]
 [Intended use of the research]
-For complex research, include: "Thoroughly explore multiple sources and consider various perspectives"
 </research_objective>
 
 <scope>
@@ -253,7 +243,7 @@ Before completing, verify:
 
 3. **Be Explicit**: Generate prompts with explicit, specific instructions. For ambitious results, include "go beyond the basics." For specific formats, state exactly what format is needed.
 
-4. **Scope Assessment**: Simple tasks get concise prompts. Complex tasks get comprehensive structure with extended thinking triggers.
+4. **Scope Assessment**: Simple tasks get concise prompts. Complex tasks get comprehensive structure.
 
 5. **Context Loading**: Only request file reading when the task explicitly requires understanding existing code. Use patterns like:
 
@@ -268,7 +258,6 @@ Before completing, verify:
    - Include MCP servers only when explicitly mentioned or obviously needed
    - Use bash commands for environment checking when state matters
    - File references should be specific, not broad wildcards
-   - For multi-step agentic tasks, include parallel tool calling guidance
 
 8. **Output Clarity**: Every prompt must specify exactly where to save outputs using relative paths
 
@@ -298,7 +287,7 @@ Choose (1-4): \_
 </presentation>
 
 <action>
-If user chooses #1, invoke via SlashCommand tool: `/run-prompt 005`
+If user chooses #1, read `./prompts/005-implement-feature.md` and carry it out.
 </action>
 </single_prompt_scenario>
 
@@ -324,8 +313,8 @@ Choose (1-4): \_
 </presentation>
 
 <actions>
-If user chooses #1, invoke via SlashCommand tool: `/run-prompt 005 006 007 --parallel`
-If user chooses #2, invoke via SlashCommand tool: `/run-prompt 005 006 007 --sequential`
+If user chooses #1, read the three prompt files and carry each one out in its own subagent, all in the same turn.
+If user chooses #2, read and carry out the prompt files one after another, in numeric order.
 </actions>
 </parallel_scenario>
 
@@ -351,8 +340,8 @@ Choose (1-4): \_
 </presentation>
 
 <actions>
-If user chooses #1, invoke via SlashCommand tool: `/run-prompt 005 006 007 --sequential`
-If user chooses #2, invoke via SlashCommand tool: `/run-prompt 005`
+If user chooses #1, read and carry out the prompt files one after another, in numeric order.
+If user chooses #2, read and carry out only `./prompts/005-setup-database.md`.
 </actions>
 </sequential_scenario>
 
@@ -370,7 +359,7 @@ If user chooses #2, invoke via SlashCommand tool: `/run-prompt 005`
 - Consider the user's working directory as the root for all relative paths
 - Each prompt file should contain ONLY the prompt content, no preamble or explanation
 - After saving, present the appropriate decision tree based on what was created
-- Use the SlashCommand tool to invoke /run-prompt when user makes their choice
+- When the user chooses to run, read the saved prompt file(s) and execute them directly
 
 ## Examples of When to Ask for Clarification
 

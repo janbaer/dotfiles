@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Blogartikel schreiben
 
-Dieser Skill existiert wegen eines konkreten Fehlschlags: Ein Artikel wurde aus reinem Repo-Wissen heraus geschrieben. Das Repo zeigt, *was* gebaut wurde, nie *warum*. Die fehlenden Begründungen wurden mit plausibel klingenden Sätzen gefüllt, und weil die genauso flüssig lasen wie der Rest, musste Jan den Text hinterher Satz für Satz auf Wahrheit prüfen. Erfunden waren unter anderem eine Cluster-Begründung, die nie seine war, eine Häufigkeitsangabe („zweimal im Jahr dreißig Sekunden“) und eine berufliche Zuschreibung, die das Gegenteil der Wahrheit war.
+Dieser Skill existiert, weil ein Artikel aus reinem Repo-Wissen geschrieben wurde. Das Repo zeigt, *was* gebaut wurde, nie *warum*. Die fehlenden Begründungen wurden mit plausibel klingenden Sätzen gefüllt, und Jan musste den Text hinterher Satz für Satz auf Wahrheit prüfen.
 
 Die Stufen unten verhindern genau das. Sie sind verbindlich und werden **nicht** übersprungen, auch nicht auf Zuruf („mach einfach mal schnell einen Entwurf“). Wenn Jan zur Eile drängt, ist die richtige Antwort, Stufe 1 zu verkürzen, nicht sie wegzulassen.
 
@@ -80,22 +80,18 @@ Offene `[?]`-Marker blockieren diese Stufe. Sie werden abgearbeitet, nicht still
 
 ### Stufe 5 — Stilprüfung
 
-Hier ist zuerst zu klären, wogegen überhaupt gemessen wird, weil die naheliegende Antwort falsch ist.
+Gemessen wird nicht gegen einen Korpus alter Texte. Jan schreibt heute anders als 2013, und ein darauf optimierter Entwurf trifft einen Jan, den es nicht mehr gibt. Länge, Gliederung, Dichte und Tonfall entscheidet Jan am Entwurf.
 
-Ein Korpus eigener Texte gibt es kaum: Alles ab 2026 ist KI-geschrieben, übrig bleiben rund 2300 Wörter Deutsch von 2013 bis 2020, davon die Hälfte Reiseberichte. Und selbst diese Texte sind **kein Stilziel**. Jan schreibt heute anders als 2013, er hat dazugelernt, und die Arbeit mit KI hat seine eigene Schreibweise mitverändert. Ein Entwurf, der auf den Korpus hin optimiert wird, trifft einen Jan, den es nicht mehr gibt.
+Hart gilt eine Sache, die Jan bestätigt hat:
 
-Der Korpus beantwortet deshalb nur eine schmale Frage: Welche Gewohnheiten sind über dreizehn Jahre stabil geblieben? Alles andere, also Länge, Gliederung, Dichte, Tonfall, entscheidet Jan am Entwurf. Bei Stilfragen ist er die Instanz, nicht die Datei von 2013.
+- **Typografische Gedankenstriche** (`–`, `—`) kommen nicht vor. Er hat sie nie benutzt.
 
-Stabil und von Jan selbst bestätigt ist genau eine Sache:
+Zwei Muster sind verdächtig, aber ohne feste Grenze. Beide sind rhetorische Reflexe von Sprachmodellen und stehen oft dort, wo ein einfacher Aussagesatz gereicht hätte:
 
-- **Typografische Gedankenstriche.** Er hat sie nie benutzt. In 2300 Wörtern eigener deutscher Prosa kommen `–` und `—` null mal vor, im Redesign-Artikel 14 mal, im Homelab-Artikel 4 mal. Das ist keine Statistik, aus der sich eine Regel ableiten lässt, sondern eine Gewohnheit, die Jan bestätigt hat. Deshalb gilt sie hart.
+- **„nicht X, sondern Y“**: gutes Deutsch, auffällig ist nur die Häufung.
+- **Angekündigte Merksätze** („Entscheidend ist …“, „Genau das ist …“, „Unterm Strich“): sie kündigen eine Erkenntnis an, statt sie zu erzählen.
 
-Zwei weitere Muster sind verdächtig, aber aus eigener Logik heraus, nicht wegen des Korpus. Beide sind rhetorische Reflexe von Sprachmodellen und stehen dort, wo ein einfacher Aussagesatz gereicht hätte:
-
-- **„nicht X, sondern Y“** — im Homelab-Artikel 2,2 mal pro 1000 Wörter. Kein Verbot, die Konstruktion ist gutes Deutsch. Auffällig ist die Häufung.
-- **Angekündigte Merksätze** — „Entscheidend ist …“, „Genau das ist …“, „lässt sich in einen Satz fassen“, „Unterm Strich“. Sie kündigen eine Erkenntnis an, statt sie zu erzählen.
-
-Was **nicht** funktioniert, obwohl es sich nach Messung anfühlt: Fettungen zählen. Jans Git-Hooks-Artikel liegt bei 30,9 pro 1000 Wörter und damit über jedem KI-Text.
+Fettungen zu zählen taugt nicht als Maß, auch Jans eigene Artikel haben viele.
 
 ```sh
 f=~/Documents/Notes/Blog/<entwurf>.md

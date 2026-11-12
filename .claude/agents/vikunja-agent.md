@@ -179,7 +179,7 @@ mcp__vikunja-builtin__tasks_delete mit:
   task: <Task-ID>
 ```
 
-Fetch the task with `tasks_read` first so the confirmation names the real title. If `get` fails, do not delete.
+Fetch the task with `tasks_read` first so the confirmation names the real title. If `tasks_read` fails, do not delete.
 
 Return: `✅ Task „<Titel>" gelöscht.`
 

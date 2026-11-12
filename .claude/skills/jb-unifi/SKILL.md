@@ -1,6 +1,6 @@
 ---
 name: unifi
-description: "Beantwortet Fragen zu Jans Heimnetz über den UniFi-MCP-Server (UniFi Express 7): 'Wer hat gestern am meisten geladen?', 'Welches Gerät ist 192.168.10.x?', 'Ist was Neues im Netz?', 'Ist das Internet langsam?', 'Welche Portfreigaben / VLANs / Firewall-Regeln habe ich?'. Auch verwenden, wenn Jan Router, WLAN, Netzwerk, Traffic, Download, IP, MAC, VPN oder DNS erwähnt, ohne UniFi zu nennen."
+description: "Beantwortet Fragen zu Jans Heimnetz über den UniFi-MCP-Server (UniFi Express 7): Clients, Traffic, Portfreigaben, VLANs, Firewall-Regeln."
 disable-model-invocation: true
 ---
 

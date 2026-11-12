@@ -80,5 +80,5 @@ Never overwrite a file that already exists without asking first.
 After applying changes, offer to commit with:
 ```
 git add <changed files>
-git commit -m "claude 🔧: Syncing project config to standard"
+git commit -m "config 🔧: Bringing missing standard config into <name>"
 ```

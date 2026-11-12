@@ -107,20 +107,19 @@ Supported Mermaid diagram types (all work natively in Obsidian):
 
 | Type | Syntax | Use case |
 |---|---|---|
-| Flowchart | `flowchart TD` / `LR` | Prozesse, Abhängigkeiten, Entscheidungsbäume |
-| Sequence | `sequenceDiagram` | Kommunikation zwischen Systemen/Services |
-| Gantt | `gantt` | Zeitpläne, Projektplanung |
-| Class | `classDiagram` | Datenmodelle, OOP-Strukturen |
-| State | `stateDiagram-v2` | Zustandsautomaten, Lifecycle-Diagramme |
-| Pie | `pie` | Einfache Anteile/Verteilungen |
-| Git | `gitGraph` | Branch-Strategien |
-| ER | `erDiagram` | Datenbankschemas |
+| Flowchart | `flowchart TD` / `LR` | Processes, dependencies, decision trees |
+| Sequence | `sequenceDiagram` | Communication between systems/services |
+| Gantt | `gantt` | Schedules, project planning |
+| Class | `classDiagram` | Data models, OOP structures |
+| State | `stateDiagram-v2` | State machines, lifecycle diagrams |
+| Pie | `pie` | Simple shares/distributions |
+| Git | `gitGraph` | Branch strategies |
+| ER | `erDiagram` | Database schemas |
 
 **Other visualization options (require plugins):**
 
-- **Excalidraw** (`obsidian-excalidraw-plugin`) — Hand-drawn style, freie Zeichenfläche, sehr beliebt für Architekturen
-- **Dataview** (`dataview`) — Tabellen und Listen aus Vault-Metadaten abfragen (kein Chart, aber strukturierte Daten)
-- **Charts** (`obsidian-charts`) — Bar-, Line-, Pie-Charts via YAML-Block
-- **PlantUML** (`plantuml`) — Alternative zu Mermaid für UML
+- **Excalidraw** (`obsidian-excalidraw-plugin`) — Hand-drawn style, free drawing canvas, popular for architecture
+- **Dataview** (`dataview`) — Query tables and lists from vault metadata (not a chart, but structured data)
+- **Charts** (`obsidian-charts`) — Bar, line and pie charts via YAML block
+- **PlantUML** (`plantuml`) — Alternative to Mermaid for UML
 
-Für den Standardfall immer **Mermaid** verwenden — kein Plugin, kein Setup, funktioniert sofort.

@@ -170,7 +170,7 @@ For each inline comment from a review, post an individual reply using `create_is
 ```markdown
 > [reviewer] on `src/foo.ts` line 12: "This can be null — add a null check."
 
-Fixed — added a null guard in the `getUser` function. ✅
+Fixed: added a null guard in `getUser`. ✅
 ```
 
 or if not addressed:
@@ -178,7 +178,7 @@ or if not addressed:
 ```markdown
 > [reviewer] on `src/bar.ts` line 34: "Extract this into a named constant."
 
-Deferred — will address in the follow-up refactoring PR. ⏭️
+Deferred: will address in the follow-up refactoring PR. ⏭️
 ```
 
 Post replies for all inline comments, not just the ones that were fixed — reviewers appreciate knowing what happened to every point they raised.
@@ -189,8 +189,6 @@ After the inline replies, post one final summary comment using `create_issue_com
 
 ```markdown
 ## Review Response
-
-Thank you for the review! Here's a summary of how each point was addressed:
 
 ### ✅ Fixed
 

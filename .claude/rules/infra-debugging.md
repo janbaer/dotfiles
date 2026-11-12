@@ -6,7 +6,9 @@ When root-causing an infrastructure or system problem, first find out what chang
 
 Ask Jan what he changed in the last days, including things that seem unrelated. Ask "what did you change", not "what could be related": he filters the answer otherwise. Then look yourself, before listing hypotheses: `git log` of the affected repos, creation dates of Docker networks and containers, firmware and uptime. Ask the peer session of the project if one runs. Every change near the start of the problem becomes its own hypothesis, with its disproof command.
 
-## Hypotheses For each hypothesis, name the single cheapest read-only command that would disprove it. Run those commands first, in that order, and report which hypotheses survive. Only then propose a change.
+## Hypotheses
+
+For each hypothesis, name the single cheapest read-only command that would disprove it. Run those commands first, in that order, and report which hypotheses survive. Only then propose a change.
 
 ## Why
 

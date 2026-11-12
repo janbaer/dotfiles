@@ -202,7 +202,7 @@ Ein Treffer heißt: im Tagebuch erledigt, in Vikunja noch offen. Frag dann nach 
 
 Auf Bestätigung schließt der `vikunja-agent` die bestätigten Tasks in einem Aufruf. Die fallen damit aus der Liste raus und kommen **nicht** in die heutigen Ziele. Lehnt Jan ab, bleibt der Task in der Liste und wird ganz normal behandelt.
 
-Der Abgleich läuft **vor** dem Wochenend-Filter, also auch am Samstag und Sonntag. Ein längst erledigter Arbeits-Task ist kein Wochenend-Ballast, sondern eine Rückfrage von fünf Sekunden. Genau diese Reihenfolge fehlte, als ein am 18.09.2026 erledigter CHECK24-Task das ganze Wochenende unbemerkt offen blieb.
+Der Abgleich läuft **vor** dem Wochenend-Filter, also auch am Samstag und Sonntag. Ein längst erledigter Arbeits-Task ist kein Wochenend-Ballast, sondern eine Rückfrage von fünf Sekunden.
 
 **4c. Wochenend-Filter (Arbeits-Tasks):** Ist der heutige Wochentag (aus Schritt 1) ein **Samstag oder Sonntag**, entferne alle Tasks aus dem Arbeitsprojekt **CHECK24-BU** aus der Vikunja-Liste, bevor du sie erwähnst oder in die Ziele übernimmst — erkennbar am Projekt-Label `*CHECK24-BU*` in der Agent-Ausgabe. Der Grund: Jan arbeitet am Wochenende nicht, und ein Arbeits-Task im Wochenend-Tagebuch ist nur Ballast, den er ohnehin erst am Montag anfassen kann. Fällige oder überfällige CHECK24-Tasks tauchen dadurch nicht am Wochenende auf, sondern erst wieder im nächsten Montags-Eintrag. Alle anderen Projekte (privat, Haushalt, Finanzen etc.) bleiben auch am Wochenende drin — der Filter gilt nur für die Arbeit. Bleibt nach dem Filtern nichts übrig, behandle die Liste wie `keine`.
 

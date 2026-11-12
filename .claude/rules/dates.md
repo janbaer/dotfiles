@@ -12,7 +12,7 @@ date -d tomorrow +%F     # resolve a relative date
 
 ## Why
 
-Two separate failure modes, both invisible from the inside:
+Three failure modes, all invisible from the inside:
 
 - **The session context goes stale.** `currentDate` is stamped once, when the
   session starts. Sessions here regularly run past midnight, and from that

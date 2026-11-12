@@ -64,7 +64,7 @@ Derive a title from the branch name or recent commits. Do not include `closes #N
 
 ### 5. Check for implementation deviations
 
-Compare the actual implementation (commits, code changes) against the issue description, acceptance criteria, and "How to Test" scenarios fetched in step 3.
+Compare the actual implementation (commits, code changes) against the issue description, acceptance criteria, and "How to Test" scenarios fetched in step 4.
 
 Look for decisions made during implementation that contradict or significantly differ from what was defined in the issue — for example:
 - A different technical approach than described

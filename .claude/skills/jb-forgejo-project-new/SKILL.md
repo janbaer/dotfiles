@@ -199,7 +199,7 @@ Ask: **"Run the project interview now to fill requirements.md and design.md?"**
 ```bash
 cd ~/Projects/<name>
 git add .
-git commit -m "Initial commit"
+git commit -m "project ✨: Starting <name> from the standard project files"
 git push -u origin main
 ```
 

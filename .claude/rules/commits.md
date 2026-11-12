@@ -5,7 +5,7 @@
 All commit messages must follow: `{component} {emoji}: {message}`
 
 - **component**: the top-level area of the codebase being changed — never a type like `feat` or `fix`, and never the name of the specific file or feature modified
-  - In this dotfiles repo: `.claude/` → `claude`, `.config/nvim/` → `nvim`, `bin/` → `bin`, `.config/hypr/` → `hypr`, etc.
+  - In this dotfiles repo: `.claude/` → `claude`, `bin/` → `bin`, etc.
   - In application repos: use the module or domain name (e.g. `itemlist`, `backup`, `header`)
 - **emoji**: indicates the type of change:
   - ✨ new feature
@@ -41,7 +41,7 @@ When amending an existing message, keep the rationale text that is already writt
 
 English, subject and body. Holds for every repo unless the project itself says otherwise: a repo whose CLAUDE.md sets a different language wins, and so does an existing history clearly written in another one. Where German is allowed, it is German throughout — never a German body under an English subject.
 
-German prose drifted into the dotfiles bodies from 2026-07-30 on, starting with commits about German-language skills, and was never actually decided. The result was a history split down the middle, which is worse than either language on its own.
+A history split between two languages is worse than either one on its own.
 
 Quoted material keeps its original language — a diary line, a vocabulary entry, an error message. The prose around it stays English.
 

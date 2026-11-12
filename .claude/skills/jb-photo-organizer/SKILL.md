@@ -2,15 +2,10 @@
 name: photo-organizer
 model: sonnet
 description: >
-  Organizes and renames a folder of trip or event photos by analyzing each image
-  visually, generating descriptive names, detecting near-duplicate burst shots, and
-  copying everything into a renamed/ subfolder. Automatically detects the event name
-  and date from the current folder name and asks the user to confirm before proceeding.
-  Use this skill whenever the user wants to rename, organize, describe, or catalog
-  photos from a trip, event, or photo shoot — triggered by phrases like "organize my
-  photos", "rename the photos in this folder", "analyze and name my trip photos",
-  "clean up my photo folder", or whenever the working directory looks like a photo
-  collection (contains many .jpg/.JPG files).
+  Organizes and renames a folder of trip or event photos: describes each image,
+  names it, detects near-duplicate burst shots and copies everything into a
+  renamed/ subfolder. Takes the event name and date from the folder name and asks
+  for confirmation before proceeding.
 disable-model-invocation: true
 ---
 

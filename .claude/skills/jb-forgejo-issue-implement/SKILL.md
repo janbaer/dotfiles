@@ -13,53 +13,6 @@ description: Use when working with Forgejo issues in the current project - listi
 
 Uses the `forgejo-mcp` MCP server (configured globally in `~/.claude.json`) to interact with issues on any Forgejo project.
 
-## Full Workflow
-
-```dot
-digraph issue_workflow {
-    "Issue number given?" [shape=diamond];
-    "Validate issue is open" [shape=box];
-    "Issue open?" [shape=diamond];
-    "Stop: issue already closed" [shape=box];
-    "List open issues" [shape=box];
-    "User selects issue" [shape=diamond];
-    "Read issue details" [shape=box];
-    "Create branch: feature/{N}-{slug}" [shape=box];
-    "Plan from issue" [shape=box];
-    "Plan clear?" [shape=diamond];
-    "Implement" [shape=box];
-    "Run tests + lint" [shape=box];
-    "All pass?" [shape=diamond];
-    "Execute 'How to Test' scenarios" [shape=box];
-    "All scenarios pass?" [shape=diamond];
-    "Fix issues" [shape=box];
-    "Commit + push" [shape=box];
-    "Notify user: run /forgejo-issue-finish" [shape=box];
-    "Commit + push (partial)" [shape=box];
-
-    "Issue number given?" -> "Validate issue is open" [label="yes"];
-    "Issue number given?" -> "List open issues" [label="no"];
-    "Validate issue is open" -> "Issue open?" ;
-    "Issue open?" -> "Read issue details" [label="yes"];
-    "Issue open?" -> "Stop: issue already closed" [label="no"];
-    "List open issues" -> "User selects issue";
-    "User selects issue" -> "Read issue details";
-    "Read issue details" -> "Create branch: feature/{N}-{slug}";
-    "Create branch: feature/{N}-{slug}" -> "Plan from issue";
-    "Plan from issue" -> "Plan clear?";
-    "Plan clear?" -> "Implement" [label="yes"];
-    "Plan clear?" -> "Commit + push (partial)" [label="no - stop here"];
-    "Implement" -> "Run tests + lint";
-    "Run tests + lint" -> "All pass?";
-    "All pass?" -> "Execute 'How to Test' scenarios" [label="yes"];
-    "Execute 'How to Test' scenarios" -> "All scenarios pass?";
-    "All scenarios pass?" -> "Commit + push" [label="yes"];
-    "All scenarios pass?" -> "Fix issues" [label="no"];
-    "Fix issues" -> "Run tests + lint";
-    "Commit + push" -> "Notify user: run /forgejo-issue-finish";
-}
-```
-
 ## Autonomy principle
 
 **Minimize user interaction.** Only stop to ask if genuinely blocked. Never pause to confirm next steps when the path forward is clear. Keep moving.
@@ -157,7 +110,7 @@ Run the project's test and lint commands before committing. Fix failures before 
 
 ### 8. Execute the "How to Test" scenarios
 
-Re-read the **"How to Test"** section from the original issue (fetched in step 2). Execute every scenario described there — use the browser via Chrome DevTools MCP tools if the issue requires UI interaction. This is **mandatory**, not optional.
+Re-read the **"How to Test"** section from the original issue (fetched in step 2). Execute every scenario described there — use the available browser tools if the issue requires UI interaction. This is **mandatory**, not optional.
 
 - If all scenarios pass → proceed to commit
 - If any scenario fails → fix the issue, re-run tests and lint, then re-verify all scenarios
@@ -182,7 +135,7 @@ After pushing, send a notification via the **`ntfy-me`** skill:
 | `--title` | `Implementation pushed` |
 | body | `Ready for your review. Run /forgejo-issue-finish when done.` |
 
-The skill ends here. Archive and PR creation are handled by `/forgejo-issue-finish` once the user has verified the implementation manually.
+The skill ends here. PR creation is handled by `/forgejo-issue-finish` once the user has verified the implementation manually.
 
 ## MCP Tools Reference
 

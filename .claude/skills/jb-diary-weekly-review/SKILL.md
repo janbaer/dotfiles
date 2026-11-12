@@ -104,7 +104,7 @@ Der Schritt hat zwei Teile, die nichts miteinander zu tun haben.
 - **Ja** → den betroffenen Abschnitt fortschreiben (anhängen/aktualisieren, nicht das ganze Dokument neu generieren — Jan editiert es auch von Hand).
 - **Nein** → nichts tun, weiter. In den meisten Wochen ist das der Normalfall.
 
-**b) Stand-Abschnitt.** Den schreibst du ohne Rückfrage fort: aktuelle KW, welche Tage geschrieben sind, offene Todos, die Vorsätze der kommenden Woche und die bekannten Termine. Das ist keine Frage an Jan, sondern Buchführung aus dem Wochenbericht, den du in diesem Rückblick sowieso gelesen hast. Seit der tägliche Eintrag das Handoff zu Beginn liest (`diary-daily-entry`, Schritt 2), ist genau dieser Abschnitt die Stelle, aus der die Einordnung kommt — ein veralteter Stand ist dann schlechter als gar keiner.
+**b) Stand-Abschnitt.** Den schreibst du ohne Rückfrage fort: aktuelle KW, welche Tage geschrieben sind, offene Todos, die Vorsätze der kommenden Woche und die bekannten Termine. Das ist keine Frage an Jan, sondern Buchführung aus dem Wochenbericht, den du in diesem Rückblick sowieso gelesen hast. Der tägliche Eintrag liest das Handoff zu Beginn (`diary-daily-entry`, Schritt 2). Dieser Abschnitt ist die Stelle, aus der die Einordnung kommt, und ein veralteter Stand ist schlechter als gar keiner.
 
 Sagt Jan, das Handoff soll diese Woche in Ruhe gelassen werden, gilt das für beide Teile.
 
