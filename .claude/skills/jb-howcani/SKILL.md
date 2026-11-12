@@ -29,6 +29,8 @@ Always show the user a preview of the new item and ask the user if they want to 
   - Use Markdown for formatting.
   - Never start the answer with a header, since the h1 for the whole topic is the question it self. Instead just start with the text for the answer
 
+**Length:** Keep items short and limited to the facts that matter: the key commands plus one or two lines on how to read the result. No alternatives the user doesn't use, no background, no "notes" sections. Anything longer belongs in the Obsidian wiki (use the `obsidian` skill). If a draft grows past a screen, shorten it or offer to put it in Obsidian instead.
+
 ## Requirements
 
 - howcani-mcp server should be running and accessible.
