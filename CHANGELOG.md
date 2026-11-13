@@ -2,6 +2,14 @@
 
 This file describes all changes in the project.
 
+## 2026-11-13
+---
+
+- Add the `agents-info` mod: subagents show by role in their own panel, with costs only for known prices and API billing. It replaces `savvy-progress`, which must be uninstalled on machines that still have it
+- Add skills for Forgejo issue review, Renovate PR merges, runbooks, project handover, Hermes tasks and homelab questions; PR, merge and release now run without manual steps
+- Add mods for reading answers aloud (speak), cache expiry (cache-meter), prompt routing to the right project (project-guard) and secret redaction; switch the default style to Concise
+- Add rules for dates from `date`, sourced facts before prose, English-only commit history and infra root-causing; drop OpenSpec for linked requirements and design docs
+
 ## 2026-08-01
 ---
 
