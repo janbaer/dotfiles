@@ -1,0 +1,26 @@
+{
+  "name": "agents-info",
+  "version": "1.4.4",
+  "description": "Agents panel (/agents-info) for the subagents Claude starts: each gets a role (researcher, planner, reviewer, writer, designer, builder) with its own color, costume and status line, plus model, context, time and, when billed, cost. Fork of savvy-progress without the savvy-flow parts. Panel in German by default.",
+  "author": {
+    "name": "johnnyvizz",
+    "url": "https://github.com/johnnyvizz"
+  },
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "language": {
+      "type": "string",
+      "title": "Panel language",
+      "description": "de (default); auto follows Claude Code's language setting, then the system locale; en",
+      "default": "de",
+      "options": [
+        "de",
+        "auto",
+        "en"
+      ]
+    }
+  },
+  "homepage": "https://github.com/johnnyvizz/claude-kit/tree/main/plugins/savvy-progress",
+  "repository": "https://github.com/johnnyvizz/claude-kit",
+  "license": "MIT"
+}

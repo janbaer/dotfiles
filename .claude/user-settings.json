@@ -93,7 +93,6 @@
     "typescript-lsp@claude-plugins-official": true,
     "redact-secrets@jan-mods": true,
     "ideas-pane@jan-mods": true,
-    "savvy-progress@claude-kit": true,
     "next-steps@claude-code-mods": true,
     "filetree@claude-code-filetree": false,
     "cache-meter@jan-mods": true,
@@ -101,7 +100,8 @@
     "model-router@jan-mods": true,
     "cc-plugin-you-should-know@builtin": true,
     "fortschritt@claude-mods-deutsch": true,
-    "project-guard@jan-mods": true
+    "project-guard@jan-mods": true,
+    "agents-info@jan-mods": true
   },
   "extraKnownMarketplaces": {
     "jan-mods": {
@@ -110,12 +110,6 @@
         "path": "~/Projects/dotfiles/.claude/mods"
       },
       "autoUpdate": true
-    },
-    "claude-kit": {
-      "source": {
-        "source": "github",
-        "repo": "JohnnyVizz/claude-kit"
-      }
     },
     "claude-code-mods": {
       "source": {

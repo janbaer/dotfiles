@@ -2,6 +2,11 @@
 
 This file describes all changes to the mods in this directory. Versions are the `version` in each mod's `plugin.json`; an entry without a version left it unchanged.
 
+## 2026-11-12
+---
+
+- agents-info 1.4.4: New mod, a fork of savvy-progress (claude-kit 1.2.1) without the savvy-flow parts. The agents panel shows each subagent as a crab with a role (Rechercheur, Planer, Prüfer, Schreiber, Gestalter, Entwickler, Helfer) taken from its type and description, in German. Costs show only for the model releases the price table names and only when an API key, `ANTHROPIC_BASE_URL` or an enabled cloud-provider flag is set.
+
 ## 2026-11-11
 ---
 

@@ -31,6 +31,11 @@
       "name": "project-guard",
       "source": "./project-guard",
       "description": "Asks before a prompt goes to the wrong project session: keywords of another project, none of this one's."
+    },
+    {
+      "name": "agents-info",
+      "source": "./agents-info",
+      "description": "Panel showing what the subagents Claude starts are doing: a role per agent (researcher, planner, reviewer, writer, designer, builder) with its own color and costume, in German."
     }
   ]
 }
