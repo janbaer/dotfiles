@@ -1,6 +1,6 @@
 {
   "name": "agents-info",
-  "version": "1.4.4",
+  "version": "1.5.0",
   "description": "Agents panel (/agents-info) for the subagents Claude starts: each gets a role (researcher, planner, reviewer, writer, designer, builder) with its own color, costume and status line, plus model, context, time and, when billed, cost. Fork of savvy-progress without the savvy-flow parts. Panel in German by default.",
   "author": {
     "name": "johnnyvizz",

@@ -151,6 +151,16 @@ const ROLE_COLOR: Record<Role, string> = {
   other: '#888780',
 }
 
+const ROLE_EMOJI: Record<Role, string> = {
+  researcher: '🦀',
+  planner: '🦉',
+  reviewer: '🦞',
+  writer: '🐙',
+  designer: '🦑',
+  builder: '🐝',
+  other: '🐚',
+}
+
 const ROLE_TEXT = {
   de: {
     name: { researcher: 'Rechercheur', planner: 'Planer', reviewer: 'Prüfer', writer: 'Schreiber', designer: 'Gestalter', builder: 'Entwickler', other: 'Helfer' },
@@ -555,8 +565,10 @@ async function autoOpen($: EngineInterface): Promise<void> {
 }
 
 export const register: Register = (on, options) => {
+  let version = ''
   on('session.start', async ($, e, next) => {
     const started = await next(e)
+    version = JSON.parse(await $.fs.read(`${$.plugin.root}/.claude-plugin/plugin.json`)).version
     lang = await detectLang($, options.language)
     isBilled = await detectBilling($)
     await $.command.register({
@@ -763,7 +775,7 @@ export const register: Register = (on, options) => {
       return (
         <Box key={a.id} flexDirection="column" marginBottom={1}>
           <Box flexDirection="row" gap={1}>
-            <Text color={color}>▣</Text>
+            <Text>{ROLE_EMOJI[role]}</Text>
             <Text bold wrap="truncate-end">
               {a.description || a.type}
             </Text>
@@ -789,7 +801,10 @@ export const register: Register = (on, options) => {
     return (
       <Box flexDirection="column">
         <Box flexDirection="row" justifyContent="space-between">
-          <Text bold>{s.pane}</Text>
+          <Box gap={1}>
+            <Text bold>{s.pane}</Text>
+            <Text dimColor>v{version}</Text>
+          </Box>
           {toggleCompact}
         </Box>
         <Text dimColor>
@@ -799,7 +814,7 @@ export const register: Register = (on, options) => {
           <Text wrap="truncate-end">
             {[...running, ...finished].map(a => (
               <Text key={a.id} color={colorOf(roleOfRun(a))}>
-                {STATUS_GLYPH[a.status]}{' '}
+                {ROLE_EMOJI[roleOfRun(a)]}{' '}
               </Text>
             ))}
           </Text>

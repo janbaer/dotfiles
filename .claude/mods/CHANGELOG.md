@@ -2,6 +2,11 @@
 
 This file describes all changes to the mods in this directory. Versions are the `version` in each mod's `plugin.json`; an entry without a version left it unchanged.
 
+## 2026-11-14
+---
+
+- agents-info 1.5.0: In the terminal the panel shows a crab-family emoji per role (🦀 Rechercheur, 🦞 Prüfer, 🐙 Schreiber, 🦑 Gestalter, 🦉 Planer, 🐝 Entwickler, 🐚 Helfer) instead of the blue square, and the loaded version next to the title.
+
 ## 2026-11-12
 ---
 
