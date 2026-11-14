@@ -30,12 +30,29 @@ for entry in "${SERVERS[@]}"; do
   echo "==> $name ($branch)"
 
   if [[ -d $dir/.git ]]; then
+    synced="$(git -C "$dir" rev-parse --verify --quiet '@{u}' || true)"
     git -C "$dir" fetch --all --quiet
     current="$(git -C "$dir" branch --show-current)"
     if [[ $current != "$branch" ]]; then
       echo "    on '$current' instead of '$branch', leaving the checkout alone"
+    elif ! git -C "$dir" rev-parse --verify --quiet '@{u}' >/dev/null; then
+      echo "    no upstream configured, keeping what is there"
     elif ! git -C "$dir" merge --ff-only '@{u}' --quiet 2>/dev/null; then
-      echo "    no upstream to fast-forward, keeping what is there"
+      # The fork branches get rebuilt and force-pushed. A checkout that was
+      # level with the remote before the fetch has no work of its own and can
+      # follow the rewrite; anything else is left for a human, because
+      # building the stale code and reporting success is the failure this
+      # script exists to avoid.
+      if [[ -n "$(git -C "$dir" status --porcelain)" ]]; then
+        echo "    '$branch' diverged from upstream and has uncommitted changes, resolve by hand" >&2
+        exit 1
+      elif [[ $synced == "$(git -C "$dir" rev-parse HEAD)" ]]; then
+        echo "    upstream was rewritten, resetting '$branch' to it"
+        git -C "$dir" reset --hard --quiet '@{u}'
+      else
+        echo "    '$branch' has local commits upstream does not, resolve by hand" >&2
+        exit 1
+      fi
     fi
     if [[ -n "$(git -C "$dir" status --porcelain)" ]]; then
       echo "    uncommitted changes present, building them as they are"
@@ -52,9 +69,13 @@ for entry in "${SERVERS[@]}"; do
   #
   # ci over install: it installs exactly what the lockfile says and leaves the
   # file alone, so a plain setup run does not show up as a local change.
+  #
+  # --ignore-scripts: these are runtime checkouts, so the prepare script is not
+  # needed. It fails where git's hooksPath is set globally, and npm ci would
+  # then exit non-zero before the build.
   (
     cd "$dir"
-    npm ci --silent --no-audit --no-fund
+    npm ci --ignore-scripts --silent --no-audit --no-fund
     npm run build --silent
   )
 
