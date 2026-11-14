@@ -19,8 +19,8 @@ Uses the `forgejo-mcp` MCP server (configured globally in `~/.claude.json`) to i
 
 The only required user input in the entire workflow is choosing which issue to work on (step 1, when no issue number is given). Everything else runs automatically.
 
-**Done when:** the issue is implemented, tests and lint pass, all test scenarios pass, the branch is pushed and the ntfy is sent.
-If any user input is required or the whole workflow is done, notify by delegating to the **`ntfy-me`** skill with:
+**Done when:** the issue is implemented, tests and lint pass, all test scenarios pass and the branch is pushed. Then step 10 either finishes the issue (`forgejo-issue-finish` sends the ntfy) or hands it over to the user (ntfy from this skill).
+If any user input is required or the workflow stops here, notify by delegating to the **`ntfy-me`** skill with:
 
 | Parameter | Value |
 |-----------|-------|
@@ -117,6 +117,8 @@ Re-read the **"How to Test"** section from the original issue (fetched in step 2
 
 Do not skip this step even if automated tests pass. Automated tests verify correctness; the "How to Test" scenarios verify that the feature works as the user intended.
 
+**Tick the acceptance criteria you verified.** Run the check for every acceptance criterion whose verifier is the implementer. When a check passes, tick that criterion in the issue: read the body fresh with `get_issue_by_index`, change only the `- [ ]` of the verified lines to `- [x]`, write it back with `update_issue`. Leave a criterion unticked when it says `verified by <who>` (a check before the merge) or `after merge`. A criterion you cannot run yourself that carries neither marker is a defect in the issue: name it and do not tick it. When a check fails, fix the cause and run it again; a criterion with a failed check is never ticked and never skipped. Never tick a criterion without an executed check and its observed result.
+
 Before committing, check once more whether the implementation forced a decision that the design documents (`docs/design.md`, `docs/services/`, `docs/roles/`) do not list yet. Add it via the `update` mode of **forgejo-project-interview**.
 
 ### 9. Commit and push
@@ -127,15 +129,29 @@ git commit -m "<message>"
 git push -u origin feature/42-fix-login-redirect
 ```
 
-After pushing, send a notification via the **`ntfy-me`** skill:
+### 10. Finish automatically, or hand over
+
+Finish automatically by invoking the **forgejo-issue-finish** skill when all of these hold:
+
+- the issue has at least one acceptance criterion, and every criterion without a marker is ticked
+- no criterion says `verified by <who>`
+- tests and lint are green, and every "How to Test" scenario ran and passed
+- the issue has no `blocked` label, no open question is left and no TODO from this change remains in the code
+- the implementation does not deviate from the issue
+
+Criteria marked `after merge` do not block.
+
+In the final message, on both paths, list each ticked criterion with the check that was run and its result, each open `after merge` criterion with who does it, and each `verified by <who>` criterion left for that person.
+
+Otherwise send a notification via the **`ntfy-me`** skill and end here. Name the criteria left for the user in the body:
 
 | Parameter | Value |
 |-----------|-------|
 | `--topic` | `claude` |
 | `--title` | `Implementation pushed` |
-| body | `Ready for your review. Run /forgejo-issue-finish when done.` |
+| body | `Ready for your review: <open criteria>. Run /forgejo-issue-finish when done.` |
 
-The skill ends here. PR creation is handled by `/forgejo-issue-finish` once the user has verified the implementation manually.
+PR creation is then handled by `/forgejo-issue-finish` once the user has verified the implementation manually.
 
 ## MCP Tools Reference
 

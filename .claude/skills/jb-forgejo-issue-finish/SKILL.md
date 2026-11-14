@@ -1,7 +1,7 @@
 ---
 name: forgejo-issue-finish
 model: sonnet
-description: Use after manually verifying a forgejo-issue-implement implementation to open a Pull Request. Trigger on phrases like "finish the issue", "complete the issue", "finish and create PR", "create PR for the issue", or "open a PR for issue #N".
+description: Use after a forgejo-issue-implement implementation is verified, by the user or by that skill's own check, to open a Pull Request. Trigger on phrases like "finish the issue", "complete the issue", "finish and create PR", "create PR for the issue", or "open a PR for issue #N".
 ---
 
 ## Pre-requisites
@@ -10,7 +10,7 @@ description: Use after manually verifying a forgejo-issue-implement implementati
 
 # Forgejo Finish Issue
 
-Creates a Pull Request once the user has verified the implementation. This is the second half of the `forgejo-issue-implement` workflow — triggered explicitly by the user after manual testing.
+Creates a Pull Request once the implementation is verified. This is the second half of the `forgejo-issue-implement` workflow. `forgejo-issue-implement` calls it itself when the gate in its step 10 holds; otherwise the user triggers it after manual testing.
 
 ## Workflow
 
