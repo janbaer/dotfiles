@@ -23,7 +23,7 @@ bench_model() {
   while IFS= read -r line; do
     ((++id))
     request=$(jq --arg model "$model" --argjson case "$line" \
-      '{model: $model, state: $case.prompt, questions: {model: ({type: "choice"} + .)}}' "$dir/criteria.json")
+      '{model: $model, state: $case.prompt, questions: (with_entries(.value |= ({type: "choice"} + .)))}' "$dir/criteria.json")
     for ((run = 1; run <= runs; run++)); do
       response=$(curl -sS -m 15 -w '\n%{time_total}' https://openrouter.ai/api/alpha/decisions \
         -H "Authorization: Bearer $OPENROUTER_API_KEY" \
@@ -32,8 +32,9 @@ bench_model() {
       jq -nc --arg model "$model" --argjson id "$id" --argjson case "$line" \
         --arg body "${response%$'\n'*}" --arg latency "$latency" '
         ($body | try fromjson catch null) as $r | {
-          model: $model, id: $id, expected: $case.expected,
+          model: $model, id: $id, expected: $case.expected, expected_effort: $case.expected_effort,
           choice: $r.answers.model.choice, confidence: $r.answers.model.confidence,
+          effort: $r.answers.effort.choice,
           latency: ($latency | tonumber? // null), cost: ($r.usage.cost // 0),
           error: (if $r.answers.model.choice then null else $body[0:200] end)
         }'
@@ -50,9 +51,10 @@ cat "$tmp"/*.jsonl >"$out"
 
 jq -rs '
   {haiku: 0, sonnet: 1, opus: 2, fable: 3} as $tier
+  | {low: 0, medium: 1, high: 2, xhigh: 3} as $etier
   | def pct(a; b): if b == 0 then "-" else (100 * a / b | round | tostring) + "%" end;
     def q(p): sort | if length == 0 then null else .[((length - 1) * p | floor)] end;
-  ["model", "acc", "under", "over", "stable", "errors", "p50", "p95", "cost"],
+  ["model", "acc", "under", "over", "eff", "e-under", "e-over", "stable", "errors", "p50", "p95", "cost"],
   (group_by(.model)[]
     | (map(select(.error == null))) as $ok
     | ($ok | map(.latency)) as $lat
@@ -60,6 +62,9 @@ jq -rs '
         pct($ok | map(select(.choice == .expected)) | length; $ok | length),
         pct($ok | map(select($tier[.choice] < $tier[.expected])) | length; $ok | length),
         pct($ok | map(select($tier[.choice] > $tier[.expected])) | length; $ok | length),
+        pct($ok | map(select(.effort == .expected_effort)) | length; $ok | length),
+        pct($ok | map(select(.effort != null and $etier[.effort] < $etier[.expected_effort])) | length; $ok | length),
+        pct($ok | map(select(.effort != null and $etier[.effort] > $etier[.expected_effort])) | length; $ok | length),
         pct($ok | group_by(.id) | map(select(map(.choice) | unique | length == 1)) | length;
             $ok | map(.id) | unique | length),
         (map(select(.error)) | length),

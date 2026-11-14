@@ -5,6 +5,7 @@ This file describes all changes to the mods in this directory. Versions are the 
 ## 2026-11-14
 ---
 
+- model-router 0.2.0: The decision model now also picks the effort (`low` to `xhigh`) in the same request, and the main session runs with it. Before, a switch from Opus to Sonnet silently raised the effort, because the models' defaults differ. An effort below the confidence threshold leaves the session's setting alone.
 - agents-info 1.5.0: In the terminal the panel shows a crab-family emoji per role (🦀 Rechercheur, 🦞 Prüfer, 🐙 Schreiber, 🦑 Gestalter, 🦉 Planer, 🐝 Entwickler, 🐚 Helfer) instead of the blue square, and the loaded version next to the title.
 
 ## 2026-11-12

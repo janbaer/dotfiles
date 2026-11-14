@@ -1,9 +1,20 @@
 {
-  "instructions": "Which Claude model should handle this prompt to a coding assistant? Pick the cheapest model that will still do it well.",
-  "criteria": {
-    "haiku": "Trivial, mechanical or purely factual: a quick lookup, a one-line edit, a rename, formatting, a single shell command, a short question with a known answer.",
-    "sonnet": "Everyday engineering work: implementing or fixing something well scoped, writing a script, a config change, explaining code, a routine review.",
-    "opus": "Demanding work: debugging an unclear root cause, design or architecture decisions, refactoring across many files, security-sensitive changes, critically reviewing a plan, research that weighs trade-offs.",
-    "fable": "Exceptionally hard, long-horizon work: designing a whole system, a deep investigation across several repositories, a problem earlier attempts failed to solve."
+  "model": {
+    "instructions": "Which Claude model should handle this prompt to a coding assistant? Pick the smallest model that will still do it well. When the difficulty is unclear, pick opus.",
+    "criteria": {
+      "haiku": "Trivial, mechanical or purely factual: a quick lookup, a one-line edit, a rename, formatting, a single shell command, a short question with a known answer.",
+      "sonnet": "Everyday engineering work: implementing or fixing something well scoped, writing a script, a config change, explaining code, a routine review.",
+      "opus": "Demanding work: debugging an unclear root cause, design or architecture decisions, refactoring across many files, security-sensitive changes, critically reviewing a plan, research that weighs trade-offs.",
+      "fable": "Exceptionally hard, long-horizon work: designing a whole system, a deep investigation across several repositories, a problem earlier attempts failed to solve."
+    }
+  },
+  "effort": {
+    "instructions": "How much effort should the model put into this prompt? Effort is independent of the model: it decides how much the model reads, tests and decides on its own, not what it knows. Pick the first level that applies and default to medium.",
+    "criteria": {
+      "low": "A simple or conversational request where the assistant should stay close to the user and ask instead of deciding: a lookup, a rename, a short explanation, a single command.",
+      "medium": "Normal work that is neither trivial nor risky: a well scoped implementation, a script, a config change, a routine review.",
+      "high": "An unnoticed mistake would cost money, customers or lead to a wrong decision: production changes, security, data deletion, migrations, root-cause analysis, checking a plan for flaws.",
+      "xhigh": "A long, difficult and critical task that will run unattended: a whole-system design, a migration plan, an investigation across several repositories."
+    }
   }
 }

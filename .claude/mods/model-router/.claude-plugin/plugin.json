@@ -1,6 +1,6 @@
 {
   "name": "model-router",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Picks the model for a session from its first prompt via a decision model on OpenRouter. The first prompt of each session is sent to OpenRouter.",
   "types": "./types/index.d.ts"
 }

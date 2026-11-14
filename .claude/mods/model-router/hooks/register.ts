@@ -1,9 +1,10 @@
 import { atom, read, update, type EngineInterface, type Register } from 'claude-code'
-import type { Decision, Route } from '../types'
+import type { Decision, Effort, Route } from '../types'
 
 const ROUTER_MODEL = 'typesafe/jev-1.14'
 const MIN_CONFIDENCE = 0.6
 const TIMEOUT_MS = 3000
+const LOG_PROMPT_CHARS = 2000
 
 type Mode = 'auto' | 'manual'
 
@@ -12,10 +13,14 @@ const route = atom({ plugin: 'model-router', key: 'route' } as const, {
   pending: null,
   suggestion: null,
   model: null,
+  effort: null,
   base: null,
+  baseEffort: null,
 } as Route)
 
 const family = (model: string) => model.match(/haiku|sonnet|opus|fable/)?.[0] ?? model
+
+const label = (model: string, effort?: unknown) => (effort ? `${model} ${effort}` : model)
 
 async function mode($: EngineInterface): Promise<Mode> {
   return (await $.store.get('mode')) === 'auto' ? 'auto' : 'manual'
@@ -32,20 +37,29 @@ async function showStatus($: EngineInterface, detail?: string) {
 async function decide($: EngineInterface, prompt: string): Promise<Decision | null> {
   const key = await $.env.get('OPENROUTER_API_KEY')
   if (!key) return null
-  const { instructions, criteria } = JSON.parse(await $.fs.read(`${$.plugin.root}/criteria.json`))
+  const questions = JSON.parse(await $.fs.read(`${$.plugin.root}/criteria.json`))
   const request = $.http.fetch('https://openrouter.ai/api/alpha/decisions', {
     method: 'POST',
     headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model: ROUTER_MODEL,
       state: prompt,
-      questions: { model: { type: 'choice', instructions, criteria } },
+      questions: Object.fromEntries(
+        Object.entries(questions).map(([key, question]) => [key, { type: 'choice', ...(question as object) }]),
+      ),
     }),
   })
   const res = await Promise.race([request, $.clock.sleep(TIMEOUT_MS).then(() => null)])
   if (!res?.ok) return null
-  const answer = JSON.parse(res.text).answers?.model
-  return answer?.choice ? { choice: answer.choice, confidence: answer.confidence } : null
+  const answers = JSON.parse(res.text).answers
+  const { model, effort } = answers ?? {}
+  if (!model?.choice) return null
+  const hasEffort = effort?.choice && effort.choice in questions.effort.criteria && effort.confidence >= MIN_CONFIDENCE
+  return {
+    choice: model.choice,
+    confidence: model.confidence,
+    effort: hasEffort ? (effort.choice as Effort) : null,
+  }
 }
 
 async function logDecision($: EngineInterface, decision: Decision | null, prompt: string) {
@@ -54,7 +68,8 @@ async function logDecision($: EngineInterface, decision: Decision | null, prompt
     ROUTER_MODEL,
     decision?.choice ?? 'error',
     decision?.confidence ?? 0,
-    prompt.slice(0, 100).replace(/\s+/g, ' '),
+    prompt.slice(0, LOG_PROMPT_CHARS).replace(/\s+/g, ' '),
+    decision?.effort ?? '',
   ].join('\t')
   const file = `${await $.env.get('HOME')}/.local/state/claude-model-router/decisions.tsv`
   await $.process.run(['sh', '-c', 'mkdir -p "${1%/*}" && cat >>"$1"', 'sh', file], {
@@ -64,10 +79,11 @@ async function logDecision($: EngineInterface, decision: Decision | null, prompt
 
 async function accept($: EngineInterface, decision: Decision, current: string): Promise<boolean> {
   if ((await mode($)) === 'auto') return true
-  const target = `Zu ${decision.choice} wechseln`
+  const proposal = label(decision.choice, decision.effort)
+  const target = `Zu ${proposal} wechseln`
   const answer = await $.ui
     .ask(
-      `Jev schlägt ${decision.choice} statt ${current} vor (Sicherheit ${Math.round(decision.confidence * 100)} %). Für diese Session wechseln?`,
+      `Jev schlägt ${proposal} statt ${current} vor (Sicherheit ${Math.round(decision.confidence * 100)} %). Für diese Session wechseln?`,
       { options: [target, `Bei ${current} bleiben`], header: 'Model-Router' },
     )
     .catch(() => null)
@@ -117,26 +133,33 @@ export const register: Register = on => {
     let r = await read($, route)
 
     if (r.pending) {
-      const decision = r.pending
-      const current = family(e.model)
-      const isSwitch = decision.choice !== current && (await accept($, decision, current))
+      const decision = { ...r.pending, effort: r.pending.effort ?? e.effort ?? null }
+      const current = label(family(e.model), e.effort)
+      const changed = decision.choice !== family(e.model) || decision.effort !== (e.effort ?? null)
+      const isSwitch = changed && (await accept($, decision, current))
       r = await update($, route, s => ({
         ...s,
         pending: null,
         model: isSwitch ? decision.choice : null,
+        effort: isSwitch ? decision.effort : null,
         base: e.model,
+        baseEffort: e.effort ?? null,
       }))
-      if (!isSwitch) await showStatus($, decision.choice === current ? undefined : `abgelehnt, bleibt bei ${current}`)
+      if (!isSwitch) await showStatus($, changed ? `abgelehnt, bleibt bei ${current}` : undefined)
     }
 
     if (!r.model) return yield* next(e)
-    if (e.model !== r.base) {
+    if (e.model !== r.base || (e.effort ?? null) !== r.baseEffort) {
       await update($, route, s => ({ ...s, model: null }))
       await showStatus($, 'aus nach /model')
       return yield* next(e)
     }
 
-    const result = yield* next(e.model.includes(r.model) ? e : { ...e, model: r.model })
+    const result = yield* next({
+      ...e,
+      model: e.model.includes(r.model) ? e.model : r.model,
+      effort: r.effort ?? e.effort,
+    })
     await showStatus($, `antwortet: ${result.usage?.model ?? '?'}`)
     return result
   })
