@@ -32,9 +32,11 @@ An issue number (read it with `get_issue_by_index`) or the path of a draft file,
 > Report at most three findings, most important first. Report fewer, or "no findings", when that is the truth; padding hides the findings that matter. For each finding give: what is wrong in the straightforward implementation, the concrete next change that would hurt (a scenario, not a principle), the evidence in the repository (file or existing pattern, or "not verified"), and one acceptance criterion that states the wanted outcome as behaviour and can be checked by a command or test, without prescribing the technique. Example: "The look of the mail changes by editing one file and no Python is touched; a test changes only that file and sees the output change."
 >
 > Do not comment on wording, spelling or whether the ticket is clear. Do not propose alternatives for their own sake.
+>
+> Separately from the findings, propose the model and the effort the implementation should run on. The allowed values and when each applies are in `~/Projects/dotfiles/.claude/mods/model-router/criteria.json`, under `model.criteria` and `effort.criteria`. Pick one of each for the work the ticket describes and end with one line: `Proposal: model <model>, effort <effort>`. The proposal is not a finding and does not count towards the three.
 
 ## Report to Jan
 
-Show the findings as the reviewer gave them, checked against the repository where you can, with unverified ones marked. Drop a finding only when it is plainly wrong, and say so. End with the question which criteria to take over.
+Show the findings as the reviewer gave them, checked against the repository where you can, with unverified ones marked. Drop a finding only when it is plainly wrong, and say so. Show the proposal line as given. Called from `jb-forgejo-issue-create` it becomes the labels; on its own, on an existing issue, the session Jan names sets `model/<value>` and `effort/<value>` after he confirms the values, creating missing labels as step 8 of `jb-forgejo-issue-create` describes. Labels are metadata, not ticket text. End with the question which criteria to take over.
 
 The review never edits the ticket. When called from `jb-forgejo-issue-create`, the session creating the ticket writes the criteria Jan accepted into the draft before the preview. When called on its own for an existing issue, the session Jan names edits the issue after Jan says which findings count.

@@ -83,6 +83,8 @@ Match the IssueType and Severity answers to numeric label IDs from step 2, and a
 - If a matching label exists → use its numeric ID
 - If no matching label exists → skip it (do not invent label names or IDs)
 
+The `model/` and `effort/` labels are mapped in step 8, once the review has proposed them and Jan has confirmed them in the preview.
+
 ### 6. Review the Draft with Another Model
 
 Before the preview, hand the drafted issue to a subagent on a model other than the one running this session (the system prompt names it): `Agent` with `subagent_type: "general-purpose"` and an explicit `model`, because a fresh agent inherits yours by default.
@@ -96,7 +98,7 @@ Before the preview, hand the drafted issue to a subagent on a model other than t
 
 Write the draft body to a scratchpad file and give the subagent that path plus the repository and the files the issue names. Give it the draft, not your reasoning or your conclusion, so it forms its own view. Tell it to stay read-only, to check the issue's claims against the code, and to report what is wrong, unclear, unverifiable or too large, each with a concrete failure scenario and the file behind it, ranked by severity, with unverified claims marked.
 
-In the same turn, run the `forgejo-issue-review` skill on the draft; skipping this step skips both reviews. It asks a different question: what a maintainer would complain about in the straightforward implementation, such as content hard-coded in source or an existing mechanism the ticket ignores. The two reviews overlap little. Show Jan its findings and let him pick which become acceptance criteria; you write those into the draft, the skill never edits it.
+In the same turn, run the `forgejo-issue-review` skill on the draft; skipping this step skips both reviews. It asks a different question: what a maintainer would complain about in the straightforward implementation, such as content hard-coded in source or an existing mechanism the ticket ignores. The two reviews overlap little. Show Jan its findings and let him pick which become acceptance criteria; you write those into the draft, the skill never edits it. Its last line is a model and effort proposal; carry it into the preview.
 
 Weigh the findings yourself: fold the valid ones into the body, drop the rest, and say in the preview in one line which findings you took and which you did not. Several drafts created together go to one subagent. The step runs for every issue, trivial ones included: a trivial issue makes the review quick, it is no reason to skip it. Only an explicit "skip" from Jan omits it.
 
@@ -107,12 +109,13 @@ Before calling `create_issue`, show the user a preview of the issue:
 ```
 **Title:** {derived title}
 **Labels:** {IssueType}, {Severity}, {blocked, if field #9 is Blocked}
+**Model / Effort:** {model} / {effort} (proposed by the review)
 **Assignee:** {hermes-agent | none}
 **Body:**
 {full rendered body}
 ```
 
-Ask: "Does this look right? Shall I create the issue?"
+Ask: "Does this look right? Shall I create the issue?" Jan may change the model or the effort here.
 
 Only proceed if the user confirms. If they want changes, update the relevant fields and re-show the preview.
 
@@ -152,10 +155,18 @@ create_issue(
 )
 ```
 
+The model and effort proposal from step 6, as confirmed in step 7, becomes two labels: `model/<value>` and `effort/<value>`. The values come from `~/Projects/dotfiles/.claude/mods/model-router/criteria.json` (`model.criteria`, `effort.criteria`) and are not listed here. These two groups are exempt from step 5's skip rule: create a missing one with `create_repo_label` and `exclusive=true`, so an issue carries at most one value per group. A label that already exists but shows `exclusive: false` in the step 2 listing is set exclusive with `edit_repo_label` before it is used. When the review was skipped, there is no proposal: leave out the preview line and both labels.
+
+| Group | Color | Description |
+| --- | --- | --- |
+| `model/` | `#5319e7` | Model forgejo-issue-implement runs the implementation on |
+| `effort/` | `#fbca04` | Effort forgejo-issue-implement runs the implementation with |
+
 `create_issue` takes neither labels nor an assignee, so set both afterwards on the new issue number:
 
 ```
-add_issue_labels(owner, repo, index=N, labels="<comma-separated IDs from step 5>")
+create_repo_label(owner, repo, name="model/<value>", color, description, exclusive=true)   # only if missing, same for effort/
+add_issue_labels(owner, repo, index=N, labels="<comma-separated IDs from step 5, including model/ and effort/>")
 create_issue_comment(owner, repo, index=N, body="Blocked: <what is open>")   # only if Blocked
 update_issue(owner, repo, index=N, assignee="hermes-agent")   # only if assigned to Hermes
 ```
@@ -189,5 +200,7 @@ Do NOT start implementing unless the user explicitly selects Yes.
 | `create_issue` | Create the new issue |
 | `list_repo_labels` | Discover label names and IDs |
 | `add_issue_labels` | Apply labels after creation |
+| `create_repo_label` | Create a missing `model/` or `effort/` label |
+| `edit_repo_label` | Make an existing `model/` or `effort/` label exclusive |
 | `create_issue_comment` | Say what blocks a `blocked` issue |
 | `update_issue` | Assign `hermes-agent` after creation |

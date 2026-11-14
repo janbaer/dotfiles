@@ -59,6 +59,11 @@ Leave out issues whose `assignees` include `hermes-agent`; the MCP tools cannot 
 
 ```
 get_issue_by_index(owner, repo, index=N)
+```
+
+Before anything else, look for a `model/<value>` and an `effort/<value>` label on the issue. Valid values are the keys of `model.criteria` and `effort.criteria` in `~/Projects/dotfiles/.claude/mods/model-router/criteria.json`. A value not in that file: say so in one line and ignore that label. No such label: carry on without a word; the run stays on this skill's own model and effort.
+
+```
 list_issue_comments(owner, repo, index=N)
 ```
 
@@ -103,6 +108,8 @@ After the plan exists (step 4), check the issue's labels (fetched in step 2). An
 ### 6. Implement
 
 Follow the plan from step 4. Work through it in order without stopping for confirmation between steps. Implement only what is planned; mention anything extra at the end instead of building it.
+
+When step 2 found a valid `model/` or `effort/` label, run this step and step 7 in a subagent: `Agent` with `subagent_type: "general-purpose"`, `model` and `effort` set from the labels (each only when present). Give it the issue body, the plan, the branch and the repository path. It implements the plan, runs tests and lint and fixes failures, does not commit, and reports the changed files and the test results. Continue with step 8 here. If it reports failures it could not fix, treat that like step 5's "Not clear": commit what exists, push the branch and explain what is open.
 
 ### 7. Run tests and lint
 
