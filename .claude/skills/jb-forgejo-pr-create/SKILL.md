@@ -136,8 +136,9 @@ Every new PR triggers a workflow that posts an AI review (user `ai`). Right
 after showing the link, invoke the **forgejo-pr-feedback** skill for this PR in
 **loop mode**. It waits for that first review, fixes what is clearly right,
 records deliberate declines in the PR description, pushes, and waits for the
-next review until the PR is approved. It asks Jan only about questionable
-points, bundled once per round. Do not make the user ask for it.
+next review until `ai` approves, then tells Jan, waits for his approval and
+merges the PR. It asks Jan only about questionable points, bundled once per
+round. Do not make the user ask for it.
 
 Skip the handover when the user said they don't want it, or when the PR was
 not created in this session.

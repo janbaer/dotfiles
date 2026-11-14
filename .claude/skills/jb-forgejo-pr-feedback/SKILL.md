@@ -2,7 +2,7 @@
 name: forgejo-pr-feedback
 model: sonnet
 effort: high
-description: Use when reading review comments on a Forgejo pull request to understand received feedback, assess whether each comment is correct, estimate the effort to address it, and post a follow-up comment summarising what was fixed and what was not. Also runs the fix-push-rereview loop with the automated `ai` reviewer until the PR is approved. Trigger on phrases like "read PR comments", "check PR feedback", "what feedback did I get", "review comments on my PR", "what do the reviewers say", "assess PR review", "post review response", "reply to review comments", "work through the review", or "iterate until approved".
+description: Use when reading review comments on a Forgejo pull request to understand received feedback, assess whether each comment is correct, estimate the effort to address it, and post a follow-up comment summarising what was fixed and what was not. Also runs the fix-push-rereview loop with the automated `ai` reviewer until the PR is approved, then waits for Jan's approval and merges. Trigger on phrases like "read PR comments", "check PR feedback", "what feedback did I get", "review comments on my PR", "what do the reviewers say", "assess PR review", "post review response", "reply to review comments", "work through the review", or "iterate until approved".
 disable-model-invocation: false
 ---
 
@@ -17,7 +17,7 @@ Reads all review comments on a Forgejo PR and helps the PR author understand, ev
 Two modes:
 
 - **Assessment** (default) — steps 1–5 once, then step 6 when the user has worked on the feedback.
-- **Loop** — used when `forgejo-pr-create` hands over a PR it just opened, or when the user asks to work through the review until it is approved. A PR without an `ai` review yet starts at L6. Otherwise steps 1–4 for the latest review, then the **Loop mode** section below, round after round.
+- **Loop** — used when `forgejo-pr-create` hands over a PR it just opened, or when the user asks to work through the review until it is approved. A PR without an `ai` review yet starts at L6. Otherwise steps 1–4 for the latest review, then the **Loop mode** section below, round after round. It ends with the merge, once `ai` and Jan have both approved.
 
 ## Workflow
 
@@ -115,9 +115,9 @@ The `ai` review with the highest `id` is this round's review; remember its `id`.
 
 Check first whether a comment by `ai` starting with `**Review limit reached**` was created after this review's `submitted_at` (`list_issue_comments`). If so, stop and tell Jan in one line that the round limit is reached and the PR is his now. Do not push and do not send an ntfy; the workflow already notified him.
 
-### L2. Stop on approval
+### L2. On approval, hand over to Jan
 
-If its state is `APPROVED`, send an ntfy (`--title "PR approved"`, body `#N: <PR title>`), say in one line that the PR is ready to merge, and stop. Remaining nits in an approving review are not worth another round.
+If its state is `APPROVED`, send an ntfy (`--title "PR approved by ai"`, body `#N: <PR title> waits for your approval`), say in one line that Jan's turn is next, and go to L7. Remaining nits in an approving review are not worth another round.
 
 ### L3. Sort every finding
 
@@ -146,11 +146,27 @@ The workflow waits 60 s before it starts and the review takes about as long agai
 
 When a new review is there, go back to L1.
 
+### L7. Wait for Jan's approval
+
+A PR needs both approvals, and Jan reviews in his own time. Wait in the background (`sleep 300`, Bash with `run_in_background: true`), then call `list_pull_reviews` and `list_issue_comments` and check, in this order:
+
+1. A `**Review limit reached**` comment by `ai` newer than the approved review: stop as in L1.
+2. A review by user `jan` with state `REQUEST_CHANGES`: stop and say in one line that Jan requested changes. Jan's changes are his to give; do not start fixing on a hunch.
+3. An `ai` review with an `id` above the approved one (Jan pushed or commented, which starts a round): go back to L1.
+4. Both approvals are current: the latest review by `ai` is `APPROVED` and its `commit_id` equals the PR's head SHA (`get_pull_request_by_index`), the latest review by `jan` is `APPROVED`, and neither is `stale` or `dismissed`. Go to L8. An approval from only one of them never merges.
+
+Otherwise wait again. After 24 checks (about two hours), say in one line that Jan's approval is still missing and stop.
+
+### L8. Merge
+
+Invoke the **forgejo-pr-merge** skill for this PR, with the bump type Jan named, `patch` otherwise. Do not ask for confirmation: the two approvals are the confirmation. This automatic merge exists only for a PR whose approvals `ai` and `jan` have both given; when Jan calls the merge skill himself, it merges as he says. If the merge skill stops, relay its one-line reason and stop too.
+
 ### Stop conditions
 
-- The review is `APPROVED` (L2).
+- The PR is merged (L8), or the merge skill stopped (L8).
 - No new review arrived after four waits (L6).
-- A `**Review limit reached**` comment by `ai` newer than the latest review (L1, L5).
+- Jan's approval is still missing after 24 checks, or Jan requested changes (L7).
+- A `**Review limit reached**` comment by `ai` newer than the latest review (L1, L5, L7).
 - Jan says stop.
 
 Loop mode posts no reply comments beyond the one decline comment in L5. Step 6 is for human reviewers and assessment mode.

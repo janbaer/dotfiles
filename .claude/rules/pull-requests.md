@@ -73,7 +73,7 @@ On Forgejo, Claude opens the PR as user `claude`, never as `jan`: Forgejo does
 not count the poster's own approval, and a PR needs both `ai`'s and Jan's. The
 n8n workflow reviews every PR as user `ai` and reviews again after each push or
 comment. From here the loop is: read the review, fix, push,
-wait for the next review — `jb-forgejo-pr-feedback` runs it. Follow-up pushes only need
+wait for the next review — `jb-forgejo-pr-feedback` runs it. Once `ai` approves, it notifies Jan and merges when he has approved too. Follow-up pushes only need
 the project's own tests and linters, not the `/simplify` + `/review-diff` pair:
 the pair is there to catch problems before the first reviewer sees the branch,
 and after that the reviewer itself is the check. Running the pair again on a
