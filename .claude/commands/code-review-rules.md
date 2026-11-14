@@ -38,6 +38,8 @@ Leave out:
 
 The reviewer does not read `CLAUDE.md` or the README, so a convention stated only there may go in.
 
+A `## Excluded from review` section is not a rule: it lists globs the workflow drops from the review diff. Keep it and its entries exactly as they are, and never move rules into it or entries out of it. Propose an entry only when a generated or vendored file would otherwise fill the diff.
+
 ## New file
 
 1. Delegate the reading to an `Explore` subagent and ask for a summary, not file contents: `CLAUDE.md`, `README.md`, `docs/project.md`, `docs/requirements.md`, `docs/design.md`, `docs/services/`, `docs/roles/`, manifests, lint config, CI, test layout, directory structure. It reports what the project is, its conventions, and what the existing project file already covers.

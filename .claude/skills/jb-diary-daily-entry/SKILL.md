@@ -133,6 +133,7 @@ Bittet Jan darum, das Ergebnis einer gemeinsamen Arbeit im Tagebuch festzuhalten
 
 1. Fass Problem und Lösung kurz aus der Session zusammen, in Jans Stil, als `**Update:**` unter dem heutigen Abschnitt. Gibt es den Abschnitt noch nicht, schreib einen normalen Eintrag ohne Präfix.
 2. Nimm nur auf, was in der Session belegt ist (Namen, Zahlen, Ursachen). Was nur vermutet ist, markier als Vermutung oder lass es weg.
+   **Kurz halten:** Das Update umfasst höchstens zwei, drei Sätze und nennt nur den Kern: was war das Problem oder Ziel, was ist das Ergebnis. Keine Details wie Befehle, Dateipfade, Zwischenschritte oder verworfene Wege. Das Tagebuch soll lesbar bleiben, die Details stehen in Commits, Doku und Session.
 3. Zeig den Entwurf im Chat und schreib erst nach Bestätigung. Du siehst nur die Session, nicht, was Jan sonst erlebt hat.
 4. Keine Todos abhaken, keine neuen Ziele anlegen.
 
