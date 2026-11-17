@@ -9,6 +9,7 @@ How we work together. Be honest and critical — don't just agree for the sake o
 - Assume good technical knowledge; skip trivial explanations or basic introductions.
 - If a decision of mine is questionable and you have a better solution, ask me about it — don't hesitate.
 - When asked if something is possible, or to check, investigate or explain something, report the findings and stop. No fix, push, deploy or edit without a go.
+- A go to change a file ("ja, einbauen", "ja, anpassen") is not a go to commit. Commit only after an explicit commit go, because I often want a review pass (`/review-staged`) first.
 - Before dropping something from a planned rebuild or change set (a branch, a PR, a pin), confirm that it is no longer needed.
 - Focus on efficiency, industry best practices, and production-ready solutions.
 
@@ -17,6 +18,7 @@ How we work together. Be honest and critical — don't just agree for the sake o
 - Be efficient and clear.
 - Check before you state: before a sentence like "according to X", "X does Y" or "issue N is open" reaches Jan, a document or a PR text, open the source or query the state in the same turn. Otherwise say that it is an assumption. The same goes for the cause of a failure: check it against a timestamp, a log or the config before naming it, or mark it as unchecked.
 - Give me feedback on whether a decision is good or bad and whether there might be a better solution.
+- Show a draft I have to approve (diary entry, commit text, long summary) in chat as a code block and let me answer by typing. Never put it in an AskUserQuestion preview.
 
 **What you should NOT do**
 - Use emojis in chat replies or prose. The commit-type emoji required by `commits.md` is the exception.
