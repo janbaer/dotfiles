@@ -13,7 +13,7 @@ There is **no** `sync.sh`, install script, or build step. This repo is the sourc
 Consequences when editing:
 
 - Editing a file in this repo is live immediately on the current machine. `~/.claude/commands/`, `~/.claude/skills/`, `~/.claude/rules/`, `~/.claude/agents/` resolve through the nix store back into `.claude/` here (`mkOutOfStoreSymlink`), so the store holds the pointer, not a copy. No sync step, no switch. A running session still needs a restart to re-read what it loads at startup.
-- Machine-local secrets (`.claude/settings.json`, `.zshrc.local`, `.zshrc.secrets`, OAuth/MCP credentials) are git-ignored and stay out of this repo.
+- Machine-local secrets (`.claude/settings.json`, `.zshrc.local`, OAuth/MCP credentials) are git-ignored and stay out of this repo.
 
 ## Structure
 
