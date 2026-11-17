@@ -2,6 +2,15 @@
 
 This file describes all changes in the project.
 
+## 2026-11-17
+---
+
+- Add the `dream` skill so project memory stays current from recent chats without unreviewed writes: agents only stage changes, and nothing reaches memory or the rules until it is ticked in a local report
+- Let issues and PRs finish without manual steps: issues close once Claude verified every criterion, PRs merge once `ai` and Jan approved, and implementation starts on the model the issue asks for
+- Route the effort together with the model in `model-router`, and tell subagents apart at a glance in `agents-info`
+- Require an explicit commit go, keep Claude from overreaching on checks and diary entries, and make the NixOS shebang and `gojq` rules global
+- Remove `.zshrc.secrets` from the repo and stop the MCP setup from building stale code after a force-push
+
 ## 2026-11-13
 ---
 
