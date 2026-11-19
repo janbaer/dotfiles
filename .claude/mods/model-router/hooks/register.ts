@@ -5,6 +5,7 @@ const ROUTER_MODEL = 'typesafe/jev-1.14'
 const MIN_CONFIDENCE = 0.6
 const TIMEOUT_MS = 3000
 const LOG_PROMPT_CHARS = 2000
+const SESSION_MESSAGE = /^\s*<(agent-message|task-notification|cross-session-message)\b/
 
 type Mode = 'auto' | 'manual'
 
@@ -120,7 +121,7 @@ export const register: Register = on => {
     if (e.command) return next(e)
 
     const decision = await decide($, e.text).catch(() => null)
-    await logDecision($, decision, e.text).catch(() => {})
+    if (!SESSION_MESSAGE.test(e.text)) await logDecision($, decision, e.text).catch(() => {})
     if (decision && decision.confidence >= MIN_CONFIDENCE) {
       await update($, route, r => ({ ...r, pending: decision, suggestion: decision.choice }))
     }
