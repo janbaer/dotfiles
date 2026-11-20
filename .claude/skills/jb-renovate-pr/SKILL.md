@@ -45,7 +45,7 @@ PR bodies carry release notes and can be large, so the result may land in a file
 
 ### 3. Conflict test and merge result
 
-Nothing is pushed, and the Renovate branch is never rebased or pushed: a foreign commit makes Renovate stop maintaining the branch.
+This step pushes nothing. If the repo file asks for a rebase of the branch, it happens in `Before merge`; the branch is then foreign to Renovate, which stops maintaining it, so merge it right after the deploy.
 
 ```bash
 git fetch origin <base> <head>
