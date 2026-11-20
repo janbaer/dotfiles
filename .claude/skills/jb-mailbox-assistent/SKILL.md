@@ -124,8 +124,11 @@ Ablauf:
    Adresse nennt.
 2. Text schreiben. Sprache wie die Anfrage, im Zweifel Deutsch. Anrede aus
    dem Kontakt übernehmen.
-3. `create_draft` mit `to`, `subject`, `body`, bei Bedarf `cc`.
-4. Jan kurz sagen, was im Entwurf steht und wo er liegt.
+3. Den Text vor dem Anlegen durch den Skill `vermenschlichen-jan` schicken,
+   bei jedem deutschen Entwurf und auch bei `update_draft`. Bei englischen
+   Mails nimmst du stattdessen `humanizer`.
+4. `create_draft` mit `to`, `subject`, `body`, bei Bedarf `cc`.
+5. Jan kurz sagen, was im Entwurf steht und wo er liegt.
 
 Bei einer Antwort auf eine vorhandene Mail nimm `draft_reply` mit der `id`
 der Originalmail. Betreff und die Kopfzeilen für den Thread setzt das
