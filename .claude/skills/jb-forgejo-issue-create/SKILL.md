@@ -74,8 +74,6 @@ The number of files, new dependencies and the like do not matter. A change to He
 
 When a check fails on a criterion Jan wants to keep for Hermes, name it and let him rewrite it, then check again.
 
-If the `ntfy-me` skill is available, use it (topic: `claude`) to notify the user that input is needed before starting the questions.
-
 ### 5. Map Answers to Label IDs
 
 Match the IssueType and Severity answers to numeric label IDs from step 2, and add the ID of `blocked` when field #9 is `Blocked`.
@@ -173,13 +171,7 @@ update_issue(owner, repo, index=N, assignee="hermes-agent")   # only if assigned
 
 The assignment is what triggers Hermes. If `update_issue` fails, tell Jan: the issue exists but Hermes will not pick it up.
 
-### 9. Notify When Done
-
-Use the **ntfy-me** skill (if available) to notify with topic `claude`:
-- Title: `Issue Created – #{N}: {title}`
-- Body: link to the created issue
-
-### 10. Ask Whether to Implement
+### 9. Ask Whether to Implement
 
 If the issue is assigned to `hermes-agent`, stop here: Hermes picks it up. If it is `blocked`, stop here too: it is not ready.
 

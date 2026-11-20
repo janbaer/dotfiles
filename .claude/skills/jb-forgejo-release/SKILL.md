@@ -129,20 +129,10 @@ the final line and leave it to the user.
 Versioned mode, and only when `package.json` has a `check:deploy` script: run
 `bun run check:deploy` right after the push. It waits up to ten minutes until the live
 service reports the new version on the pinned runtime and exits 0. A non-zero exit means
-the release is not verified: say so in the final message and in the notification below,
+the release is not verified: say so in the final message,
 and do not report a successful release.
 
 Without the script, skip this step.
-
-### 9. Notify
-
-Invoke the `ntfy-me` skill:
-
-> Released <version> of `<repo>`: <the reason in a few words>
-
-With `check:deploy`, add whether it confirmed the deploy.
-
-In changelog-only mode: "Changelog updated for `<repo>`: <the reason in a few words>".
 
 ## Related skills
 

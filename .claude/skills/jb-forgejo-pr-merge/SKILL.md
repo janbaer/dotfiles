@@ -162,13 +162,7 @@ git branch -D <head-branch>
 
 Force-delete (`-D`) is used because the squash commit rewrites history and git won't consider the local branch "fully merged".
 
-### 8. Notify
-
-Invoke the `ntfy-me` skill with a message summarising what was merged:
-
-> Merged PR #N: _\<title\>_ into `<base-branch>` on `<repo>`
-
-### 9. Release
+### 8. Release
 
 Only when the base branch is `main` or `master` and `CHANGELOG.md` exists. Invoke the
 **forgejo-release** skill with the bump type (`patch` unless the user said otherwise).

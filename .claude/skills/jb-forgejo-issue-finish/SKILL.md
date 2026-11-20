@@ -25,7 +25,6 @@ digraph finish_workflow {
     "PR already exists?" [shape=diamond];
     "Show existing PR link" [shape=box];
     "Create PR via forgejo-pr-create skill" [shape=box];
-    "Send ntfy notification" [shape=box];
 
     "Detect repo + branch" -> "On feature/* branch?";
     "On feature/* branch?" -> "Read issue number from branch" [label="yes"];
@@ -35,8 +34,6 @@ digraph finish_workflow {
     "Issue still open?" -> "Stop: issue already closed" [label="no"];
     "PR already exists?" -> "Show existing PR link" [label="yes"];
     "PR already exists?" -> "Create PR via forgejo-pr-create skill" [label="no"];
-    "Show existing PR link" -> "Send ntfy notification";
-    "Create PR via forgejo-pr-create skill" -> "Send ntfy notification";
 }
 ```
 
@@ -71,7 +68,7 @@ get_issue_by_index(owner, repo, index=N)
 
 Check `state`. If `state != "open"`, stop and inform the user the issue is already closed.
 
-Read the issue title — you'll need it for the PR and notification.
+Read the issue title — you'll need it for the PR.
 
 ### 4. Check for existing PR
 
@@ -83,18 +80,6 @@ Filter by `head` branch matching the current feature branch.
 
 - **PR found** → show the user the link, skip creation
 - **No PR found** → invoke the **forgejo-pr-create** skill to create the PR; always include `closes #N` in the PR body. Never call `create_pull_request` directly from here: that skips the `/simplify` + `/review-diff` pass and the review loop that `forgejo-pr-create` runs.
-
-### 5. Send notification
-
-Delegate to the **`ntfy-me`** skill with:
-
-| Parameter | Value |
-|-----------|-------|
-| `--topic` | `claude` |
-| `--title` | `PR ready` |
-| body | `#N: <issue title>` |
-
-Send this whether the PR was newly created or already existed.
 
 ## MCP Tools Reference
 
