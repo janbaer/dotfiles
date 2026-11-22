@@ -101,7 +101,8 @@
     "cc-plugin-you-should-know@builtin": true,
     "fortschritt@claude-mods-deutsch": true,
     "project-guard@jan-mods": true,
-    "agents-info@jan-mods": true
+    "agents-info@jan-mods": true,
+    "inventar@jan-mods": true
   },
   "extraKnownMarketplaces": {
     "jan-mods": {

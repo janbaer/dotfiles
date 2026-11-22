@@ -2,6 +2,11 @@
 
 This file describes all changes to the mods in this directory. Versions are the `version` in each mod's `plugin.json`; an entry without a version left it unchanged.
 
+## 2026-11-22
+---
+
+- inventar 0.1.8: New mod. An "Inventar" button above the prompt (or `/inventar`) opens the pane "In diesem Chat": what Claude is doing right now and since when, with "hängt vielleicht" after 90 seconds, the chat's goal as Haiku sums up the first prompt (a `SetGoal` overrides it), the to-do list, and the MCP servers, skills and files used so far, subagents included. "Nur das Wichtigste" folds away everything below the to-dos.
+
 ## 2026-11-14
 ---
 

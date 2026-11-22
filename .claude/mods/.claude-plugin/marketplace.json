@@ -36,6 +36,11 @@
       "name": "agents-info",
       "source": "./agents-info",
       "description": "Panel showing what the subagents Claude starts are doing: a role per agent (researcher, planner, reviewer, writer, designer, builder) with its own color and costume, in German."
+    },
+    {
+      "name": "inventar",
+      "source": "./inventar",
+      "description": "Inventar button above the prompt opening a side pane: current step and since when, the chat's goal, to-dos, and the MCP servers, skills and files used. In German."
     }
   ]
 }

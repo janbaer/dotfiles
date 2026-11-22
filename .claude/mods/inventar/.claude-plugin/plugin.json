@@ -1,0 +1,7 @@
+{
+  "name": "inventar",
+  "version": "0.1.8",
+  "description": "Inventar button above the prompt that opens a side pane \"In diesem Chat\": what Claude is doing right now and since when, the chat's goal, the to-do list, and the MCP servers, skills and files used so far. In German.",
+  "author": { "name": "Jan Baer" },
+  "types": "./types/index.d.ts"
+}
