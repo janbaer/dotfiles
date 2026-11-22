@@ -2,6 +2,14 @@
 
 This file describes all changes in the project.
 
+## 2026-11-22
+---
+
+- Add the `inventar` mod so what Claude is doing right now, its to-dos and the MCP servers, skills and files it used can be seen beside the chat without scrolling
+- Make the Forgejo issue, merge and release skills quieter with fewer ntfy messages, and let the release skill verify the live deploy instead of leaving it to Jan
+- Keep AI tells out of mail drafts, show the session effort in the statusline, and let `jb-renovate-pr` follow a repository's rebase step
+- Cover the middle tiers in the `model-router` dataset and keep session messages out of its log
+
 ## 2026-11-17
 ---
 
