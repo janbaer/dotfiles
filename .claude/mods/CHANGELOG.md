@@ -2,6 +2,11 @@
 
 This file describes all changes to the mods in this directory. Versions are the `version` in each mod's `plugin.json`; an entry without a version left it unchanged.
 
+## 2026-11-23
+---
+
+- inventar 0.1.9: The "Inventar" button above the prompt is gone, it cost a line of its own. The pane opens with `/inventar` only.
+
 ## 2026-11-22
 ---
 

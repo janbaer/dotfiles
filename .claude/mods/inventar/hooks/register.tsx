@@ -336,16 +336,6 @@ export const register: Register = on => {
     return ran
   })
 
-  on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
-    if (e.props.hasSurvey) return next(e)
-    const { Box, Button } = $.ui.resolve(e)
-    return (
-      <Box>
-        <Button key="inventar" label="Inventar" hotkey="i" onPress={() => void togglePane($)} />
-      </Box>
-    )
-  })
-
   on('ui.render', { component: 'Pane', requestId: PANE }, async ($, e) => {
     const { Box, Button, Text } = $.ui.resolve(e)
     const [at, compact, busy, ph, g, list] = await Promise.all([
