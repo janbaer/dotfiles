@@ -88,7 +88,9 @@ merge_pull_request(
 )
 ```
 
-The component is the directory name under `services/` that `list_pull_request_files` shows. For changes outside `services/` it is `renovate`. If it is not clear, ask. No release, no `CHANGELOG.md`.
+The component is the directory name under `services/` that `list_pull_request_files` shows. For changes outside `services/` it is `renovate`. If it is not clear, ask. No release.
+
+No `CHANGELOG.md` entry for a routine bump. A security fix always gets one, also when the affected feature is not used here: one line under the repo's existing format naming the package, the new version and the CVE or advisory IDs from the release notes. Commit it on `<base>` after step 8 as `<component> 📝: Recording the <package> security release in the changelog` and push. The repo file can add entries for other bumps, but it cannot drop this one.
 
 If Forgejo refuses the merge, report the reason and stop. Do not use `force_merge`.
 
