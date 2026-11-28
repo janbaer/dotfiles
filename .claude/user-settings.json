@@ -51,6 +51,9 @@
     ],
     "defaultMode": "auto"
   },
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_CODE_MODE": "1"
+  },
   "model": "opus",
   "skillOverrides": {
     "code-review-excellence": "name-only",
