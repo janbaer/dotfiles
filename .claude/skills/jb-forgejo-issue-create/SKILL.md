@@ -98,7 +98,7 @@ Write the draft body to a scratchpad file and give the subagent that path plus t
 
 In the same turn, run the `forgejo-issue-review` skill on the draft; skipping this step skips both reviews. It asks a different question: what a maintainer would complain about in the straightforward implementation, such as content hard-coded in source or an existing mechanism the ticket ignores. The two reviews overlap little. Show Jan its findings and let him pick which become acceptance criteria; you write those into the draft, the skill never edits it. Its last line is a model and effort proposal; carry it into the preview.
 
-Weigh the findings yourself: fold the valid ones into the body, drop the rest, and say in the preview in one line which findings you took and which you did not. Several drafts created together go to one subagent. The step runs for every issue, trivial ones included: a trivial issue makes the review quick, it is no reason to skip it. Only an explicit "skip" from Jan omits it.
+Weigh the findings yourself: fold the valid ones into the body, drop the rest, and say in the preview in one line which findings you took and which you did not. Several drafts created together go to one subagent. The step runs for every issue, trivial ones included: a trivial issue makes the review quick, it is no reason to skip it. For a trivial issue (one file, a few lines) one subagent answers both: give it this step's brief and the reviewer brief from `forgejo-issue-review`, and take the model and effort proposal from its last line. Only an explicit "skip" from Jan omits it.
 
 ### 7. Confirm Before Creating
 

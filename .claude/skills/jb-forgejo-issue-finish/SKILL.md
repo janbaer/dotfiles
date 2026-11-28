@@ -70,6 +70,10 @@ Check `state`. If `state != "open"`, stop and inform the user the issue is alrea
 
 Read the issue title — you'll need it for the PR.
 
+### 3a. Clear stale Open points
+
+A Draft header's `**Open:**` list (see `document-status.md`) stays until someone removes it, and a stale point makes the next session repeat a claim that is no longer true. List the documents the branch touches (`git diff --name-only origin/<base>...HEAD`) plus every document the issue's acceptance criteria name. For each one with an `**Open:**` list, check every point against what the branch and the issue's verified criteria now settle. Remove a settled point, or reword it to what is still open, and commit that on the branch. Done when every remaining point is still open.
+
 ### 4. Check for existing PR
 
 ```
